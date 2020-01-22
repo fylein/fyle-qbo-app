@@ -9,7 +9,6 @@ import {  SettingsComponent } from './components/base/settings/settings.componen
 
 
 const routes: Routes = [
-  { path: '', redirectTo: 'workspaces/:workspace_id/tasks', pathMatch: 'full' },
   { path: 'workspaces/:workspace_id/tasks', component: TasksComponent },
   { path: 'workspaces/:workspace_id/expense_groups', component: ExpenseGroupsComponent },
   { path: 'workspaces/:workspace_id/bills', component: BillsComponent },

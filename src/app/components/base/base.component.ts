@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router} from '@angular/router';
 
 @Component({
   selector: 'app-base',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BaseComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
+
+  fullName: string = 'Example Name';
+  workspaceName: string = 'Example Workspace Name';
+  workspace_id: number = 1;
 
   ngOnInit() {
+    this.router.navigate(['/workspaces/' + this.workspace_id + '/tasks'])
   }
 
 }

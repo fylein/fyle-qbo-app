@@ -4,16 +4,19 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Token } from './tokens';
+
+import { environment } from 'environment.localhost';
 
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
   }),
 };
+
+const API_BASE_URL = environment.api_url;
 
 @Injectable({
   providedIn: 'root',
@@ -35,7 +38,7 @@ export class AuthService {
   login(code: string): Observable<Token> {
     return this.http
       .post<Token>(
-        'http://localhost:8000/api/auth/login/',
+        API_BASE_URL + '/auth/login/',
         {
           code: code,
         },

@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'environment.localhost';
+
+const FYLE_URL = environment.fyle_url;
+const FYLE_CLIENT_ID = environment.fyle_client_id;
+const CALLBACK_URI = environment.callback_uri;
 
 @Component({
   selector: 'app-login',
@@ -10,8 +15,13 @@ export class LoginComponent implements OnInit {
 
   login() {
     window.location.href =
-      'https://staging.fyle.in/app/main/#/oauth/authorize?' +
-      'client_id=tpaYfU7VLyrEN&redirect_uri=http://localhost:4200/callback&response_type=code';
+      FYLE_URL +
+      '/app/main/#/oauth/authorize?' +
+      'client_id=' +
+      FYLE_CLIENT_ID +
+      '&redirect_uri=' +
+      CALLBACK_URI +
+      '&response_type=code';
   }
 
   ngOnInit() {}

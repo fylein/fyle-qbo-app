@@ -61,6 +61,14 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "localhost": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "environment.localhost.ts"
+                }
+              ]
             }
           }
         },
@@ -72,6 +80,9 @@
           "configurations": {
             "production": {
               "browserTarget": "fyle-qbo-app:build:production"
+            },
+            "localhost": {
+              "browserTarget": "fyle-qbo-app:build:localhost"
             }
           }
         },

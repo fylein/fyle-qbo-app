@@ -1,6 +1,6 @@
 :root {
     --lightGrey: #f2f2f2;
-    --primaryColor: #f36;
+    --primaryColor: #ff3366;
     --secondaryColor: #ff0040;
     --tertiaryColor: #f5003d;
     --white: #fff;
@@ -36,13 +36,13 @@
   
   .navbar{
     border-bottom: 1px solid var(--lightGrey);
-    background-color: var(--white);
+    background-color: #ffffff;
     padding: 8px 20px;
   }
   
   .sub-navbar {
     border-bottom: 1px solid var(--lightGrey);
-    background-color: var(--white);
+    background-color: #ffffff;
     padding: 0px 20px;
   }
   
@@ -124,7 +124,7 @@
     text-align:center;
     padding:8px 16px;
     border:none;
-    background-color: var(--white);
+    background-color: #ffffff;
   }
   .signoutBtn:hover {
     background-color: rgba(158,158,158,0.2) !important;
@@ -149,7 +149,7 @@
     background: var(--lightGreen);
     vertical-align:middle;
     margin-right:1em;
-    color: var(--white);
+    color: #ffffff;
     }
   
   button:focus{
@@ -162,8 +162,8 @@
   
   .btn:disabled, .btn:disabled:hover {
       cursor: default;
-      background-color: var(--primaryColor);
-      border-color: var(--primaryColor);
+      background-color: #ff3366;
+      border-color: #ff3366;
       opacity: 0.65;
   }
   
@@ -183,9 +183,9 @@
   }
   
   .main-btn {
-    background-color: var(--primaryColor);
-    border-color: var(--primaryColor);
-    color: var(--white);
+    background-color: #ff3366;
+    border-color: #ff3366;
+    color: #ffffff;
     text-transform: uppercase;
     font-weight: 700;
     line-height: 1.25;
@@ -198,15 +198,15 @@
   }
   
   .main-btn:hover {
-      color: var(--white);
+      color: #ffffff;
       background-color: var(--secondaryColor);
       border-color: var(--tertiaryColor);
   }
   
   .main-btn-outline {
     background-color: transparent;
-    border: 1px solid var(--primaryColor);
-    color: var(--primaryColor);
+    border: 1px solid #ff3366;
+    color: #ff3366;
     text-transform: uppercase;
     font-weight: 700;
     line-height: 1.25;
@@ -219,9 +219,9 @@
   }
   
   .main-btn-outline:hover {
-      color: var(--white);
-      background-color: var(--primaryColor);
-      border-color: var(--primaryColor);
+      color: #ffffff;
+      background-color: #ff3366;
+      border-color: #ff3366;
   }
   
   @media only screen and (max-width: 768px) { 
@@ -254,7 +254,7 @@
   
   input:focus {
     outline: none;
-    border-bottom: 2px solid var(--primaryColor);
+    border-bottom: 2px solid #ff3366;
   }
   
   .input-label {
@@ -271,12 +271,13 @@
   input:focus ~ label, input:not(:placeholder-shown) ~ label {
     top: -5px;
     font-size: 11px;
-    color: var(--primaryColor);
+    color: #ff3366;
   }
   
   .navbar-light
   .navbar-brand {
     color: var(--mainHeading);
+    padding-left: 5px;
   }
   
   .sub-navbar-heading {
@@ -316,7 +317,7 @@
   }
   
   .checkbox-label input:checked ~ .checkmark {
-    background-color: var(--primaryColor);
+    background-color: #ff3366;
   }
   
   .checkmark:after {
@@ -353,7 +354,7 @@
   }
   
   .nav-tabs {
-      background-color: var(--white);
+      background-color: #ffffff;
   }
   
   .navTabsUl {
@@ -365,7 +366,7 @@
   }
   
   .nav-tabs .nav-item, .nav-link  {
-      color: var(--white) !important;
+      color: #ffffff !important;
       text-decoration: none;
       font-weight: 700;
       font-size: 14px;
@@ -373,15 +374,15 @@
 
   .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
       border: none;
-      border-bottom: 2px solid var(--primaryColor) !important;
-      color: var(--primaryColor) !important;
+      border-bottom: 2px solid #ff3366 !important;
+      color: #ff3366 !important;
       font-size: 14px;
-      background-color: var(--white);
+      background-color: #ffffff;
   }
   
   .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
       font-size: 14px;
-      color: var(--primaryColor) !important;
+      color: #ff3366 !important;
       text-decoration: none;
       border-color: transparent;
   }
@@ -401,7 +402,7 @@
   }
   
   .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
-    color: var(--white) !important;
+    color: #ffffff !important;
     background: #d64d4d2b;
   }
   
@@ -446,7 +447,7 @@
   }
   
   .content {
-    background-color: var(--white);
+    background-color: #ffffff;
     border: 1px solid var(--lightGrey);
     padding: 10px;
     border-radius: 6px;
@@ -456,7 +457,7 @@
   
   @media (min-width: 768px) and (max-width: 1440px) {
       .content {
-          background-color: var(--white);
+          background-color: #ffffff;
           border: 1px solid var(--lightGrey);
           padding: 10px;
           border-radius: 6px;
@@ -467,7 +468,7 @@
   
   @media (min-width: 1440px) and (max-width: 2560px) {
       .content {
-          background-color: var(--white);
+          background-color: #ffffff;
           border: 1px solid var(--lightGrey);
           padding: 10px;
           border-radius: 6px;
@@ -478,7 +479,7 @@
   
   @media (min-width: 768px) and (max-width: 1366px) {
       .content {
-          background-color: var(--white);
+          background-color: #ffffff;
           border: 1px solid var(--lightGrey);
           padding: 10px;
           border-radius: 6px;
@@ -489,7 +490,7 @@
   
   @media (min-width: 1440px) and (max-width: 2560px) {
       .content {
-          background-color: var(--white);
+          background-color: #ffffff;
           border: 1px solid var(--lightGrey);
           padding: 10px;
           border-radius: 6px;
@@ -535,7 +536,7 @@
   }
   
   .sub-nav-tabs {
-      background-color: var(--white);
+      background-color: #ffffff;
       width: 100%;
   }
   
@@ -553,18 +554,7 @@
   .sub-nav-item {
       padding: 8px 16px 8px 0px;
   }
-  
-  .sub-nav-tabs .sub-nav-item.show .sub-nav-link, .sub-nav-tabs .sub-nav-link.active {
-      border: none;
-      border-bottom: 2px solid var(--primaryColor) !important;
-      color: var(--primaryColor) !important;
-      font-size: 16px;
-      background-color: var(--white);
+
+  .back-btn {
+    vertical-align: middle;
   }
-  .sub-nav-tabs .sub-nav-link:focus, .sub-nav-tabs .sub-nav-link:hover {
-      font-size: 16px;
-      color: var(--primaryColor) !important;
-      text-decoration: none;
-      border-color: transparent;
-  }
-  

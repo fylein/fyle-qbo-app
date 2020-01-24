@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BaseComponent } from './components/base/base.component'
+import { AuthService } from './components/auth/auth.service'
 
 @Component({
   selector: 'app-root',
@@ -7,5 +7,12 @@ import { BaseComponent } from './components/base/base.component'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'fyle-qbo-app';
+
+  constructor (private authService: AuthService) {}
+
+  isAuthenticated() {
+    let loggedIn = this.authService.isLoggedIn();
+    return loggedIn;
+  }
+
 }

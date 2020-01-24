@@ -9,7 +9,10 @@ export class LoginComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  login() {
+    window.location.href = 'https://staging.fyle.in/app/main/#/oauth/authorize?client_id=tpaYfU7VLyrEN&redirect_uri=http://localhost:4200/callback&response_type=code';
   }
 
+  ngOnInit() {
+  }
 }

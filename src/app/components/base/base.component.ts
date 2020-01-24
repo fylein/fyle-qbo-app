@@ -13,9 +13,9 @@ export class BaseComponent implements OnInit {
   fullName: string = 'Example Name';
   workspaceName: string = 'Example Workspace Name';
   workspace_id: number = 1;
-
+  
   ngOnInit() {
-    this.router.navigate(['/workspaces/' + this.workspace_id + '/tasks'])
+    this.router.navigate(['/workspaces/' + this.workspace_id + '/tasks']);
   }
 
 }

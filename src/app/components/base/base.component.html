@@ -10,16 +10,19 @@
         <a class="nav-link tabitem" routerLink="workspaces/{{workspace_id}}/tasks/" routerLinkActive="active">Tasks</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link tabitem" routerLink="workspaces/{{workspace_id}}/expense_groups/" routerLinkActive="active">Expense Groups</a>
+        <a class="nav-link tabitem" routerLink="workspaces/{{workspace_id}}/expense_groups/"
+          routerLinkActive="active">Expense Groups</a>
       </li>
       <li class="nav-item">
         <a class="nav-link tabitem" routerLink="workspaces/{{workspace_id}}/bills/" routerLinkActive="active">Bills</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link tabitem" routerLink="workspaces/{{workspace_id}}/mappings/" routerLinkActive="active">Mappings</a>
+        <a class="nav-link tabitem" routerLink="workspaces/{{workspace_id}}/mappings/"
+          routerLinkActive="active">Mappings</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link tabitem" routerLink="workspaces/{{workspace_id}}/settings/" routerLinkActive="active">Settings</a>
+        <a class="nav-link tabitem" routerLink="workspaces/{{workspace_id}}/settings/"
+          routerLinkActive="active">Settings</a>
       </li>
     </ul>
     <div class="workspace-content">
@@ -41,7 +44,7 @@
           </button>
           <div class="dropdown-menu profile-content" aria-labelledby="profileBtn">
             <div>
-              <button class="btn-block signoutBtn" type="submit">
+              <button class="btn-block signoutBtn" routerLink="logout" type="submit">
                 <div class="d-flex signout-layout">
                   <i class="material-icons icon">power_settings_new</i>
                   <strong>
@@ -53,9 +56,7 @@
           </div>
         </div>
       </nav>
-      <div class="tabitem-content">
-        <router-outlet></router-outlet>
-      </div>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>

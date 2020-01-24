@@ -1,18 +1,16 @@
 import { Component } from '@angular/core';
-import { AuthService } from './components/auth/auth.service'
+import { AuthService } from './components/auth/auth.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-
-  constructor (private authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   isAuthenticated() {
     let loggedIn = this.authService.isLoggedIn();
     return loggedIn;
   }
-
 }

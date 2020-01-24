@@ -8,9 +8,8 @@ describe('ExpenseGroupsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExpenseGroupsComponent ]
-    })
-    .compileComponents();
+      declarations: [ExpenseGroupsComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

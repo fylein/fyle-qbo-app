@@ -1,9 +1,9 @@
 export interface User {
-    email: string;
+  email: string;
 }
 
 export interface Token {
-    access_token: string;
-    refresh_token: string;
-    user: User
+  access_token: string;
+  refresh_token: string;
+  user: User;
 }

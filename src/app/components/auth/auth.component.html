@@ -7,7 +7,6 @@
       </a>
       <h3 class="app-name">Fyle QBO Integration</h3>
     </header>
-    <app-login *ngIf="authPage === 'login'"></app-login>
-    <app-callback *ngIf="authPage === 'callback'"></app-callback>
+    <router-outlet></router-outlet>
   </div>
-  </div>
+</div>

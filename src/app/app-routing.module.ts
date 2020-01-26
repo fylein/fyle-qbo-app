@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthComponent } from './components/auth/auth.component';
 import { LogoutComponent } from './components/auth/logout/logout.component';
 import { BaseComponent } from './components/base/base.component';
 
@@ -10,32 +9,66 @@ import { ExpenseGroupsComponent } from './components/base/expense-groups/expense
 import { BillsComponent } from './components/base/bills/bills.component';
 import { MappingsComponent } from './components/base/mappings/mappings.component';
 import { SettingsComponent } from './components/base/settings/settings.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { CallbackComponent } from './components/auth/callback/callback.component';
+import { AuthComponent } from './components/auth/auth.component';
 
-const routes: Routes = [
+import { AuthGuard } from './components/auth/auth.guard'
+
+const authRoutes: Routes = [
   {
-    path: 'login',
+    path: '',
+    redirectTo: '/workspaces',
+    pathMatch: 'full'
+  },
+  {
+    path: 'auth',
     component: AuthComponent,
-    data: { login: true, callback: false },
+    children: [
+      {
+        path: 'login',
+        component: LoginComponent
+      },
+      {
+        path: 'callback',
+        component: CallbackComponent
+      },
+      {
+        path: 'logout',
+        component: LogoutComponent
+      }
+    ]
   },
   {
-    path: 'callback',
-    component: AuthComponent,
-    data: { login: false, callback: true },
+    path: '**',
+    redirectTo: 'workspaces',
+    pathMatch: 'full'
   },
-  { path: 'logout', component: LogoutComponent },
-  { path: 'workspaces', component: BaseComponent },
-  { path: 'workspaces/:workspace_id/tasks', component: TasksComponent },
-  {
-    path: 'workspaces/:workspace_id/expense_groups',
-    component: ExpenseGroupsComponent,
-  },
-  { path: 'workspaces/:workspace_id/bills', component: BillsComponent },
-  { path: 'workspaces/:workspace_id/mappings', component: MappingsComponent },
-  { path: 'workspaces/:workspace_id/settings', component: SettingsComponent },
 ];
 
+const baseModuleRoutes: Routes = [
+  {
+    path: 'workspaces',
+    component: BaseComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: ':workspace_id/tasks', component: TasksComponent },
+      {
+        path: ':workspace_id/expense_groups',
+        component: ExpenseGroupsComponent,
+      },
+      { path: ':workspace_id/bills', component: BillsComponent },
+      { path: ':workspace_id/mappings', component: MappingsComponent },
+      { path: ':workspace_id/settings', component: SettingsComponent }
+    ]
+  }
+]
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forChild(baseModuleRoutes),
+    RouterModule.forRoot(authRoutes)
+  ],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

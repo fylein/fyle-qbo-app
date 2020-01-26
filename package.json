@@ -19,8 +19,6 @@
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
-    "@auth0/angular-jwt": "^3.0.1",
-    "angular2-jwt": "^0.2.3",
     "bootstrap": "^4.4.1",
     "jquery": "^3.4.1",
     "rxjs": "~6.4.0",

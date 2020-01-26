@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { WorkspaceService } from './workspace.service';
 
 @Component({
   selector: 'app-base',
@@ -7,13 +8,26 @@ import { Router } from '@angular/router';
   styleUrls: ['./base.component.css'],
 })
 export class BaseComponent implements OnInit {
-  constructor(private router: Router) {}
-
   fullName: string = 'Example Name';
-  workspaceName: string = 'Example Workspace Name';
-  workspace_id: number = 1;
+  workspace: any = {};
+
+  constructor(private router: Router, private workspaceService: WorkspaceService) {
+    this.workspaceService.getWorkspaces().subscribe(workspaces => {
+      if(Array.isArray(workspaces) && workspaces.length) {
+        this.workspace = workspaces[0];
+        // this.router.navigate([this.workspace.id + '/tasks']);
+      } else {
+        this.workspaceService.createWorkspace().subscribe(workspace => {
+          this.workspace = workspace
+          this.router.navigate([this.workspace.id + '/tasks']);
+        });
+      }
+    },
+    error => {
+      console.log(error.message);
+    });
+  }
 
   ngOnInit() {
-    this.router.navigate(['/workspaces/' + this.workspace_id + '/tasks']);
   }
 }

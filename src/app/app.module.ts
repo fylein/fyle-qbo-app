@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { JwtModule } from '@auth0/angular-jwt';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +14,7 @@ import { MappingsComponent } from './components/base/mappings/mappings.component
 import { SettingsComponent } from './components/base/settings/settings.component';
 import { CallbackComponent } from './components/auth/callback/callback.component';
 import { AuthComponent } from './components/auth/auth.component';
+import { JwtInterceptor } from './components/auth/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -34,16 +34,10 @@ import { AuthComponent } from './components/auth/auth.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    JwtModule.forRoot({
-      config: {
-        tokenGetter: () => {
-          return localStorage.getItem('access_token');
-        },
-        whitelistedDomains: ['localhost'],
-      },
-    }),
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

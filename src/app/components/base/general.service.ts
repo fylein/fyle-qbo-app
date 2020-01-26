@@ -1,14 +1,13 @@
 import {
   HttpClient,
-  HttpErrorResponse,
-  HttpHeaders,
+  HttpErrorResponse,  HttpHeaders, 
+  HttpParams
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Token } from './tokens';
-
 import { environment } from 'src/environments/environment';
+
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
@@ -18,10 +17,11 @@ const httpOptions = {
 const API_BASE_URL = environment.api_url;
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class AuthService {
-  constructor(private http: HttpClient) {}
+export class GeneralService {
+
+  constructor(private http: HttpClient) { }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
@@ -34,29 +34,28 @@ export class AuthService {
     return throwError(error);
   }
 
-  login(code: string): Observable<Token> {
+  post(endpoint: string, body: {}): Observable<any> {
     return this.http
-      .post<Token>(
-        API_BASE_URL + '/auth/login/',
-        {
-          code: code,
-        },
+      .post(
+        API_BASE_URL + endpoint,
+        body,
         httpOptions
       )
       .pipe(catchError(this.handleError));
   }
 
-  setUser(response: Token) {
-    localStorage.setItem('email', response.user.email);
-    localStorage.setItem('access_token', response.access_token);
-    localStorage.setItem('refresh_token', response.refresh_token);
-  }
+  get(endpoint: string, apiParams: {}): Observable<any> {
+    
+    const params = new HttpParams();
 
-  isLoggedIn() {
-    return localStorage.getItem('access_token') != null;
-  }
+    Object.keys(apiParams).forEach(key => {
+      params.append(key, apiParams[key])
+    });
 
-  logout() {
-    localStorage.clear();
+    return this.http.get(
+        API_BASE_URL + endpoint,
+        {params}
+      )
+      .pipe(catchError(this.handleError));
   }
 }

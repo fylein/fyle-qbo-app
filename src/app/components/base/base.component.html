@@ -7,27 +7,27 @@
         </div>
       </header>
       <li class="nav-item">
-        <a class="nav-link tabitem" routerLink="workspaces/{{workspace_id}}/tasks/" routerLinkActive="active">Tasks</a>
+        <a class="nav-link tabitem" routerLink="{{workspace.id}}/tasks/" routerLinkActive="active">Tasks</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link tabitem" routerLink="workspaces/{{workspace_id}}/expense_groups/"
+        <a class="nav-link tabitem" routerLink="{{workspace.id}}/expense_groups/"
           routerLinkActive="active">Expense Groups</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link tabitem" routerLink="workspaces/{{workspace_id}}/bills/" routerLinkActive="active">Bills</a>
+        <a class="nav-link tabitem" routerLink="{{workspace.id}}/bills/" routerLinkActive="active">Bills</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link tabitem" routerLink="workspaces/{{workspace_id}}/mappings/"
+        <a class="nav-link tabitem" routerLink="{{workspace.id}}/mappings/"
           routerLinkActive="active">Mappings</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link tabitem" routerLink="workspaces/{{workspace_id}}/settings/"
+        <a class="nav-link tabitem" routerLink="{{workspace.id}}/settings/"
           routerLinkActive="active">Settings</a>
       </li>
     </ul>
     <div class="workspace-content">
       <nav class="navbar fixed-top navbar-light">
-        <h1 class="navbar-brand">{{workspaceName}}</h1>
+        <h1 class="navbar-brand">{{workspace.name}}</h1>
         <div class="msg">
 
         </div>
@@ -44,7 +44,7 @@
           </button>
           <div class="dropdown-menu profile-content" aria-labelledby="profileBtn">
             <div>
-              <button class="btn-block signoutBtn" routerLink="logout" type="submit">
+              <button class="btn-block signoutBtn" [routerLink]="['../auth/logout']" type="submit">
                 <div class="d-flex signout-layout">
                   <i class="material-icons icon">power_settings_new</i>
                   <strong>

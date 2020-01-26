@@ -8,11 +8,11 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./callback.component.css'],
 })
 export class CallbackComponent implements OnInit {
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private authService: AuthService
-  ) {
+  constructor(private router: Router, private route: ActivatedRoute,
+    private authService: AuthService) {
+    if(this.authService.isLoggedIn()){
+      router.navigate(['/workspaces']);
+    }
     this.route.queryParams.subscribe(params => {
       if (params.code) {
         this.authService.login(params.code).subscribe(
@@ -21,13 +21,14 @@ export class CallbackComponent implements OnInit {
             this.router.navigate(['/workspaces']);
           },
           error => {
-            this.router.navigate(['login']).then(function() {
+            console.log(error);
+            this.router.navigate(['auth/login']).then(function() {
               window.location.reload();
             });
           }
         );
       } else if (params.error) {
-        this.router.navigate(['login']).then(function() {
+        this.router.navigate(['auth/login']).then(function() {
           window.location.reload();
         });
       }

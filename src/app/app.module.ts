@@ -15,6 +15,7 @@ import { SettingsComponent } from './components/base/settings/settings.component
 import { CallbackComponent } from './components/auth/callback/callback.component';
 import { AuthComponent } from './components/auth/auth.component';
 import { JwtInterceptor } from './components/auth/jwt.interceptor';
+import { LoaderComponent } from './components/general/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { JwtInterceptor } from './components/auth/jwt.interceptor';
     SettingsComponent,
     CallbackComponent,
     AuthComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <div class="main-layout sidebar">
+  <div *ngIf="!isLoading" class="main-layout sidebar">
     <ul class="nav nav-pills navTabsUl flex-column">
       <header class="sidenav-header">
         <div class="site-logo">
@@ -37,7 +37,8 @@
             <div class="d-flex flex-row user-details">
               <i class="material-icons user-icon">account_circle</i>
               <div>
-                <strong class="user-name">{{fullName}}</strong>
+                <strong class="user-name">{{user.full_name}}</strong>
+                <p class="profile-organizationName">{{user.org_name}}</p>
               </div>
               <i class="material-icons arrow-down">keyboard_arrow_down</i>
             </div>
@@ -60,3 +61,5 @@
     </div>
   </div>
 </div>
+
+<app-loader *ngIf="isLoading"></app-loader>

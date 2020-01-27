@@ -46,6 +46,18 @@ export class AuthService {
       .pipe(catchError(this.handleError));
   }
 
+  refreshToken(refresh_token: string): Observable<Token> {
+    return this.http
+      .post<Token>(
+        API_BASE_URL + '/auth/refresh/',
+        {
+          refresh_token: refresh_token,
+        },
+        httpOptions
+      )
+      .pipe(catchError(this.handleError));
+    }
+
   setUser(response: Token) {
     localStorage.setItem('email', response.user.email);
     localStorage.setItem('access_token', response.access_token);

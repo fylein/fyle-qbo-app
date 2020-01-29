@@ -9,6 +9,7 @@ import { catchError } from 'rxjs/operators';
 import { Token } from './tokens';
 
 import { environment } from 'src/environments/environment';
+import { GeneralService } from '../base/general.service';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
@@ -21,7 +22,7 @@ const API_BASE_URL = environment.api_url;
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private generalService: GeneralService) {}
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
@@ -58,14 +59,19 @@ export class AuthService {
       .pipe(catchError(this.handleError));
     }
 
-  setUser(response: Token) {
+  setUser(response: Token): Observable<any> {
     localStorage.setItem('email', response.user.email);
     localStorage.setItem('access_token', response.access_token);
     localStorage.setItem('refresh_token', response.refresh_token);
+    return this.setUserProfile();
   }
 
   isLoggedIn() {
     return localStorage.getItem('access_token') != null;
+  }
+
+  setUserProfile(): Observable<any> {
+    return this.generalService.get('/user/profile/', {});
   }
 
   logout() {

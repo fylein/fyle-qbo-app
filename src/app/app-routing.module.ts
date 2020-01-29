@@ -14,6 +14,8 @@ import { CallbackComponent } from './components/auth/callback/callback.component
 import { AuthComponent } from './components/auth/auth.component';
 
 import { AuthGuard } from './components/auth/auth.guard'
+import { FyleCallbackComponent } from './components/base/settings/fyle-callback/fyle-callback.component';
+import { QBOCallbackComponent } from './components/base/settings/qbo-callback/qbo-callback.component';
 
 const authRoutes: Routes = [
   {
@@ -59,7 +61,9 @@ const baseModuleRoutes: Routes = [
       },
       { path: ':workspace_id/bills', component: BillsComponent },
       { path: ':workspace_id/mappings', component: MappingsComponent },
-      { path: ':workspace_id/settings', component: SettingsComponent }
+      { path: ':workspace_id/settings', component: SettingsComponent },
+      { path: 'fyle/callback', component: FyleCallbackComponent },
+      { path: 'qbo/callback', component: QBOCallbackComponent }
     ]
   }
 ]

@@ -16,6 +16,8 @@ import { CallbackComponent } from './components/auth/callback/callback.component
 import { AuthComponent } from './components/auth/auth.component';
 import { JwtInterceptor } from './components/auth/jwt.interceptor';
 import { LoaderComponent } from './components/general/loader/loader.component';
+import { QBOCallbackComponent } from './components/base/settings/qbo-callback/qbo-callback.component';
+import { FyleCallbackComponent } from './components/base/settings/fyle-callback/fyle-callback.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { LoaderComponent } from './components/general/loader/loader.component';
     CallbackComponent,
     AuthComponent,
     LoaderComponent,
+    QBOCallbackComponent,
+    FyleCallbackComponent,
   ],
   imports: [
     BrowserModule,

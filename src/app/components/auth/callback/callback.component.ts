@@ -17,11 +17,12 @@ export class CallbackComponent implements OnInit {
       if (params.code) {
         this.authService.login(params.code).subscribe(
           response => {
-            this.authService.setUser(response);
-            this.router.navigate(['/workspaces']);
+            this.authService.setUser(response).subscribe(profile => {
+              localStorage.setItem('user', JSON.stringify(profile));
+              this.router.navigate(['/workspaces']);
+            });
           },
           error => {
-            console.log(error);
             this.router.navigate(['auth/login']).then(function() {
               window.location.reload();
             });

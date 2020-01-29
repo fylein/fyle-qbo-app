@@ -8,32 +8,21 @@ import { WorkspaceService } from './workspace.service';
   styleUrls: ['./base.component.css'],
 })
 export class BaseComponent implements OnInit {
-  user: any = {};
+  user = JSON.parse(localStorage.getItem('user'));;
   workspace: any = {};
-  isLoading: boolean = false;
+  isLoading: boolean = true;
 
-  setUser() {
-    this.workspaceService.getUserProfile(this.workspace.id).subscribe(user => {
-      this.user = user;
-      this.isLoading = false;
-    });
-  }
-
-  constructor(private router: Router, private workspaceService: WorkspaceService) {
-    this.isLoading = true;
+  constructor(private workspaceService: WorkspaceService) {
     this.workspaceService.getWorkspaces().subscribe(workspaces => {
-      if(Array.isArray(workspaces) && workspaces.length) {
+      if (Array.isArray(workspaces) && workspaces.length) {
         this.workspace = workspaces[0];
-        this.setUser();
+        this.isLoading = false;
       } else {
         this.workspaceService.createWorkspace().subscribe(workspace => {
-          this.workspace = workspace
-          this.setUser();
+          this.workspace = workspace;
+          this.isLoading = false;
         });
       }
-    },
-    error => {
-      console.log(error.message);
     });
   }
 

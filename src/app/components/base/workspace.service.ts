@@ -16,8 +16,4 @@ export class WorkspaceService {
   getWorkspaces(): Observable<any> {
     return this.generalService.get('/workspaces/', {});
   }
-
-  getUserProfile(workspace_id: string): Observable<any> {
-    return this.generalService.get('/workspaces/' + workspace_id + '/fyle/user/', {});
-  }
 }

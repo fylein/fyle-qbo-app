@@ -31,7 +31,7 @@ export class JwtInterceptor implements HttpInterceptor {
             catchError(error => {
                 if (error instanceof HttpErrorResponse) {
                     switch ((<HttpErrorResponse>error).status) {
-                        case 401 || 403:
+                        case 403:
                             return this.handle403Error(error);
                         default:
                             return observableThrowError(error);
@@ -43,11 +43,7 @@ export class JwtInterceptor implements HttpInterceptor {
     }
 
     handle403Error(error) {
-        if (error && error.status === 400) {
-            this.authService.logout()
-        }
-
-        return observableThrowError(error);
+        return this.logoutUser();
     }
 
     logoutUser() {

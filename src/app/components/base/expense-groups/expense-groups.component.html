@@ -1,1 +1,22 @@
-<p>expense-groups works!</p>
+<nav class="sub-navbar navbar fixed-top navbar-light d-flex flex-column">
+    <div class="sub-navbar-heading">
+      <h1 class="navbar-brand">Expense Groups</h1>
+    </div>
+    <ul class="nav sub-nav-tabs d-flex flex-row tabSection">
+      <li class="sub-nav-item">
+        <a class="sub-nav-link active" href="{% url 'xero_workspace:tasks' workspace_id %}">All</a>
+      </li>
+      <li class="sub-nav-item">
+        <a class="sub-nav-link" href="?state=complete">Complete</a>
+      </li>
+      <li class="sub-nav-item">
+        <a class="sub-nav-link" href="?state=failed">Failed</a>
+      </li>
+    </ul>
+  </nav>
+  <div class="tabitem-content">
+    <div class="d-flex content-header">
+        <button class="btn ml-auto main-btn sync-btn" (click)="syncExpenseGroups()">Sync</button>
+        <!-- <button class="btn main-btn-outline ml-4 resync-btn">Resync</button> -->
+    </div>
+  </div>

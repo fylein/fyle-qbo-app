@@ -1,22 +1,82 @@
 <nav class="sub-navbar navbar fixed-top navbar-light d-flex flex-column">
-    <div class="sub-navbar-heading">
-      <h1 class="navbar-brand">Expense Groups</h1>
+  <div class="sub-navbar-heading">
+    <h1 class="navbar-brand">Expense Groups</h1>
+  </div>
+  <ul class="nav sub-nav-tabs d-flex flex-row tabSection">
+    <li class="sub-nav-item">
+      <a class="sub-nav-link {{ready}}" (click)="changeState('READY')">Ready</a>
+    </li>
+    <li class="sub-nav-item">
+      <a class="sub-nav-link {{complete}}" (click)="changeState('COMPLETE')">Complete</a>
+    </li>
+    <li class="sub-nav-item">
+      <a class="sub-nav-link {{all}}" (click)="changeState('ALL')">All</a>
+    </li>
+  </ul>
+</nav>
+<app-loader *ngIf="isLoading"></app-loader>
+<div class="tabitem-content" *ngIf="!isLoading">
+  <div class="d-flex content-header">
+    <button class="btn ml-auto main-btn sync-btn" (click)="syncExpenseGroups()">Sync Expense Groups</button>
+    <button class="btn ml-2 main-btn sync-btn" (click)="getSelectedOptions()" *ngIf="getSelectedOptions().length">Export Expense Groups</button>
+  </div>
+  <div class="content">
+    <div class="alert alert-light mx-auto warning" *ngIf="!expenseGroups.length">
+      <p>Looks like you don't have any Expense Groups</p>
     </div>
-    <ul class="nav sub-nav-tabs d-flex flex-row tabSection">
-      <li class="sub-nav-item">
-        <a class="sub-nav-link active" href="{% url 'xero_workspace:tasks' workspace_id %}">All</a>
-      </li>
-      <li class="sub-nav-item">
-        <a class="sub-nav-link" href="?state=complete">Complete</a>
-      </li>
-      <li class="sub-nav-item">
-        <a class="sub-nav-link" href="?state=failed">Failed</a>
-      </li>
-    </ul>
-  </nav>
-  <div class="tabitem-content">
-    <div class="d-flex content-header">
-        <button class="btn ml-auto main-btn sync-btn" (click)="syncExpenseGroups()">Sync</button>
-        <!-- <button class="btn main-btn-outline ml-4 resync-btn">Resync</button> -->
+    <div class="table-layout" *ngIf="expenseGroups.length">
+      <div class="table-responsive">
+        <table class="table expense-groups-table">
+          <thead class="table-head">
+            <tr class="colHeadings">
+              <th style="width: 30%">Description</th>
+              <th>Status</th>
+              <th>Employee</th>
+              <th>Claim No.</th>
+              <th style="width: 10%">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="select-all" [(ngModel)]="allSelected" (change)=toggleSelectAll()/>
+                  <span class="checkmark"></span>
+                </label>
+              </th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let expenseGroup of expenseGroups;">
+            <tr class="expense-groups-row">
+              <td>
+                Grouped by {{expenseGroup.fyle_group_id}}
+              </td>
+              <td *ngIf="state === 'COMPLETE'">Complete</td>
+              <td *ngIf="state === 'READY'">Ready</td>
+              <td *ngIf="state === 'ALL'">All</td>
+              <td>{{expenseGroup.description.employee_email}}</td>
+              <td>{{expenseGroup.description.claim_number}}</td>
+              <td>
+                <label class="checkbox-label">
+                  <input type="checkbox" class="expenseCheckbox" name="expense_group_ids" 
+                  value="{{expenseGroup.id}}" [(ngModel)]="expenseGroup.selected">
+                  <span id="checkmark" class="checkmark"></span>
+                </label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="nav-pagination" *ngIf="expenseGroups.length">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" *ngIf="previousPageLink">
+            <a class="page-link" (click)="previousPage()">&laquo;</a>
+          </li>
+          <li class="page-item disabled">
+            <a class="page-link">{{offset + 1}} - {{offset + expenseGroups.length}} of {{count}}</a>
+          </li>
+          <li class="page-item" *ngIf="nextPageLink">
+            <a class="page-link" (click)="nextPage()">&raquo;</a>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
+</div>

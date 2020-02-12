@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExpenseGroupsService } from './expense-groups.service';
+import { BillsService } from '../bills/bills.service';
 
 @Component({
   selector: 'app-expense-groups',
@@ -21,8 +22,10 @@ export class ExpenseGroupsComponent implements OnInit {
   complete: string;
   all: string
   allSelected: boolean;
+  selectedGroups: any[] = [];
 
-  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private router: Router) {}
+  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, 
+    private router: Router, private billsService: BillsService) {}
 
   syncExpenseGroups() {
     this.expenseGroupService.syncExpenseGroups(this.workspaceId).subscribe(task => {
@@ -34,6 +37,11 @@ export class ExpenseGroupsComponent implements OnInit {
     this.offset = this.offset + this.limit;
     this.isLoading = true;
     this.getPaginatedExpenses();
+  }
+
+  onSelect() {
+    console.log('compinghere');
+    this.selectedGroups = this.expenseGroups.filter(expenseGroup => expenseGroup.selected);
   }
 
   previousPage() {
@@ -64,14 +72,17 @@ export class ExpenseGroupsComponent implements OnInit {
     this.getPaginatedExpenses();
   }
 
-  getSelectedOptions() { 
+  createBills() { 
     let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.id);
     console.log(expenseGroupIds);
-    return expenseGroupIds;
+    this.billsService.createBills(this.workspaceId, expenseGroupIds).subscribe(result => {
+      this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+    });
   }
 
   toggleSelectAll() {
     this.expenseGroups.map(expenseGroup => expenseGroup.selected = this.allSelected);
+    this.selectedGroups = this.expenseGroups.filter(expenseGroup => expenseGroup.selected == true);
   }
 
   getPaginatedExpenses() {

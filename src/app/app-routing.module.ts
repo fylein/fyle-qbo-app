@@ -16,6 +16,9 @@ import { AuthComponent } from './components/auth/auth.component';
 import { AuthGuard } from './components/auth/auth.guard'
 import { FyleCallbackComponent } from './components/base/settings/fyle-callback/fyle-callback.component';
 import { QBOCallbackComponent } from './components/base/settings/qbo-callback/qbo-callback.component';
+import { CategoryComponent } from './components/base/mappings/category/category.component';
+import { EmployeeComponent } from './components/base/mappings/employee/employee.component';
+import { GeneralComponent } from './components/base/mappings/general/general.component';
 
 const authRoutes: Routes = [
   {
@@ -60,7 +63,15 @@ const baseModuleRoutes: Routes = [
         component: ExpenseGroupsComponent,
       },
       { path: ':workspace_id/bills', component: BillsComponent },
-      { path: ':workspace_id/mappings', component: MappingsComponent },
+      { 
+        path: ':workspace_id/mappings', 
+        component: MappingsComponent,
+        children: [
+          { path: 'general', component: GeneralComponent },
+          { path: 'category', component: CategoryComponent },
+          { path: 'employee', component: EmployeeComponent }
+        ]
+      },
       { path: ':workspace_id/settings', component: SettingsComponent },
       { path: 'fyle/callback', component: FyleCallbackComponent },
       { path: 'qbo/callback', component: QBOCallbackComponent }

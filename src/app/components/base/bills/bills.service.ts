@@ -1,8 +1,18 @@
 import { Injectable } from '@angular/core';
+import { GeneralService } from '../general.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BillsService {
-  constructor() {}
+  constructor(private generalService: GeneralService) {}
+
+  createBills(workspace_id: number, expnese_group_ids: any[]): Observable<any> {
+    return this.generalService.post(
+      `/workspaces/${workspace_id}/qbo/bills/`, {
+        expense_group_ids: expnese_group_ids
+      }
+    );
+  }
 }

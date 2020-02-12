@@ -19,6 +19,11 @@ import { JwtInterceptor } from './components/auth/jwt.interceptor';
 import { LoaderComponent } from './components/general/loader/loader.component';
 import { QBOCallbackComponent } from './components/base/settings/qbo-callback/qbo-callback.component';
 import { FyleCallbackComponent } from './components/base/settings/fyle-callback/fyle-callback.component';
+import { CategoryComponent } from './components/base/mappings/category/category.component';
+import { EmployeeComponent } from './components/base/mappings/employee/employee.component';
+import { GeneralComponent } from './components/base/mappings/general/general.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -36,12 +41,21 @@ import { FyleCallbackComponent } from './components/base/settings/fyle-callback/
     LoaderComponent,
     QBOCallbackComponent,
     FyleCallbackComponent,
+    CategoryComponent,
+    EmployeeComponent,
+    GeneralComponent,
+  ],
+  entryComponents: [
+    GeneralComponent, 
+    // NgbModalBackdrop
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    NgbModule,
+    ReactiveFormsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

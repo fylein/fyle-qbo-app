@@ -10,10 +10,5 @@ export class MappingsComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      let workspaceId = +params['workspace_id'];
-      console.log(workspaceId)
-      this.router.navigateByUrl(`workspaces/${workspaceId}/mappings/general`)
-    });
   }
 }

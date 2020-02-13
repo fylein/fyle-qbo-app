@@ -22,7 +22,7 @@ import { FyleCallbackComponent } from './components/base/settings/fyle-callback/
 import { CategoryComponent } from './components/base/mappings/category/category.component';
 import { EmployeeComponent } from './components/base/mappings/employee/employee.component';
 import { GeneralComponent } from './components/base/mappings/general/general.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
@@ -46,7 +46,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     GeneralComponent,
   ],
   entryComponents: [
-    GeneralComponent, 
+    EmployeeComponent, 
     // NgbModalBackdrop
   ],
   imports: [
@@ -59,6 +59,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    NgbActiveModal
   ],
   bootstrap: [AppComponent],
 })

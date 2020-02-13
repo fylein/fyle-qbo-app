@@ -40,7 +40,6 @@ export class ExpenseGroupsComponent implements OnInit {
   }
 
   onSelect() {
-    console.log('compinghere');
     this.selectedGroups = this.expenseGroups.filter(expenseGroup => expenseGroup.selected);
   }
 
@@ -74,7 +73,6 @@ export class ExpenseGroupsComponent implements OnInit {
 
   createBills() { 
     let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.id);
-    console.log(expenseGroupIds);
     this.billsService.createBills(this.workspaceId, expenseGroupIds).subscribe(result => {
       this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
     });

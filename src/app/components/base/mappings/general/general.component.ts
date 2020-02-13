@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MappingsService } from '../mappings.service';
-import { FormBuilder, FormGroup, FormArray, FormControl, ValidatorFn } from '@angular/forms';
+import { FormBuilder, FormGroup} from '@angular/forms';
 
 
 @Component({

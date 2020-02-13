@@ -12,7 +12,7 @@ export class TasksComponent implements OnInit {
   tasks: any;
   limit: number = 10;
   offset: number = 0;
-  state: string = 'IN_PROGRESS';
+  state: string = 'ALL';
   nextPageLink: string;
   previousPageLink: string;
   count: number;
@@ -38,8 +38,8 @@ export class TasksComponent implements OnInit {
   changeState(state: string) {
     this.isLoading = true;
     this.offset = 0;
-    if(state === 'IN_PROGRESS') {
-      this.state = 'IN_PROGRESS';
+    if(state === 'ALL') {
+      this.state = 'ALL';
       this.inProgress = 'active';
       this.complete = '';
       this.failed = '';
@@ -63,6 +63,7 @@ export class TasksComponent implements OnInit {
       this.previousPageLink = tasks.previous;
       this.count = tasks.count;
       this.tasks = tasks.results;
+      console.log(this.tasks);
       this.isLoading = false;
     });
   }

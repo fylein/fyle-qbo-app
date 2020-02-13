@@ -1,8 +1,16 @@
-<app-loader *ngIf="isLoading"></app-loader>
-
-<div class="tabitem-content" *ngIf="!isLoading">
+<nav class="sub-navbar navbar fixed-top navbar-light d-flex flex-column">
     <div class="sub-navbar-heading">
         <h1 class="navbar-brand">Bills</h1>
+    </div>
+    <ul class="nav sub-nav-tabs d-flex flex-row tabSection">
+        <li class="sub-nav-item">
+            <a class="sub-nav-link active">All</a>
+        </li>
+    </ul>
+</nav>
+<app-loader *ngIf="isLoading"></app-loader>
+<div class="tabitem-content" *ngIf="!isLoading">
+    <div class="d-flex content-header">
     </div>
     <div class="content">
         <div class="alert alert-light mx-auto warning" *ngIf="!bills.length">
@@ -15,22 +23,24 @@
                         <tr class="colHeadings">
                             <th style="width: 40%">Description</th>
                             <th>Exported on</th>
-                            <th>Employee</th>
-                            <th>Claim No.</th>
+                            <th>Bill no.</th>
+                            <th>Expense Group</th>
                         </tr>
                     </thead>
                     <tbody *ngFor="let bill of bills;">
                         <tr class="expense-groups-row">
-                            <td>{{bill.private_note}}</td>
+                            <td>
+                                {{bill.private_note}}
+                            </td>
                             <td>{{bill.transaction_date}}</td>
-                            <td>abcd</td>
-                            <td>efg</td>
+                            <td>{{bill.bill_number}}</td>
+                            <td>{{bill.expense_group}}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        <div class="nav-pagination" *ngIf="!isLoading && bills.length">
+        <div class="nav-pagination mb-auto" *ngIf="!isLoading && bills.length">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
                     <li class="page-item" *ngIf="previousPageLink">

@@ -53,6 +53,17 @@ export class MappingsService {
     );
   }
 
+  postCategoryMappings(workspace_id: number, category: string, sub_category: string, account_name: string, account_id: string): Observable<any> {
+    return this.generalService.post(
+      `/workspaces/${workspace_id}/mappings/categories/`, {
+        category: category,
+        sub_category: sub_category,
+        account_name: account_name,
+        account_id: account_id
+      }
+    );
+  }
+
   getEmployeeMappings(workspace_id: number): Observable<any> {
     return this.generalService.get(
       `/workspaces/${workspace_id}/mappings/employees/`, {}

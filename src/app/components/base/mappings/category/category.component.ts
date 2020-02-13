@@ -119,7 +119,7 @@ export class CategoryComponent implements OnInit {
       });
 
       this.mappingsService.getQBOAccounts(this.workspaceId).subscribe(accounts => {
-        this.qboAccounts = accounts;
+        this.qboAccounts = accounts.filter(account => account.AccountType === 'Expense');
       });
     });
   }

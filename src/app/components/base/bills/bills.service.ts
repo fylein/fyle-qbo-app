@@ -15,4 +15,8 @@ export class BillsService {
       }
     );
   }
+
+  getBills(workspace_id: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspace_id}/qbo/bills/`, {});
+  }
 }

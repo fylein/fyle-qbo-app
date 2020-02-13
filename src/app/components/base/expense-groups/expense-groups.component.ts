@@ -36,7 +36,7 @@ export class ExpenseGroupsComponent implements OnInit {
   nextPage() {
     this.offset = this.offset + this.limit;
     this.isLoading = true;
-    this.getPaginatedExpenses();
+    this.getPaginatedExpenseGroups();
   }
 
   onSelect() {
@@ -46,7 +46,7 @@ export class ExpenseGroupsComponent implements OnInit {
   previousPage() {
     this.offset = this.offset - this.limit;
     this.isLoading = true;
-    this.getPaginatedExpenses();
+    this.getPaginatedExpenseGroups();
   }
   
   changeState(state: string) {
@@ -68,7 +68,7 @@ export class ExpenseGroupsComponent implements OnInit {
       this.complete = 'active';
       this.all = '';
     }
-    this.getPaginatedExpenses();
+    this.getPaginatedExpenseGroups();
   }
 
   createBills() { 
@@ -83,7 +83,7 @@ export class ExpenseGroupsComponent implements OnInit {
     this.selectedGroups = this.expenseGroups.filter(expenseGroup => expenseGroup.selected == true);
   }
 
-  getPaginatedExpenses() {
+  getPaginatedExpenseGroups() {
     this.expenseGroupService.getExpenseGroups(this.workspaceId, this.limit, this.offset, this.state).subscribe(expenseGroups => {
       this.nextPageLink = expenseGroups.next;
       this.previousPageLink = expenseGroups.previous;
@@ -97,7 +97,7 @@ export class ExpenseGroupsComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
-      this.getPaginatedExpenses();
+      this.getPaginatedExpenseGroups();
     });
   }
 }

@@ -39,7 +39,6 @@ export class BillsComponent implements OnInit {
       this.previousPageLink = bills.previous;
       this.count = bills.count;
       this.bills = bills.results;
-      console.log(this.bills);
       this.isLoading = false;
     });
   }

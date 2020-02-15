@@ -31,6 +31,7 @@
                             <th>Status</th>
                             <th>Employee</th>
                             <th>Claim No.</th>
+                            <th *ngIf="state === 'FAILED'">Errors</th>
                         </tr>
                     </thead>
                     <tbody *ngFor="let task of tasks;">
@@ -43,6 +44,11 @@
                             <td *ngIf="task.status === 'FAILED'">Failed</td>
                             <td>{{task.bill}}</td>
                             <td>{{task.expense_group}}</td>
+                            <td *ngIf="state === 'FAILED'">
+                                <button class="btn" (click)="showErrors(task.detail)">
+                                    <i class="material-icons">menu_open</i>
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

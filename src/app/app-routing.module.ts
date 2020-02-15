@@ -19,6 +19,8 @@ import { QBOCallbackComponent } from './components/base/settings/qbo-callback/qb
 import { CategoryComponent } from './components/base/mappings/category/category.component';
 import { EmployeeComponent } from './components/base/mappings/employee/employee.component';
 import { GeneralComponent } from './components/base/mappings/general/general.component';
+import { ProjectComponent } from './components/base/mappings/project/project.component';
+import { CostCenterComponent } from './components/base/mappings/cost-center/cost-center.component';
 
 const authRoutes: Routes = [
   {
@@ -68,8 +70,10 @@ const baseModuleRoutes: Routes = [
         component: MappingsComponent,
         children: [
           { path: 'general', component: GeneralComponent },
-          { path: 'category', component: CategoryComponent },
-          { path: 'employee', component: EmployeeComponent }
+          { path: 'categories', component: CategoryComponent },
+          { path: 'employees', component: EmployeeComponent },
+          { path: 'projects', component: ProjectComponent },
+          { path: 'cost_centers', component: CostCenterComponent },
         ]
       },
       { path: ':workspace_id/settings', component: SettingsComponent },

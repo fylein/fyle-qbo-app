@@ -24,6 +24,8 @@ import { EmployeeComponent } from './components/base/mappings/employee/employee.
 import { GeneralComponent } from './components/base/mappings/general/general.component';
 import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ProjectComponent } from './components/base/mappings/project/project.component';
+import { CostCenterComponent } from './components/base/mappings/cost-center/cost-center.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CategoryComponent,
     EmployeeComponent,
     GeneralComponent,
+    ProjectComponent,
+    CostCenterComponent,
   ],
   entryComponents: [
     EmployeeComponent, 

@@ -54,7 +54,7 @@ export class CategoryComponent implements OnInit {
   accountSearch = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
-    filter(term => term.length >= 2),
+    filter(term => term.length >= 1),
     map(term => this.qboAccounts.filter(qboAccount => new RegExp(term.toLowerCase(), 'g').test(qboAccount.Name.toLowerCase())))
   )
   
@@ -63,7 +63,7 @@ export class CategoryComponent implements OnInit {
   categorySearch = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
-    filter(term => term.length >= 2),
+    filter(term => term.length >= 1),
     map(term => this.fyleCategories.filter(fyleCategory => new RegExp(term.toLowerCase(), 'g').test(fyleCategory.name.toLowerCase())))
   )
 
@@ -72,7 +72,7 @@ export class CategoryComponent implements OnInit {
   subCategorySearch = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
-    filter(term => term.length >= 2),
+    filter(term => term.length >= 1),
     map(term => this.fyleCategories.filter(fyleCategory => new RegExp(term.toLowerCase(), 'g').test(fyleCategory.sub_category.toLowerCase())))
   )
 

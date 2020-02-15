@@ -63,9 +63,12 @@ export class TasksComponent implements OnInit {
       this.previousPageLink = tasks.previous;
       this.count = tasks.count;
       this.tasks = tasks.results;
-      console.log(this.tasks);
       this.isLoading = false;
     });
+  }
+
+  showErrors(errorDetails) {
+    console.log(errorDetails);
   }
 
   ngOnInit() {

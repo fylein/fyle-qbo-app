@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { WorkspaceService } from './workspace.service';
 
 @Component({
@@ -17,14 +17,20 @@ export class BaseComponent implements OnInit {
 
   ngOnInit() {
     this.workspaceService.getWorkspaces().subscribe(workspaces => {
+      let pathName = window.location.pathname;
       if (Array.isArray(workspaces) && workspaces.length) {
         this.workspace = workspaces[0];
         this.isLoading = false;
-        this.router.navigateByUrl(`/workspaces/${this.workspace.id}/expense_groups`);
+        if (pathName === '/workspaces') {
+          this.router.navigateByUrl(`/workspaces/${this.workspace.id}/expense_groups`);
+        }
       } else {
         this.workspaceService.createWorkspace().subscribe(workspace => {
           this.workspace = workspace;
           this.isLoading = false;
+          if (pathName === '/workspaces') {
+            this.router.navigateByUrl(`/workspaces/${this.workspace.id}/expense_groups`);
+          }
         });
       }
     });

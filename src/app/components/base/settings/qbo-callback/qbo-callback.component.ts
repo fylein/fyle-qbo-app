@@ -18,7 +18,12 @@ export class QBOCallbackComponent implements OnInit {
       let realmId: string = params.realmId
       this.settingsService.connectQBO(workspaceId, code, realmId).subscribe(response => {
         if (response) {
-          this.router.navigateByUrl('/workspaces/' + workspaceId + '/settings?state=destination');
+          this.router.navigateByUrl(`/workspaces/${workspaceId}/settings?state=destination`);
+        }
+      },
+      error => {
+        if (error.status == 400) {
+          this.router.navigateByUrl(`/workspaces/${workspaceId}/settings?state=destination&error=${error.error.message}`);
         }
       });
     });

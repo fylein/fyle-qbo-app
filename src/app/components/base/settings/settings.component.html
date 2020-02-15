@@ -22,6 +22,9 @@
   <div class="login center-div mt-5" *ngIf="!fyleConnected && !isLoading">
     <p>Connect to your Fyle account</p>
     <button class="btn btn-lg main-btn" (click)="connectFyle()">Connect</button>
+    <div class="text-danger mt-2" *ngIf="error">
+      <p>{{error}}</p>
+    </div>
   </div>
 </div>
 
@@ -33,6 +36,9 @@
   <div class="login center-div mt-5" *ngIf="!qboConnected && !isLoading">
     <p>Connect to your Quickbooks online account</p>
     <button class="btn btn-lg main-btn" (click)="connectQBO()">Connect</button>
+    <div class="text-danger mt-2" *ngIf="error">
+      <p>{{error}}</p>
+    </div>
   </div>
 </div>
 

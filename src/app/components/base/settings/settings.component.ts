@@ -26,6 +26,7 @@ export class SettingsComponent implements OnInit {
   destination: string;
   schedule: string;
   workspaceId: number;
+  error: string;
 
   constructor(private settingsService: SettingsService, private route: ActivatedRoute, private router: Router) {
   }
@@ -109,6 +110,7 @@ export class SettingsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
       this.route.queryParams.subscribe(queryParams => {
+        this.error = queryParams.error;
         this.getSource();
         this.getDestination();
         if (queryParams.state) {

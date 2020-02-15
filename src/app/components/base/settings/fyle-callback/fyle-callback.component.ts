@@ -19,6 +19,10 @@ export class FyleCallbackComponent implements OnInit {
         if (response) {
           this.router.navigateByUrl('/workspaces/' + workspaceId + '/settings?state=source');
         }
+      }, error => {
+        if (error.status == 400) {
+          this.router.navigateByUrl(`/workspaces/${workspaceId}/settings?state=source&error=${error.error.message}`);
+        }
       });
     });
   }

@@ -12,11 +12,15 @@ export class BaseComponent implements OnInit {
   workspace: any = {};
   isLoading: boolean = true;
 
-  constructor(private workspaceService: WorkspaceService) {
+  constructor(private workspaceService: WorkspaceService, private router: Router) {
+  }
+
+  ngOnInit() {
     this.workspaceService.getWorkspaces().subscribe(workspaces => {
       if (Array.isArray(workspaces) && workspaces.length) {
         this.workspace = workspaces[0];
         this.isLoading = false;
+        this.router.navigateByUrl(`/workspaces/${this.workspace.id}/expense_groups`);
       } else {
         this.workspaceService.createWorkspace().subscribe(workspace => {
           this.workspace = workspace;
@@ -24,8 +28,5 @@ export class BaseComponent implements OnInit {
         });
       }
     });
-  }
-
-  ngOnInit() {
   }
 }

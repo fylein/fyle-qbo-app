@@ -43,7 +43,7 @@
             <div class="floating-label">
                 <input formControlName="fyleCostCenter" class="form-control" type="text" [ngbTypeahead]="costCenterSearch"
                     [inputFormatter]="costCenterFormatter" [resultFormatter]="costCenterFormatter" [editable]='false' />
-                <label for="fyleCostCenters" class="input-label">CostCenter</label>
+                <label for="fyleCostCenters" class="input-label">Cost Center</label>
                 <div class="text-danger mb-2" *ngIf="!costCenterIsValid">
                     <small>
                         cost center not found in Fyle

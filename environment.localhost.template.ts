@@ -8,5 +8,6 @@ export const environment = {
     app_url: 'ANGULAR APP URL',
     qbo_client_id: 'QBO CLIENT_ID',
     qbo_scope: 'QBO SCOPE',
-    qbo_authorize_uri: 'QBO CONNETION URI'
+    qbo_authorize_uri: 'QBO CONNETION URI',
+    qbo_app_url: 'QBO app url'
 }

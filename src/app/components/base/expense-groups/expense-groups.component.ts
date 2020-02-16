@@ -94,6 +94,12 @@ export class ExpenseGroupsComponent implements OnInit {
     });
   }
 
+  goToExpenseGroup(id: number) {
+    this.router.navigate([]).then(result => {
+      window.open(`workspaces/${this.workspaceId}/expense_groups/${id}/view`, '_blank')
+    });
+  }
+
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];

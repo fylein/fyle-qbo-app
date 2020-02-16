@@ -34,3 +34,7 @@ p:nth-child(2) span:nth-child(1) {
     text-decoration: none;
     border-color: transparent;
 }
+
+.btn:hover {
+    background-color: #f2f2f2;
+}

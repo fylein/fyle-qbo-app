@@ -13,4 +13,10 @@ export class TasksService {
       `/workspaces/${workspace_id}/tasks/all/?limit=${limit}&offset=${offset}&status=${status}`, {}
     );
   }
+
+  getTasksByExpenseGroupId(workspace_id: number, expense_group_id: number): Observable<any> {
+    return this.generalService.get(
+      `/workspaces/${workspace_id}/tasks/expense_group/${expense_group_id}/`, {}
+    );
+  }
 }

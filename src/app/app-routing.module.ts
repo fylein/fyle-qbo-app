@@ -21,6 +21,7 @@ import { EmployeeComponent } from './components/base/mappings/employee/employee.
 import { GeneralComponent } from './components/base/mappings/general/general.component';
 import { ProjectComponent } from './components/base/mappings/project/project.component';
 import { CostCenterComponent } from './components/base/mappings/cost-center/cost-center.component';
+import { ViewExpenseGroupComponent } from './components/base/expense-groups/view-expense-group/view-expense-group.component';
 
 const authRoutes: Routes = [
   {
@@ -64,6 +65,7 @@ const baseModuleRoutes: Routes = [
         path: ':workspace_id/expense_groups',
         component: ExpenseGroupsComponent,
       },
+      { path: ':workspace_id/expense_groups/:expense_group_id/view', component: ViewExpenseGroupComponent },
       { path: ':workspace_id/bills', component: BillsComponent },
       { 
         path: ':workspace_id/mappings', 

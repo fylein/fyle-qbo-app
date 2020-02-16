@@ -26,6 +26,7 @@ import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProjectComponent } from './components/base/mappings/project/project.component';
 import { CostCenterComponent } from './components/base/mappings/cost-center/cost-center.component';
+import { ViewExpenseGroupComponent } from './components/base/expense-groups/view-expense-group/view-expense-group.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { CostCenterComponent } from './components/base/mappings/cost-center/cost
     GeneralComponent,
     ProjectComponent,
     CostCenterComponent,
+    ViewExpenseGroupComponent,
   ],
   entryComponents: [
     EmployeeComponent, 

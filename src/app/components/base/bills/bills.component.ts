@@ -18,7 +18,7 @@ export class BillsComponent implements OnInit {
   offset: number = 0;
 
 
-  constructor(private route: ActivatedRoute, private billsService: BillsService) {}
+  constructor(private route: ActivatedRoute, private router: Router, private billsService: BillsService) {}
 
   
   nextPage() {
@@ -40,6 +40,12 @@ export class BillsComponent implements OnInit {
       this.count = bills.count;
       this.bills = bills.results;
       this.isLoading = false;
+    });
+  }
+
+  goToExpenseGroup(id: number) {
+    this.router.navigate([]).then(result => {
+      window.open(`workspaces/${this.workspaceId}/expense_groups/${id}/view`, '_blank')
     });
   }
 

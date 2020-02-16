@@ -31,6 +31,10 @@ export class ViewExpenseGroupComponent implements OnInit {
     window.open(`${environment.qbo_app_url}/app/bill?txnId=${this.task['detail'].Bill.Id}`, '_blank')
   }
 
+  openExpenseInFyle(expenseId: string) {
+    window.open(`${environment.fyle_url}/app/main/#/enterprise/view_expense/${expenseId}`, '_blank');
+  }
+
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];

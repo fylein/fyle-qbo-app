@@ -34,7 +34,11 @@
                             </td>
                             <td>{{bill.transaction_date}}</td>
                             <td>{{bill.bill_number}}</td>
-                            <td>{{bill.expense_group}}</td>
+                            <td>
+                                <button class="btn" (click)="goToExpenseGroup(bill.expense_group)">
+                                    <i class="material-icons">open_in_new</i>
+                                </button>          
+                            </td>
                         </tr>
                     </tbody>
                 </table>

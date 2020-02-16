@@ -39,7 +39,7 @@
                                 </label>
                             </th>
                             <th style="width: 30%">Description</th>
-                            <th>Status</th>
+                            <th *ngIf="state !== 'ALL'">Status</th>
                             <th>Employee</th>
                             <th>Claim No.</th>
                             <th>View</th>
@@ -60,7 +60,6 @@
                             </td>
                             <td *ngIf="state === 'COMPLETE'">Complete</td>
                             <td *ngIf="state === 'READY'">Ready</td>
-                            <td *ngIf="state === 'ALL'">All</td>
                             <td>{{expenseGroup.description.employee_email}}</td>
                             <td>{{expenseGroup.description.claim_number}}</td>
                             <td>

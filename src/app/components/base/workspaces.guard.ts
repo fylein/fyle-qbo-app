@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, ActivatedRoute, Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable, forkJoin } from 'rxjs';
 import { SettingsService } from 'src/app/components/base/settings/settings.service';
 import { map, catchError } from 'rxjs/operators';
@@ -14,7 +14,6 @@ export class WorkspacesGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     let params = next.params;
     let workspaceId = +params['workspace_id']
-    console.log(workspaceId);
 
     return forkJoin(
       [
@@ -32,7 +31,6 @@ export class WorkspacesGuard implements CanActivate {
             state = 'source';
           }
         }
-        console.log(state);
         return this.router.navigateByUrl(`workspaces/${workspaceId}/settings?state=${state}&error=${error.error.message}`);
       })
     );

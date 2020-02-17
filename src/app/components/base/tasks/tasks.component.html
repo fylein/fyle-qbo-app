@@ -40,7 +40,11 @@
                                 {{task.type === 'FETCHING_EXPENSES'? 'Fetching Expenses': 'Creating Bill'}}
                             </td>
                             <td *ngIf="task.status === 'COMPLETE'">Complete</td>
-                            <td *ngIf="task.status === 'IN_PROGRESS'">In Progress</td>
+                            <td *ngIf="task.status === 'IN_PROGRESS'">
+                                <div class="spinner-border spinner-color" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                  </div>
+                            </td>
                             <td *ngIf="task.status === 'FAILED'">Failed</td>
                             <td>{{task.created_at | date}}</td>
                             <td *ngIf="(state === 'FAILED' || state === 'ALL')">

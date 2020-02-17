@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TasksService } from './tasks.service';
+import { timer, interval, from } from 'rxjs';
+import { scan, tap, delay, takeWhile, switchMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tasks',
@@ -65,6 +67,15 @@ export class TasksComponent implements OnInit {
       this.count = tasks.count;
       this.tasks = tasks.results;
       this.isLoading = false;
+
+      if(this.state === 'ALL') {
+        interval(3000).pipe(
+          switchMap(() => from(this.tasksService.getTasks(this.workspaceId, this.limit, this.offset, this.state))),
+          takeWhile((response) => response['results'].filter(task => task.status === 'IN_PROGRESS').length, true)
+        ).subscribe(response => {
+          this.tasks = response['results'];
+        })
+      }
     });
   }
 

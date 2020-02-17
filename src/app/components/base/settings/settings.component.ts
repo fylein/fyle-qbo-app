@@ -74,6 +74,7 @@ export class SettingsComponent implements OnInit {
 
   toggleState(state: string) {
     this.state = state;
+    this.error = '';
 
     if (this.state === 'source') {
       this.source = 'active';
@@ -110,13 +111,14 @@ export class SettingsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
       this.route.queryParams.subscribe(queryParams => {
-        this.error = queryParams.error;
         this.getSource();
         this.getDestination();
         if (queryParams.state) {
           this.toggleState(queryParams.state);
+          this.error = queryParams.error;
         } else {
           this.toggleState('source');
+          this.error = queryParams.error;
         }
       });
     });

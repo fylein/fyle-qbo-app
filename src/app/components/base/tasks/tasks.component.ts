@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TasksService } from './tasks.service';
 
 @Component({
@@ -21,7 +21,7 @@ export class TasksComponent implements OnInit {
   complete: string;
   failed: string;
 
-  constructor(private route: ActivatedRoute, private tasksService: TasksService) {}
+  constructor(private route: ActivatedRoute, private router: Router, private tasksService: TasksService) {}
 
   nextPage() {
     this.offset = this.offset + this.limit;
@@ -64,6 +64,12 @@ export class TasksComponent implements OnInit {
       this.count = tasks.count;
       this.tasks = tasks.results;
       this.isLoading = false;
+    });
+  }
+
+  goToExpenseGroup(id: number) {
+    this.router.navigate([]).then(result => {
+      window.open(`workspaces/${this.workspaceId}/expense_groups/${id}/view`, '_blank')
     });
   }
 

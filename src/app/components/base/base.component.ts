@@ -11,6 +11,8 @@ export class BaseComponent implements OnInit {
   user = JSON.parse(localStorage.getItem('user'));;
   workspace: any = {};
   isLoading: boolean = true;
+  fyleConnected: boolean = false;
+  qboConencted: boolean = false;
 
   constructor(private workspaceService: WorkspaceService, private router: Router) {
   }

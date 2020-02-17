@@ -22,6 +22,7 @@ import { GeneralComponent } from './components/base/mappings/general/general.com
 import { ProjectComponent } from './components/base/mappings/project/project.component';
 import { CostCenterComponent } from './components/base/mappings/cost-center/cost-center.component';
 import { ViewExpenseGroupComponent } from './components/base/expense-groups/view-expense-group/view-expense-group.component';
+import { WorkspacesGuard } from './components/base/workspaces.guard';
 
 const authRoutes: Routes = [
   {
@@ -60,16 +61,18 @@ const baseModuleRoutes: Routes = [
     component: BaseComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: ':workspace_id/tasks', component: TasksComponent },
+      { path: ':workspace_id/tasks', component: TasksComponent, canActivate: [WorkspacesGuard] },
       {
         path: ':workspace_id/expense_groups',
         component: ExpenseGroupsComponent,
+        canActivate: [WorkspacesGuard]
       },
-      { path: ':workspace_id/expense_groups/:expense_group_id/view', component: ViewExpenseGroupComponent },
-      { path: ':workspace_id/bills', component: BillsComponent },
+      { path: ':workspace_id/expense_groups/:expense_group_id/view', component: ViewExpenseGroupComponent, canActivate: [WorkspacesGuard] },
+      { path: ':workspace_id/bills', component: BillsComponent , canActivate: [WorkspacesGuard]},
       { 
         path: ':workspace_id/mappings', 
         component: MappingsComponent,
+        canActivate: [WorkspacesGuard],
         children: [
           { path: 'general', component: GeneralComponent },
           { path: 'categories', component: CategoryComponent },

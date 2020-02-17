@@ -29,9 +29,9 @@
                         <tr class="colHeadings">
                             <th style="width: 30%">Type</th>
                             <th>Status</th>
-                            <th>Employee</th>
-                            <th>Claim No.</th>
-                            <th *ngIf="state === 'FAILED'">Errors</th>
+                            <th>Created On</th>
+                            <th *ngIf="state === 'FAILED' || state === 'ALL'">Issues</th>
+                            <th>Expense Group</th>
                         </tr>
                     </thead>
                     <tbody *ngFor="let task of tasks;">
@@ -42,12 +42,16 @@
                             <td *ngIf="task.status === 'COMPLETE'">Complete</td>
                             <td *ngIf="task.status === 'IN_PROGRESS'">In Progress</td>
                             <td *ngIf="task.status === 'FAILED'">Failed</td>
-                            <td>{{task.bill}}</td>
-                            <td>{{task.expense_group}}</td>
-                            <td *ngIf="state === 'FAILED'">
-                                <button class="btn" (click)="showErrors(task.detail)">
-                                    <i class="material-icons">menu_open</i>
+                            <td>{{task.created_at | date}}</td>
+                            <td *ngIf="(state === 'FAILED' || state === 'ALL')">
+                                <button class="btn" *ngIf="task.status == 'FAILED'" (click)="showErrors(task.detail)">
+                                    <i class="material-icons">info</i>
                                 </button>
+                            </td>
+                            <td>
+                                <button class="btn" (click)="goToExpenseGroup(task.expense_group)">
+                                    <i class="material-icons">open_in_new</i>
+                                </button>          
                             </td>
                         </tr>
                     </tbody>

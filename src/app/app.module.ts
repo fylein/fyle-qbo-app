@@ -27,6 +27,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ProjectComponent } from './components/base/mappings/project/project.component';
 import { CostCenterComponent } from './components/base/mappings/cost-center/cost-center.component';
 import { ViewExpenseGroupComponent } from './components/base/expense-groups/view-expense-group/view-expense-group.component';
+import { MappingErrorsComponent } from './components/base/tasks/mapping-errors/mapping-errors.component';
 
 @NgModule({
   declarations: [
@@ -50,10 +51,10 @@ import { ViewExpenseGroupComponent } from './components/base/expense-groups/view
     ProjectComponent,
     CostCenterComponent,
     ViewExpenseGroupComponent,
+    MappingErrorsComponent,
   ],
   entryComponents: [
-    EmployeeComponent, 
-    // NgbModalBackdrop
+    EmployeeComponent
   ],
   imports: [
     BrowserModule,

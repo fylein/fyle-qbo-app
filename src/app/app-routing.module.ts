@@ -23,6 +23,7 @@ import { ProjectComponent } from './components/base/mappings/project/project.com
 import { CostCenterComponent } from './components/base/mappings/cost-center/cost-center.component';
 import { ViewExpenseGroupComponent } from './components/base/expense-groups/view-expense-group/view-expense-group.component';
 import { WorkspacesGuard } from './components/base/workspaces.guard';
+import { MappingErrorsComponent } from './components/base/tasks/mapping-errors/mapping-errors.component';
 
 const authRoutes: Routes = [
   {
@@ -62,6 +63,7 @@ const baseModuleRoutes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: ':workspace_id/tasks', component: TasksComponent, canActivate: [WorkspacesGuard] },
+      { path: ':workspace_id/tasks/:task_id/errors', component: MappingErrorsComponent },
       {
         path: ':workspace_id/expense_groups',
         component: ExpenseGroupsComponent,

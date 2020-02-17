@@ -20,6 +20,7 @@ export class TasksComponent implements OnInit {
   inProgress: string = 'active';
   complete: string;
   failed: string;
+  error: any[];
 
   constructor(private route: ActivatedRoute, private router: Router, private tasksService: TasksService) {}
 
@@ -69,12 +70,12 @@ export class TasksComponent implements OnInit {
 
   goToExpenseGroup(id: number) {
     this.router.navigate([]).then(result => {
-      window.open(`workspaces/${this.workspaceId}/expense_groups/${id}/view`, '_blank')
+      window.open(`workspaces/${this.workspaceId}/expense_groups/${id}/view`, '_blank');
     });
   }
 
-  showErrors(errorDetails) {
-    console.log(errorDetails);
+  showErrors(taskId: number, errors: any[]) {
+    this.router.navigateByUrl(`workspaces/${this.workspaceId}/tasks/${taskId}/errors`, {queryParams: {errors: errors}});
   }
 
   ngOnInit() {

@@ -14,6 +14,12 @@ export class TasksService {
     );
   }
 
+  getTaskById(workspace_id: number, id: number): Observable<any> {
+    return this.generalService.get(
+      `/workspaces/${workspace_id}/tasks/?id=${id}`, {}
+    );
+  }
+
   getTasksByExpenseGroupId(workspace_id: number, expense_group_id: number): Observable<any> {
     return this.generalService.get(
       `/workspaces/${workspace_id}/tasks/expense_group/${expense_group_id}/`, {}

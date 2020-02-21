@@ -21,7 +21,10 @@
     "@angular/router": "~8.2.14",
     "@ng-bootstrap/ng-bootstrap": "^5.2.1",
     "bootstrap": "^4.4.1",
+    "i": "^0.3.6",
     "jquery": "^3.4.1",
+    "ng2-flatpickr": "^9.0.0",
+    "npm": "^6.13.7",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SettingsService } from './settings.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FlatpickrOptions } from 'ng2-flatpickr';
 
 
 const FYLE_URL = environment.fyle_url;
@@ -26,9 +28,19 @@ export class SettingsComponent implements OnInit {
   destination: string;
   schedule: string;
   workspaceId: number;
+  form: FormGroup;
   error: string;
+  datetimeIsValid: boolean = true;
+  frequencyIsValid: boolean = true;
+  scheduleEnabled: boolean = true;
+  datetimePickerOptions: FlatpickrOptions;
 
-  constructor(private settingsService: SettingsService, private route: ActivatedRoute, private router: Router) {
+  constructor(private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder) {
+    this.form = this.formBuilder.group({
+      datetime: new FormControl(''),
+      hours: new FormControl(''),
+      scheduleEnabled: new FormControl()
+    });
   }
 
   getSource() {
@@ -54,6 +66,27 @@ export class SettingsComponent implements OnInit {
     }, error => {
       if (error.status == 400) {
         this.qboConnected = false;
+        this.isLoading = false;
+      }
+    });
+  }
+
+  getSettings() {
+    this.settingsService.getSettings(this.workspaceId).subscribe(settings => {
+      if (settings) {
+        if (settings.schedule) {
+          this.form.setValue({
+            datetime: new Date(settings.schedule.next_run),
+            hours: settings.schedule.minutes/60,
+            scheduleEnabled: settings.schedule_enabled
+          });
+          this.datetimePickerOptions.minDate = new Date(settings.schedule.next_run.split('T')[0]);
+          this.datetimePickerOptions.defaultDate = new Date(settings.schedule.next_run).toISOString();
+        }
+        this.isLoading = false;
+      }
+    }, error => {
+      if (error.status == 400) {
         this.isLoading = false;
       }
     });
@@ -91,10 +124,32 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+  submit() {
+    this.datetimeIsValid = false
+    this.frequencyIsValid = false
+
+    if (this.form.value.datetime) {
+      this.datetimeIsValid = true;
+    }
+
+    if (this.form.value.hours) {
+      this.frequencyIsValid = true;
+    }
+    
+    if (this.datetimeIsValid && this.frequencyIsValid) {
+      let nextRun = new Date(this.form.value.datetime).toISOString();
+      let hours = this.form.value.hours;
+      let scheduleEnabled = this.form.value.scheduleEnabled;
+      this.isLoading = true;
+      this.settingsService.postSettings(this.workspaceId, nextRun, hours, scheduleEnabled).subscribe(response => {
+        this.getSettings();
+      });
+    }
+  }
+
   connectFyle() {
     window.location.href =
-      FYLE_URL + '/app/main/#/oauth/authorize?' + 'client_id=' + FYLE_CLIENT_ID +
-      '&redirect_uri=' + APP_URL + '/workspaces/fyle/callback&response_type=code&state=' + this.workspaceId;
+      `${FYLE_URL}/app/main/#/oauth/authorize?client_id=${FYLE_CLIENT_ID}&redirect_uri=${APP_URL}/workspaces/fyle/callback&response_type=code&state=${this.workspaceId}`;
   }
 
   connectQBO() {
@@ -108,11 +163,16 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.datetimePickerOptions = {
+      enableTime: true,
+      minDate: new Date()
+    }
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
       this.route.queryParams.subscribe(queryParams => {
         this.getSource();
         this.getDestination();
+        this.getSettings();
         if (queryParams.state) {
           this.toggleState(queryParams.state);
           this.error = queryParams.error;

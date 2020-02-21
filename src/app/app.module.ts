@@ -28,6 +28,7 @@ import { ProjectComponent } from './components/base/mappings/project/project.com
 import { CostCenterComponent } from './components/base/mappings/cost-center/cost-center.component';
 import { ViewExpenseGroupComponent } from './components/base/expense-groups/view-expense-group/view-expense-group.component';
 import { MappingErrorsComponent } from './components/base/tasks/mapping-errors/mapping-errors.component';
+import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { MappingErrorsComponent } from './components/base/tasks/mapping-errors/m
     HttpClientModule,
     FormsModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    Ng2FlatpickrModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

@@ -15,7 +15,7 @@ export class ExpenseGroupsComponent implements OnInit {
   nextPageLink: string;
   previousPageLink: string;
   count: number;
-  limit: number = 10;
+  limit: number = 20;
   offset: number = 0;
   state = 'READY';
   ready: string = 'active';;

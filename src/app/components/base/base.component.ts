@@ -31,7 +31,7 @@ export class BaseComponent implements OnInit {
           this.workspace = workspace;
           this.isLoading = false;
           if (pathName === '/workspaces') {
-            this.router.navigateByUrl(`/workspaces/${this.workspace.id}/expense_groups`);
+            this.router.navigateByUrl(`/workspaces/${this.workspace.id}/settings`);
           }
         });
       }

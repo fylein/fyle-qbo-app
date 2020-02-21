@@ -36,4 +36,16 @@ export class SettingsService {
       realm_id: realm_id
     });
   }
+
+  postSettings(workspace_id: number, next_run: string, hours: number, schedule_enabled: boolean) {
+    return this.generalService.post(`/workspaces/${workspace_id}/settings/`, {
+      next_run: next_run,
+      hours: hours,
+      schedule_enabled: schedule_enabled
+    });
+  }
+
+  getSettings(workspace_id: number) {
+    return this.generalService.get(`/workspaces/${workspace_id}/settings/`, {});
+  }
 }

@@ -1,24 +1,5 @@
 <div class="content" *ngIf="!isLoading">
     <div class="schedule-content">
-        <!-- <div class="d-flex enable-schedule">
-            <p>Enabled</p>
-            <input type="checkbox" id="schedule-enabled" name="schedule" value="enabled" class="switch-input"
-                onchange="document.getElementById('schedule-form').submit()" checked>
-            <label for="schedule-enabled" class="switch-label"></label>
-            <p>Disabled</p>
-            <input type="checkbox" id="schedule-disabled" name="schedule" value="enabled" class="switch-input"
-                onchange="document.getElementById('schedule-form').submit()">
-            <label for="schedule-disabled" class="switch-label"></label>
-        </div>
-        <div class="d-flex repeat-frequency">
-            <p>Repeat Frequency</p>
-        </div>
-        <div class="d-flex datetimepicker">
-            <p>Start date & time</p>
-        </div>
-        <div class="save-schedule">
-            <button class="main-btn btn save-btn" type="submit">Save Schedule</button>
-        </div> -->
         <form [formGroup]="form" (ngSubmit)="submit()">
             <label for="bankAccounts" class="d-flex">Bank Account</label>
             <select formControlName="bankAccounts" id="bankAccounts" class="form-control selectpicker col-4">

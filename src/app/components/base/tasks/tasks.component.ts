@@ -12,7 +12,7 @@ import { scan, tap, delay, takeWhile, switchMap, map } from 'rxjs/operators';
 export class TasksComponent implements OnInit {
   workspaceId: number;
   tasks: any;
-  limit: number = 10;
+  limit: number = 20;
   offset: number = 0;
   state: string = 'ALL';
   nextPageLink: string;

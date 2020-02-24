@@ -53,7 +53,7 @@
                                 </button>
                             </td>
                             <td>
-                                <button class="btn" (click)="goToExpenseGroup(task.expense_group)">
+                                <button class="btn" (click)="goToExpenseGroup(task.expense_group)" *ngIf="task.type==='CREATING_BILL'">
                                     <i class="material-icons">open_in_new</i>
                                 </button>          
                             </td>

@@ -17,7 +17,7 @@
 <app-loader *ngIf="isLoading"></app-loader>
 <div class="tabitem-content" *ngIf="!isLoading">
     <div class="d-flex content-header">
-        <button class="btn ml-auto main-btn sync-btn" (click)="syncExpenseGroups()">Sync Expense Groups</button>
+        <button class="btn main-btn sync-btn" (click)="syncExpenseGroups()">Sync Expense Groups</button>
         <button class="main-btn-outline delete-btn ml-3" type="submit" form="delete-form" name="method" value="delete"
             (click)="createBills()" *ngIf="selectedGroups.length">Export Expense Groups
         </button>

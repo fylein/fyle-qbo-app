@@ -15,5 +15,8 @@ RUN npm install -g @angular/cli
 # add app
 COPY . /app
 
+# Expose development port
+EXPOSE 4200
+
 # start app
-CMD ng serve --host 0.0.0.0 --configuration=localhost
+CMD ng serve --host 0.0.0.0 --port 4200 --disable-host-check --configuration=production

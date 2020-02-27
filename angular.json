@@ -67,7 +67,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "environment.localhost.ts"
+                  "with": "src/environments/environment.localhost.ts"
                 }
               ]
             }
@@ -80,10 +80,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "fyle-qbo-app:build:production"
+		"browserTarget": "fyle-qbo-app:build:production"
             },
             "localhost": {
-              "browserTarget": "fyle-qbo-app:build:localhost"
+		"browserTarget": "fyle-qbo-app:build:localhost"
             }
           }
         },

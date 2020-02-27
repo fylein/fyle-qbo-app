@@ -14,7 +14,7 @@ export class GeneralComponent implements OnInit{
   form: FormGroup;
   workspaceId: number;
   bankAccounts: any[]
-  generalMappings: {};
+  generalMappings: any;
   isLoading: boolean = true;
 
   constructor(private route: ActivatedRoute, private mappingsService: MappingsService, private formBuilder: FormBuilder) {

@@ -16,8 +16,8 @@ export class ViewExpenseGroupComponent implements OnInit {
   expenseGroupId: number;
   expenses: any[];
   isLoading: boolean = true;
-  expenseGroup: {any};
-  task: {any};
+  expenseGroup: any;
+  task: any;
 
   constructor(private route: ActivatedRoute, private router: Router, private expenseGroupsService: ExpenseGroupsService, private tasksService: TasksService, private billsService: BillsService) { }
 

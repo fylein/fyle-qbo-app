@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class MappingErrorsComponent implements OnInit {
   errors: any[];
-  task: {any};
+  task: any;
   isLoading: boolean = true;
   workspaceId: number;
 

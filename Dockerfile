@@ -1,5 +1,5 @@
 # base image
-FROM node:12.2.0
+FROM node:12.2.0-alpine
 
 # set working directory
 WORKDIR /app
@@ -16,4 +16,4 @@ RUN npm install -g @angular/cli
 COPY . /app
 
 # start app
-CMD ng serve --host 0.0.0.0 --configuration=localhost
+CMD ng serve --host 0.0.0.0 --prod

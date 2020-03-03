@@ -51,7 +51,7 @@ export class GeneralComponent implements OnInit{
     this.route.parent.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
       this.mappingsService.getQBOAccounts(this.workspaceId).subscribe(response => {
-        this.bankAccounts = response.filter(account => account.AccountType === 'Bank');
+        this.bankAccounts = response.filter(account => account.AccountType === 'Accounts Payable');
         this.getGeneralMappings();
       });
     });

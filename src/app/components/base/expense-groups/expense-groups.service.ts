@@ -24,6 +24,6 @@ export class ExpenseGroupsService {
   }
 
   syncExpenseGroups(workspace_id: number): Observable<any> {
-    return this.generalService.post(`/workspaces/${workspace_id}/fyle/expense_groups/`, {});
+    return this.generalService.post(`/workspaces/${workspace_id}/fyle/expense_groups/trigger/`, {});
   }
 }

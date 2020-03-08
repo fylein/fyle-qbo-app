@@ -10,7 +10,7 @@ export class BillsService {
 
   createBills(workspace_id: number, expnese_group_ids: any[]): Observable<any> {
     return this.generalService.post(
-      `/workspaces/${workspace_id}/qbo/bills/`, {
+      `/workspaces/${workspace_id}/qbo/bills/trigger/`, {
         expense_group_ids: expnese_group_ids
       }
     );

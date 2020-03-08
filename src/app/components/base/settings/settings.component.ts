@@ -76,12 +76,12 @@ export class SettingsComponent implements OnInit {
       if (settings) {
         if (settings.schedule) {
           this.form.setValue({
-            datetime: new Date(settings.schedule.next_run),
-            hours: settings.schedule.minutes/60,
-            scheduleEnabled: settings.schedule_enabled
+            datetime: new Date(settings.schedule.start_datetime),
+            hours: settings.schedule.interval_hours,
+            scheduleEnabled: settings.schedule.enabled
           });
-          this.datetimePickerOptions.minDate = new Date(settings.schedule.next_run.split('T')[0]);
-          this.datetimePickerOptions.defaultDate = new Date(settings.schedule.next_run).toISOString();
+          this.datetimePickerOptions.minDate = new Date(settings.schedule.start_datetime.split('T')[0]);
+          this.datetimePickerOptions.defaultDate = new Date(settings.schedule.start_datetime).toISOString();
         }
         this.isLoading = false;
       }

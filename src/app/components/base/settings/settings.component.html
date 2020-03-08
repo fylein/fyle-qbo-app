@@ -46,7 +46,7 @@
     <div class="schedule-content">
         <form [formGroup]="form" (ngSubmit)="submit()">
             <div class="d-flex enable-schedule">
-                <p>Enabled</p>
+                <p>Status</p>
                 <input type="checkbox" id="schedule-enabled" name="schedule" (value)="scheduleEnabled" class="switch-input"
                     formControlName="scheduleEnabled" checked>
                 <label for="schedule-enabled" class="switch-label"></label>
@@ -70,7 +70,7 @@
             </div>
             <div class="row">
                 <div class="col-2">
-                    <p>Next run date & time</p>
+                    <p>Start date & time</p>
                 </div>
                 <div class="input-group col-3">
                     <ng2-flatpickr formControlName="datetime" [config]="datetimePickerOptions"></ng2-flatpickr>

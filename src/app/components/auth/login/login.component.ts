@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   login() {
     window.location.href =
       FYLE_URL +
-      '/app/main/#/oauth/authorize?' +
+      '/app/developers/#/oauth/authorize?' +
       'client_id=' +
       FYLE_CLIENT_ID +
       '&redirect_uri=' +

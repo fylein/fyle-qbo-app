@@ -149,7 +149,7 @@ export class SettingsComponent implements OnInit {
 
   connectFyle() {
     window.location.href =
-      `${FYLE_URL}/app/main/#/oauth/authorize?client_id=${FYLE_CLIENT_ID}&redirect_uri=${APP_URL}/workspaces/fyle/callback&response_type=code&state=${this.workspaceId}`;
+      `${FYLE_URL}/app/developers/#/oauth/authorize?client_id=${FYLE_CLIENT_ID}&redirect_uri=${APP_URL}/workspaces/fyle/callback&response_type=code&state=${this.workspaceId}`;
   }
 
   connectQBO() {

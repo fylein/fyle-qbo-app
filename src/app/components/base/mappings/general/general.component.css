@@ -95,11 +95,11 @@ label {
 }
 
 input {
-    margin: 0;
+  margin: 0;
 }
 
 .input-group {
-  width: 16%;
+width: 16%;
 }
 
 .form-control {
@@ -143,4 +143,8 @@ p {
 .bootstrap-datetimepicker-widget.dropdown-menu:before,
 .bootstrap-datetimepicker-widget.dropdown-menu:after {
     content: none !important;
+}
+
+.bank-account {
+    margin: 20px 0;
 }

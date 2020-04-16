@@ -12,6 +12,7 @@ export class MappingsService {
   
   fyleEmployees: Observable<any[]>;
   qboVendors: Observable<any[]>;
+  qboEmployees: Observable<any[]>;
 
   fyleProjects: Observable<any[]>;
   qboCustomers: Observable<any[]>;
@@ -58,6 +59,19 @@ export class MappingsService {
       );
     }
     return this.qboVendors;
+  }
+
+  getQBOEmployees(workspace_id: number): Observable<any> {
+    if (!this.qboEmployees) {
+      this.qboEmployees = this.generalService.get(
+        `/workspaces/${workspace_id}/qbo/employees/`, {}
+      ).pipe(
+        map(data => data),
+        publishReplay(1),
+        refCount()
+      );
+    }
+    return this.qboEmployees;
   }
 
   getFyleEmployees(workspace_id: number): Observable<any> {
@@ -170,14 +184,19 @@ export class MappingsService {
     );
   }
 
-  postEmployeeMappings(workspace_id: number, employee_email: string, vendor_name: string, vendor_id: string): Observable<any> {
+  postEmployeeMappings(workspace_id: number, employee_email: string, vendor_display_name: string, vendor_id: string, employee_display_name: string, employee_id: string, ccc_account_name: string, ccc_account_id: string): Observable<any> {
     this.fyleEmployees = null;
     this.qboVendors = null;
+    this.qboEmployees = null;
     return this.generalService.post(
       `/workspaces/${workspace_id}/mappings/employees/`, {
         employee_email: employee_email,
-        vendor_name: vendor_name,
-        vendor_id: vendor_id
+        vendor_display_name: vendor_display_name,
+        vendor_id: vendor_id,
+        employee_display_name: employee_display_name,
+        employee_id: employee_id,
+        ccc_account_name: ccc_account_name,
+        ccc_account_id: ccc_account_id
       }
     );
   }

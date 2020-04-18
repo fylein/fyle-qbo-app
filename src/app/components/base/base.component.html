@@ -21,12 +21,12 @@
         <a class="nav-link tabitem" routerLink="{{workspace.id}}/checks/"
          routerLinkActive="active">Checks</a>
       </li>
-      <li class="nav-item" *ngIf="generalSettings?.reimbursable_expenses_object == 'JOURNAL_ENTRY' || generalSettings?.corporate_credit_card_expenses_object == 'JOURNAL_ENTRY'">
+      <li class="nav-item" *ngIf="generalSettings?.reimbursable_expenses_object == 'JOURNAL ENTRY' || generalSettings?.corporate_credit_card_expenses_object == 'JOURNAL ENTRY'">
         <a class="nav-link tabitem" routerLink="{{workspace.id}}/journal_entries/"
          routerLinkActive="active">Journal Entries</a>
       </li>
 
-      <li class="nav-item" *ngIf="generalSettings?.corporate_credit_card_expenses_object == 'CREDIT_CARD_PURCHASE'">
+      <li class="nav-item" *ngIf="generalSettings?.corporate_credit_card_expenses_object == 'CREDIT CARD PURCHASE'">
         <a class="nav-link tabitem" routerLink="{{workspace.id}}/credit_card_purchases/"
          routerLinkActive="active">Credit Card Purchases</a>
       </li>

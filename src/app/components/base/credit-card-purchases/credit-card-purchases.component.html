@@ -44,14 +44,14 @@
                 </table>
             </div>
         </div>
-        <div class="nav-pagination mb-auto" *ngIf="!isLoading && creditCardPurchase.length">
+        <div class="nav-pagination mb-auto" *ngIf="!isLoading && creditCardPurchases.length">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
                     <li class="page-item" *ngIf="previousPageLink">
                         <a class="page-link" (click)="previousPage()">&laquo;</a>
                     </li>
                     <li class="page-item disabled">
-                        <a class="page-link">{{offset + 1}} - {{offset + creditCardPurchase.length}} of {{count}}</a>
+                        <a class="page-link">{{offset + 1}} - {{offset + creditCardPurchases.length}} of {{count}}</a>
                     </li>
                     <li class="page-item" *ngIf="nextPageLink">
                         <a class="page-link" (click)="nextPage()">&raquo;</a>

@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExpenseGroupsService } from './expense-groups.service';
 import { BillsService } from '../bills/bills.service';
+import { ChecksService } from '../checks/checks.service';
+import { JournalEntriesService } from '../journal-entries/journal-entries.service';
+import { CreditCardPurchasesService } from '../credit-card-purchases/credit-card-purchases.service';
+import { SettingsService } from '../settings/settings.service';
+
 
 @Component({
   selector: 'app-expense-groups',
@@ -23,9 +28,9 @@ export class ExpenseGroupsComponent implements OnInit {
   all: string
   allSelected: boolean;
   selectedGroups: any[] = [];
+  generalSettings: any;
 
-  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, 
-    private router: Router, private billsService: BillsService) {}
+  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private settingsService: SettingsService, private router: Router, private billsService: BillsService, private checksService: ChecksService, private JournalEntriesService: JournalEntriesService, private CreditCardPurchasesService: CreditCardPurchasesService) {}
 
   syncExpenseGroups() {
     this.expenseGroupService.syncExpenseGroups(this.workspaceId).subscribe(task => {
@@ -71,11 +76,42 @@ export class ExpenseGroupsComponent implements OnInit {
     this.getPaginatedExpenseGroups();
   }
 
-  createBills() { 
-    let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.id);
-    this.billsService.createBills(this.workspaceId, expenseGroupIds).subscribe(result => {
-      this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-    });
+  createQBOItems() { 
+    if (this.generalSettings.reimbursable_expenses_object == 'CHECK') {
+      let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.fund_source == 'PERSONAL' ? expenseGroup.id : '');
+      let filteredIds = expenseGroupIds.filter(Boolean);
+      this.checksService.createChecks(this.workspaceId, filteredIds).subscribe(result => {
+        this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+      });
+    }
+    if (this.generalSettings.reimbursable_expenses_object == 'BILL') {
+      let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.fund_source == 'PERSONAL' ? expenseGroup.id : '');
+      let filteredIds = expenseGroupIds.filter(Boolean);
+      this.billsService.createBills(this.workspaceId, filteredIds).subscribe(result => {
+        this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+      });
+    }
+    if (this.generalSettings.reimbursable_expenses_object == 'JOURNAL ENTRY') {
+      let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.fund_source == 'PERSONAL' ? expenseGroup.id : '');
+      let filteredIds = expenseGroupIds.filter(Boolean);
+      this.JournalEntriesService.createJournalEntries(this.workspaceId, filteredIds).subscribe(result => {
+        this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+      });
+    }
+    if (this.generalSettings.corporate_credit_card_expenses_object == 'JOURNAL ENTRY') {
+      let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.fund_source == 'CCC' ? expenseGroup.id : '');
+      let filteredIds = expenseGroupIds.filter(Boolean);
+      this.JournalEntriesService.createJournalEntries(this.workspaceId, filteredIds).subscribe(result => {
+        this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+      });
+    }
+    if (this.generalSettings.corporate_credit_card_expenses_object == 'CREDIT CARD PURCHASE') {
+      let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.fund_source == 'CCC' ? expenseGroup.id : '');
+      let filteredIds = expenseGroupIds.filter(Boolean);
+      this.CreditCardPurchasesService.createCreditCardPurchases(this.workspaceId, filteredIds).subscribe(result => {
+        this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+      });
+    }
   }
 
   toggleSelectAll() {
@@ -104,6 +140,9 @@ export class ExpenseGroupsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
       this.getPaginatedExpenseGroups();
+      this.settingsService.getGeneralSettings(this.workspaceId).subscribe(generalSettings =>{
+        this.generalSettings = generalSettings;
+      });
     });
   }
 }

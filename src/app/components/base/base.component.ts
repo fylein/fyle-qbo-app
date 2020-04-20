@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { WorkspaceService } from './workspace.service';
+import { SettingsService } from './settings/settings.service'
 
 @Component({
   selector: 'app-base',
@@ -13,8 +14,9 @@ export class BaseComponent implements OnInit {
   isLoading: boolean = true;
   fyleConnected: boolean = false;
   qboConencted: boolean = false;
+  generalSettings: any;
 
-  constructor(private workspaceService: WorkspaceService, private router: Router) {
+  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router) {
   }
 
   ngOnInit() {
@@ -35,6 +37,9 @@ export class BaseComponent implements OnInit {
           }
         });
       }
+      this.settingsService.getGeneralSettings(this.workspace.id).subscribe(response =>{
+        this.generalSettings = response;
+      });
     });
   }
 }

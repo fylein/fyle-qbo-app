@@ -7,7 +7,6 @@ import { BillsService } from '../../bills/bills.service';
 import { ChecksService } from '../../checks/checks.service';
 import { JournalEntriesService } from '../../journal-entries/journal-entries.service';
 import { CreditCardPurchasesService } from '../../credit-card-purchases/credit-card-purchases.service';
-import { SettingsService } from '../../settings/settings.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -24,7 +23,7 @@ export class ViewExpenseGroupComponent implements OnInit {
   task: any;
   generalSettings: any;
 
-  constructor(private route: ActivatedRoute, private router: Router, private expenseGroupsService: ExpenseGroupsService, private tasksService: TasksService, private billsService: BillsService, private checksService: ChecksService, private JournalEntriesService: JournalEntriesService, private CreditCardPurchasesService: CreditCardPurchasesService, private settingsService: SettingsService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private expenseGroupsService: ExpenseGroupsService, private tasksService: TasksService, private billsService: BillsService, private checksService: ChecksService, private JournalEntriesService: JournalEntriesService, private CreditCardPurchasesService: CreditCardPurchasesService) { }
 
   createBills(expense_group_id: number) { 
     this.billsService.createBills(this.workspaceId, [expense_group_id]).subscribe(result => {

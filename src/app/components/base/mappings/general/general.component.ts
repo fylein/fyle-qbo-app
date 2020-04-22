@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MappingsService } from '../mappings.service';
 import { FormBuilder, FormGroup} from '@angular/forms';
-import { SettingsService } from '../../settings/settings.service';
 
 
 @Component({
@@ -24,7 +23,7 @@ export class GeneralComponent implements OnInit{
   bankAccountIsValid: boolean = true;
   cccAccountIsValid: boolean = true;
 
-  constructor(private route: ActivatedRoute, private mappingsService: MappingsService, private settingsService: SettingsService, private formBuilder: FormBuilder) {
+  constructor(private route: ActivatedRoute, private mappingsService: MappingsService, private formBuilder: FormBuilder) {
   }
 
   submit() {

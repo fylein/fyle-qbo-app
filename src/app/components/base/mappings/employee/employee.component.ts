@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute } from '@angular/router';
 import { MappingsService } from '../mappings.service';
-import { SettingsService } from '../../settings/settings.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -32,7 +31,7 @@ export class EmployeeComponent implements OnInit {
   generalMappings: any;
   filteredAccounts: any[];
 
-  constructor(private modalService: NgbModal, private route: ActivatedRoute, private mappingsService: MappingsService, private settingsService: SettingsService, private formBuilder: FormBuilder) {
+  constructor(private modalService: NgbModal, private route: ActivatedRoute, private mappingsService: MappingsService, private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
       fyleEmployee: new FormControl(''),
       qboVendor: new FormControl(''),

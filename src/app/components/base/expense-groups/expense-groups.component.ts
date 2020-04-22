@@ -5,7 +5,6 @@ import { BillsService } from '../bills/bills.service';
 import { ChecksService } from '../checks/checks.service';
 import { JournalEntriesService } from '../journal-entries/journal-entries.service';
 import { CreditCardPurchasesService } from '../credit-card-purchases/credit-card-purchases.service';
-import { SettingsService } from '../settings/settings.service';
 
 
 @Component({
@@ -30,7 +29,7 @@ export class ExpenseGroupsComponent implements OnInit {
   selectedGroups: any[] = [];
   generalSettings: any;
 
-  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private settingsService: SettingsService, private router: Router, private billsService: BillsService, private checksService: ChecksService, private JournalEntriesService: JournalEntriesService, private CreditCardPurchasesService: CreditCardPurchasesService) {}
+  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private router: Router, private billsService: BillsService, private checksService: ChecksService, private JournalEntriesService: JournalEntriesService, private CreditCardPurchasesService: CreditCardPurchasesService) {}
 
   syncExpenseGroups() {
     this.expenseGroupService.syncExpenseGroups(this.workspaceId).subscribe(task => {

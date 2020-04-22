@@ -78,8 +78,6 @@ export class ExpenseGroupsComponent implements OnInit {
 
   createQBOItems() { 
     if (this.generalSettings.reimbursable_expenses_object){
-      let expenseGroupIdss = this.expenseGroups.filter(expenseGroup => expenseGroup.selected && expenseGroup.fund_source == 'PERSONAL');
-      console.log(expenseGroupIdss)
       let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.fund_source == 'PERSONAL' ? expenseGroup.id : '');
       let filteredIds = expenseGroupIds.filter(Boolean);
 

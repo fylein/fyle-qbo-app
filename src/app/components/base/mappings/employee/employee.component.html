@@ -15,7 +15,7 @@
                         <th>Employee Email</th>
                         <th *ngIf="generalSettings?.employee_field_mapping == 'VENDOR'">Vendor Name</th>
                         <th *ngIf="generalSettings?.employee_field_mapping == 'EMPLOYEE'">Quickbooks Employee Name</th>
-                        <th *ngIf="generalSettings?.corporate_credit_card_expenses_object">Account Name</th>
+                        <th *ngIf="generalSettings?.corporate_credit_card_expenses_object">Credit Card</th>
                     </tr>
                 </thead>
                 <tbody *ngFor="let employeeMapping of employeeMappings;">

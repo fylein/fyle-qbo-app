@@ -139,7 +139,7 @@ export class MappingsService {
     return this.fyleCostCenters;
   }
 
-  postGeneralMappings(workspace_id: number, accounts_payable_id:string, accounts_payable_name:string, bank_account_id: string, bank_account_name: string, default_ccc_account_id: string, default_ccc_account_name: string): Observable<any> {
+  postGeneralMappings(workspace_id: number, accounts_payable_id: string, accounts_payable_name: string, bank_account_id: string, bank_account_name: string, default_ccc_account_id: string, default_ccc_account_name: string): Observable<any> {
     this.qboAccounts = null;
     return this.generalService.post(
       `/workspaces/${workspace_id}/mappings/general/`, {

@@ -19,6 +19,14 @@ export class BaseComponent implements OnInit {
   constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router) {
   }
 
+  getGeneralSettings() { 
+    this.settingsService.getGeneralSettings(this.workspace.id).subscribe(response => {
+      this.generalSettings = response;
+      localStorage.setItem('generalSettings', JSON.stringify(this.generalSettings));
+      this.generalSettings = JSON.parse(window.localStorage.getItem('generalSettings'));
+    });
+  }
+
   ngOnInit() {
     this.workspaceService.getWorkspaces().subscribe(workspaces => {
       let pathName = window.location.pathname;
@@ -28,6 +36,7 @@ export class BaseComponent implements OnInit {
         if (pathName === '/workspaces') {
           this.router.navigateByUrl(`/workspaces/${this.workspace.id}/expense_groups`);
         }
+        this.getGeneralSettings()
       } else {
         this.workspaceService.createWorkspace().subscribe(workspace => {
           this.workspace = workspace;
@@ -35,11 +44,9 @@ export class BaseComponent implements OnInit {
           if (pathName === '/workspaces') {
             this.router.navigateByUrl(`/workspaces/${this.workspace.id}/settings`);
           }
+          this.getGeneralSettings()
         });
       }
-      this.settingsService.getGeneralSettings(this.workspace.id).subscribe(response =>{
-        this.generalSettings = response;
-      });
     });
   }
 }

@@ -211,7 +211,7 @@ export class SettingsComponent implements OnInit {
       }
     });
   }
-  submit_settings() {
+  submitSettings() {
     this.reimbursableExpensesObjectIsValid = false;
     this.employeeMappingsObjectIsValid = false;
     

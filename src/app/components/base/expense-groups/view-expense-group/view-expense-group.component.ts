@@ -33,25 +33,36 @@ export class ViewExpenseGroupComponent implements OnInit {
   }
 
   createQBOItems(expense_group_id: number) {
-    if (this.generalSettings.reimbursable_expenses_object == 'BILL') {
-      this.billsService.createBills(this.workspaceId, [expense_group_id]).subscribe(result => {
-        this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-      });
+    if (this.generalSettings.reimbursable_expenses_object) {
+      if (this.generalSettings.reimbursable_expenses_object == 'BILL') {
+        this.billsService.createBills(this.workspaceId, [expense_group_id]).subscribe(result => {
+          this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+        });
+      }
+      if (this.generalSettings.reimbursable_expenses_object == 'CHECK') {
+        this.checksService.createChecks(this.workspaceId, [expense_group_id]).subscribe(result => {
+          this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+        });
+      }
+      if (this.generalSettings.reimbursable_expenses_object == 'JOURNAL ENTRY') {
+        this.JournalEntriesService.createJournalEntries(this.workspaceId, [expense_group_id]).subscribe(result => {
+          this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+        });
+      }
     }
-    if (this.generalSettings.reimbursable_expenses_object == 'CHECK') {
-      this.checksService.createChecks(this.workspaceId, [expense_group_id]).subscribe(result => {
-        this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-      });
-    }
-    if (this.generalSettings.reimbursable_expenses_object == 'JOURNAL ENTRY') {
-      this.JournalEntriesService.createJournalEntries(this.workspaceId, [expense_group_id]).subscribe(result => {
-        this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-      });
-    }
-    if (this.generalSettings.reimbursable_expenses_object == 'CREDIT CARD PURCHASE') {
-      this.CreditCardPurchasesService.createCreditCardPurchases(this.workspaceId, [expense_group_id]).subscribe(result => {
-        this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-      });
+
+    if (this.generalSettings.corporate_credit_card_expenses_object != 'NONE') {
+      if (this.generalSettings.corporate_credit_card_expenses_object == 'JOURNAL ENTRY') {
+        this.JournalEntriesService.createJournalEntries(this.workspaceId, [expense_group_id]).subscribe(result => {
+          this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+        });
+      }
+
+      if (this.generalSettings.corporate_credit_card_expenses_object == 'CREDIT CARD PURCHASE') {
+        this.CreditCardPurchasesService.createCreditCardPurchases(this.workspaceId, [expense_group_id]).subscribe(result => {
+          this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+        });
+      }
     }
   }
 
@@ -79,9 +90,7 @@ export class ViewExpenseGroupComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
       this.expenseGroupId = +params['expense_group_id'];
-      this.settingsService.getGeneralSettings(this.workspaceId).subscribe(generalSettings =>{
-        this.generalSettings = generalSettings;
-      });
+      this.generalSettings = JSON.parse(window.localStorage.getItem('generalSettings'));
       forkJoin(
         [
           this.expenseGroupsService.getExpensesGroupById(this.workspaceId, this.expenseGroupId),

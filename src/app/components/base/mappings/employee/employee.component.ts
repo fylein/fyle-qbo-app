@@ -162,9 +162,7 @@ export class EmployeeComponent implements OnInit {
         this.generalMappings = generalMappings;
       });
 
-      this.settingsService.getGeneralSettings(this.workspaceId).subscribe(settings => {
-        this.generalSettings = settings;
-      })
+      this.generalSettings = JSON.parse(window.localStorage.getItem('generalSettings'));
     });
   }
 

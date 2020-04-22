@@ -77,40 +77,47 @@ export class ExpenseGroupsComponent implements OnInit {
   }
 
   createQBOItems() { 
-    if (this.generalSettings.reimbursable_expenses_object == 'CHECK') {
+    if (this.generalSettings.reimbursable_expenses_object){
+      let expenseGroupIdss = this.expenseGroups.filter(expenseGroup => expenseGroup.selected && expenseGroup.fund_source == 'PERSONAL');
+      console.log(expenseGroupIdss)
       let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.fund_source == 'PERSONAL' ? expenseGroup.id : '');
       let filteredIds = expenseGroupIds.filter(Boolean);
-      this.checksService.createChecks(this.workspaceId, filteredIds).subscribe(result => {
-        this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-      });
+
+      if (filteredIds) {
+        if(this.generalSettings.reimbursable_expenses_object == 'BILL') {
+          this.billsService.createBills(this.workspaceId, filteredIds).subscribe(result => {
+            this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+          });
+        }
+        if (this.generalSettings.reimbursable_expenses_object == 'CHECK') {
+          this.checksService.createChecks(this.workspaceId, filteredIds).subscribe(result => {
+            this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+          });
+        }
+        if (this.generalSettings.reimbursable_expenses_object == 'JOURNAL ENTRY') {
+          this.JournalEntriesService.createJournalEntries(this.workspaceId, filteredIds).subscribe(result => {
+            this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+          });
+        }
+      }
     }
-    if (this.generalSettings.reimbursable_expenses_object == 'BILL') {
-      let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.fund_source == 'PERSONAL' ? expenseGroup.id : '');
-      let filteredIds = expenseGroupIds.filter(Boolean);
-      this.billsService.createBills(this.workspaceId, filteredIds).subscribe(result => {
-        this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-      });
-    }
-    if (this.generalSettings.reimbursable_expenses_object == 'JOURNAL ENTRY') {
-      let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.fund_source == 'PERSONAL' ? expenseGroup.id : '');
-      let filteredIds = expenseGroupIds.filter(Boolean);
-      this.JournalEntriesService.createJournalEntries(this.workspaceId, filteredIds).subscribe(result => {
-        this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-      });
-    }
-    if (this.generalSettings.corporate_credit_card_expenses_object == 'JOURNAL ENTRY') {
+
+    if (this.generalSettings.corporate_credit_card_expenses_object != 'NONE') {
       let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.fund_source == 'CCC' ? expenseGroup.id : '');
       let filteredIds = expenseGroupIds.filter(Boolean);
-      this.JournalEntriesService.createJournalEntries(this.workspaceId, filteredIds).subscribe(result => {
-        this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-      });
-    }
-    if (this.generalSettings.corporate_credit_card_expenses_object == 'CREDIT CARD PURCHASE') {
-      let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.fund_source == 'CCC' ? expenseGroup.id : '');
-      let filteredIds = expenseGroupIds.filter(Boolean);
-      this.CreditCardPurchasesService.createCreditCardPurchases(this.workspaceId, filteredIds).subscribe(result => {
-        this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-      });
+
+      if (filteredIds) {
+        if (this.generalSettings.corporate_credit_card_expenses_object == 'JOURNAL ENTRY') {
+          this.JournalEntriesService.createJournalEntries(this.workspaceId, filteredIds).subscribe(result => {
+            this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+          });
+        }
+        if (this.generalSettings.corporate_credit_card_expenses_object == 'CREDIT CARD PURCHASE') {
+          this.CreditCardPurchasesService.createCreditCardPurchases(this.workspaceId, filteredIds).subscribe(result => {
+            this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+          });
+        }
+      }
     }
   }
 
@@ -140,9 +147,7 @@ export class ExpenseGroupsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
       this.getPaginatedExpenseGroups();
-      this.settingsService.getGeneralSettings(this.workspaceId).subscribe(generalSettings =>{
-        this.generalSettings = generalSettings;
-      });
+      this.generalSettings = JSON.parse(window.localStorage.getItem('generalSettings'));
     });
   }
 }

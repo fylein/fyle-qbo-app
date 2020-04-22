@@ -135,8 +135,16 @@
             </select>
         </div>
         
-        <div class="save-schedule" *ngIf="generalSettings.corporate_credit_card_expenses_object == 'NONE' || !generalSettings.reimbursable_expenses_object || !generalSettings.employee_field_mapping">
+        <div class="save-schedule" *ngIf="!generalSettings.corporate_credit_card_expenses_object || !generalSettings.reimbursable_expenses_object || !generalSettings.employee_field_mapping">
             <button class="main-btn btn save-btn" type="submit" (click)="open(content)">Save Settings</button>
+        </div>
+
+        <div class="save-schedule" *ngIf="generalSettings.corporate_credit_card_expenses_object && generalSettings.reimbursable_expenses_object && generalSettings.employee_field_mapping">
+            <p>
+                To change your settings, Please send us a note at 
+                <a class="support" href="mailto:support@fyle.in">support@fyle.in</a>
+            </p>
+
         </div>
 
         <ng-template #content let-modal>

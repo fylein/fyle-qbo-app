@@ -83,7 +83,7 @@ export class GeneralComponent implements OnInit{
       this.route.parent.params.subscribe(params => {
         this.workspaceId = +params['workspace_id'];
         this.mappingsService.getQBOAccounts(this.workspaceId).subscribe(response => {
-          this.generalSettings = JSON.parse(window.localStorage.getItem('generalSettings'));
+          this.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
         this.accountPayableAccounts = response.filter(account => account.AccountType === 'Accounts Payable');
         this.bankAccounts = response.filter(account => account.AccountType === 'Bank');
         this.cccAccounts = response.filter(account => account.AccountType === 'Credit Card');

@@ -161,7 +161,7 @@ export class EmployeeComponent implements OnInit {
         this.generalMappings = generalMappings;
       });
 
-      this.generalSettings = JSON.parse(window.localStorage.getItem('generalSettings'));
+      this.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
     });
   }
 

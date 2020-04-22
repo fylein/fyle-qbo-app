@@ -77,41 +77,42 @@ export class ExpenseGroupsComponent implements OnInit {
 
   createQBOItems() { 
     if (this.generalSettings.reimbursable_expenses_object){
-      let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.fund_source == 'PERSONAL' ? expenseGroup.id : '');
-      let filteredIds = expenseGroupIds.filter(Boolean);
-
+      let filteredIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected && expenseGroup.fund_source == 'PERSONAL').map(expenseGroup => expenseGroup.id);
       if (filteredIds) {
         if(this.generalSettings.reimbursable_expenses_object == 'BILL') {
           this.billsService.createBills(this.workspaceId, filteredIds).subscribe(result => {
             this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+            console.log('BILL Trigger')
           });
         }
-        if (this.generalSettings.reimbursable_expenses_object == 'CHECK') {
+        else if (this.generalSettings.reimbursable_expenses_object == 'CHECK') {
           this.checksService.createChecks(this.workspaceId, filteredIds).subscribe(result => {
             this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+            console.log('CHECK Trigger')
           });
         }
-        if (this.generalSettings.reimbursable_expenses_object == 'JOURNAL ENTRY') {
+        else {
           this.JournalEntriesService.createJournalEntries(this.workspaceId, filteredIds).subscribe(result => {
             this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+            console.log('JE Trigger')
           });
         }
       }
     }
 
-    if (this.generalSettings.corporate_credit_card_expenses_object != 'NONE') {
-      let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.fund_source == 'CCC' ? expenseGroup.id : '');
-      let filteredIds = expenseGroupIds.filter(Boolean);
-
+    else if (this.generalSettings.corporate_credit_card_expenses_object) {
+      let filteredIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected && expenseGroup.fund_source == 'CCC').map(expenseGroup => expenseGroup.id);
       if (filteredIds) {
         if (this.generalSettings.corporate_credit_card_expenses_object == 'JOURNAL ENTRY') {
           this.JournalEntriesService.createJournalEntries(this.workspaceId, filteredIds).subscribe(result => {
             this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+            console.log('JE Trigger in CCC')
           });
         }
-        if (this.generalSettings.corporate_credit_card_expenses_object == 'CREDIT CARD PURCHASE') {
+        else {
           this.CreditCardPurchasesService.createCreditCardPurchases(this.workspaceId, filteredIds).subscribe(result => {
             this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+            console.log('CCP Trigger in CCC')
           });
         }
       }
@@ -144,7 +145,7 @@ export class ExpenseGroupsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
       this.getPaginatedExpenseGroups();
-      this.generalSettings = JSON.parse(window.localStorage.getItem('generalSettings'));
+      this.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
     });
   }
 }

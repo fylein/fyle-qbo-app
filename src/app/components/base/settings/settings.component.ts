@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { FlatpickrOptions } from 'ng2-flatpickr';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NONE_TYPE } from '@angular/compiler/src/output/output_ast';
 
 
 const FYLE_URL = environment.fyle_url;
@@ -186,7 +187,7 @@ export class SettingsComponent implements OnInit {
       });
       this.generalSettingsForm.controls.employeeMappingsObjects.disable()
       this.generalSettingsForm.controls.reimbursableExpensesObjects.disable()
-      if(this.generalSettings.corporate_credit_card_expenses_object == 'JOURNAL ENTRY' || this.generalSettings.corporate_credit_card_expenses_object == 'CREDIT CARD PURCHASE' ){
+      if(this.generalSettings.corporate_credit_card_expenses_object){
         this.generalSettingsForm.controls.cccExpensesObjects.disable()
       }
     }, error => {
@@ -216,7 +217,7 @@ export class SettingsComponent implements OnInit {
     this.employeeMappingsObjectIsValid = false;
     
     let reimbursableExpensesObject = this.generalSettingsForm.value.reimbursableExpensesObjects == undefined ? this.generalSettings.reimbursable_expenses_object : this.generalSettingsForm.value.reimbursableExpensesObjects;
-    let cccExpensesObject = this.generalSettingsForm.value.cccExpensesObjects == 'NONE' ? 'NONE' : this.generalSettingsForm.value.cccExpensesObjects;
+    let cccExpensesObject = this.generalSettingsForm.value.cccExpensesObjects == 'NONE' ? null : this.generalSettingsForm.value.cccExpensesObjects;
     let employeeMappingsObject = this.generalSettingsForm.value.employeeMappingsObjects == undefined ? this.generalSettings.employee_field_mapping : this.generalSettingsForm.value.employeeMappingsObjects;
 
     if (reimbursableExpensesObject != null) {

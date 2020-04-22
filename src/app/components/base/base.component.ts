@@ -23,7 +23,6 @@ export class BaseComponent implements OnInit {
     this.settingsService.getGeneralSettings(this.workspace.id).subscribe(response => {
       this.generalSettings = response;
       localStorage.setItem('generalSettings', JSON.stringify(this.generalSettings));
-      this.generalSettings = JSON.parse(window.localStorage.getItem('generalSettings'));
     });
   }
 

@@ -18,7 +18,8 @@ export class WorkspacesGuard implements CanActivate {
     return forkJoin(
       [
         this.settingsService.getFyleCredentials(workspaceId),
-        this.settingsService.getQBOCredentials(workspaceId)
+        this.settingsService.getQBOCredentials(workspaceId),
+        this.settingsService.getGeneralSettings(workspaceId)
       ]
     ).pipe(
       map(response => response? true: false),
@@ -27,6 +28,8 @@ export class WorkspacesGuard implements CanActivate {
         if (error.status == 400) {
           if(error.error.message === 'QBO Credentials not found in this workspace') {
             state = 'destination';
+          }else if(error.error.message === 'General Settings does not exist in workspace') {
+            state = 'settings';
           } else {
             state = 'source';
           }

@@ -7,6 +7,9 @@ import { BaseComponent } from './components/base/base.component';
 import { TasksComponent } from './components/base/tasks/tasks.component';
 import { ExpenseGroupsComponent } from './components/base/expense-groups/expense-groups.component';
 import { BillsComponent } from './components/base/bills/bills.component';
+import { ChecksComponent } from './components/base/checks/checks.component';
+import { JournalEntriesComponent } from './components/base/journal-entries/journal-entries.component';
+import { CreditCardPurchasesComponent } from './components/base/credit-card-purchases/credit-card-purchases.component';
 import { MappingsComponent } from './components/base/mappings/mappings.component';
 import { SettingsComponent } from './components/base/settings/settings.component';
 import { LoginComponent } from './components/auth/login/login.component';
@@ -71,6 +74,9 @@ const baseModuleRoutes: Routes = [
       },
       { path: ':workspace_id/expense_groups/:expense_group_id/view', component: ViewExpenseGroupComponent, canActivate: [WorkspacesGuard] },
       { path: ':workspace_id/bills', component: BillsComponent , canActivate: [WorkspacesGuard]},
+      { path: ':workspace_id/checks', component: ChecksComponent , canActivate: [WorkspacesGuard]},
+      { path: ':workspace_id/journal_entries', component: JournalEntriesComponent, canActivate: [WorkspacesGuard]},
+      { path: ':workspace_id/credit_card_purchases', component: CreditCardPurchasesComponent, canActivate: [WorkspacesGuard]},
       { 
         path: ':workspace_id/mappings', 
         component: MappingsComponent,

@@ -13,15 +13,25 @@
                 <thead class="table-head">
                     <tr class="colHeadings">
                         <th>Employee Email</th>
-                        <th>Vendor Name</th>
+                        <th *ngIf="generalSettings?.employee_field_mapping == 'VENDOR'">Vendor Name</th>
+                        <th *ngIf="generalSettings?.employee_field_mapping == 'EMPLOYEE'">Quickbooks Employee Name</th>
+                        <th *ngIf="generalSettings?.corporate_credit_card_expenses_object">Credit Card</th>
                     </tr>
                 </thead>
                 <tbody *ngFor="let employeeMapping of employeeMappings;">
                     <tr class="expense-groups-row">
                         <td>
-                            {{ employeeMapping.employee_email }}
+                            {{ employeeMapping?.employee_email }}
                         </td>
-                        <td>{{ employeeMapping.vendor_display_name }}</td>
+                        <td *ngIf="generalSettings?.employee_field_mapping === 'VENDOR'">
+                            {{ employeeMapping?.vendor_display_name }}
+                        </td>
+                        <td *ngIf="generalSettings?.employee_field_mapping === 'EMPLOYEE'">
+                            {{ employeeMapping?.employee_display_name }}
+                        </td>
+                        <td *ngIf="generalSettings?.corporate_credit_card_expenses_object">
+                            {{ employeeMapping?.ccc_account_name }}
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -49,7 +59,7 @@
                     </small>
                 </div>
             </div>
-            <div class="floating-label">
+            <div class="floating-label" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
                 <input formControlName="qboVendor" type="text" class="form-control" [ngbTypeahead]="vendorSearch"
                     [inputFormatter]="vendorFormatter" [resultFormatter]="vendorFormatter" [editable]='false' />
                 <label for="qboVendors" class="input-label">Vendor</label>
@@ -59,6 +69,27 @@
                     </small>
                 </div>
             </div>
+            <div class="floating-label" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
+                <input formControlName="qboEmployee" type="text" class="form-control" [ngbTypeahead]="employeeSearch"
+                    [inputFormatter]="employeeFormatter" [resultFormatter]="employeeFormatter" [editable]='false' />
+                <label for="qboEmployees" class="input-label">Employee</label>
+                <div class="text-danger mb-2" *ngIf="!employeeIsValid">
+                    <small>
+                        employee not found in Quickbooks online
+                    </small>
+                </div>
+            </div>
+            <div class="floating-label" *ngIf="generalSettings.corporate_credit_card_expenses_object">
+                <input formControlName="qboAccount" type="text" class="form-control" [value] = "generalMappings.default_ccc_account_name" [ngbTypeahead]="accountSearch"
+                    [inputFormatter]="accountFormatter" [resultFormatter]="accountFormatter" [editable]='true' />
+                <label for="qboAccounts" class="input-label">Account</label>
+                <div class="text-danger mb-2" *ngIf="!accountIsValid">
+                    <small>
+                        account not found in Quickbooks online
+                    </small>
+                </div>
+            </div>
+
         </div>
         <div class="modal-footer">
             <button id="cancel-btn" class="btn btnInline cancelBtn" type="button" data-dismiss="modal"

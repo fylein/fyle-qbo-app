@@ -10,6 +10,9 @@
             <a class="sub-nav-link {{destination}}" (click)="toggleState('destination')">Destination</a>
         </li>
         <li class="sub-nav-item">
+            <a class="sub-nav-link {{settings}}" (click)="toggleState('settings')">General Settings</a>
+        </li>
+        <li class="sub-nav-item">
             <a class="sub-nav-link {{schedule}}" (click)="toggleState('schedule')">Schedule</a>
         </li>
     </ul>
@@ -17,7 +20,6 @@
 <div class="tabitem-content" *ngIf="state === 'source'">
     <div class="login center-div mt-5" *ngIf="fyleConnected && !isLoading">
         <p>Connected to your Fyle account</p>
-        <button class="btn btn-lg main-btn" (click)="disconnectFyle()">Disconnect</button>
     </div>
     <div class="login center-div mt-5" *ngIf="!fyleConnected && !isLoading">
         <p>Connect to your Fyle account</p>
@@ -31,7 +33,6 @@
 <div class="tabitem-content" *ngIf="state === 'destination'">
     <div class="login center-div mt-5" *ngIf="qboConnected && !isLoading">
         <p>Connected to your Quickbooks online account</p>
-        <button class="btn btn-lg main-btn" (click)="disconnectQBO()">Disconnect</button>
     </div>
     <div class="login center-div mt-5" *ngIf="!qboConnected && !isLoading">
         <p>Connect to your Quickbooks online account</p>
@@ -86,6 +87,88 @@
             </div>
         </form>
     </div>
+</div>
+
+<div class="tabitem-content" *ngIf="state === 'settings' && !isLoading">
+<div class="schedule-content">
+    <form  *ngIf="generalSettings" [formGroup]="generalSettingsForm">
+
+        <div class="settings-object">
+            <label for="employeeMappingsObjects" class="d-flex"> Map Fyle employee field to </label>
+            <select formControlName="employeeMappingsObjects" id="employeeMappingsObjects" class="form-control selectpicker col-4">
+                <option *ngFor="let employeeMappingsObject of employeeMappingsObjects; let i = index"
+                    [selected]="employeeMappingsObjects[i].Name === generalSettings?.employee_field_mapping" [value]="employeeMappingsObjects[i].Name">
+                    {{employeeMappingsObjects[i].Name}}
+                </option>
+            </select>
+        </div>
+
+        <div class="text-danger mb-2" *ngIf="!employeeMappingsObjectIsValid">
+            <small>
+                Employee Field Mappings Object should not be empty
+            </small>
+        </div>
+
+        <div class="settings-object">
+            <label for="reimbursableExpensesObjects" class="d-flex">Map reimbursable expenses to</label>
+            <select formControlName="reimbursableExpensesObjects" id="reimbursableExpensesObjects" class="form-control selectpicker col-4">
+                <option *ngFor="let accountPayableAccount of reimbursableExpensesObjects; let i = index"
+                    [selected]="reimbursableExpensesObjects[i].Name === generalSettings?.reimbursable_expenses_object" [value]="reimbursableExpensesObjects[i].Name">
+                    {{reimbursableExpensesObjects[i].Name}}
+                </option>
+            </select>
+        </div>
+
+        <div class="text-danger mb-2" *ngIf="!reimbursableExpensesObjectIsValid">
+            <small>
+                Reimbursable Expenses Object should not be empty
+            </small>
+        </div>
+
+        <div class="settings-object">
+            <label for="cccExpensesObjects" class="d-flex">Map corporate credit card expenses to</label>
+            <select formControlName="cccExpensesObjects" id="cccExpensesObjects" class="form-control selectpicker col-4">
+                <option *ngFor="let accountPayableAccount of cccExpensesObjects; let i = index"
+                    [selected]="cccExpensesObjects[i].Name === generalSettings?.corporate_credit_card_expenses_object" [value]="cccExpensesObjects[i].Name">
+                    {{cccExpensesObjects[i].Name}}
+                </option>
+            </select>
+        </div>
+        
+        <div class="save-schedule" *ngIf="!generalSettings.corporate_credit_card_expenses_object || !generalSettings.reimbursable_expenses_object || !generalSettings.employee_field_mapping">
+            <button class="main-btn btn save-btn" type="submit" (click)="open(content)">Save Settings</button>
+        </div>
+
+        <div class="save-schedule" *ngIf="generalSettings.corporate_credit_card_expenses_object && generalSettings.reimbursable_expenses_object && generalSettings.employee_field_mapping">
+            <p>
+                To change your settings, Please send us a note at 
+                <a class="support" href="mailto:support@fyle.in">support@fyle.in</a>
+            </p>
+
+        </div>
+
+        <ng-template #content let-modal>
+            <div class="modal-header">
+                <h5 class="modal-title" id="generalSettingModalTitle">Save Settings</h5>
+                <button type="button" class="close ml-auto" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="md-caption text-danger mt-0">
+                    Setting cannot be modified once saved.
+                    Are you sure you want to continue ? 
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-btn" class="btn btnInline cancelBtn" type="button" data-dismiss="modal"
+                    (click)="closeModal()">Cancel</button>
+                <button id="submit-btn" class="btn btnInline saveBtn" type="submit" name="method" (click)="submitSettings()">Save</button>
+            </div>
+        </ng-template>
+
+    </form>
+</div>
 </div>
 
 <app-loader *ngIf="isLoading"></app-loader>

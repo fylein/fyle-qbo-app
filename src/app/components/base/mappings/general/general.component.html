@@ -1,13 +1,54 @@
 <div class="content" *ngIf="!isLoading">
     <div class="schedule-content">
         <form [formGroup]="form" (ngSubmit)="submit()">
-            <label for="bankAccounts" class="d-flex">Accounts Payable</label>
-            <select formControlName="bankAccounts" id="bankAccounts" class="form-control selectpicker col-4">
-                <option *ngFor="let bankAccount of bankAccounts; let i = index"
-                    [selected]="bankAccounts[i].Id === generalMappings.bank_account_id" [value]="bankAccounts[i].Id">
-                    {{bankAccounts[i].Name}}
+
+            <div class="bank-account" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
+            <label for="accountPayableAccounts" class="d-flex">Accounts Payable</label>
+            <select formControlName="accountPayableAccounts" id="accountPayableAccounts" class="form-control selectpicker col-4">
+                <option *ngFor="let accountPayableAccount of accountPayableAccounts; let i = index"
+                    [selected]="accountPayableAccounts[i].Id === generalMappings.accounts_payable_id" [value]="accountPayableAccounts[i].Id">
+                    {{accountPayableAccounts[i].Name}}
                 </option>
             </select>
+            </div>
+
+            <div class="text-danger mb-2" *ngIf="!accountsPayableIsValid">
+                <small>
+                    Accounts Payable Account should not be empty
+                </small>
+            </div>
+
+            <div class="bank-account" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
+                <label for="bankAccounts" class="d-flex">Bank Account</label>
+                <select formControlName="bankAccounts" id="bankAccounts" class="form-control selectpicker col-4">
+                    <option *ngFor="let bankAccount of bankAccounts; let i = index"
+                        [selected]="bankAccounts[i].Id === generalMappings.bank_account_id" [value]="bankAccounts[i].Id">
+                        {{bankAccounts[i].Name}}
+                    </option>
+                </select>
+            </div>
+
+            <div class="text-danger mb-2" *ngIf="!bankAccountIsValid">
+                <small>
+                    Bank Account should not be empty
+                </small>
+            </div>
+
+            <div class="bank-account" *ngIf="generalSettings.corporate_credit_card_expenses_object">
+                <label for="cccAccounts" class="d-flex">Default CCC Account</label>
+                <select formControlName="cccAccounts" id="cccAccounts" class="form-control selectpicker col-4">
+                    <option *ngFor="let cccAccount of cccAccounts; let i = index"
+                        [selected]="cccAccounts[i].Id === generalMappings.default_ccc_account_id" [value]="cccAccounts[i].Id">
+                        {{cccAccounts[i].Name}}
+                    </option>
+                </select>
+            </div>
+
+            <div class="text-danger mb-2" *ngIf="!cccAccountIsValid">
+                <small>
+                    Default CCC Account should not be empty
+                </small>
+            </div>
 
             <div class="save-schedule">
                 <button class="main-btn btn save-btn" type="submit">Save</button>

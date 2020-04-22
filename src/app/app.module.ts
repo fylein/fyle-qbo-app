@@ -29,6 +29,9 @@ import { CostCenterComponent } from './components/base/mappings/cost-center/cost
 import { ViewExpenseGroupComponent } from './components/base/expense-groups/view-expense-group/view-expense-group.component';
 import { MappingErrorsComponent } from './components/base/tasks/mapping-errors/mapping-errors.component';
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
+import { ChecksComponent } from './components/base/checks/checks.component';
+import { JournalEntriesComponent } from './components/base/journal-entries/journal-entries.component';
+import { CreditCardPurchasesComponent } from './components/base/credit-card-purchases/credit-card-purchases.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +56,9 @@ import { Ng2FlatpickrModule } from 'ng2-flatpickr';
     CostCenterComponent,
     ViewExpenseGroupComponent,
     MappingErrorsComponent,
+    ChecksComponent,
+    JournalEntriesComponent,
+    CreditCardPurchasesComponent,
   ],
   entryComponents: [
     EmployeeComponent

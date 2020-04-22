@@ -95,7 +95,7 @@ label {
 }
 
 input {
-    margin: 0;
+  margin: 0;
 }
 
 .input-group {
@@ -119,7 +119,7 @@ input {
 }
 
 .save-schedule {
-  margin-top: 5%;
+    margin-top: 5%;
 }
 
 .floating-label {
@@ -131,7 +131,7 @@ input {
 }
 
 p {
-  margin-right: 5%;
+    margin-right: 5%;
 }
 
 .bootstrap-datetimepicker-widget {
@@ -143,4 +143,8 @@ p {
 .bootstrap-datetimepicker-widget.dropdown-menu:before,
 .bootstrap-datetimepicker-widget.dropdown-menu:after {
     content: none !important;
+}
+
+.bank-account {
+    margin: 20px 0;
 }

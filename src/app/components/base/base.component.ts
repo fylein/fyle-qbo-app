@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { WorkspaceService } from './workspace.service';
+import { SettingsService } from './settings/settings.service'
 
 @Component({
   selector: 'app-base',
@@ -13,8 +14,16 @@ export class BaseComponent implements OnInit {
   isLoading: boolean = true;
   fyleConnected: boolean = false;
   qboConencted: boolean = false;
+  generalSettings: any;
 
-  constructor(private workspaceService: WorkspaceService, private router: Router) {
+  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router) {
+  }
+
+  getGeneralSettings() { 
+    this.settingsService.getGeneralSettings(this.workspace.id).subscribe(response => {
+      this.generalSettings = response;
+      localStorage.setItem('generalSettings', JSON.stringify(this.generalSettings));
+    });
   }
 
   ngOnInit() {
@@ -26,6 +35,7 @@ export class BaseComponent implements OnInit {
         if (pathName === '/workspaces') {
           this.router.navigateByUrl(`/workspaces/${this.workspace.id}/expense_groups`);
         }
+        this.getGeneralSettings()
       } else {
         this.workspaceService.createWorkspace().subscribe(workspace => {
           this.workspace = workspace;
@@ -33,6 +43,7 @@ export class BaseComponent implements OnInit {
           if (pathName === '/workspaces') {
             this.router.navigateByUrl(`/workspaces/${this.workspace.id}/settings`);
           }
+          this.getGeneralSettings()
         });
       }
     });

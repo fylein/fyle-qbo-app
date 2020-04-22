@@ -48,4 +48,16 @@ export class SettingsService {
   getSettings(workspace_id: number) {
     return this.generalService.get(`/workspaces/${workspace_id}/settings/`, {});
   }
+
+  postGeneralSettings(workspace_id: number, reimbursable_expenses_object: string, corporate_credit_card_expenses_object: string, employee_field_mapping: string) {
+    return this.generalService.post(`/workspaces/${workspace_id}/settings/general/`, {
+      reimbursable_expenses_object: reimbursable_expenses_object,
+      corporate_credit_card_expenses_object: corporate_credit_card_expenses_object,
+      employee_field_mapping: employee_field_mapping
+    });
+  }
+
+  getGeneralSettings(workspace_id: number) {
+    return this.generalService.get(`/workspaces/${workspace_id}/settings/general/`, {});
+  }
 }

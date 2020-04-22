@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExpenseGroupsService } from './expense-groups.service';
 import { BillsService } from '../bills/bills.service';
+import { ChecksService } from '../checks/checks.service';
+import { JournalEntriesService } from '../journal-entries/journal-entries.service';
+import { CreditCardPurchasesService } from '../credit-card-purchases/credit-card-purchases.service';
+
 
 @Component({
   selector: 'app-expense-groups',
@@ -23,9 +27,9 @@ export class ExpenseGroupsComponent implements OnInit {
   all: string
   allSelected: boolean;
   selectedGroups: any[] = [];
+  generalSettings: any;
 
-  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, 
-    private router: Router, private billsService: BillsService) {}
+  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private router: Router, private billsService: BillsService, private checksService: ChecksService, private JournalEntriesService: JournalEntriesService, private CreditCardPurchasesService: CreditCardPurchasesService) {}
 
   syncExpenseGroups() {
     this.expenseGroupService.syncExpenseGroups(this.workspaceId).subscribe(task => {
@@ -71,11 +75,48 @@ export class ExpenseGroupsComponent implements OnInit {
     this.getPaginatedExpenseGroups();
   }
 
-  createBills() { 
-    let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.id);
-    this.billsService.createBills(this.workspaceId, expenseGroupIds).subscribe(result => {
-      this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-    });
+  createQBOItems() { 
+    if (this.generalSettings.reimbursable_expenses_object){
+      let filteredIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected && expenseGroup.fund_source == 'PERSONAL').map(expenseGroup => expenseGroup.id);
+      if (filteredIds) {
+        if(this.generalSettings.reimbursable_expenses_object == 'BILL') {
+          this.billsService.createBills(this.workspaceId, filteredIds).subscribe(result => {
+            this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+            console.log('BILL Trigger')
+          });
+        }
+        else if (this.generalSettings.reimbursable_expenses_object == 'CHECK') {
+          this.checksService.createChecks(this.workspaceId, filteredIds).subscribe(result => {
+            this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+            console.log('CHECK Trigger')
+          });
+        }
+        else {
+          this.JournalEntriesService.createJournalEntries(this.workspaceId, filteredIds).subscribe(result => {
+            this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+            console.log('JE Trigger')
+          });
+        }
+      }
+    }
+
+    else if (this.generalSettings.corporate_credit_card_expenses_object) {
+      let filteredIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected && expenseGroup.fund_source == 'CCC').map(expenseGroup => expenseGroup.id);
+      if (filteredIds) {
+        if (this.generalSettings.corporate_credit_card_expenses_object == 'JOURNAL ENTRY') {
+          this.JournalEntriesService.createJournalEntries(this.workspaceId, filteredIds).subscribe(result => {
+            this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+            console.log('JE Trigger in CCC')
+          });
+        }
+        else {
+          this.CreditCardPurchasesService.createCreditCardPurchases(this.workspaceId, filteredIds).subscribe(result => {
+            this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+            console.log('CCP Trigger in CCC')
+          });
+        }
+      }
+    }
   }
 
   toggleSelectAll() {
@@ -104,6 +145,7 @@ export class ExpenseGroupsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
       this.getPaginatedExpenseGroups();
+      this.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
     });
   }
 }

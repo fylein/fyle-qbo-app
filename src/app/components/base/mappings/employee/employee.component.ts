@@ -17,17 +17,26 @@ export class EmployeeComponent implements OnInit {
   form: FormGroup;
   fyleEmployees: any[];
   qboVendors: any[];
+  qboEmployees: any[];
+  qboAccounts: any[];
   employeeMappings: any[];
   workspaceId: number;
   emailIsValid: boolean = true;
   vendorIsValid:boolean = true;
+  employeeIsValid:boolean = true;
+  accountIsValid:boolean = true;
   modalRef: NgbModalRef;
   isLoading: boolean = true;
+  generalSettings: any;
+  generalMappings: any;
+  filteredAccounts: any[];
 
   constructor(private modalService: NgbModal, private route: ActivatedRoute, private mappingsService: MappingsService, private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
       fyleEmployee: new FormControl(''),
-      qboVendor: new FormControl('')
+      qboVendor: new FormControl(''),
+      qboEmployee: new FormControl(''),
+      qboAccount: new FormControl('')
     });
   }
 
@@ -55,6 +64,24 @@ export class EmployeeComponent implements OnInit {
     filter(term => term.length >= 2),
     map(term => this.qboVendors.filter(qboVendor => new RegExp(term.toLowerCase(), 'g').test(qboVendor.DisplayName.toLowerCase())))
   )
+
+  employeeFormatter = (qboEmployee) => qboEmployee.DisplayName;
+
+  employeeSearch = (text$: Observable<string>) => text$.pipe(
+    debounceTime(200),
+    distinctUntilChanged(),
+    filter(term => term.length >= 2),
+    map(term => this.qboEmployees.filter(qboEmployee => new RegExp(term.toLowerCase(), 'g').test(qboEmployee.DisplayName.toLowerCase())))
+  )
+
+  accountFormatter = (qboAccount) => qboAccount.Name;
+
+  accountSearch = (text$: Observable<string>) => text$.pipe(
+    debounceTime(200),
+    distinctUntilChanged(),
+    filter(term => term.length >= 2),
+    map(term => this.qboAccounts.filter(qboAccount => new RegExp(term.toLowerCase(), 'g').test(qboAccount.Name.toLowerCase())))
+  )
   
   emailFormatter = (fyleEmployee) => fyleEmployee.employee_email;
 
@@ -67,21 +94,38 @@ export class EmployeeComponent implements OnInit {
 
   submit() {
     let fyleEmployee = this.form.value.fyleEmployee;
-    let qboVendor = this.form.value.qboVendor;
+    let qboVendor = this.generalSettings.employee_field_mapping === 'VENDOR' ? this.form.value.qboVendor : '';
+    let qboEmployee = this.generalSettings.employee_field_mapping === 'EMPLOYEE' ? this.form.value.qboEmployee : '';
+    let qboAccount = this.form.value.qboAccount ? this.form.value.qboAccount : this.generalMappings.default_ccc_account_name;
+
+    if(qboAccount == this.generalMappings.default_ccc_account_name){
+      this.filteredAccounts = this.qboAccounts.filter(account => account.Name === qboAccount)[0];
+    }
+    else {
+      this.filteredAccounts = qboAccount
+    }
+
     this.emailIsValid = false;
     this.vendorIsValid = false;
+    this.employeeIsValid = false;
+    this.accountIsValid = false;
     
     if (fyleEmployee) {
       this.emailIsValid = true;
     }
 
-    if (qboVendor) {
+    if (qboVendor || qboEmployee) {
       this.vendorIsValid = true;
+      this.employeeIsValid = true;
     }
 
-    if (this.emailIsValid && this.vendorIsValid) {
+    if(qboAccount) {
+      this.accountIsValid = true;
+    }
+
+    if (this.emailIsValid && this.vendorIsValid && this.employeeIsValid && this.accountIsValid) {
       this.isLoading = true;
-      this.mappingsService.postEmployeeMappings(this.workspaceId, fyleEmployee.employee_email, qboVendor.DisplayName, qboVendor.Id).subscribe(response => {
+      this.mappingsService.postEmployeeMappings(this.workspaceId, fyleEmployee.employee_email, qboVendor.DisplayName, qboVendor.Id, qboEmployee.DisplayName, qboEmployee.Id, this.filteredAccounts['Name'], this.filteredAccounts['Id']).subscribe(response => {
         this.clearModalValues();
         this.getEmployeeMappings();
       });
@@ -104,6 +148,20 @@ export class EmployeeComponent implements OnInit {
       this.mappingsService.getQBOVendors(this.workspaceId).subscribe(vendors => {
         this.qboVendors = vendors;
       });
+
+      this.mappingsService.getQBOEmployees(this.workspaceId).subscribe(employees => {
+        this.qboEmployees = employees;
+      });
+
+      this.mappingsService.getQBOAccounts(this.workspaceId).subscribe(accounts => {
+        this.qboAccounts = accounts;
+      });
+
+      this.mappingsService.getGeneralMappings(this.workspaceId).subscribe(generalMappings => {
+        this.generalMappings = generalMappings;
+      });
+
+      this.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
     });
   }
 

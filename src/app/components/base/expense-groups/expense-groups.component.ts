@@ -78,7 +78,7 @@ export class ExpenseGroupsComponent implements OnInit {
   createQBOItems() { 
     if (this.generalSettings.reimbursable_expenses_object){
       let filteredIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected && expenseGroup.fund_source == 'PERSONAL').map(expenseGroup => expenseGroup.id);
-      if (filteredIds) {
+      if (filteredIds.length > 0) {
         if(this.generalSettings.reimbursable_expenses_object == 'BILL') {
           this.billsService.createBills(this.workspaceId, filteredIds).subscribe(result => {
             this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
@@ -99,7 +99,7 @@ export class ExpenseGroupsComponent implements OnInit {
 
     if (this.generalSettings.corporate_credit_card_expenses_object) {
       let filteredIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected && expenseGroup.fund_source == 'CCC').map(expenseGroup => expenseGroup.id);
-      if (filteredIds) {
+      if (filteredIds.length > 0) {
         if (this.generalSettings.corporate_credit_card_expenses_object == 'JOURNAL ENTRY') {
           this.JournalEntriesService.createJournalEntries(this.workspaceId, filteredIds).subscribe(result => {
             this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);

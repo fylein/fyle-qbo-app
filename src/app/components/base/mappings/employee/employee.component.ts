@@ -119,16 +119,25 @@ export class EmployeeComponent implements OnInit {
       this.employeeIsValid = true;
     }
 
-    if(qboAccount) {
+    if(qboAccount || !(this.generalSettings.corporate_credit_card_expenses_object)) {
       this.accountIsValid = true;
     }
 
     if (this.emailIsValid && this.vendorIsValid && this.employeeIsValid && this.accountIsValid) {
-      this.isLoading = true;
+      if(this.generalSettings.corporate_credit_card_expenses_object) {
+        this.isLoading = true;
       this.mappingsService.postEmployeeMappings(this.workspaceId, fyleEmployee.employee_email, qboVendor.DisplayName, qboVendor.Id, qboEmployee.DisplayName, qboEmployee.Id, this.filteredAccounts['Name'], this.filteredAccounts['Id']).subscribe(response => {
         this.clearModalValues();
         this.getEmployeeMappings();
       });
+    }
+    else if(this.generalSettings.reimbursable_expenses_object && this.emailIsValid && this.vendorIsValid && this.employeeIsValid) {
+      this.isLoading = true;
+      this.mappingsService.postEmployeeMappings(this.workspaceId, fyleEmployee.employee_email, qboVendor.DisplayName, qboVendor.Id, qboEmployee.DisplayName, qboEmployee.Id, '', '').subscribe(response => {
+        this.clearModalValues();
+        this.getEmployeeMappings();
+      });
+    }
     }
   }
 

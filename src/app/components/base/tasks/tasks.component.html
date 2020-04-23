@@ -65,7 +65,7 @@
                                 </button>
                             </td>
                             <td>
-                                <button class="btn" (click)="goToExpenseGroup(task.expense_group)" *ngIf="task.type==='CREATING_BILL'">
+                                <button class="btn" (click)="goToExpenseGroup(task.expense_group)" *ngIf="task.type!=='FETCHING_EXPENSES'">
                                     <i class="material-icons">open_in_new</i>
                                 </button>          
                             </td>

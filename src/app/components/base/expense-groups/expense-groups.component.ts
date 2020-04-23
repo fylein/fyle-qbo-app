@@ -82,37 +82,32 @@ export class ExpenseGroupsComponent implements OnInit {
         if(this.generalSettings.reimbursable_expenses_object == 'BILL') {
           this.billsService.createBills(this.workspaceId, filteredIds).subscribe(result => {
             this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-            console.log('BILL Trigger')
           });
         }
         else if (this.generalSettings.reimbursable_expenses_object == 'CHECK') {
           this.checksService.createChecks(this.workspaceId, filteredIds).subscribe(result => {
             this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-            console.log('CHECK Trigger')
           });
         }
         else {
           this.JournalEntriesService.createJournalEntries(this.workspaceId, filteredIds).subscribe(result => {
             this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-            console.log('JE Trigger')
           });
         }
       }
     }
 
-    else if (this.generalSettings.corporate_credit_card_expenses_object) {
+    if (this.generalSettings.corporate_credit_card_expenses_object) {
       let filteredIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected && expenseGroup.fund_source == 'CCC').map(expenseGroup => expenseGroup.id);
       if (filteredIds) {
         if (this.generalSettings.corporate_credit_card_expenses_object == 'JOURNAL ENTRY') {
           this.JournalEntriesService.createJournalEntries(this.workspaceId, filteredIds).subscribe(result => {
             this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-            console.log('JE Trigger in CCC')
           });
         }
         else {
           this.CreditCardPurchasesService.createCreditCardPurchases(this.workspaceId, filteredIds).subscribe(result => {
             this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-            console.log('CCP Trigger in CCC')
           });
         }
       }

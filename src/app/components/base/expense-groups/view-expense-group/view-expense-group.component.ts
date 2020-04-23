@@ -44,7 +44,7 @@ export class ViewExpenseGroupComponent implements OnInit {
       }
     }
 
-    else if (this.generalSettings.corporate_credit_card_expenses_object) {
+    if (this.generalSettings.corporate_credit_card_expenses_object) {
       if (this.generalSettings.corporate_credit_card_expenses_object == 'JOURNAL ENTRY') {
         this.JournalEntriesService.createJournalEntries(this.workspaceId, [expense_group_id]).subscribe(result => {
           this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);

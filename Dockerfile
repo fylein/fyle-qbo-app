@@ -1,5 +1,7 @@
 # base image
-FROM node:12.4.0-alpine
+FROM node:12.4.0-slim as build
+
+RUN apt-get update && apt-get install nginx vim -y --no-install-recommends git
 
 # set working directory
 WORKDIR /app
@@ -15,5 +17,27 @@ RUN npm install -g @angular/cli
 # add app
 COPY . /app
 
-# start app
-CMD ng serve --host 0.0.0.0 --prod --disableHostCheck
+# generate build
+RUN ng build --configuration=production --output-path=dist --source-map=false
+
+############
+### prod ###
+############
+
+# base image
+FROM nginx
+
+# copy artifact build from the 'build environment'
+COPY --from=build /app/dist /usr/share/nginx/html
+
+COPY --from=build /app/nginx.conf /etc/nginx/nginx.conf
+
+COPY --from=build /app/run.sh ./
+
+COPY --from=build /app/* /fyle-qbo-app/
+
+# expose port 80
+EXPOSE 80
+
+# run nginx
+CMD bash run.sh

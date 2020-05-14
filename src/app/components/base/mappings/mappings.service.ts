@@ -139,6 +139,30 @@ export class MappingsService {
     return this.fyleCostCenters;
   }
 
+  getExpenseAccounts(workspace_id: number): Observable<any> {
+    return this.generalService.get(
+      `/workspaces/${workspace_id}/qbo/accounts/`, {}
+    );
+  }
+
+  getBankAccounts(workspace_id: number): Observable<any> {
+    return this.generalService.get(
+      `/workspaces/${workspace_id}/qbo/bank_accounts/`, {}
+    );
+  }
+
+  getAccountsPayables(workspace_id: number): Observable<any> {
+    return this.generalService.get(
+      `/workspaces/${workspace_id}/qbo/accounts_payables/`, {}
+    );
+  }
+
+  getCreditCardAccounts(workspace_id: number): Observable<any> {
+    return this.generalService.get(
+      `/workspaces/${workspace_id}/qbo/credit_card_accounts/`, {}
+    );
+  }
+
   postGeneralMappings(workspace_id: number, accounts_payable_id: string, accounts_payable_name: string, bank_account_id: string, bank_account_name: string, default_ccc_account_id: string, default_ccc_account_name: string): Observable<any> {
     this.qboAccounts = null;
     return this.generalService.post(
@@ -157,6 +181,16 @@ export class MappingsService {
     return this.generalService.get(
       `/workspaces/${workspace_id}/mappings/general/`, {}
     );
+  }
+
+  getMappings(workspace_id: number, source_type): Observable<any> {
+    return this.generalService.get(
+      `/workspaces/${workspace_id}/mappings/infra/?source_type=${source_type}`, {}
+    );
+  }
+
+  postMappings(workspace_id: number, mapping: any) {
+    return this.generalService.post(`/workspaces/${workspace_id}/mappings/infra/`, mapping);
   }
 
   getCategoryMappings(workspace_id: number): Observable<any> {

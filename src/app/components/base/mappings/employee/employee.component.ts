@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MappingsService } from '../mappings.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-employee',
@@ -18,7 +18,7 @@ export class EmployeeComponent implements OnInit {
   fyleEmployees: any[];
   qboVendors: any[];
   qboEmployees: any[];
-  qboAccounts: any[];
+  creditCardAccounts: any[];
   employeeMappings: any[];
   workspaceId: number;
   emailIsValid: boolean = true;
@@ -36,7 +36,7 @@ export class EmployeeComponent implements OnInit {
       fyleEmployee: new FormControl(''),
       qboVendor: new FormControl(''),
       qboEmployee: new FormControl(''),
-      qboAccount: new FormControl('')
+      creditCardAccount: new FormControl('')
     });
   }
 
@@ -49,60 +49,53 @@ export class EmployeeComponent implements OnInit {
     });
   }
 
-  getEmployeeMappings() {
-    this.mappingsService.getEmployeeMappings(this.workspaceId).subscribe(employeeMappings => {
-      this.employeeMappings = employeeMappings.results;
-      this.isLoading = false;
-    });
-  }
-
-  vendorFormatter = (qboVendor) => qboVendor.DisplayName;
+  vendorFormatter = (qboVendor) => qboVendor.value;
 
   vendorSearch = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
     filter(term => term.length >= 2),
-    map(term => this.qboVendors.filter(qboVendor => new RegExp(term.toLowerCase(), 'g').test(qboVendor.DisplayName.toLowerCase())))
+    map(term => this.qboVendors.filter(qboVendor => new RegExp(term.toLowerCase(), 'g').test(qboVendor.value.toLowerCase())))
   )
 
-  employeeFormatter = (qboEmployee) => qboEmployee.DisplayName;
+  employeeFormatter = (qboEmployee) => qboEmployee.value;
 
   employeeSearch = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
     filter(term => term.length >= 2),
-    map(term => this.qboEmployees.filter(qboEmployee => new RegExp(term.toLowerCase(), 'g').test(qboEmployee.DisplayName.toLowerCase())))
+    map(term => this.qboEmployees.filter(qboEmployee => new RegExp(term.toLowerCase(), 'g').test(qboEmployee.value.toLowerCase())))
   )
 
-  accountFormatter = (qboAccount) => qboAccount.Name;
+  accountFormatter = (creditCardAccount) => creditCardAccount.value;
 
   accountSearch = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
     filter(term => term.length >= 2),
-    map(term => this.qboAccounts.filter(qboAccount => new RegExp(term.toLowerCase(), 'g').test(qboAccount.Name.toLowerCase())))
+    map(term => this.creditCardAccounts.filter(creditCardAccount => new RegExp(term.toLowerCase(), 'g').test(creditCardAccount.value.toLowerCase())))
   )
   
-  emailFormatter = (fyleEmployee) => fyleEmployee.employee_email;
+  emailFormatter = (fyleEmployee) => fyleEmployee.value;
 
   emailSearch = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
     filter(term => term.length >= 2),
-    map(term => this.fyleEmployees.filter(fyleEmployee => new RegExp(term.toLowerCase(), 'g').test(fyleEmployee.employee_email.toLowerCase())))
+    map(term => this.fyleEmployees.filter(fyleEmployee => new RegExp(term.toLowerCase(), 'g').test(fyleEmployee.value.toLowerCase())))
   )
 
   submit() {
     let fyleEmployee = this.form.value.fyleEmployee;
     let qboVendor = this.generalSettings.employee_field_mapping === 'VENDOR' ? this.form.value.qboVendor : '';
     let qboEmployee = this.generalSettings.employee_field_mapping === 'EMPLOYEE' ? this.form.value.qboEmployee : '';
-    let qboAccount = this.form.value.qboAccount ? this.form.value.qboAccount : this.generalMappings.default_ccc_account_name;
+    let creditCardAccount = this.form.value.creditCardAccount ? this.form.value.creditCardAccount.value : this.generalMappings.default_ccc_account_name;
 
-    if(qboAccount == this.generalMappings.default_ccc_account_name){
-      this.filteredAccounts = this.qboAccounts.filter(account => account.Name === qboAccount)[0];
+    if(creditCardAccount == this.generalMappings.default_ccc_account_name){
+      this.filteredAccounts = this.creditCardAccounts.filter(account => account.Name === creditCardAccount)[0];
     }
     else {
-      this.filteredAccounts = qboAccount
+      this.filteredAccounts = creditCardAccount
     }
 
     this.emailIsValid = false;
@@ -119,26 +112,49 @@ export class EmployeeComponent implements OnInit {
       this.employeeIsValid = true;
     }
 
-    if(qboAccount || !(this.generalSettings.corporate_credit_card_expenses_object)) {
+    let employeeMapping: any = [
+      this.mappingsService.postMappings(this.workspaceId, {
+        source_type: 'EMPLOYEE',
+        destination_type: this.generalSettings.employee_field_mapping,
+        source_value: fyleEmployee.value,
+        destination_value: this.generalSettings.employee_field_mapping == 'VENDOR'? qboVendor.value: qboEmployee.value
+      })
+    ];
+
+    if(creditCardAccount || !(this.generalSettings.corporate_credit_card_expenses_object)) {
       this.accountIsValid = true;
+
+      employeeMapping.push(
+        this.mappingsService.postMappings(this.workspaceId, {
+          source_type: 'EMPLOYEE',
+          destination_type: 'CREDIT_CARD_ACCOUNT',
+          source_value: fyleEmployee.value,
+          destination_value: creditCardAccount
+        })
+      )
     }
 
     if (this.emailIsValid && this.vendorIsValid && this.employeeIsValid && this.accountIsValid) {
-      if(this.generalSettings.corporate_credit_card_expenses_object) {
+      forkJoin(employeeMapping).subscribe(responses => {
         this.isLoading = true;
-      this.mappingsService.postEmployeeMappings(this.workspaceId, fyleEmployee.employee_email, qboVendor.DisplayName, qboVendor.Id, qboEmployee.DisplayName, qboEmployee.Id, this.filteredAccounts['Name'], this.filteredAccounts['Id']).subscribe(response => {
         this.clearModalValues();
-        this.getEmployeeMappings();
+        this.ngOnInit();
       });
     }
-    else if(this.generalSettings.reimbursable_expenses_object && this.emailIsValid && this.vendorIsValid && this.employeeIsValid) {
-      this.isLoading = true;
-      this.mappingsService.postEmployeeMappings(this.workspaceId, fyleEmployee.employee_email, qboVendor.DisplayName, qboVendor.Id, qboEmployee.DisplayName, qboEmployee.Id, '', '').subscribe(response => {
-        this.clearModalValues();
-        this.getEmployeeMappings();
+  }
+
+  createEmployeeMappingsRows() {
+    let employeeEVMappings = this.employeeMappings.filter(mapping => mapping.destination_type !== 'CREDIT_CARD_ACCOUNT');
+    let mappings = [];
+
+    employeeEVMappings.forEach(employeeEVMapping => {
+      mappings.push({
+        fyle_value: employeeEVMapping['source']['value'],
+        qbo_value: employeeEVMapping['destination']['value'],
+        ccc_account: this.employeeMappings.filter(evMapping => evMapping.destination_type === 'CREDIT_CARD_ACCOUNT' && evMapping.source.value === employeeEVMapping.source.value)[0].destination.value
       });
-    }
-    }
+    });
+    this.employeeMappings = mappings;
   }
 
   clearModalValues() {
@@ -149,21 +165,25 @@ export class EmployeeComponent implements OnInit {
   ngOnInit() {
     this.route.parent.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
-      this.mappingsService.getFyleEmployees(this.workspaceId).subscribe(employees => {
-        this.fyleEmployees = employees;
-        this.getEmployeeMappings();
-      });
 
-      this.mappingsService.getQBOVendors(this.workspaceId).subscribe(vendors => {
-        this.qboVendors = vendors;
-      });
+      forkJoin(
+        [
+          this.mappingsService.getFyleEmployees(this.workspaceId),
+          this.mappingsService.getQBOVendors(this.workspaceId),
+          this.mappingsService.getQBOEmployees(this.workspaceId),
+          this.mappingsService.getCreditCardAccounts(this.workspaceId),
+          this.mappingsService.getMappings(this.workspaceId, 'EMPLOYEE')
+        ]
+      ).subscribe(responses => {
+        this.fyleEmployees = responses [0];
+        this.qboVendors = responses [1];
+        this.qboEmployees = responses[2];
+        this.creditCardAccounts = responses[3];
+        this.employeeMappings = responses[4]['results'];
 
-      this.mappingsService.getQBOEmployees(this.workspaceId).subscribe(employees => {
-        this.qboEmployees = employees;
-      });
-
-      this.mappingsService.getQBOAccounts(this.workspaceId).subscribe(accounts => {
-        this.qboAccounts = accounts;
+        this.createEmployeeMappingsRows();
+        
+        this.isLoading = false;
       });
 
       this.mappingsService.getGeneralMappings(this.workspaceId).subscribe(generalMappings => {

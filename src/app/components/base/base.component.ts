@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { WorkspaceService } from './workspace.service';
 import { SettingsService } from './settings/settings.service'
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-base',
@@ -15,13 +16,28 @@ export class BaseComponent implements OnInit {
   fyleConnected: boolean = false;
   qboConencted: boolean = false;
   generalSettings: any;
+  mappingSettings: any;
 
   constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router) {
   }
 
   getGeneralSettings() { 
-    this.settingsService.getGeneralSettings(this.workspace.id).subscribe(response => {
-      this.generalSettings = response;
+
+    forkJoin(
+      [
+        this.settingsService.getGeneralSettings(this.workspace.id),
+        this.settingsService.getMappingSettings(this.workspace.id)
+      ]
+    ).subscribe(responses => {
+      this.generalSettings = responses[0];
+      this.mappingSettings = responses[1]['results'];
+      
+      let employeeFieldMapping = this.mappingSettings.filter(
+        setting => (setting.source_field === 'EMPLOYEE') && 
+        (setting.destination_field === 'EMPLOYEE' || setting.destination_field === 'VENDOR')
+      )[0];
+
+      this.generalSettings['employee_field_mapping'] = employeeFieldMapping.destination_field;
       localStorage.setItem('generalSettings', JSON.stringify(this.generalSettings));
     });
   }

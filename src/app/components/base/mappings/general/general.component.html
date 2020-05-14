@@ -6,8 +6,8 @@
             <label for="accountPayableAccounts" class="d-flex">Accounts Payable</label>
             <select formControlName="accountPayableAccounts" id="accountPayableAccounts" class="form-control selectpicker col-4">
                 <option *ngFor="let accountPayableAccount of accountPayableAccounts; let i = index"
-                    [selected]="accountPayableAccounts[i].Id === generalMappings.accounts_payable_id" [value]="accountPayableAccounts[i].Id">
-                    {{accountPayableAccounts[i].Name}}
+                    [selected]="accountPayableAccounts[i].destination_id === generalMappings.accounts_payable_id" [value]="accountPayableAccounts[i].destination_id">
+                    {{accountPayableAccounts[i].value}}
                 </option>
             </select>
             </div>
@@ -22,8 +22,8 @@
                 <label for="bankAccounts" class="d-flex">Bank Account</label>
                 <select formControlName="bankAccounts" id="bankAccounts" class="form-control selectpicker col-4">
                     <option *ngFor="let bankAccount of bankAccounts; let i = index"
-                        [selected]="bankAccounts[i].Id === generalMappings.bank_account_id" [value]="bankAccounts[i].Id">
-                        {{bankAccounts[i].Name}}
+                        [selected]="bankAccounts[i].destination_id === generalMappings.bank_account_id" [value]="bankAccounts[i].destination_id">
+                        {{bankAccounts[i].value}}
                     </option>
                 </select>
             </div>
@@ -38,8 +38,8 @@
                 <label for="cccAccounts" class="d-flex">Default CCC Account</label>
                 <select formControlName="cccAccounts" id="cccAccounts" class="form-control selectpicker col-4">
                     <option *ngFor="let cccAccount of cccAccounts; let i = index"
-                        [selected]="cccAccounts[i].Id === generalMappings.default_ccc_account_id" [value]="cccAccounts[i].Id">
-                        {{cccAccounts[i].Name}}
+                        [selected]="cccAccounts[i].destination_id === generalMappings.default_ccc_account_id" [value]="cccAccounts[i].destination_id">
+                        {{cccAccounts[i].value}}
                     </option>
                 </select>
             </div>

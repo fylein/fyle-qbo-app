@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MappingsService } from '../mappings.service';
 import { FormBuilder, FormGroup} from '@angular/forms';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -32,13 +33,13 @@ export class GeneralComponent implements OnInit{
     this.cccAccountIsValid = false;
     
     let accountPayableAccountId = this.generalSettings.employee_field_mapping === 'VENDOR' ? this.form.value.accountPayableAccounts : '';
-    let accountPayableAccount = this.generalSettings.employee_field_mapping === 'VENDOR' ? this.accountPayableAccounts.filter(filteredAccountsPayableAccount => filteredAccountsPayableAccount.Id === accountPayableAccountId)[0] : '';
+    let accountPayableAccount = this.generalSettings.employee_field_mapping === 'VENDOR' ? this.accountPayableAccounts.filter(filteredAccountsPayableAccount => filteredAccountsPayableAccount.destination_id === accountPayableAccountId)[0] : '';
 
     let bankAccountId = this.generalSettings.employee_field_mapping === 'EMPLOYEE' ? this.form.value.bankAccounts : '';
-    let bankAccount = this.generalSettings.employee_field_mapping === 'EMPLOYEE' ? this.bankAccounts.filter(filteredBankAccount => filteredBankAccount.Id === bankAccountId)[0] : '';
+    let bankAccount = this.generalSettings.employee_field_mapping === 'EMPLOYEE' ? this.bankAccounts.filter(filteredBankAccount => filteredBankAccount.destination_id === bankAccountId)[0] : '';
 
     let cccAccountId = this.generalSettings.corporate_credit_card_expenses_object ? this.form.value.cccAccounts: '';
-    let cccAccount = this.generalSettings.corporate_credit_card_expenses_object ? this.cccAccounts.filter(filteredCCCAccount => filteredCCCAccount.Id === cccAccountId)[0] : '';
+    let cccAccount = this.generalSettings.corporate_credit_card_expenses_object ? this.cccAccounts.filter(filteredCCCAccount => filteredCCCAccount.destination_id === cccAccountId)[0] : '';
 
     if (accountPayableAccountId != null) {
       this.accountsPayableIsValid = true;
@@ -49,17 +50,20 @@ export class GeneralComponent implements OnInit{
     if (cccAccountId != null) {
       this.cccAccountIsValid = true;
     }
+
     if(this.accountsPayableIsValid && this.bankAccountIsValid && this.cccAccountIsValid){
       this.isLoading = true;
-      this.mappingsService.postGeneralMappings(this.workspaceId, accountPayableAccount.Id, accountPayableAccount.Name, bankAccount.Id, bankAccount.Name, cccAccount.Id, cccAccount.Name).subscribe(response => {
+      this.mappingsService.postGeneralMappings(this.workspaceId, accountPayableAccount.destination_id, accountPayableAccount.value, bankAccount.destination_id, bankAccount.value, cccAccount.destination_id, cccAccount.value).subscribe(response => {
         this.getGeneralMappings();
       });
     }
   }
+
   getGeneralMappings() {
     this.mappingsService.getGeneralMappings(this.workspaceId).subscribe(generalMappings => {
       this.generalMappings = generalMappings;
       this.isLoading = false;
+
       this.form = this.formBuilder.group({
         accountPayableAccounts: [this.generalMappings? this.generalMappings['accounts_payable_id']: ''],
         bankAccounts: [this.generalMappings? this.generalMappings['bank_account_id']: ''],
@@ -82,13 +86,19 @@ export class GeneralComponent implements OnInit{
     ngOnInit() {
       this.route.parent.params.subscribe(params => {
         this.workspaceId = +params['workspace_id'];
-        this.mappingsService.getQBOAccounts(this.workspaceId).subscribe(response => {
-          this.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
-        this.accountPayableAccounts = response.filter(account => account.AccountType === 'Accounts Payable');
-        this.bankAccounts = response.filter(account => account.AccountType === 'Bank');
-        this.cccAccounts = response.filter(account => account.AccountType === 'Credit Card');
-        this.getGeneralMappings();
-      });
+        this.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
+        forkJoin(
+          [
+            this.mappingsService.getBankAccounts(this.workspaceId),
+            this.mappingsService.getCreditCardAccounts(this.workspaceId),
+            this.mappingsService.getAccountsPayables(this.workspaceId)
+          ]
+        ).subscribe(responses => {
+          this.bankAccounts = responses[0]
+          this.cccAccounts = responses[1]
+          this.accountPayableAccounts = responses[2]
+          this.getGeneralMappings();
+        });
       });
     }
   }

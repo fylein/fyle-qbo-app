@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MappingsService } from '../mappings.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-category',
@@ -20,7 +20,6 @@ export class CategoryComponent implements OnInit {
   categoryMappings: any[];
   workspaceId: number;
   categoryIsValid: boolean = true;
-  subCategoryIsValid: boolean = true;
   accountIsValid:boolean = true;
   modalRef: NgbModalRef;
   isLoading: boolean = true;
@@ -28,7 +27,6 @@ export class CategoryComponent implements OnInit {
   constructor(private modalService: NgbModal, private route: ActivatedRoute, private mappingsService: MappingsService, private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
       fyleCategory: new FormControl(''),
-      fyleSubCategory: new FormControl(''),
       qboAccount: new FormControl('')
     });
   }
@@ -49,58 +47,49 @@ export class CategoryComponent implements OnInit {
     });
   }
 
-  accountFormatter = (qboAccount) => qboAccount.Name;
+  accountFormatter = (qboAccount) => qboAccount.value;
 
   accountSearch = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
     filter(term => term.length >= 1),
-    map(term => this.qboAccounts.filter(qboAccount => new RegExp(term.toLowerCase(), 'g').test(qboAccount.Name.toLowerCase())))
+    map(term => this.qboAccounts.filter(qboAccount => new RegExp(term.toLowerCase(), 'g').test(qboAccount.value.toLowerCase())))
   )
   
-  categoryFormatter = (fyleCategory) => fyleCategory.name;
+  categoryFormatter = (fyleCategory) => fyleCategory.value;
 
   categorySearch = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
     filter(term => term.length >= 1),
-    map(term => this.fyleCategories.filter(fyleCategory => new RegExp(term.toLowerCase(), 'g').test(fyleCategory.name.toLowerCase())))
-  )
-
-  subCategoryFormatter = (fyleCategory) => fyleCategory.sub_category;
-
-  subCategorySearch = (text$: Observable<string>) => text$.pipe(
-    debounceTime(200),
-    distinctUntilChanged(),
-    filter(term => term.length >= 1),
-    map(term => this.fyleCategories.filter(fyleCategory => new RegExp(term.toLowerCase(), 'g').test(fyleCategory.sub_category.toLowerCase())))
+    map(term => this.fyleCategories.filter(fyleCategory => new RegExp(term.toLowerCase(), 'g').test(fyleCategory.value.toLowerCase())))
   )
 
   submit() {
     let fyleCategory = this.form.value.fyleCategory;
-    let fyleSubCategory = this.form.value.fyleSubCategory;
     let qboAccount = this.form.value.qboAccount;
     this.categoryIsValid = false;
-    this.subCategoryIsValid = false;
     this.accountIsValid = false;
     
     if (fyleCategory) {
       this.categoryIsValid = true;
     }
 
-    if (fyleSubCategory) {
-      this.subCategoryIsValid = true;
-    }
-
     if (qboAccount) {
       this.accountIsValid = true;
     }
 
-    if (this.categoryIsValid && this.subCategoryIsValid && this.accountIsValid) {
+    if (this.categoryIsValid && this.accountIsValid) {
       this.isLoading = true;
-      this.mappingsService.postCategoryMappings(this.workspaceId, fyleCategory.name, fyleSubCategory.sub_category, qboAccount.Name, qboAccount.Id).subscribe(response => {
+      this.mappingsService.postMappings(this.workspaceId, {
+        source_type: 'CATEGORY',
+        destination_type: 'ACCOUNT',
+        source_value: fyleCategory.value,
+        destination_value: qboAccount.value
+      }).subscribe(response => {
         this.clearModalValues();
-        this.getCategoryMappings();
+        this.isLoading = true;
+        this.ngOnInit();
       });
     }
   }
@@ -113,13 +102,19 @@ export class CategoryComponent implements OnInit {
   ngOnInit() {
     this.route.parent.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
-      this.mappingsService.getFyleCategories(this.workspaceId).subscribe(categories => {
-        this.fyleCategories = categories;
-        this.getCategoryMappings();
-      });
 
-      this.mappingsService.getQBOAccounts(this.workspaceId).subscribe(accounts => {
-        this.qboAccounts = accounts.filter(account => account.AccountType === 'Expense');
+      forkJoin(
+        [
+          this.mappingsService.getFyleCategories(this.workspaceId),
+          this.mappingsService.getExpenseAccounts(this.workspaceId),
+          this.mappingsService.getMappings(this.workspaceId, 'CATEGORY')
+        ]
+      ).subscribe(responses => {
+        this.fyleCategories = responses [0];
+        this.qboAccounts = responses [1];
+        this.categoryMappings = responses[2]['results'];
+        
+        this.isLoading = false;
       });
     });
   }

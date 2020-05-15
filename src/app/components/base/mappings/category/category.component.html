@@ -13,17 +13,13 @@
                 <thead class="table-head">
                     <tr class="colHeadings">
                         <th>Category</th>
-                        <th>Sub Category</th>
                         <th>Account</th>
                     </tr>
                 </thead>
                 <tbody *ngFor="let categoryMapping of categoryMappings;">
                     <tr class="expense-groups-row">
-                        <td>
-                            {{ categoryMapping.category }}
-                        </td>
-                        <td>{{ categoryMapping.sub_category }}</td>
-                        <td>{{ categoryMapping.account_name }}</td>
+                        <td>{{ categoryMapping.source.value }}</td>
+                        <td>{{ categoryMapping.destination.value }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -48,16 +44,6 @@
                 <div class="text-danger mb-2" *ngIf="!categoryIsValid">
                     <small>
                         category not found in Fyle
-                    </small>
-                </div>
-            </div>
-            <div class="floating-label">
-                <input formControlName="fyleSubCategory" class="form-control" type="text" [ngbTypeahead]="subCategorySearch"
-                    [inputFormatter]="subCategoryFormatter" [resultFormatter]="subCategoryFormatter" [editable]='false' />
-                <label for="fyleCategories" class="input-label">Sub Category</label>
-                <div class="text-danger mb-2" *ngIf="!subCategoryIsValid">
-                    <small>
-                        sub category not found in Fyle
                     </small>
                 </div>
             </div>

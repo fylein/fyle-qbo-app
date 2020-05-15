@@ -37,7 +37,24 @@ export class BaseComponent implements OnInit {
         (setting.destination_field === 'EMPLOYEE' || setting.destination_field === 'VENDOR')
       )[0];
 
+      let projectFieldMapping = this.mappingSettings.filter(
+        settings => settings.source_field === 'PROJECT'
+      )[0];
+
+      let costCenterFieldMapping = this.mappingSettings.filter(
+        settings => settings.source_field === 'COST_CENTER'
+      )[0];
+
       this.generalSettings['employee_field_mapping'] = employeeFieldMapping.destination_field;
+
+      if (projectFieldMapping) {
+        this.generalSettings['project_field_mapping'] = projectFieldMapping.destination_field;
+      }
+
+      if (costCenterFieldMapping) {
+        this.generalSettings['cost_center_field_mapping'] = costCenterFieldMapping.destination_field;
+      }
+
       localStorage.setItem('generalSettings', JSON.stringify(this.generalSettings));
     });
   }

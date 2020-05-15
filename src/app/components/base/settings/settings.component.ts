@@ -231,34 +231,7 @@ export class SettingsComponent implements OnInit {
         this.generalSettingsForm.controls.costCenterFieldOptions.disable();
       }
 
-      this.generalSettingsForm.controls['projectFieldOptions'].valueChanges.subscribe((value) => {
-        this.costCenterFieldOptions = [
-          { name: 'CLASS' },
-          { name: 'DEPARTMENT' },
-          { name: 'CUSTOMER' }
-        ];
-
-        setTimeout(() => {
-          console.log(value);
-          if (value) {
-            this.costCenterFieldOptions = this.costCenterFieldOptions.filter(option => option.name !== value);
-          }
-        }, 500);
-      });
-
-      this.generalSettingsForm.controls['costCenterFieldOptions'].valueChanges.subscribe((value) => {
-        this.projectFieldOptions = [
-          { name: 'CLASS' },
-          { name: 'DEPARTMENT' },
-          { name: 'CUSTOMER' }
-        ];
-
-        setTimeout(() => {
-          if (value) {
-            this.projectFieldOptions = this.projectFieldOptions.filter(option => option.name !== value);
-          }
-        }, 500);
-      });
+      this.initializeForm();
 
       this.isLoading = false;
     }, error => {
@@ -273,102 +246,50 @@ export class SettingsComponent implements OnInit {
           projectFieldOptions: [''],
           costCenterFieldOptions: ['']
         });
-
-        this.generalSettingsForm.controls['employeeFieldOptions'].valueChanges.subscribe((value) => {
-          setTimeout(() => {
-            switch (value) {
-              case 'VENDOR': this.reimbursableExpensesObjects = [{ name: 'BILL' }, { name: 'JOURNAL ENTRY' }];
-                break;
-              case 'EMPLOYEE': this.reimbursableExpensesObjects = [{ name: 'CHECK' }, { name: 'JOURNAL ENTRY' }];
-                break;
-            }
-          }, 500);
-        });
-
-        this.generalSettingsForm.controls['reimbursableExpensesObjects'].valueChanges.subscribe((value) => {
-          setTimeout(() => {
-            console.log(value);
-
-            switch (value) {
-              
-              case 'JOURNAL ENTRY': 
-                this.projectFieldOptions = [
-                  { name: 'CLASS' },
-                  { name: 'DEPARTMENT' },
-                ];
-
-                this.costCenterFieldOptions = [
-                  { name: 'CLASS' },
-                  { name: 'DEPARTMENT' },
-                ];
-                break;
-              default: 
-                this.projectFieldOptions = [
-                  { name: 'CLASS' },
-                  { name: 'DEPARTMENT' },
-                  { name: 'CUSTOMER' }
-                ];
-
-                this.costCenterFieldOptions = [
-                  { name: 'CLASS' },
-                  { name: 'DEPARTMENT' },
-                  { name: 'CUSTOMER' }
-                ];
-            }
-          }, 500);
-        });
-
-        this.generalSettingsForm.controls['cccExpensesObjects'].valueChanges.subscribe((value) => {
-          setTimeout(() => {
-            console.log(value);
-            switch (value) {
-              case 'JOURNAL_ENTRY': 
-                this.projectFieldOptions = [
-                  { name: 'CLASS' },
-                  { name: 'DEPARTMENT' },
-                ];
-
-                this.costCenterFieldOptions = [
-                  { name: 'CLASS' },
-                  { name: 'DEPARTMENT' },
-                ];
-                break;
-              default: 
-                this.projectFieldOptions = [
-                  { name: 'CLASS' },
-                  { name: 'DEPARTMENT' },
-                  { name: 'CUSTOMER' }
-                ];
-
-                this.costCenterFieldOptions = [
-                  { name: 'CLASS' },
-                  { name: 'DEPARTMENT' },
-                  { name: 'CUSTOMER' }
-                ];
-            }
-          }, 500);
-        });
-
-        this.generalSettingsForm.controls['projectFieldOptions'].valueChanges.subscribe((value) => {
-          setTimeout(() => {
-            if (value) {
-              this.costCenterFieldOptions = this.costCenterFieldOptions.filter(option => {
-                option.name !== value;
-              });
-            }
-          }, 500);
-        });
-
-        this.generalSettingsForm.controls['costCenterFieldOptions'].valueChanges.subscribe((value) => {
-          setTimeout(() => {
-            if (value) {
-              this.projectFieldOptions = this.projectFieldOptions.filter(option => {
-                option.name !== value;
-              });
-            }
-          }, 500);
-        });
+        this.initializeForm();
       }
+    }); 
+  }
+
+
+  initializeForm() {
+    this.generalSettingsForm.controls['employeeFieldOptions'].valueChanges.subscribe((value) => {
+      setTimeout(() => {
+        switch (value) {
+          case 'VENDOR': this.reimbursableExpensesObjects = [{ name: 'BILL' }, { name: 'JOURNAL ENTRY' }];
+            break;
+          case 'EMPLOYEE': this.reimbursableExpensesObjects = [{ name: 'CHECK' }, { name: 'JOURNAL ENTRY' }];
+            break;
+        }
+      }, 500);
+    });
+
+    this.generalSettingsForm.controls['projectFieldOptions'].valueChanges.subscribe((value) => {
+      setTimeout(() => {
+        this.costCenterFieldOptions = [
+          { name: 'CLASS' },
+          { name: 'CUSTOMER' },
+          { name: 'DEPARTMENT' }
+        ];
+        
+        if (value) {
+          this.costCenterFieldOptions = this.costCenterFieldOptions.filter(option => option.name !== value);
+        }
+      }, 500);
+    });
+
+    this.generalSettingsForm.controls['costCenterFieldOptions'].valueChanges.subscribe((value) => {
+      this.projectFieldOptions = [
+        { name: 'CLASS' },
+        { name: 'CUSTOMER' },
+        { name: 'DEPARTMENT' }
+      ];
+
+      setTimeout(() => {
+        if (value) {
+          this.projectFieldOptions = this.projectFieldOptions.filter(option => option.name !== value);
+        }
+      }, 500);
     });
   }
 
@@ -381,9 +302,11 @@ export class SettingsComponent implements OnInit {
       destination_field: 'ACCOUNT'
     }]
 
-    let reimbursableExpensesObject = this.generalSettingsForm.value.reimbursableExpensesObjects == undefined ? this.generalSettings.reimbursable_expenses_object : this.generalSettingsForm.value.reimbursableExpensesObjects;
-    let cccExpensesObject = this.generalSettingsForm.value.cccExpensesObjects == 'NONE' ? null : this.generalSettingsForm.value.cccExpensesObjects;
-    let employeeMappingsObject = this.generalSettingsForm.value.employeeFieldOptions == undefined ? this.generalSettings.employee_field_mapping : this.generalSettingsForm.value.employeeFieldOptions;
+    let reimbursableExpensesObject = this.generalSettingsForm.value.reimbursableExpensesObjects ? this.generalSettingsForm.value.reimbursableExpensesObjects: this.generalSettings.reimbursable_expenses_object;
+    let cccExpensesObject = this.generalSettingsForm.value.cccExpensesObjects? this.generalSettingsForm.value.cccExpensesObjects: this.generalSettings.corporate_credit_card_expenses_object;
+    let employeeMappingsObject = this.generalSettingsForm.value.employeeFieldOptions ? this.generalSettingsForm.value.employeeFieldOptions: this.employeeFieldMapping.destination_field;
+    let costCenterMappingObject = this.generalSettingsForm.value.costCenterFieldOptions? this.generalSettingsForm.value.costCenterFieldOptions: this.costCenterFieldMapping.destination_field;
+    let projectMappingObject = this.generalSettingsForm.value.projectFieldOptions? this.generalSettingsForm.value.projectFieldOptions: this.projectFieldMapping.destination_field;
 
     if (reimbursableExpensesObject != null) {
       this.reimbursableExpensesObjectIsValid = true;
@@ -392,10 +315,24 @@ export class SettingsComponent implements OnInit {
       this.employeeMappingsObjectIsValid = true;
     }
 
-    if (cccExpensesObject != null) {
+    if (cccExpensesObject) {
       mappingsSettingsPayload.push({
         source_field: 'EMPLOYEE',
         destination_field: 'CREDIT_CARD_ACCOUNT'
+      });
+    }
+
+    if (projectMappingObject) {
+      mappingsSettingsPayload.push({
+        source_field: 'PROJECT',
+        destination_field: projectMappingObject
+      });
+    }
+
+    if (costCenterMappingObject) {
+      mappingsSettingsPayload.push({
+        source_field: 'COST_CENTER',
+        destination_field: costCenterMappingObject
       });
     }
 
@@ -409,7 +346,7 @@ export class SettingsComponent implements OnInit {
       forkJoin(
         [
           this.settingsService.postMappingSettings(this.workspaceId, mappingsSettingsPayload),
-          this.settingsService.postGeneralSettings(this.workspaceId, reimbursableExpensesObject, cccExpensesObject, '')
+          this.settingsService.postGeneralSettings(this.workspaceId, reimbursableExpensesObject, cccExpensesObject)
         ]
       ).subscribe(responses => {
         this.closeModal();
@@ -441,14 +378,14 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     this.projectFieldOptions = [
       { name: 'CLASS' },
-      { name: 'DEPARTMENT' },
-      { name: 'CUSTOMER' }
+      { name: 'CUSTOMER' },
+      { name: 'DEPARTMENT' }
     ];
 
     this.costCenterFieldOptions = [
       { name: 'CLASS' },
-      { name: 'DEPARTMENT' },
-      { name: 'CUSTOMER' }
+      { name: 'CUSTOMER' },
+      { name: 'DEPARTMENT' }
     ];
 
     this.reimbursableExpensesObjects = [
@@ -458,7 +395,7 @@ export class SettingsComponent implements OnInit {
     ];
 
     this.cccExpensesObjects = [
-      { name: 'NONE' },
+      { name: null },
       { name: 'CREDIT CARD PURCHASE' },
       { name: 'JOURNAL ENTRY' }
     ];

@@ -164,12 +164,12 @@ export class MappingsService {
 
   getMappings(workspace_id: number, source_type): Observable<any> {
     return this.generalService.get(
-      `/workspaces/${workspace_id}/mappings/infra/?source_type=${source_type}`, {}
+      `/workspaces/${workspace_id}/mappings/?source_type=${source_type}`, {}
     );
   }
 
   postMappings(workspace_id: number, mapping: any) {
-    return this.generalService.post(`/workspaces/${workspace_id}/mappings/infra/`, mapping);
+    return this.generalService.post(`/workspaces/${workspace_id}/mappings/`, mapping);
   }
 
   getCategoryMappings(workspace_id: number): Observable<any> {

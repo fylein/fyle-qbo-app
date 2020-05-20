@@ -50,7 +50,7 @@ export class SettingsService {
   }
 
   getMappingSettings(workspace_id: number) {
-    return this.generalService.get(`/workspaces/${workspace_id}/mappings/infra/settings/`, {});
+    return this.generalService.get(`/workspaces/${workspace_id}/mappings/settings/`, {});
   }
 
   postGeneralSettings(workspace_id: number, reimbursable_expenses_object: string, corporate_credit_card_expenses_object: string) {
@@ -61,7 +61,7 @@ export class SettingsService {
   }
 
   postMappingSettings(workspace_id: number, mappingSettings: any) {
-    return this.generalService.post(`/workspaces/${workspace_id}/mappings/infra/settings/`, mappingSettings);
+    return this.generalService.post(`/workspaces/${workspace_id}/mappings/settings/`, mappingSettings);
   }
 
   getGeneralSettings(workspace_id: number) {

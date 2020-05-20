@@ -16,18 +16,19 @@ export class CostCenterComponent implements OnInit {
   closeResult: string;
   form: FormGroup;
   fyleCostCenters: any[];
-  qboClasses: any[];
+  qboObjects: any[];
   costCenterMappings: any[];
   workspaceId: number;
   costCenterIsValid: boolean = true;
-  classIsValid:boolean = true;
+  objectIsValid:boolean = true;
   modalRef: NgbModalRef;
   isLoading: boolean = true;
+  generalSettings: any;
 
   constructor(private modalService: NgbModal, private route: ActivatedRoute, private mappingsService: MappingsService, private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
       fyleCostCenter: new FormControl(''),
-      qboClass: new FormControl('')
+      qboObject: new FormControl('')
     });
   }
 
@@ -41,49 +42,54 @@ export class CostCenterComponent implements OnInit {
   }
 
   getCostCenterMappings() {
-    this.mappingsService.getCostCenterMappings(this.workspaceId).subscribe(costCenterMappings => {
+    this.mappingsService.getMappings(this.workspaceId, 'COST_CENTER').subscribe(costCenterMappings => {
       this.costCenterMappings = costCenterMappings.results;
       this.isLoading = false;
     });
   }
 
-  classFormatter = (qboClass) => qboClass.Name;
+  objectFormatter = (qboObject) => qboObject.value;
 
-  classSearch = (text$: Observable<string>) => text$.pipe(
+  objectSearch = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
     filter(term => term.length >= 2),
-    map(term => this.qboClasses.filter(qboClass => new RegExp(term.toLowerCase(), 'g').test(qboClass.Name.toLowerCase())))
+    map(term => this.qboObjects.filter(qboObject => new RegExp(term.toLowerCase(), 'g').test(qboObject.value.toLowerCase())))
   )
   
-  costCenterFormatter = (fyleCostCenter) => fyleCostCenter.name;
+  costCenterFormatter = (fyleCostCenter) => fyleCostCenter.value;
 
   costCenterSearch = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
     filter(term => term.length >= 2),
-    map(term => this.fyleCostCenters.filter(fyleCostCenter => new RegExp(term.toLowerCase(), 'g').test(fyleCostCenter.name.toLowerCase())))
+    map(term => this.fyleCostCenters.filter(fyleCostCenter => new RegExp(term.toLowerCase(), 'g').test(fyleCostCenter.value.toLowerCase())))
   )
 
   submit() {
     let fyleCostCenter = this.form.value.fyleCostCenter;
-    let qboClass = this.form.value.qboClass;
+    let qboObject = this.form.value.qboObject;
     this.costCenterIsValid = false;
-    this.classIsValid = false;
+    this.objectIsValid = false;
     
     if (fyleCostCenter) {
       this.costCenterIsValid = true;
     }
 
-    if (qboClass) {
-      this.classIsValid = true;
+    if (qboObject) {
+      this.objectIsValid = true;
     }
 
-    if (this.costCenterIsValid && this.classIsValid) {
-      this.isLoading = true;
-      this.mappingsService.postCostCenterMappings(this.workspaceId, fyleCostCenter.name, qboClass.Name, qboClass.Id).subscribe(response => {
+    if (this.costCenterIsValid && this.objectIsValid) {
+      this.mappingsService.postMappings(this.workspaceId, {
+        source_type: 'COST_CENTER',
+        destination_type: this.generalSettings.cost_center_field_mapping,
+        source_value: fyleCostCenter.value,
+        destination_value: qboObject.value
+      }).subscribe(response => {
         this.clearModalValues();
-        this.getCostCenterMappings();
+        this.isLoading = true;
+        this.ngOnInit();
       });
     }
   }
@@ -95,15 +101,28 @@ export class CostCenterComponent implements OnInit {
 
   ngOnInit() {
     this.route.parent.params.subscribe(params => {
+      this.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
       this.workspaceId = +params['workspace_id'];
       this.mappingsService.getFyleCostCenters(this.workspaceId).subscribe(costCenters => {
         this.fyleCostCenters = costCenters;
         this.getCostCenterMappings();
       });
 
-      this.mappingsService.getQBOClasses(this.workspaceId).subscribe(classes => {
-        this.qboClasses = classes;
-      });
+      let costCenterField = this.generalSettings.cost_center_field_mapping;
+
+      if (costCenterField === 'CUSTOMER') { 
+        this.mappingsService.getQBOCustomers(this.workspaceId).subscribe(objects => {
+          this.qboObjects = objects;
+        });
+      } else if(costCenterField === 'CLASS') {
+        this.mappingsService.getQBOClasses(this.workspaceId).subscribe(objects => {
+          this.qboObjects = objects;
+        });
+      } else if(costCenterField === 'DEPARTMENT') {
+        this.mappingsService.getQBODepartments(this.workspaceId).subscribe(objects => {
+          this.qboObjects = objects;
+        });
+      }
     });
   }
 

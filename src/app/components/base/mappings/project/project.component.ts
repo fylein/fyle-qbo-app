@@ -16,18 +16,19 @@ export class ProjectComponent implements OnInit {
   closeResult: string;
   form: FormGroup;
   fyleProjects: any[];
-  qboCustomers: any[];
+  qboObjects: any[];
   projectMappings: any[];
   workspaceId: number;
   projectIsValid: boolean = true;
-  customerIsValid:boolean = true;
+  objectIsValid:boolean = true;
   modalRef: NgbModalRef;
   isLoading: boolean = true;
+  generalSettings: any = true;
 
   constructor(private modalService: NgbModal, private route: ActivatedRoute, private mappingsService: MappingsService, private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
       fyleProject: new FormControl(''),
-      qboCustomer: new FormControl('')
+      qboObject: new FormControl('')
     });
   }
 
@@ -41,49 +42,56 @@ export class ProjectComponent implements OnInit {
   }
 
   getProjectMappings() {
-    this.mappingsService.getProjectMappings(this.workspaceId).subscribe(projectMappings => {
+    this.mappingsService.getMappings(this.workspaceId, 'PROJECT').subscribe(projectMappings => {
       this.projectMappings = projectMappings.results;
       this.isLoading = false;
     });
   }
 
-  customerFormatter = (qboCustomer) => qboCustomer.DisplayName;
+  objectFormatter = (qboObject) => qboObject.value;
 
-  customerSearch = (text$: Observable<string>) => text$.pipe(
+  objectSearch = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
     filter(term => term.length >= 2),
-    map(term => this.qboCustomers.filter(qboCustomer => new RegExp(term.toLowerCase(), 'g').test(qboCustomer.DisplayName.toLowerCase())))
+    map(term => this.qboObjects.filter(qboObject => new RegExp(term.toLowerCase(), 'g').test(qboObject.value.toLowerCase())))
   )
   
-  projectFormatter = (fyleProject) => fyleProject.name;
+  projectFormatter = (fyleProject) => fyleProject.value;
 
   projectSearch = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
     filter(term => term.length >= 2),
-    map(term => this.fyleProjects.filter(fyleProject => new RegExp(term.toLowerCase(), 'g').test(fyleProject.name.toLowerCase())))
+    map(term => this.fyleProjects.filter(fyleProject => new RegExp(term.toLowerCase(), 'g').test(fyleProject.value.toLowerCase())))
   )
 
   submit() {
     let fyleProject = this.form.value.fyleProject;
-    let qboCustomer = this.form.value.qboCustomer;
+    let qboObject = this.form.value.qboObject;
     this.projectIsValid = false;
-    this.customerIsValid = false;
+    this.objectIsValid = false;
     
     if (fyleProject) {
       this.projectIsValid = true;
     }
 
-    if (qboCustomer) {
-      this.customerIsValid = true;
+    if (qboObject) {
+      this.objectIsValid = true;
     }
 
-    if (this.projectIsValid && this.customerIsValid) {
+    if (this.projectIsValid && this.objectIsValid) {
       this.isLoading = true;
-      this.mappingsService.postProjectMappings(this.workspaceId, fyleProject.name, qboCustomer.DisplayName, qboCustomer.Id).subscribe(response => {
+
+      this.mappingsService.postMappings(this.workspaceId, {
+        source_type: 'PROJECT',
+        destination_type: this.generalSettings.project_field_mapping,
+        source_value: fyleProject.value,
+        destination_value: qboObject.value
+      }).subscribe(response => {
         this.clearModalValues();
-        this.getProjectMappings();
+        this.isLoading = true;
+        this.ngOnInit();
       });
     }
   }
@@ -95,15 +103,29 @@ export class ProjectComponent implements OnInit {
 
   ngOnInit() {
     this.route.parent.params.subscribe(params => {
+      this.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
       this.workspaceId = +params['workspace_id'];
       this.mappingsService.getFyleProjects(this.workspaceId).subscribe(projects => {
         this.fyleProjects = projects;
         this.getProjectMappings();
       });
+      
+      let projectField = this.generalSettings.project_field_mapping;
 
-      this.mappingsService.getQBOCustomers(this.workspaceId).subscribe(customers => {
-        this.qboCustomers = customers;
-      });
+      if (projectField === 'CUSTOMER') { 
+        this.mappingsService.getQBOCustomers(this.workspaceId).subscribe(objects => {
+          this.qboObjects = objects;
+        });
+      } else if(projectField === 'CLASS') {
+        this.mappingsService.getQBOClasses(this.workspaceId).subscribe(objects => {
+          this.qboObjects = objects;
+        });
+      } else if(projectField === 'DEPARTMENT') {
+        this.mappingsService.getQBODepartments(this.workspaceId).subscribe(objects => {
+          this.qboObjects = objects;
+        });
+      }
+
     });
   }
 

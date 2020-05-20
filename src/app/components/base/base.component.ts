@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { WorkspaceService } from './workspace.service';
 import { SettingsService } from './settings/settings.service'
 import { forkJoin } from 'rxjs';
+import { MappingsService } from './mappings/mappings.service';
 
 @Component({
   selector: 'app-base',
@@ -18,7 +19,7 @@ export class BaseComponent implements OnInit {
   generalSettings: any;
   mappingSettings: any;
 
-  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router) {
+  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router, private mappingService: MappingsService) {
   }
 
   getGeneralSettings() { 
@@ -59,6 +60,28 @@ export class BaseComponent implements OnInit {
     });
   }
 
+  updateDimensionTables(workspaceId: number) {
+    forkJoin(
+      [
+        this.mappingService.postAccountsPayables(workspaceId),
+        this.mappingService.postBankAccounts(workspaceId),
+        this.mappingService.postExpenseAccounts(workspaceId),
+        this.mappingService.postCreditCardAccounts(workspaceId),
+        this.mappingService.postQBOEmployees(workspaceId),
+        this.mappingService.postQBOVendors(workspaceId),
+        this.mappingService.postQBOCustomers(workspaceId),
+        this.mappingService.postQBOClasses(workspaceId),
+        this.mappingService.postQBODepartments(workspaceId),
+        this.mappingService.postFyleEmployees(workspaceId),
+        this.mappingService.postFyleCategories(workspaceId),
+        this.mappingService.postFyleCostCenters(workspaceId),
+        this.mappingService.postFyleProjects(workspaceId)
+      ]
+    ).subscribe(responses => {
+      let data = responses;
+    });
+  }
+
   ngOnInit() {
     this.workspaceService.getWorkspaces().subscribe(workspaces => {
       let pathName = window.location.pathname;
@@ -68,7 +91,8 @@ export class BaseComponent implements OnInit {
         if (pathName === '/workspaces') {
           this.router.navigateByUrl(`/workspaces/${this.workspace.id}/expense_groups`);
         }
-        this.getGeneralSettings()
+        this.getGeneralSettings();
+        this.updateDimensionTables(this.workspace.id);
       } else {
         this.workspaceService.createWorkspace().subscribe(workspace => {
           this.workspace = workspace;

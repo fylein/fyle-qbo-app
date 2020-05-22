@@ -1,4 +1,4 @@
-<nav class="sub-navbar navbar fixed-top navbar-light d-flex flex-column">
+<nav class="sub-navbar navbar fixed-top navbar-light d-flex flex-column" *ngIf="!isLoading">
     <div class="sub-navbar-heading">
       <h1 class="navbar-brand">Mappings</h1>
     </div>
@@ -20,4 +20,5 @@
         </li>
     </ul>
 </nav>
+<app-loader *ngIf="isLoading"></app-loader>
 <router-outlet></router-outlet>

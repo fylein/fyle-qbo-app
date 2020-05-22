@@ -14,6 +14,7 @@ export class MappingsComponent implements OnInit {
   generalSettings: any;
   projectsEnabled: boolean = false;
   costCentersEnabled: boolean = false;
+  isLoading = true;
 
   updateDimensionTables(workspaceId: number) {
     forkJoin(
@@ -32,7 +33,11 @@ export class MappingsComponent implements OnInit {
         this.mappingService.postFyleCostCenters(workspaceId),
         this.mappingService.postFyleProjects(workspaceId)
       ]
-    ).subscribe();
+    ).subscribe(response => {
+      if (response) {
+        this.isLoading = false;
+      }
+    });
   }
 
   ngOnInit() {

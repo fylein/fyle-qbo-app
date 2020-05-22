@@ -19,7 +19,7 @@ export class BaseComponent implements OnInit {
   generalSettings: any;
   mappingSettings: any;
 
-  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router, private mappingService: MappingsService) {
+  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router) {
   }
 
   getGeneralSettings() { 

@@ -124,13 +124,6 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  disconnectQBO() {
-    this.settingsService.deleteQBOCredentials(this.workspaceId).subscribe(response => {
-      this.qboConnected = false;
-    });
-  }
-
-
   toggleState(state: string) {
     this.state = state;
     this.error = '';
@@ -375,6 +368,16 @@ export class SettingsComponent implements OnInit {
     this.showModal = !this.showModal;
   }
 
+  disconnectQBOOnExpiry() {
+    if (this.error === 'Quickbooks Online connection expired') {
+      this.isLoading = true;
+      this.settingsService.deleteQBOCredentials(this.workspaceId).subscribe(response => {
+        this.qboConnected = false;
+        this.isLoading = false;
+      });
+    }
+  }
+
   ngOnInit() {
     this.projectFieldOptions = [
       { name: 'CLASS' },
@@ -418,9 +421,11 @@ export class SettingsComponent implements OnInit {
         if (queryParams.state) {
           this.toggleState(queryParams.state);
           this.error = queryParams.error;
+          this.disconnectQBOOnExpiry();
         } else {
           this.toggleState('source');
           this.error = queryParams.error;
+          this.disconnectQBOOnExpiry();
         }
       });
       this.getAllSettings();

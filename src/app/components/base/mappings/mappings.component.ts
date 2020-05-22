@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MappingsService } from './mappings.service';
-import { forkJoin } from 'rxjs';
+import { merge } from 'rxjs';
 
 @Component({
   selector: 'app-mappings',
@@ -17,8 +17,7 @@ export class MappingsComponent implements OnInit {
   isLoading = true;
 
   updateDimensionTables(workspaceId: number) {
-    forkJoin(
-      [
+    merge(
         this.mappingService.postAccountsPayables(workspaceId),
         this.mappingService.postBankAccounts(workspaceId),
         this.mappingService.postExpenseAccounts(workspaceId),
@@ -32,12 +31,12 @@ export class MappingsComponent implements OnInit {
         this.mappingService.postFyleCategories(workspaceId),
         this.mappingService.postFyleCostCenters(workspaceId),
         this.mappingService.postFyleProjects(workspaceId)
-      ]
     ).subscribe(response => {
       if (response) {
         this.isLoading = false;
       }
-    });
+    },
+    error => error);
   }
 
   ngOnInit() {

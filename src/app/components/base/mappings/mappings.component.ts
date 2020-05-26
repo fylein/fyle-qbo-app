@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MappingsService } from './mappings.service';
-import { merge } from 'rxjs';
+import { concat } from 'rxjs';
 
 @Component({
   selector: 'app-mappings',
@@ -17,7 +17,7 @@ export class MappingsComponent implements OnInit {
   isLoading = true;
 
   updateDimensionTables(workspaceId: number) {
-    merge(
+    concat(
         this.mappingService.postAccountsPayables(workspaceId),
         this.mappingService.postBankAccounts(workspaceId),
         this.mappingService.postExpenseAccounts(workspaceId),

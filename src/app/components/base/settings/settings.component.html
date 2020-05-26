@@ -94,11 +94,11 @@
     <form  *ngIf="generalSettings" [formGroup]="generalSettingsForm">
 
         <div class="settings-object">
-            <label for="employeeMappingsObjects" class="d-flex"> Map Fyle employee field to </label>
-            <select formControlName="employeeMappingsObjects" id="employeeMappingsObjects" class="form-control selectpicker col-4">
-                <option *ngFor="let employeeMappingsObject of employeeMappingsObjects; let i = index"
-                    [selected]="employeeMappingsObjects[i].Name === generalSettings?.employee_field_mapping" [value]="employeeMappingsObjects[i].Name">
-                    {{employeeMappingsObjects[i].Name}}
+            <label for="employeeFieldOptions" class="d-flex"> Map Fyle employees to </label>
+            <select formControlName="employeeFieldOptions" id="employeeFieldOptions" class="form-control selectpicker col-4">
+                <option *ngFor="let employeeMappingsObject of employeeFieldOptions; let i = index"
+                    [selected]="employeeFieldOptions[i].name === employeeFieldMapping.destination_field" [value]="employeeFieldOptions[i].name">
+                    {{employeeFieldOptions[i].name}}
                 </option>
             </select>
         </div>
@@ -113,8 +113,8 @@
             <label for="reimbursableExpensesObjects" class="d-flex">Map reimbursable expenses to</label>
             <select formControlName="reimbursableExpensesObjects" id="reimbursableExpensesObjects" class="form-control selectpicker col-4">
                 <option *ngFor="let accountPayableAccount of reimbursableExpensesObjects; let i = index"
-                    [selected]="reimbursableExpensesObjects[i].Name === generalSettings?.reimbursable_expenses_object" [value]="reimbursableExpensesObjects[i].Name">
-                    {{reimbursableExpensesObjects[i].Name}}
+                    [selected]="reimbursableExpensesObjects[i].name === generalSettings?.reimbursable_expenses_object" [value]="reimbursableExpensesObjects[i].name">
+                    {{reimbursableExpensesObjects[i].name}}
                 </option>
             </select>
         </div>
@@ -129,13 +129,33 @@
             <label for="cccExpensesObjects" class="d-flex">Map corporate credit card expenses to</label>
             <select formControlName="cccExpensesObjects" id="cccExpensesObjects" class="form-control selectpicker col-4">
                 <option *ngFor="let accountPayableAccount of cccExpensesObjects; let i = index"
-                    [selected]="cccExpensesObjects[i].Name === generalSettings?.corporate_credit_card_expenses_object" [value]="cccExpensesObjects[i].Name">
-                    {{cccExpensesObjects[i].Name}}
+                    [selected]="cccExpensesObjects[i].name === generalSettings?.corporate_credit_card_expenses_object" [value]="cccExpensesObjects[i].name">
+                    {{cccExpensesObjects[i].name}}
                 </option>
             </select>
         </div>
-        
-        <div class="save-schedule" *ngIf="!generalSettings.corporate_credit_card_expenses_object || !generalSettings.reimbursable_expenses_object || !generalSettings.employee_field_mapping">
+
+        <div class="settings-object">
+            <label for="projectFieldOptions" class="d-flex">Map Fyle projects to</label>
+            <select formControlName="projectFieldOptions" id="projectFieldOptions" class="form-control selectpicker col-4">
+                <option *ngFor="let option of projectFieldOptions; let i = index"
+                    [selected]="projectFieldOptions[i].name === projectFieldMapping.destination_field" [value]="projectFieldOptions[i].name">
+                    {{ option.name }}
+                </option>
+            </select>
+        </div>
+
+        <div class="settings-object">
+            <label for="costCenterFieldOptions" class="d-flex">Map Fyle cost centers to</label>
+            <select formControlName="costCenterFieldOptions" id="costCenterFieldOptions" class="form-control selectpicker col-4">
+                <option *ngFor="let option of costCenterFieldOptions; let i = index"
+                    [selected]="costCenterFieldOptions[i].name === costCenterFieldMapping.destination_field" [value]="costCenterFieldOptions[i].name">
+                    {{ option.name }}
+                </option>
+            </select>
+        </div>
+
+        <div class="save-schedule">
             <button class="main-btn btn save-btn" type="submit" (click)="open(content)">Save Settings</button>
         </div>
 

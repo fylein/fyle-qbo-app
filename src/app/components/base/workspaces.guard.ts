@@ -3,13 +3,14 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Rout
 import { Observable, forkJoin } from 'rxjs';
 import { SettingsService } from 'src/app/components/base/settings/settings.service';
 import { map, catchError } from 'rxjs/operators';
+import { BillsService } from './bills/bills.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WorkspacesGuard implements CanActivate {
 
-  constructor(private settingsService: SettingsService, private router: Router) {}
+  constructor(private settingsService: SettingsService, private router: Router, private billsService: BillsService) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     let params = next.params;
@@ -19,7 +20,8 @@ export class WorkspacesGuard implements CanActivate {
       [
         this.settingsService.getFyleCredentials(workspaceId),
         this.settingsService.getQBOCredentials(workspaceId),
-        this.settingsService.getGeneralSettings(workspaceId)
+        this.settingsService.getGeneralSettings(workspaceId),
+        this.billsService.getPreferences(workspaceId)
       ]
     ).pipe(
       map(response => response? true: false),
@@ -28,8 +30,11 @@ export class WorkspacesGuard implements CanActivate {
         if (error.status == 400) {
           if(error.error.message === 'QBO Credentials not found in this workspace') {
             state = 'destination';
-          }else if(error.error.message === 'General Settings does not exist in workspace') {
+          } else if(error.error.message === 'General Settings does not exist in workspace') {
             state = 'settings';
+          } else if(error.error.message === 'Quickbooks Online connection expired') {
+            this.settingsService.deleteQBOCredentials(workspaceId).subscribe()
+            state = 'destination';
           } else {
             state = 'source';
           }

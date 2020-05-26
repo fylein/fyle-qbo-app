@@ -13,15 +13,15 @@
                 <thead class="table-head">
                     <tr class="colHeadings">
                         <th>Project</th>
-                        <th>Customer Name</th>
+                        <th>{{ generalSettings.project_field_mapping | titlecase}}</th>
                     </tr>
                 </thead>
                 <tbody *ngFor="let projectMapping of projectMappings;">
                     <tr class="expense-groups-row">
                         <td>
-                            {{ projectMapping.project }}
+                            {{ projectMapping.source.value }}
                         </td>
-                        <td>{{ projectMapping.customer_display_name }}</td>
+                        <td>{{ projectMapping.destination.value }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -50,12 +50,12 @@
                 </div>
             </div>
             <div class="floating-label">
-                <input formControlName="qboCustomer" type="text" class="form-control" [ngbTypeahead]="customerSearch"
-                    [inputFormatter]="customerFormatter" [resultFormatter]="customerFormatter" [editable]='false' />
-                <label for="qboCustomers" class="input-label">Customer</label>
-                <div class="text-danger mb-2" *ngIf="!customerIsValid">
+                <input formControlName="qboObject" type="text" class="form-control" [ngbTypeahead]="objectSearch"
+                    [inputFormatter]="objectFormatter" [resultFormatter]="objectFormatter" [editable]='false' />
+                <label for="qboObjects" class="input-label">{{ generalSettings.project_field_mapping | titlecase }}</label>
+                <div class="text-danger mb-2" *ngIf="!objectIsValid">
                     <small>
-                        customer not found in Quickbooks online
+                        {{ generalSettings.project_field_mapping | titlecase }} not found in Quickbooks online
                     </small>
                 </div>
             </div>

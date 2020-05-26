@@ -19,4 +19,8 @@ export class BillsService {
   getBills(workspace_id: number, limit: number, offset: number): Observable<any> {
     return this.generalService.get(`/workspaces/${workspace_id}/qbo/bills/?limit=${limit}&offset=${offset}`, {});
   }
+
+  getPreferences(workspace_id: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspace_id}/qbo/preferences/`, {});
+  }
 }

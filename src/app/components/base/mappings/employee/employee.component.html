@@ -21,16 +21,16 @@
                 <tbody *ngFor="let employeeMapping of employeeMappings;">
                     <tr class="expense-groups-row">
                         <td>
-                            {{ employeeMapping?.employee_email }}
+                            {{ employeeMapping.fyle_value }}
                         </td>
                         <td *ngIf="generalSettings?.employee_field_mapping === 'VENDOR'">
-                            {{ employeeMapping?.vendor_display_name }}
+                            {{ employeeMapping.qbo_value }}
                         </td>
                         <td *ngIf="generalSettings?.employee_field_mapping === 'EMPLOYEE'">
-                            {{ employeeMapping?.employee_display_name }}
+                            {{ employeeMapping.qbo_value }}
                         </td>
                         <td *ngIf="generalSettings?.corporate_credit_card_expenses_object">
-                            {{ employeeMapping?.ccc_account_name }}
+                            {{ employeeMapping.ccc_account }}
                         </td>
                     </tr>
                 </tbody>
@@ -80,9 +80,9 @@
                 </div>
             </div>
             <div class="floating-label" *ngIf="generalSettings.corporate_credit_card_expenses_object">
-                <input formControlName="qboAccount" type="text" class="form-control" [value] = "generalMappings.default_ccc_account_name" [ngbTypeahead]="accountSearch"
+                <input formControlName="creditCardAccount" type="text" class="form-control" [value] = "generalMappings.default_ccc_account_name" [ngbTypeahead]="accountSearch"
                     [inputFormatter]="accountFormatter" [resultFormatter]="accountFormatter" [editable]='true' />
-                <label for="qboAccounts" class="input-label">Account</label>
+                <label for="creditCardAccounts" class="input-label">Account</label>
                 <div class="text-danger mb-2" *ngIf="!accountIsValid">
                     <small>
                         account not found in Quickbooks online

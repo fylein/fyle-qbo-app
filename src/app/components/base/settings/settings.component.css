@@ -20,6 +20,14 @@ body {
   display: none;
 }
 
+.form-control:disabled, .form-control:disabled:hover {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+  cursor: not-allowed;
+}
+
 label {
   margin-bottom: 0;
 }

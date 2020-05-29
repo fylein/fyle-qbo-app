@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { LogoutComponent } from './components/auth/logout/logout.component';
 import { BaseComponent } from './components/base/base.component';
 
 import { TasksComponent } from './components/base/tasks/tasks.component';
@@ -12,9 +11,6 @@ import { JournalEntriesComponent } from './components/base/journal-entries/journ
 import { CreditCardPurchasesComponent } from './components/base/credit-card-purchases/credit-card-purchases.component';
 import { MappingsComponent } from './components/base/mappings/mappings.component';
 import { SettingsComponent } from './components/base/settings/settings.component';
-import { LoginComponent } from './components/auth/login/login.component';
-import { CallbackComponent } from './components/auth/callback/callback.component';
-import { AuthComponent } from './components/auth/auth.component';
 
 import { AuthGuard } from './core/guard/auth.guard'
 import { FyleCallbackComponent } from './components/base/settings/fyle-callback/fyle-callback.component';
@@ -28,36 +24,36 @@ import { ViewExpenseGroupComponent } from './components/base/expense-groups/view
 import { WorkspacesGuard } from './core/guard/workspaces.guard';
 import { MappingErrorsComponent } from './components/base/tasks/mapping-errors/mapping-errors.component';
 
-const authRoutes: Routes = [
-  {
-    path: '',
-    redirectTo: '/workspaces',
-    pathMatch: 'full'
-  },
-  {
-    path: 'auth',
-    component: AuthComponent,
-    children: [
-      {
-        path: 'login',
-        component: LoginComponent
-      },
-      {
-        path: 'callback',
-        component: CallbackComponent
-      },
-      {
-        path: 'logout',
-        component: LogoutComponent
-      }
-    ]
-  },
-  {
-    path: '**',
-    redirectTo: 'workspaces',
-    pathMatch: 'full'
-  },
-];
+// const authRoutes: Routes = [
+//   {
+//     path: '',
+//     redirectTo: '/workspaces',
+//     pathMatch: 'full'
+//   },
+//   {
+//     path: 'auth',
+//     component: AuthComponent,
+//     children: [
+//       {
+//         path: 'login',
+//         component: LoginComponent
+//       },
+//       {
+//         path: 'callback',
+//         component: CallbackComponent
+//       },
+//       {
+//         path: 'logout',
+//         component: LogoutComponent
+//       }
+//     ]
+//   },
+//   {
+//     path: '**',
+//     redirectTo: 'workspaces',
+//     pathMatch: 'full'
+//   }
+// ];
 
 const baseModuleRoutes: Routes = [
   {
@@ -93,13 +89,26 @@ const baseModuleRoutes: Routes = [
       { path: 'fyle/callback', component: FyleCallbackComponent },
       { path: 'qbo/callback', component: QBOCallbackComponent }
     ]
+  },
+  {
+    path: '',
+    redirectTo: '/workspaces',
+    pathMatch: 'full'
+  },
+  { 
+    path: 'auth', 
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) 
+  },
+  {
+    path: '**',
+    redirectTo: 'workspaces',
+    pathMatch: 'full'
   }
 ]
 
 @NgModule({
   imports: [
-    RouterModule.forChild(baseModuleRoutes),
-    RouterModule.forRoot(authRoutes)
+    RouterModule.forRoot(baseModuleRoutes)
   ],
   exports: [RouterModule],
 })

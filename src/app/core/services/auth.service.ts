@@ -6,7 +6,7 @@ import {
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Token } from './tokens';
+import { Token } from '../tokens';
 
 import { environment } from 'src/environments/environment';
 import { GeneralService } from 'src/app/core/services/general.service';

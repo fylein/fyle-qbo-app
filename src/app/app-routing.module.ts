@@ -16,7 +16,7 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { CallbackComponent } from './components/auth/callback/callback.component';
 import { AuthComponent } from './components/auth/auth.component';
 
-import { AuthGuard } from './components/auth/auth.guard'
+import { AuthGuard } from './core/guard/auth.guard'
 import { FyleCallbackComponent } from './components/base/settings/fyle-callback/fyle-callback.component';
 import { QBOCallbackComponent } from './components/base/settings/qbo-callback/qbo-callback.component';
 import { CategoryComponent } from './components/base/mappings/category/category.component';
@@ -25,7 +25,7 @@ import { GeneralComponent } from './components/base/mappings/general/general.com
 import { ProjectComponent } from './components/base/mappings/project/project.component';
 import { CostCenterComponent } from './components/base/mappings/cost-center/cost-center.component';
 import { ViewExpenseGroupComponent } from './components/base/expense-groups/view-expense-group/view-expense-group.component';
-import { WorkspacesGuard } from './components/base/workspaces.guard';
+import { WorkspacesGuard } from './core/guard/workspaces.guard';
 import { MappingErrorsComponent } from './components/base/tasks/mapping-errors/mapping-errors.component';
 
 const authRoutes: Routes = [

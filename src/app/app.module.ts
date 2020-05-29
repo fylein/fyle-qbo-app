@@ -15,7 +15,7 @@ import { MappingsComponent } from './components/base/mappings/mappings.component
 import { SettingsComponent } from './components/base/settings/settings.component';
 import { CallbackComponent } from './components/auth/callback/callback.component';
 import { AuthComponent } from './components/auth/auth.component';
-import { JwtInterceptor } from './components/auth/jwt.interceptor';
+import { JwtInterceptor } from './core/interceptor/jwt.interceptor';
 import { LoaderComponent } from './components/general/loader/loader.component';
 import { QBOCallbackComponent } from './components/base/settings/qbo-callback/qbo-callback.component';
 import { FyleCallbackComponent } from './components/base/settings/fyle-callback/fyle-callback.component';
@@ -32,6 +32,7 @@ import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { ChecksComponent } from './components/base/checks/checks.component';
 import { JournalEntriesComponent } from './components/base/journal-entries/journal-entries.component';
 import { CreditCardPurchasesComponent } from './components/base/credit-card-purchases/credit-card-purchases.component';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { CreditCardPurchasesComponent } from './components/base/credit-card-purc
     FormsModule,
     NgbModule,
     ReactiveFormsModule,
-    Ng2FlatpickrModule
+    Ng2FlatpickrModule,
+    CoreModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

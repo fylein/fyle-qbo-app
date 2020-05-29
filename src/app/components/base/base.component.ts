@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { WorkspaceService } from './workspace.service';
+import { WorkspaceService } from '../../core/services/workspace.service';
 import { SettingsService } from './settings/settings.service'
 import { forkJoin } from 'rxjs';
 import { MappingsService } from './mappings/mappings.service';

@@ -3,7 +3,7 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Rout
 import { Observable, forkJoin } from 'rxjs';
 import { SettingsService } from 'src/app/components/base/settings/settings.service';
 import { map, catchError } from 'rxjs/operators';
-import { BillsService } from './bills/bills.service';
+import { BillsService } from '../../components/base/bills/bills.service';
 
 @Injectable({
   providedIn: 'root'

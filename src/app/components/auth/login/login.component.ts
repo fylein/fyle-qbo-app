@@ -30,5 +30,9 @@ export class LoginComponent implements OnInit {
       '&response_type=code';
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(FYLE_URL);
+    console.log(FYLE_CLIENT_ID);
+    console.log(CALLBACK_URI);
+  }
 }

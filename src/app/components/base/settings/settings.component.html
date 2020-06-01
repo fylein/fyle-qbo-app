@@ -1,0 +1,66 @@
+<nav class="sub-navbar navbar fixed-top navbar-light d-flex flex-column">
+    <div class="sub-navbar-heading">
+        <h1 class="navbar-brand">Settings</h1>
+    </div>
+    <ul class="nav sub-nav-tabs d-flex flex-row tabSection">
+        <li class="sub-nav-item">
+            <a class="sub-nav-link {{source}}" (click)="toggleState('source')">Source</a>
+        </li>
+        <li class="sub-nav-item">
+            <a class="sub-nav-link {{destination}}" (click)="toggleState('destination')">Destination</a>
+        </li>
+    </ul>
+</nav>
+<div class="tabitem-content" *ngIf="state === 'source'">
+    <div class="login center-div mt-5" *ngIf="fyleConnected && !isLoading">
+        <p>Connected to your Fyle account</p>
+    </div>
+    <div class="login center-div mt-5" *ngIf="!fyleConnected && !isLoading">
+        <p>Connect to your Fyle account</p>
+        <button class="btn btn-lg main-btn" (click)="connectFyle()">Connect</button>
+        <div class="text-danger mt-2" *ngIf="error">
+            <p>{{error}}</p>
+        </div>
+    </div>
+</div>
+
+<div class="tabitem-content" *ngIf="state === 'destination' && !isLoading">
+    <div class="schedule-content">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            
+            <label class=" control-label col-md-3">NetSuite Account ID</label>
+            <div class="col-md-4">
+              <input class="form-control" type="text" formControlName="nsAccountId">
+            </div>
+        
+            <label class=" control-label col-md-3">NetSuite Consumer Key</label>
+            <div class="col-md-4">
+              <input class="form-control" type="text" formControlName="nsConsumerKey">
+            </div>
+        
+            <label class=" control-label col-md-3">NetSuite Consumer Secret</label>
+            <div class="col-md-4">
+              <input class="form-control" type="text" formControlName="nsConsumerSecret">
+            </div>
+
+            <label class=" control-label col-md-3">NetSuite Token ID</label>
+            <div class="col-md-4">
+              <input class="form-control" type="text" formControlName="nsTokenId">
+            </div>
+
+            <label class=" control-label col-md-3">NetSuite Token Secret</label>
+            <div class="col-md-4">
+              <input class="form-control" type="text" formControlName="nsTokenSecret">
+            </div>
+    
+            <div class="save-schedule">
+                <button class="main-btn btn save-btn" type="submit">Save Schedule</button>
+            </div>
+            <div class="text-danger mt-2" *ngIf="error">
+                <p>{{error}}</p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<app-loader *ngIf="isLoading"></app-loader>

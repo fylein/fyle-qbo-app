@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable, forkJoin } from 'rxjs';
-import { SettingsService } from 'src/app/components/base/settings/settings.service';
 import { map, catchError } from 'rxjs/operators';
-import { BillsService } from '../../components/base/bills/bills.service';
+import { BillsService } from '../services/bills.service';
+import { SettingsService } from '../services/settings.service';
 
 @Injectable({
   providedIn: 'root'

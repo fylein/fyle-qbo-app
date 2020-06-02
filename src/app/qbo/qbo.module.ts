@@ -27,6 +27,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { Ng2FlatpickrModule } from 'ng2-flatpickr';
     NgbModule,
     ReactiveFormsModule,
     Ng2FlatpickrModule,
+    FlexLayoutModule
   ]
 })
 export class QboModule { }

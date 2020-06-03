@@ -4,7 +4,11 @@ import { WorkspaceService } from './workspace.service';
 import { SettingsService } from './settings/settings.service'
 import { forkJoin } from 'rxjs';
 import { MappingsService } from './mappings/mappings.service';
+import { environment } from 'src/environments/environment';
 
+const FYLE_URL = environment.fyle_url;
+const FYLE_CLIENT_ID = environment.fyle_client_id;
+const CALLBACK_URI = environment.callback_uri;
 @Component({
   selector: 'app-base',
   templateUrl: './base.component.html',
@@ -60,24 +64,50 @@ export class BaseComponent implements OnInit {
     });
   }
 
+  switchWorkspace() {
+    localStorage.clear();
+    window.location.href =
+    FYLE_URL +
+    '/app/developers/#/oauth/authorize?' +
+    'client_id=' +
+    FYLE_CLIENT_ID +
+    '&redirect_uri=' +
+    CALLBACK_URI +
+    '&response_type=code';
+  }
+
+  createWorkspace(pathName) {
+    this.workspaceService.createWorkspace().subscribe(workspace => {
+      this.workspace = workspace;
+      this.isLoading = false;
+      if (pathName === '/workspaces') {
+        this.router.navigateByUrl(`/workspaces/${this.workspace.id}/settings`);
+      }
+    });
+  }
+
   ngOnInit() {
     this.workspaceService.getWorkspaces().subscribe(workspaces => {
       let pathName = window.location.pathname;
       if (Array.isArray(workspaces) && workspaces.length) {
-        this.workspace = workspaces[0];
-        this.isLoading = false;
-        if (pathName === '/workspaces') {
-          this.router.navigateByUrl(`/workspaces/${this.workspace.id}/expense_groups`);
-        }
-        this.getGeneralSettings();
-      } else {
-        this.workspaceService.createWorkspace().subscribe(workspace => {
-          this.workspace = workspace;
+        console.log('this.workspace', this.workspace, workspaces);
+        const oldWorkspace =  workspaces.some(element => {
+          if (element.fyle_org_id === this.user.org_id) {
+            this.workspace = element;
+          }
+          return element.fyle_org_id === this.user.org_id;
+        });
+        if (oldWorkspace === true) {
           this.isLoading = false;
           if (pathName === '/workspaces') {
-            this.router.navigateByUrl(`/workspaces/${this.workspace.id}/settings`);
+            this.router.navigateByUrl(`/workspaces/${this.workspace.id}/expense_groups`);
           }
-        });
+          this.getGeneralSettings();
+        } else {
+          this.createWorkspace(pathName);
+        }
+      } else {
+        this.createWorkspace(pathName);
       }
     });
   }

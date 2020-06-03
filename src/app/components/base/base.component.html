@@ -59,6 +59,14 @@
           </button>
           <div class="dropdown-menu profile-content" aria-labelledby="profileBtn">
             <div>
+              <button class="btn-block signoutBtn" (click)="switchWorkspace()" type="submit">
+                <div class="d-flex signout-layout">
+                  <i class="material-icons icon">transform</i>
+                  <strong>
+                    <p class="signout-text">Workspace</p>
+                  </strong>
+                </div>
+              </button>
               <button class="btn-block signoutBtn" [routerLink]="['../auth/logout']" type="submit">
                 <div class="d-flex signout-layout">
                   <i class="material-icons icon">power_settings_new</i>

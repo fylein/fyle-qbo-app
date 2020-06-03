@@ -90,14 +90,13 @@ export class BaseComponent implements OnInit {
     this.workspaceService.getWorkspaces().subscribe(workspaces => {
       let pathName = window.location.pathname;
       if (Array.isArray(workspaces) && workspaces.length) {
-        console.log('this.workspace', this.workspace, workspaces);
         const oldWorkspace =  workspaces.some(element => {
           if (element.fyle_org_id === this.user.org_id) {
             this.workspace = element;
           }
           return element.fyle_org_id === this.user.org_id;
         });
-        if (oldWorkspace === true) {
+        if (oldWorkspace) {
           this.isLoading = false;
           if (pathName === '/workspaces') {
             this.router.navigateByUrl(`/workspaces/${this.workspace.id}/expense_groups`);

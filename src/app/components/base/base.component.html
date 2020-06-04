@@ -59,7 +59,7 @@
           </button>
           <div class="dropdown-menu profile-content" aria-labelledby="profileBtn">
             <div>
-              <button class="btn-block signoutBtn" (click)="switchWorkspace()" type="submit">
+              <button *ngIf="showSwitchOrg" class="btn-block signoutBtn" (click)="switchWorkspace()" type="submit">
                 <div class="d-flex signout-layout">
                   <i class="material-icons icon">transform</i>
                   <strong>

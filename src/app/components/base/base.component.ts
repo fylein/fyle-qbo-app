@@ -22,6 +22,7 @@ export class BaseComponent implements OnInit {
   qboConencted: boolean = false;
   generalSettings: any;
   mappingSettings: any;
+  showSwitchOrg: boolean = false;
 
   constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router) {
   }
@@ -87,6 +88,10 @@ export class BaseComponent implements OnInit {
   }
 
   ngOnInit() {
+    const orgsCount = parseInt(localStorage.getItem('orgsCount'));
+    if (orgsCount > 1) {
+      this.showSwitchOrg = true;
+    }
     this.workspaceService.getWorkspaces().subscribe(workspaces => {
       let pathName = window.location.pathname;
       if (Array.isArray(workspaces) && workspaces.length) {

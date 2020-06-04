@@ -59,19 +59,20 @@ export class AuthService {
       .pipe(catchError(this.handleError));
     }
 
-  setUser(response: Token): Observable<any> {
-    localStorage.setItem('email', response.user.email);
-    localStorage.setItem('access_token', response.access_token);
-    localStorage.setItem('refresh_token', response.refresh_token);
-    return this.setUserProfile();
-  }
-
   isLoggedIn() {
     return localStorage.getItem('access_token') != null;
   }
 
   setUserProfile(): Observable<any> {
     return this.generalService.get('/user/profile/', {});
+  }
+
+  getClusterDomain(): Observable<any> {
+    return this.generalService.get(`/user/domain/`, {}); 
+  }
+
+  getFyleOrgs(): Observable<any> {
+    return this.generalService.get(`/user/orgs/`, {});
   }
 
   logout() {

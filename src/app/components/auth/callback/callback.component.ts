@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-callback',
@@ -17,10 +18,19 @@ export class CallbackComponent implements OnInit {
       if (params.code) {
         this.authService.login(params.code).subscribe(
           response => {
-            this.authService.setUser(response).subscribe(profile => {
-              localStorage.setItem('user', JSON.stringify(profile));
+            localStorage.setItem('email', response.user.email);
+            localStorage.setItem('access_token', response.access_token);
+            localStorage.setItem('refresh_token', response.refresh_token);
+            forkJoin([
+              this.authService.setUserProfile(),
+              this.authService.getClusterDomain(),
+              this.authService.getFyleOrgs()
+            ]).subscribe(responses => {
+              localStorage.setItem('user', JSON.stringify(responses[0]));
+              localStorage.setItem('clusterDomain', responses[1]);
+              localStorage.setItem('orgsCount', responses[2].length);
               this.router.navigate(['/workspaces']);
-            });
+            })
           },
           error => {
             this.router.navigate(['auth/login']).then(function() {

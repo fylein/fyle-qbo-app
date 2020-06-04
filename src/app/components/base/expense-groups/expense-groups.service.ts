@@ -15,10 +15,6 @@ export class ExpenseGroupsService {
     );
   }
 
-  getClusterDomain(workspace_id: number) {
-    return this.generalService.get(`/workspaces/${workspace_id}/fyle/domain/`, {});    
-  }
-
   getExpensesByExpenseGroupId(workspace_id: number, expense_group_id:number) {
     return this.generalService.get(`/workspaces/${workspace_id}/fyle/expense_groups/${expense_group_id}/expenses/`, {});
   }

@@ -30,7 +30,7 @@ export class CallbackComponent implements OnInit {
               localStorage.setItem('clusterDomain', responses[1]);
               localStorage.setItem('orgsCount', responses[2].length);
               this.router.navigate(['/workspaces']);
-            })
+            });
           },
           error => {
             this.router.navigate(['auth/login']).then(function() {

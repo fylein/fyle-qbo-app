@@ -17,7 +17,7 @@ const APP_URL = environment.app_url;
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.css', '../qbo.component.css'],
+  styleUrls: ['./settings.component.scss', '../qbo.component.scss'],
 })
 export class SettingsComponent implements OnInit {
   showModal = false;

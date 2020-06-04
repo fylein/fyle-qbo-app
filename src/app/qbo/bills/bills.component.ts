@@ -5,7 +5,7 @@ import { BillsService } from 'src/app/core/services/bills.service';
 @Component({
   selector: 'app-bills',
   templateUrl: './bills.component.html',
-  styleUrls: ['./bills.component.css', '../qbo.component.css'],
+  styleUrls: ['./bills.component.scss', '../qbo.component.scss'],
 })
 export class BillsComponent implements OnInit {
   workspaceId: number;

@@ -7,7 +7,7 @@ import { scan, tap, delay, takeWhile, switchMap, map } from 'rxjs/operators';
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
-  styleUrls: ['./tasks.component.css', '../qbo.component.css'],
+  styleUrls: ['./tasks.component.scss', '../qbo.component.scss'],
 })
 export class TasksComponent implements OnInit {
   workspaceId: number;

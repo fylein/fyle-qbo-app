@@ -6,7 +6,7 @@ import { concat } from 'rxjs';
 @Component({
   selector: 'app-mappings',
   templateUrl: './mappings.component.html',
-  styleUrls: ['./mappings.component.css', '../qbo.component.css'],
+  styleUrls: ['./mappings.component.scss', '../qbo.component.scss'],
 })
 export class MappingsComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, private mappingService: MappingsService) {}

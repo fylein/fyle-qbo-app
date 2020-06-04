@@ -10,7 +10,7 @@ const CALLBACK_URI = environment.callback_uri;
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {

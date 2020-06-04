@@ -5,7 +5,7 @@ import { CreditCardPurchasesService } from './credit-card-purchases.service';
 @Component({
   selector: 'app-credit-card-purchases',
   templateUrl: './credit-card-purchases.component.html',
-  styleUrls: ['./credit-card-purchases.component.css', '../qbo.component.css']
+  styleUrls: ['./credit-card-purchases.component.scss', '../qbo.component.scss']
 })
 
 export class CreditCardPurchasesComponent implements OnInit {

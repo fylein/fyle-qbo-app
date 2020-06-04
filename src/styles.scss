@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~normalize.css";
+@import "~@angular/material/theming";
+@include mat-core();
+@import "./assets/stylesheets/fy-theme.scss";
+
+html,
+body {
+  height: 100%;
+}
+
+.fy-theme {
+  // use our theme with angular-material-theme mixin
+  @include angular-material-theme($fy-theme);
+}

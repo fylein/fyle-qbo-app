@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-mapping-errors',
   templateUrl: './mapping-errors.component.html',
-  styleUrls: ['./mapping-errors.component.css', '../tasks.component.css', '../../qbo.component.css']
+  styleUrls: ['./mapping-errors.component.scss', '../tasks.component.scss', '../../qbo.component.scss']
 })
 export class MappingErrorsComponent implements OnInit {
   errors: any[];

@@ -10,7 +10,7 @@ import { BillsService } from 'src/app/core/services/bills.service';
 @Component({
   selector: 'app-expense-groups',
   templateUrl: './expense-groups.component.html',
-  styleUrls: ['./expense-groups.component.css', '../qbo.component.css'],
+  styleUrls: ['./expense-groups.component.scss', '../qbo.component.scss'],
 })
 export class ExpenseGroupsComponent implements OnInit {
   workspaceId: number;

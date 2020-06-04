@@ -27,13 +27,12 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.scss",
+              "src/assets/stylesheets/variables.scss",
               "node_modules/flatpickr/dist/flatpickr.min.css"
             ],
             "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+              "node_modules/jquery/dist/jquery.min.js"
             ]
           },
           "configurations": {
@@ -108,7 +107,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           }
@@ -141,5 +140,10 @@
       }
     }
   },
-  "defaultProject": "fyle-qbo-app"
+  "defaultProject": "fyle-qbo-app",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }

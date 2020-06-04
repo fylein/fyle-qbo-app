@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-cost-center',
   templateUrl: './cost-center.component.html',
-  styleUrls: ['./cost-center.component.css', '../../qbo.component.css']
+  styleUrls: ['./cost-center.component.scss', '../../qbo.component.scss']
 })
 export class CostCenterComponent implements OnInit {
 

@@ -5,7 +5,7 @@ import { AuthService } from '../../core/services/auth.service';
 @Component({
   selector: 'app-callback',
   templateUrl: './callback.component.html',
-  styleUrls: ['./callback.component.css'],
+  styleUrls: ['./callback.component.scss'],
 })
 export class CallbackComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute,

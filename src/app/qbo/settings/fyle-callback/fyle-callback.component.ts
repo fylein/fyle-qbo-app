@@ -5,7 +5,7 @@ import { SettingsService } from 'src/app/core/services/settings.service';
 @Component({
   selector: 'app-fyle-callback',
   templateUrl: './fyle-callback.component.html',
-  styleUrls: ['./fyle-callback.component.css']
+  styleUrls: ['./fyle-callback.component.scss']
 })
 export class FyleCallbackComponent implements OnInit {
 

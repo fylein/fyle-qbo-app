@@ -5,7 +5,7 @@ import { SettingsService } from 'src/app/core/services/settings.service';
 @Component({
   selector: 'app-qbo-callback',
   templateUrl: './qbo-callback.component.html',
-  styleUrls: ['./qbo-callback.component.css']
+  styleUrls: ['./qbo-callback.component.scss']
 })
 export class QBOCallbackComponent implements OnInit {
 

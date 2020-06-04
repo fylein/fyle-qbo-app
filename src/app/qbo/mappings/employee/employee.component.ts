@@ -9,7 +9,7 @@ import { Observable, forkJoin } from 'rxjs';
 @Component({
   selector: 'app-employee',
   templateUrl: './employee.component.html',
-  styleUrls: ['./employee.component.css', '../../qbo.component.css']
+  styleUrls: ['./employee.component.scss', '../../qbo.component.scss']
 })
 export class EmployeeComponent implements OnInit {
 

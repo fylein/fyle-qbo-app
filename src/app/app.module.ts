@@ -11,7 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     ReactiveFormsModule,
     Ng2FlatpickrModule,
     CoreModule,
-    SharedModule 
+    SharedModule,
+    BrowserAnimationsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

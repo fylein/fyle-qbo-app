@@ -5,7 +5,7 @@ import { ChecksService } from '../checks/checks.service';
 @Component({
   selector: 'app-checks',
   templateUrl: './checks.component.html',
-  styleUrls: ['./checks.component.css', '../qbo.component.css']
+  styleUrls: ['./checks.component.scss', '../qbo.component.scss']
 })
 export class ChecksComponent implements OnInit {
   workspaceId: number;

@@ -7,7 +7,8 @@ import { LoginComponent } from './login/login.component';
 import { CallbackComponent } from './callback/callback.component';
 import { LogoutComponent } from './logout/logout.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
-
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   imports: [
     CommonModule,
     AuthRoutingModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatButtonModule,
+    MatProgressSpinnerModule
   ]
 })
 export class AuthModule { }

@@ -7,7 +7,7 @@ import { SettingsService } from '../core/services/settings.service';
 @Component({
   selector: 'app-qbo',
   templateUrl: './qbo.component.html',
-  styleUrls: ['./qbo.component.css']
+  styleUrls: ['./qbo.component.scss']
 })
 export class QboComponent implements OnInit {
   user = JSON.parse(localStorage.getItem('user'));;

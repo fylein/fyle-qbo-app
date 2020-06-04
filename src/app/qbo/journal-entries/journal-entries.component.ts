@@ -5,7 +5,7 @@ import { JournalEntriesService } from '../journal-entries/journal-entries.servic
 @Component({
   selector: 'app-journal-entries',
   templateUrl: './journal-entries.component.html',
-  styleUrls: ['./journal-entries.component.css', '../qbo.component.css']
+  styleUrls: ['./journal-entries.component.scss', '../qbo.component.scss']
 })
 export class JournalEntriesComponent implements OnInit {
   workspaceId: number;

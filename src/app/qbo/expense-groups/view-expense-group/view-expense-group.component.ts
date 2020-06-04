@@ -22,6 +22,7 @@ export class ViewExpenseGroupComponent implements OnInit {
   expenseGroup: any;
   task: any;
   generalSettings: any;
+  clusterDomain: any;
 
   constructor(private route: ActivatedRoute, private router: Router, private expenseGroupsService: ExpenseGroupsService, private tasksService: TasksService, private billsService: BillsService, private checksService: ChecksService, private JournalEntriesService: JournalEntriesService, private CreditCardPurchasesService: CreditCardPurchasesService) { }
 
@@ -76,7 +77,7 @@ export class ViewExpenseGroupComponent implements OnInit {
   }
 
   openExpenseInFyle(expenseId: string) {
-    window.open(`${environment.fyle_url}/app/main/#/enterprise/view_expense/${expenseId}`, '_blank');
+    window.open(`${this.clusterDomain}/app/main/#/enterprise/view_expense/${expenseId}`, '_blank');
   }
 
   ngOnInit() {
@@ -88,7 +89,8 @@ export class ViewExpenseGroupComponent implements OnInit {
         [
           this.expenseGroupsService.getExpensesGroupById(this.workspaceId, this.expenseGroupId),
           this.expenseGroupsService.getExpensesByExpenseGroupId(this.workspaceId, this.expenseGroupId),
-          this.tasksService.getTasksByExpenseGroupId(this.workspaceId, this.expenseGroupId)
+          this.tasksService.getTasksByExpenseGroupId(this.workspaceId, this.expenseGroupId),
+          this.expenseGroupsService.getClusterDomain(this.workspaceId)
         ]
       ).subscribe(response => {
         this.expenseGroup = response[0];
@@ -96,6 +98,7 @@ export class ViewExpenseGroupComponent implements OnInit {
         if (response[2].length) {
           this.task = response[2][0];
         }
+        this.clusterDomain = response[3];
         this.isLoading = false;
       });
     });

@@ -4,11 +4,8 @@ import { WorkspaceService } from './workspace.service';
 import { SettingsService } from './settings/settings.service'
 import { forkJoin } from 'rxjs';
 import { MappingsService } from './mappings/mappings.service';
-import { environment } from 'src/environments/environment';
+import { AuthService } from '../auth/auth.service';
 
-const FYLE_URL = environment.fyle_url;
-const FYLE_CLIENT_ID = environment.fyle_client_id;
-const CALLBACK_URI = environment.callback_uri;
 @Component({
   selector: 'app-base',
   templateUrl: './base.component.html',
@@ -24,7 +21,7 @@ export class BaseComponent implements OnInit {
   mappingSettings: any;
   showSwitchOrg: boolean = false;
 
-  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router) {
+  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router, private authService: AuthService) {
   }
 
   getGeneralSettings() { 
@@ -66,25 +63,7 @@ export class BaseComponent implements OnInit {
   }
 
   switchWorkspace() {
-    localStorage.clear();
-    window.location.href =
-    FYLE_URL +
-    '/app/developers/#/oauth/authorize?' +
-    'client_id=' +
-    FYLE_CLIENT_ID +
-    '&redirect_uri=' +
-    CALLBACK_URI +
-    '&response_type=code';
-  }
-
-  createWorkspace(pathName) {
-    this.workspaceService.createWorkspace().subscribe(workspace => {
-      this.workspace = workspace;
-      this.isLoading = false;
-      if (pathName === '/workspaces') {
-        this.router.navigateByUrl(`/workspaces/${this.workspace.id}/settings`);
-      }
-    });
+    this.authService.switchWorkspace();
   }
 
   ngOnInit() {
@@ -92,26 +71,23 @@ export class BaseComponent implements OnInit {
     if (orgsCount > 1) {
       this.showSwitchOrg = true;
     }
-    this.workspaceService.getWorkspaces().subscribe(workspaces => {
+    this.workspaceService.getWorkspaces(this.user.org_id).subscribe(workspaces => {
       let pathName = window.location.pathname;
       if (Array.isArray(workspaces) && workspaces.length) {
-        const oldWorkspace =  workspaces.some(element => {
-          if (element.fyle_org_id === this.user.org_id) {
-            this.workspace = element;
-          }
-          return element.fyle_org_id === this.user.org_id;
-        });
-        if (oldWorkspace) {
+        this.workspace = workspaces[0];
+        this.isLoading = false;
+        if (pathName === '/workspaces') {
+          this.router.navigateByUrl(`/workspaces/${this.workspace.id}/expense_groups`);
+        }
+        this.getGeneralSettings();
+      } else {
+        this.workspaceService.createWorkspace().subscribe(workspace => {
+          this.workspace = workspace;
           this.isLoading = false;
           if (pathName === '/workspaces') {
-            this.router.navigateByUrl(`/workspaces/${this.workspace.id}/expense_groups`);
+            this.router.navigateByUrl(`/workspaces/${this.workspace.id}/settings`);
           }
-          this.getGeneralSettings();
-        } else {
-          this.createWorkspace(pathName);
-        }
-      } else {
-        this.createWorkspace(pathName);
+        });
       }
     });
   }

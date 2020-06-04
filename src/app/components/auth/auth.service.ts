@@ -17,6 +17,9 @@ const httpOptions = {
 };
 
 const API_BASE_URL = environment.api_url;
+const FYLE_URL = environment.fyle_url;
+const FYLE_CLIENT_ID = environment.fyle_client_id;
+const CALLBACK_URI = environment.callback_uri;
 
 @Injectable({
   providedIn: 'root',
@@ -77,5 +80,21 @@ export class AuthService {
 
   logout() {
     localStorage.clear();
+  }
+
+  redirectToLogin() {
+    window.location.href =
+    FYLE_URL +
+    '/app/developers/#/oauth/authorize?' +
+    'client_id=' +
+    FYLE_CLIENT_ID +
+    '&redirect_uri=' +
+    CALLBACK_URI +
+    '&response_type=code';
+  }
+
+  switchWorkspace() {
+    this.logout();
+    this.redirectToLogin();
   }
 }

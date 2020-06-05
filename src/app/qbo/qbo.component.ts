@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { WorkspaceService } from '../core/services/workspace.service';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { SettingsService } from '../core/services/settings.service';
+import {MediaMatcher} from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-qbo',
@@ -10,6 +11,9 @@ import { SettingsService } from '../core/services/settings.service';
   styleUrls: ['./qbo.component.scss']
 })
 export class QboComponent implements OnInit {
+  mobileQuery: MediaQueryList;
+  private _mobileQueryListener: () => void;
+
   user = JSON.parse(localStorage.getItem('user'));;
   workspace: any = {};
   isLoading: boolean = true;
@@ -18,7 +22,16 @@ export class QboComponent implements OnInit {
   generalSettings: any;
   mappingSettings: any;
 
-  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router) {
+  constructor(
+    changeDetectorRef: ChangeDetectorRef,
+    media: MediaMatcher,
+    private workspaceService: WorkspaceService,
+    private settingsService: SettingsService,
+    private router: Router
+    ) {
+    this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
   getGeneralSettings() { 
@@ -57,6 +70,14 @@ export class QboComponent implements OnInit {
 
       localStorage.setItem('generalSettings', JSON.stringify(this.generalSettings));
     });
+  }
+
+  onadsadsclick(): void {
+    console.log('Hola!');
+  }
+
+  ngOnDestroy(): void {
+    this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
   ngOnInit() {

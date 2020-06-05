@@ -22,12 +22,15 @@ import { SettingsComponent } from './settings/settings.component';
 import { FyleCallbackComponent } from './settings/fyle-callback/fyle-callback.component';
 import { QBOCallbackComponent } from './settings/qbo-callback/qbo-callback.component';
 import { SharedModule } from '../shared/shared.module';
-import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -62,7 +65,11 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     NgbModule,
     ReactiveFormsModule,
     Ng2FlatpickrModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatSidenavModule,
+    MatListModule,
+    MatToolbarModule,
+    MatMenuModule
   ]
 })
 export class QboModule { }

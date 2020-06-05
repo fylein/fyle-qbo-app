@@ -17,6 +17,9 @@ const httpOptions = {
 };
 
 const API_BASE_URL = environment.api_url;
+const FYLE_URL = environment.fyle_url;
+const FYLE_CLIENT_ID = environment.fyle_client_id;
+const CALLBACK_URI = environment.callback_uri;
 
 @Injectable({
   providedIn: 'root',
@@ -59,13 +62,6 @@ export class AuthService {
       .pipe(catchError(this.handleError));
     }
 
-  setUser(response: Token): Observable<any> {
-    localStorage.setItem('email', response.user.email);
-    localStorage.setItem('access_token', response.access_token);
-    localStorage.setItem('refresh_token', response.refresh_token);
-    return this.setUserProfile();
-  }
-
   isLoggedIn() {
     return localStorage.getItem('access_token') != null;
   }
@@ -74,7 +70,31 @@ export class AuthService {
     return this.generalService.get('/user/profile/', {});
   }
 
+  getClusterDomain(): Observable<any> {
+    return this.generalService.get(`/user/domain/`, {}); 
+  }
+
+  getFyleOrgs(): Observable<any> {
+    return this.generalService.get(`/user/orgs/`, {});
+  }
+
   logout() {
     localStorage.clear();
+  }
+
+  redirectToLogin() {
+    window.location.href =
+    FYLE_URL +
+    '/app/developers/#/oauth/authorize?' +
+    'client_id=' +
+    FYLE_CLIENT_ID +
+    '&redirect_uri=' +
+    CALLBACK_URI +
+    '&response_type=code';
+  }
+
+  switchWorkspace() {
+    this.logout();
+    this.redirectToLogin();
   }
 }

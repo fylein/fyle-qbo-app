@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
+import { MappingsService } from './mappings/mappings.service';
+import { AuthService } from '../core/services/auth.service';
 import { WorkspaceService } from '../core/services/workspace.service';
-import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { SettingsService } from '../core/services/settings.service';
 
 @Component({
@@ -17,8 +19,9 @@ export class QboComponent implements OnInit {
   qboConencted: boolean = false;
   generalSettings: any;
   mappingSettings: any;
+  showSwitchOrg: boolean = false;
 
-  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router) {
+  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router, private authService: AuthService) {
   }
 
   getGeneralSettings() { 
@@ -59,23 +62,32 @@ export class QboComponent implements OnInit {
     });
   }
 
+  switchWorkspace() {
+    this.authService.switchWorkspace();
+  }
+
+  getSettingsAndNavigate(location) {
+    const pathName = window.location.pathname;
+    this.isLoading = false;
+    if (pathName === '/workspaces') {
+      this.router.navigateByUrl(`/workspaces/${this.workspace.id}/${location}`);
+    }
+    this.getGeneralSettings();
+  }
+
   ngOnInit() {
-    this.workspaceService.getWorkspaces().subscribe(workspaces => {
-      let pathName = window.location.pathname;
+    const orgsCount = parseInt(localStorage.getItem('orgsCount'));
+    if (orgsCount > 1) {
+      this.showSwitchOrg = true;
+    }
+    this.workspaceService.getWorkspaces(this.user.org_id).subscribe(workspaces => {
       if (Array.isArray(workspaces) && workspaces.length) {
         this.workspace = workspaces[0];
-        this.isLoading = false;
-        if (pathName === '/workspaces') {
-          this.router.navigateByUrl(`/workspaces/${this.workspace.id}/expense_groups`);
-        }
-        this.getGeneralSettings();
+        this.getSettingsAndNavigate('expense_groups');
       } else {
         this.workspaceService.createWorkspace().subscribe(workspace => {
           this.workspace = workspace;
-          this.isLoading = false;
-          if (pathName === '/workspaces') {
-            this.router.navigateByUrl(`/workspaces/${this.workspace.id}/settings`);
-          }
+          this.getSettingsAndNavigate('settings');
         });
       }
     });

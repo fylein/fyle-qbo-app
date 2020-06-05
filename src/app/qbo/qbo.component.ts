@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
+import { MappingsService } from './mappings/mappings.service';
+import { AuthService } from '../core/services/auth.service';
 import { WorkspaceService } from '../core/services/workspace.service';
-import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { SettingsService } from '../core/services/settings.service';
 
 @Component({
@@ -17,8 +19,9 @@ export class QboComponent implements OnInit {
   qboConencted: boolean = false;
   generalSettings: any;
   mappingSettings: any;
+  showSwitchOrg: boolean = false;
 
-  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router) {
+  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router, private authService: AuthService) {
   }
 
   getGeneralSettings() { 
@@ -59,8 +62,16 @@ export class QboComponent implements OnInit {
     });
   }
 
+  switchWorkspace() {
+    this.authService.switchWorkspace();
+  }
+
   ngOnInit() {
-    this.workspaceService.getWorkspaces().subscribe(workspaces => {
+    const orgsCount = parseInt(localStorage.getItem('orgsCount'));
+    if (orgsCount > 1) {
+      this.showSwitchOrg = true;
+    }
+    this.workspaceService.getWorkspaces(this.user.org_id).subscribe(workspaces => {
       let pathName = window.location.pathname;
       if (Array.isArray(workspaces) && workspaces.length) {
         this.workspace = workspaces[0];

@@ -66,11 +66,11 @@ export class BaseComponent implements OnInit {
     this.authService.switchWorkspace();
   }
 
-  getSettingsAndNavigate() {
+  getSettingsAndNavigate(location) {
     const pathName = window.location.pathname;
     this.isLoading = false;
     if (pathName === '/workspaces') {
-      this.router.navigateByUrl(`/workspaces/${this.workspace.id}/expense_groups`);
+      this.router.navigateByUrl(`/workspaces/${this.workspace.id}/${location}`);
     }
     this.getGeneralSettings();
   }
@@ -83,11 +83,11 @@ export class BaseComponent implements OnInit {
     this.workspaceService.getWorkspaces(this.user.org_id).subscribe(workspaces => {
       if (Array.isArray(workspaces) && workspaces.length) {
         this.workspace = workspaces[0];
-        this.getSettingsAndNavigate();
+        this.getSettingsAndNavigate('expense_groups');
       } else {
         this.workspaceService.createWorkspace().subscribe(workspace => {
           this.workspace = workspace;
-          this.getSettingsAndNavigate();
+          this.getSettingsAndNavigate('settings');
         });
       }
     });

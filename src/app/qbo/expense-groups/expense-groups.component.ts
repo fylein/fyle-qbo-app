@@ -125,7 +125,7 @@ export class ExpenseGroupsComponent implements OnInit {
       this.previousPageLink = expenseGroups.previous;
       this.count = expenseGroups.count;
       this.expenseGroups = expenseGroups.results;
-      this.allSelected = false;      
+      this.allSelected = false;
       this.isLoading = false;
     });
   }

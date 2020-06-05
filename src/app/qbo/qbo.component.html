@@ -1,96 +1,3 @@
-<!-- <div *ngIf="!isLoading" class="container-fluid">
-    <div class="main-layout sidebar">
-      <ul class="nav nav-pills navTabsUl flex-column">
-        <header class="sidenav-header">
-          <div class="site-logo">
-            <img alt="Fyle" src="../../assets/fyle_logo_white_new.png" class="fyle-logo" />
-          </div>
-        </header>
-        <li class="nav-item">
-          <a class="nav-link tabitem" routerLink="{{workspace.id}}/tasks/"
-            routerLinkActive="active">Tasks</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link tabitem" routerLink="{{workspace.id}}/expense_groups/"
-            routerLinkActive="active">Expense Groups</a>
-        </li>
-        <li class="nav-item" *ngIf="generalSettings?.reimbursable_expenses_object == 'BILL'">
-          <a class="nav-link tabitem" routerLink="{{workspace.id}}/bills/" routerLinkActive="active">Bills</a>
-        </li>
-        <li class="nav-item" *ngIf="generalSettings?.reimbursable_expenses_object == 'CHECK'">
-          <a class="nav-link tabitem" routerLink="{{workspace.id}}/checks/"
-           routerLinkActive="active">Checks</a>
-        </li>
-        <li class="nav-item" *ngIf="generalSettings?.reimbursable_expenses_object == 'JOURNAL ENTRY' || generalSettings?.corporate_credit_card_expenses_object == 'JOURNAL ENTRY'">
-          <a class="nav-link tabitem" routerLink="{{workspace.id}}/journal_entries/"
-           routerLinkActive="active">Journal Entries</a>
-        </li>
-  
-        <li class="nav-item" *ngIf="generalSettings?.corporate_credit_card_expenses_object == 'CREDIT CARD PURCHASE'">
-          <a class="nav-link tabitem" routerLink="{{workspace.id}}/credit_card_purchases/"
-           routerLinkActive="active">Credit Card Purchases</a>
-        </li>
-        
-        <li class="nav-item">
-          <a class="nav-link tabitem" routerLink="{{workspace.id}}/mappings/general/"
-            routerLinkActive="active">Mappings</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link tabitem" routerLink="{{workspace.id}}/settings/"
-            routerLinkActive="active">Settings</a>
-        </li>
-      </ul>
-      <div class="workspace-content">
-        <nav class="navbar fixed-top navbar-light">
-          <h1 class="navbar-brand">{{workspace.name}}</h1>
-          <div class="msg">
-  
-          </div>
-          <div class="dropdown">
-            <button class="user-profile" type="button" id="profileBtn" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              <div class="d-flex flex-row user-details">
-                <i class="material-icons user-icon">account_circle</i>
-                <div>
-                  <strong class="user-name">{{user.full_name}}</strong>
-                </div>
-                <i class="material-icons arrow-down">keyboard_arrow_down</i>
-              </div>
-            </button>
-            <div class="dropdown-menu profile-content" aria-labelledby="profileBtn">
-              <div>
-                <button class="btn-block signoutBtn" [routerLink]="['../auth/logout']" type="submit">
-                  <div class="d-flex signout-layout">
-                    <i class="material-icons icon">power_settings_new</i>
-                    <strong>
-                      <p class="signout-text">Signout</p>
-                    </strong>
-                  </div>
-                </button>
-              </div>
-            </div>
-          </div>
-        </nav>
-        <router-outlet></router-outlet>
-      </div>
-    </div>
-  </div>
-   -->
-
-<!-- <div class="qbo" fxLayout="row" fxLayoutAlign="start stretch" fxFlexFill *ngIf="!isLoading">
-  <nav fxFlex="320px">
-    a
-  </nav>
-  <div fxFlex fxLayout="column" fxLayoutAlign="start stretch">
-    <header fxFlex="76px">
-      Thy Headerwa
-    </header>
-    <div fxFlex>
-      The baady
-    </div>
-  </div>
-</div> -->
-
 <mat-sidenav-container class="qbo" autosize fxFlexFill *ngIf="!isLoading">
   <mat-sidenav class="qbo-sidenav" mode="side" opened>
     <mat-nav-list>
@@ -98,39 +5,39 @@
         <img alt="Fyle" src="../../assets/images/pngs/fyle-logo.png" class="qbo-sidenav--logo" />
       </header>
 
-      <a mat-list-item routerLink="{{workspace.id}}/tasks/" routerLinkActive="active">
+      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/tasks/" routerLinkActive="active">
         Tasks
       </a>
 
-      <a mat-list-item routerLink="{{workspace.id}}/expense_groups/" routerLinkActive="active">Expense
+      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/expense_groups/" routerLinkActive="active">Expense
         Groups
       </a>
 
-      <a mat-list-item routerLink="{{workspace.id}}/bills/" routerLinkActive="active"
+      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/bills/" routerLinkActive="active"
         *ngIf="generalSettings?.reimbursable_expenses_object == 'BILL'">
         Bills
       </a>
 
-      <a mat-list-item routerLink="{{workspace.id}}/checks/" routerLinkActive="active"
+      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/checks/" routerLinkActive="active"
         *ngIf="generalSettings?.reimbursable_expenses_object == 'CHECK'">
         Checks
       </a>
 
-      <a mat-list-item routerLink="{{workspace.id}}/journal_entries/" routerLinkActive="active"
+      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/journal_entries/" routerLinkActive="active"
         *ngIf="generalSettings?.reimbursable_expenses_object == 'JOURNAL ENTRY' || generalSettings?.corporate_credit_card_expenses_object == 'JOURNAL ENTRY'">
         JournalEntries
       </a>
 
-      <a mat-list-item routerLink="{{workspace.id}}/credit_card_purchases/" routerLinkActive="active"
+      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/credit_card_purchases/" routerLinkActive="active"
         *ngIf="generalSettings?.corporate_credit_card_expenses_object == 'CREDIT CARD PURCHASE'">
         Credit Card Purchases
       </a>
 
-      <a mat-list-item routerLink="{{workspace.id}}/mappings/general/" routerLinkActive="active">
+      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/mappings/general/" routerLinkActive="active">
         Mappings
       </a>
 
-      <a mat-list-item routerLink="{{workspace.id}}/settings/" routerLinkActive="active">
+      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/settings/" routerLinkActive="active">
         Settings
       </a>
     </mat-nav-list>
@@ -138,10 +45,27 @@
 
   <mat-sidenav-content>
     <mat-toolbar fxLayoutAlign="space-between center">
-      <h1>Page Name Here</h1>
+      <div fxLayout="row" fxLayoutAlign="space-around center">
+        <div class="mat-small">
+          Fyle Org Name: asdasdasd
+        </div>
+        <div class="mat-small">
+          |
+        </div>
+        <div class="mat-small">
+          QBO Company Name: qweqweqew
+        </div>
+      </div>
 
       <mat-menu #appMenu="matMenu">
-        <button mat-menu-item [routerLink]="['../auth/logout']">
+        <button type="button" mat-menu-item *ngIf="orgsCount > 0" (click)="switchWorkspace()">
+          <div fxLayoutAlign="space-around center">
+            <strong>
+              <p class="signout-text">Switch Org</p>
+            </strong>
+          </div>
+        </button>
+        <button type="button" mat-menu-item [routerLink]="['../auth/logout']">
           <div fxLayoutAlign="space-around center">
             <strong>
               <p class="signout-text">Signout</p>

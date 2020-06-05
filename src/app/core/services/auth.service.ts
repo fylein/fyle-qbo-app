@@ -66,6 +66,14 @@ export class AuthService {
     return localStorage.getItem('access_token') != null;
   }
 
+  getUser() {
+    return JSON.parse(localStorage.getItem('user'));
+  }
+
+  getOrgCount() {
+    return parseInt(localStorage.getItem('orgsCount'), 10);
+  }
+
   setUserProfile(): Observable<any> {
     return this.generalService.get('/user/profile/', {});
   }

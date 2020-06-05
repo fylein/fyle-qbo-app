@@ -1,11 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { MappingsService } from './mappings/mappings.service';
 import { AuthService } from '../core/services/auth.service';
 import { WorkspaceService } from '../core/services/workspace.service';
 import { SettingsService } from '../core/services/settings.service';
-import {MediaMatcher} from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-qbo',
@@ -13,10 +11,8 @@ import {MediaMatcher} from '@angular/cdk/layout';
   styleUrls: ['./qbo.component.scss']
 })
 export class QboComponent implements OnInit {
-  mobileQuery: MediaQueryList;
-  private _mobileQueryListener: () => void;
-
-  user = JSON.parse(localStorage.getItem('user'));;
+  user: any;
+  orgsCount: number;
   workspace: any = {};
   isLoading: boolean = true;
   fyleConnected: boolean = false;
@@ -25,24 +21,15 @@ export class QboComponent implements OnInit {
   mappingSettings: any;
   showSwitchOrg: boolean = false;
 
-<<<<<<< HEAD
   constructor(
-    changeDetectorRef: ChangeDetectorRef,
-    media: MediaMatcher,
     private workspaceService: WorkspaceService,
     private settingsService: SettingsService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
     ) {
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
-=======
-  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router, private authService: AuthService) {
->>>>>>> components
   }
 
   getGeneralSettings() { 
-
     forkJoin(
       [
         this.settingsService.getGeneralSettings(this.workspace.id),
@@ -79,14 +66,6 @@ export class QboComponent implements OnInit {
     });
   }
 
-<<<<<<< HEAD
-  onadsadsclick(): void {
-    console.log('Hola!');
-  }
-
-  ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
-=======
   switchWorkspace() {
     this.authService.switchWorkspace();
   }
@@ -98,14 +77,10 @@ export class QboComponent implements OnInit {
       this.router.navigateByUrl(`/workspaces/${this.workspace.id}/${location}`);
     }
     this.getGeneralSettings();
->>>>>>> components
   }
 
-  ngOnInit() {
-    const orgsCount = parseInt(localStorage.getItem('orgsCount'));
-    if (orgsCount > 1) {
-      this.showSwitchOrg = true;
-    }
+  setupWorkspace () {
+    this.user = this.authService.getUser();
     this.workspaceService.getWorkspaces(this.user.org_id).subscribe(workspaces => {
       if (Array.isArray(workspaces) && workspaces.length) {
         this.workspace = workspaces[0];
@@ -117,5 +92,10 @@ export class QboComponent implements OnInit {
         });
       }
     });
+  }
+
+  ngOnInit() {
+    this.orgsCount = this.authService.getOrgCount();
+    this.setupWorkspace();
   }
 }

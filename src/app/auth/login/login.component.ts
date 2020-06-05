@@ -20,14 +20,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    window.location.href =
-      FYLE_URL +
-      '/app/developers/#/oauth/authorize?' +
-      'client_id=' +
-      FYLE_CLIENT_ID +
-      '&redirect_uri=' +
-      CALLBACK_URI +
-      '&response_type=code';
+    this.authService.redirectToLogin();
   }
 
   ngOnInit() {

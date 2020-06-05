@@ -4,6 +4,7 @@ import { WorkspaceService } from './workspace.service';
 import { SettingsService } from './settings/settings.service'
 import { forkJoin } from 'rxjs';
 import { MappingsService } from './mappings/mappings.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-base',
@@ -18,8 +19,9 @@ export class BaseComponent implements OnInit {
   qboConencted: boolean = false;
   generalSettings: any;
   mappingSettings: any;
+  showSwitchOrg: boolean = false;
 
-  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router) {
+  constructor(private workspaceService: WorkspaceService, private settingsService: SettingsService, private router: Router, private authService: AuthService) {
   }
 
   getGeneralSettings() { 
@@ -60,8 +62,16 @@ export class BaseComponent implements OnInit {
     });
   }
 
+  switchWorkspace() {
+    this.authService.switchWorkspace();
+  }
+
   ngOnInit() {
-    this.workspaceService.getWorkspaces().subscribe(workspaces => {
+    const orgsCount = parseInt(localStorage.getItem('orgsCount'));
+    if (orgsCount > 1) {
+      this.showSwitchOrg = true;
+    }
+    this.workspaceService.getWorkspaces(this.user.org_id).subscribe(workspaces => {
       let pathName = window.location.pathname;
       if (Array.isArray(workspaces) && workspaces.length) {
         this.workspace = workspaces[0];

@@ -36,34 +36,11 @@ export class SettingsService {
     });
   }
 
-  postSettings(workspace_id: number, next_run: string, hours: number, schedule_enabled: boolean) {
-    return this.generalService.post(`/workspaces/${workspace_id}/settings/`, {
-      next_run: next_run,
-      hours: hours,
-      schedule_enabled: schedule_enabled
-    });
-  }
-
-  getSettings(workspace_id: number) {
-    return this.generalService.get(`/workspaces/${workspace_id}/settings/`, {});
-  }
-
   getMappingSettings(workspace_id: number) {
     return this.generalService.get(`/workspaces/${workspace_id}/mappings/settings/`, {});
   }
 
-  postGeneralSettings(workspace_id: number, reimbursable_expenses_object: string, corporate_credit_card_expenses_object: string) {
-    return this.generalService.post(`/workspaces/${workspace_id}/settings/general/`, {
-      reimbursable_expenses_object: reimbursable_expenses_object,
-      corporate_credit_card_expenses_object: corporate_credit_card_expenses_object,
-    });
-  }
-
   postMappingSettings(workspace_id: number, mappingSettings: any) {
     return this.generalService.post(`/workspaces/${workspace_id}/mappings/settings/`, mappingSettings);
-  }
-
-  getGeneralSettings(workspace_id: number) {
-    return this.generalService.get(`/workspaces/${workspace_id}/settings/general/`, {});
   }
 }

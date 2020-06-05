@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { forkJoin } from 'rxjs';
 
 const FYLE_URL = environment.fyle_url;
 const FYLE_CLIENT_ID = environment.fyle_client_id;
@@ -17,6 +18,7 @@ const APP_URL = environment.app_url;
 export class SettingsComponent implements OnInit {
   showModal = false;
   fyleConnected: boolean;
+  netsuiteConnected: boolean;
   isLoading = true;
   state: string = 'source';
   source: string = 'active';
@@ -32,6 +34,12 @@ export class SettingsComponent implements OnInit {
   nsTokenSecretIsValid: boolean = true;
   modalRef: NgbModalRef;
   closeResult: string;
+  generalSettingsForm: FormGroup;
+  mappingSettings: any;
+  projectFieldMapping: any = {};
+  costCenterFieldMapping: any = {};
+  projectFieldOptions: any[];
+  costCenterFieldOptions: any[];
 
   constructor(private modalService: NgbModal, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
@@ -39,7 +47,7 @@ export class SettingsComponent implements OnInit {
       nsConsumerKey: new FormControl(''),
       nsConsumerSecret: new FormControl(),
       nsTokenId: new FormControl(),
-      nsTokenSecret: new FormBuilder(),
+      nsTokenSecret: new FormControl(),
     });
   }
 
@@ -67,22 +75,15 @@ export class SettingsComponent implements OnInit {
   }
 
 
-  getNetSuiteSettings() {
+  getDestination() {
     this.settingsService.getNetSuiteCredentials(this.workspaceId).subscribe(settings => {
       if (settings) {
-        if (settings.destination) {
-          this.form.setValue({
-            nsAccountId: settings.destination.ns_account_id,
-            nsConsumerKey: settings.destination.ns_consumer_key,
-            nsConsumerSecret: settings.destination.ns_consumer_secret,
-            nsTokenId: settings.destination.ns_token_id,
-            nsTokenSecret: settings.destination.ns_token_secret
-          });
-        }
+        this.netsuiteConnected = true;
         this.isLoading = false;
       }
     }, error => {
-      if (error.status == 401) {
+      if (error.status == 400) {
+        this.netsuiteConnected = false;
         this.isLoading = false;
       }
     });
@@ -117,6 +118,7 @@ export class SettingsComponent implements OnInit {
       this.settings = 'active';
     }
   }
+
 
   submit() {
     this.nsAccountIdIsValid = true;
@@ -154,8 +156,7 @@ export class SettingsComponent implements OnInit {
 
       this.isLoading = true;
       this.settingsService.connectNetSuite(this.workspaceId, accountId, consumerKey, consumerSecret, tokenId, tokenSecret).subscribe(response => {
-        console.log(accountId, consumerKey, consumerSecret, tokenId, tokenSecret)
-        this.getNetSuiteSettings();
+        this.getDestination();
       }, error => {
         if (error.status == 400) {
           this.isLoading = false;
@@ -164,25 +165,118 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  getNetrSuiteSettings() {
-    this.settingsService.getNetSuiteCredentials(this.workspaceId).subscribe(settings => {
-      if (settings) {
-        if (settings.destination) {
-          this.form.setValue({
-            nsAccountId: settings.destination.ns_account_id,
-            nsConsumerKey: settings.destination.ns_consumer_key,
-            nsConsumerSecret: settings.destination.ns_consumer_secret,
-            nsTokenId: settings.destination.ns_token_id,
-            nsTokenSecret: settings.destination.ns_token_secret
-          });
-        }
-        this.isLoading = false;
+  getAllSettings() {
+    forkJoin(
+      [
+        this.settingsService.getMappingSettings(this.workspaceId)
+      ]
+    ).subscribe(responses => {
+      this.mappingSettings = responses[0]['results'];
+
+      let projectFieldMapping = this.mappingSettings.filter(
+        settings => settings.source_field === 'PROJECT'
+      )[0];
+
+      let costCenterFieldMapping = this.mappingSettings.filter(
+        settings => settings.source_field === 'COST_CENTER'
+      )[0];
+
+      this.projectFieldMapping = projectFieldMapping? projectFieldMapping: {};
+      this.costCenterFieldMapping = costCenterFieldMapping? costCenterFieldMapping: {};
+      
+      this.generalSettingsForm = this.formBuilder.group({
+        projectFieldOptions: [this.projectFieldMapping? this.projectFieldMapping.destination_field: ''],
+        costCenterFieldOptions: [this.costCenterFieldMapping? this.costCenterFieldMapping.destination_field: '']
+      });
+      
+      if (projectFieldMapping) {
+        this.generalSettingsForm.controls.projectFieldOptions.disable();
       }
+
+      if (costCenterFieldMapping) {
+        this.generalSettingsForm.controls.costCenterFieldOptions.disable();
+      }
+
+      this.initializeForm();
+
+      this.isLoading = false;
     }, error => {
       if (error.status == 400) {
+        this.mappingSettings = {}
         this.isLoading = false;
+        this.generalSettingsForm = this.formBuilder.group({
+          projectFieldOptions: [''],
+          costCenterFieldOptions: ['']
+        });
+        this.initializeForm();
       }
+    }); 
+  }
+
+  initializeForm() {
+
+    this.generalSettingsForm.controls['projectFieldOptions'].valueChanges.subscribe((value) => {
+      setTimeout(() => {
+        this.costCenterFieldOptions = [
+          { name: 'DEPARTMENT' },
+          { name: 'LOCATION' },
+          { name: 'CUSTOMER' }
+        ];
+        
+        if (value) {
+          this.costCenterFieldOptions = this.costCenterFieldOptions.filter(option => option.name !== value);
+        }
+      }, 500);
     });
+
+    this.generalSettingsForm.controls['costCenterFieldOptions'].valueChanges.subscribe((value) => {
+      this.projectFieldOptions = [
+        { name: 'LOCATION' },
+        { name: 'DEPARTMENT' },
+        { name: 'CUSTOMER' }
+      ];
+
+      setTimeout(() => {
+        if (value) {
+          this.projectFieldOptions = this.projectFieldOptions.filter(option => option.name !== value);
+        }
+      }, 500);
+    });
+}
+
+  submitSettings() {
+
+    let mappingsSettingsPayload = [{
+      source_field: 'CATEGORY',
+      destination_field: 'ACCOUNT'
+    }]
+
+    let costCenterMappingObject = this.generalSettingsForm.value.costCenterFieldOptions? this.generalSettingsForm.value.costCenterFieldOptions: this.costCenterFieldMapping.destination_field;
+    let projectMappingObject = this.generalSettingsForm.value.projectFieldOptions? this.generalSettingsForm.value.projectFieldOptions: this.projectFieldMapping.destination_field;
+
+    if (projectMappingObject) {
+      mappingsSettingsPayload.push({
+        source_field: 'PROJECT',
+        destination_field: projectMappingObject
+      });
+    }
+
+    if (costCenterMappingObject) {
+      mappingsSettingsPayload.push({
+        source_field: 'COST_CENTER',
+        destination_field: costCenterMappingObject
+      });
+    }
+      this.isLoading = true;
+      forkJoin(
+        [
+          this.settingsService.postMappingSettings(this.workspaceId, mappingsSettingsPayload),
+        ]
+      ).subscribe(responses => {
+        this.closeModal();
+        this.isLoading = true;
+        window.location.href= `/workspaces/${this.workspaceId}/expense_groups`;
+      });
   }
 
   closeModal() {
@@ -199,11 +293,23 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.projectFieldOptions = [
+      { name: 'DEPARTMENT' },
+      { name: 'LOCATION' },
+      { name: 'CUSTOMER' }
+    ];
+
+    this.costCenterFieldOptions = [
+      { name: 'LOCATION' },
+      { name: 'DEPARTMENT' },
+      { name: 'CUSTOMER' }
+    ];
+
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
       this.route.queryParams.subscribe(queryParams => {
         this.getSource();
-        this.getNetSuiteSettings();
+        this.getDestination();
         if (queryParams.state) {
           this.toggleState(queryParams.state);
           this.error = queryParams.error;
@@ -212,6 +318,7 @@ export class SettingsComponent implements OnInit {
           this.error = queryParams.error;
         }
       });
+      this.getAllSettings();
     });
 
   }

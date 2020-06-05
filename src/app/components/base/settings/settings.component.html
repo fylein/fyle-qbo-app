@@ -9,6 +9,9 @@
         <li class="sub-nav-item">
             <a class="sub-nav-link {{destination}}" (click)="toggleState('destination')">Destination</a>
         </li>
+        <li class="sub-nav-item">
+            <a class="sub-nav-link {{settings}}" (click)="toggleState('settings')">General Settings</a>
+        </li>
     </ul>
 </nav>
 <div class="tabitem-content" *ngIf="state === 'source'">
@@ -25,42 +28,105 @@
 </div>
 
 <div class="tabitem-content" *ngIf="state === 'destination' && !isLoading">
+    <div class="login center-div mt-5" *ngIf="netsuiteConnected && !isLoading">
+        <p>Connected to your NetSuite account</p>
+    </div>
     <div class="schedule-content">
-        <form [formGroup]="form" (ngSubmit)="submit()">
-            
+        <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="!netsuiteConnected && !isLoading">
             <label class=" control-label col-md-3">NetSuite Account ID</label>
             <div class="col-md-4">
               <input class="form-control" type="text" formControlName="nsAccountId">
-            </div>
+            </div><br/>
         
             <label class=" control-label col-md-3">NetSuite Consumer Key</label>
             <div class="col-md-4">
               <input class="form-control" type="text" formControlName="nsConsumerKey">
-            </div>
+            </div><br/>
         
             <label class=" control-label col-md-3">NetSuite Consumer Secret</label>
             <div class="col-md-4">
               <input class="form-control" type="text" formControlName="nsConsumerSecret">
-            </div>
+            </div><br/>
 
             <label class=" control-label col-md-3">NetSuite Token ID</label>
             <div class="col-md-4">
               <input class="form-control" type="text" formControlName="nsTokenId">
-            </div>
+            </div><br/>
 
             <label class=" control-label col-md-3">NetSuite Token Secret</label>
             <div class="col-md-4">
               <input class="form-control" type="text" formControlName="nsTokenSecret">
-            </div>
+            </div><br/>
     
-            <div class="save-schedule">
-                <button class="main-btn btn save-btn" type="submit">Save Schedule</button>
+            <div class="col-md-4">
+                <button class="main-btn btn save-btn" type="submit">Connect</button>
             </div>
-            <div class="text-danger mt-2" *ngIf="error">
+            <div class="text-danger mt-2" *ngIf="error && !netsuiteConnected">
                 <p>{{error}}</p>
             </div>
         </form>
     </div>
 </div>
 
-<app-loader *ngIf="isLoading"></app-loader>
+
+<div class="tabitem-content" *ngIf="state === 'settings' && !isLoading">
+    <div class="schedule-content">
+        <form [formGroup]="generalSettingsForm">
+    
+            <div class="settings-object">
+                <label for="projectFieldOptions" class="d-flex">Map Fyle projects to</label>
+                <select formControlName="projectFieldOptions" id="projectFieldOptions" class="form-control selectpicker col-4">
+                    <option *ngFor="let option of projectFieldOptions; let i = index"
+                        [selected]="projectFieldOptions[i].name === projectFieldMapping.destination_field" [value]="projectFieldOptions[i].name">
+                        {{ option.name }}
+                    </option>
+                </select>
+            </div>
+    
+            <div class="settings-object">
+                <label for="costCenterFieldOptions" class="d-flex">Map Fyle cost centers to</label>
+                <select formControlName="costCenterFieldOptions" id="costCenterFieldOptions" class="form-control selectpicker col-4">
+                    <option *ngFor="let option of costCenterFieldOptions; let i = index"
+                        [selected]="costCenterFieldOptions[i].name === costCenterFieldMapping.destination_field" [value]="costCenterFieldOptions[i].name">
+                        {{ option.name }}
+                    </option>
+                </select>
+            </div>
+    
+            <div class="save-schedule">
+                <button class="main-btn btn save-btn" type="submit" (click)="open(content)">Save Settings</button>
+            </div>
+    
+            <div class="save-schedule">
+                <p>
+                    To change your settings, Please send us a note at 
+                    <a class="support" href="mailto:support@fyle.in">support@fyle.in</a>
+                </p>
+    
+            </div>
+    
+            <ng-template #content let-modal>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="generalSettingModalTitle">Save Settings</h5>
+                    <button type="button" class="close ml-auto" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="md-caption text-danger mt-0">
+                        Setting cannot be modified once saved.
+                        Are you sure you want to continue ? 
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancel-btn" class="btn btnInline cancelBtn" type="button" data-dismiss="modal"
+                        (click)="closeModal()">Cancel</button>
+                    <button id="submit-btn" class="btn btnInline saveBtn" type="submit" name="method" (click)="submitSettings()">Save</button>
+                </div>
+            </ng-template>
+    
+        </form>
+    </div>
+</div>
+    
+    <app-loader *ngIf="isLoading"></app-loader>

@@ -34,7 +34,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { InfoComponent } from './expense-groups/view-expense-group/info/info.component';
+import { GroupMappingErrorComponent } from './expense-groups/view-expense-group/group-mapping-error/group-mapping-error.component';
 @NgModule({
   declarations: [
     QboComponent,
@@ -54,7 +57,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     CostCenterComponent,
     SettingsComponent,
     FyleCallbackComponent,
-    QBOCallbackComponent
+    QBOCallbackComponent,
+    InfoComponent,
+    GroupMappingErrorComponent
   ],
   entryComponents: [
     EmployeeComponent
@@ -75,7 +80,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatMenuModule,
     MatTabsModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class QboModule { }

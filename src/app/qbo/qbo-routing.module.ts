@@ -20,6 +20,8 @@ import { CostCenterComponent } from './mappings/cost-center/cost-center.componen
 import { SettingsComponent } from './settings/settings.component';
 import { FyleCallbackComponent } from './settings/fyle-callback/fyle-callback.component';
 import { QBOCallbackComponent } from './settings/qbo-callback/qbo-callback.component';
+import { InfoComponent } from './expense-groups/view-expense-group/info/info.component';
+import { GroupMappingErrorComponent } from './expense-groups/view-expense-group/group-mapping-error/group-mapping-error.component';
 
 const routes: Routes = [{
   path: '',
@@ -33,7 +35,25 @@ const routes: Routes = [{
       component: ExpenseGroupsComponent,
       canActivate: [WorkspacesGuard]
     },
-    { path: ':workspace_id/expense_groups/:expense_group_id/view', component: ViewExpenseGroupComponent, canActivate: [WorkspacesGuard] },
+    { 
+      path: ':workspace_id/expense_groups/:expense_group_id/view', 
+      component: ViewExpenseGroupComponent, 
+      canActivate: [WorkspacesGuard],
+      children: [
+        {
+          path: 'info',
+          component: InfoComponent
+        },
+        {
+          path: 'mapping_errors',
+          component: GroupMappingErrorComponent
+        },
+        {
+          path: '**',
+          redirectTo: 'info'
+        }
+      ]
+    },
     { path: ':workspace_id/bills', component: BillsComponent, canActivate: [WorkspacesGuard] },
     { path: ':workspace_id/checks', component: ChecksComponent, canActivate: [WorkspacesGuard] },
     { path: ':workspace_id/journal_entries', component: JournalEntriesComponent, canActivate: [WorkspacesGuard] },

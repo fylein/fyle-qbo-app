@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GeneralService } from 'src/app/core/services/general.service';
+import { Task } from '../models/task.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,7 @@ export class TasksService {
     );
   }
 
-  getTasksByExpenseGroupId(workspace_id: number, expense_group_id: number): Observable<any> {
+  getTasksByExpenseGroupId(workspace_id: number, expense_group_id: number): Observable<Task[]> {
     return this.generalService.get(
       `/workspaces/${workspace_id}/tasks/expense_group/${expense_group_id}/`, {}
     );

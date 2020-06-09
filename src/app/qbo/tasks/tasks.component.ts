@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TasksService } from './tasks.service';
+import { TasksService } from '../../core/services/tasks.service';
 import { timer, interval, from } from 'rxjs';
 import { scan, tap, delay, takeWhile, switchMap, map } from 'rxjs/operators';
 

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ExpenseGroupsService } from './expense-groups.service';
+import { ExpenseGroupsService } from '../../core/services/expense-groups.service';
 
 describe('ExpenseGroupsService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

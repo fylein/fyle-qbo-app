@@ -1,81 +1,21 @@
-<app-loader *ngIf="isLoading"></app-loader>
-<div class="tabitem-content" *ngIf="!isLoading">
-    <div class="content-header container">
-        <div class="row">
-            <div class="col">
-                Expenses grouped by report id {{ expenseGroup.description.claim_number }} 
-                <br>
-                 {{expenseGroup.description.employee_email}}
-            </div>
+<div fxLayoutAlign="center center" fxFlexFill *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+<div *ngIf="!isLoading">
+    <div class="page-header">
+        <div class="page-header--name mat-h2">
+            Claim Number - {{ expenseGroup.description.claim_number }} 
         </div>
-        <div class="row">
-            <div class="col mt-4">
-                <div class="rounded-pill {{task && task.status === 'COMPLETE'? 'complete': 'ready'}} border-primary">
-                    {{ task && task.status === 'COMPLETE'? 'Complete': 'Ready' }}
-                </div>
-            </div>
-            <div class="row-4 ml-auto mr-2" *ngIf="task && task.status === 'COMPLETE' && task.type === 'CREATING_BILL'">
-                <button class="btn ml-auto main-btn sync-btn" (click)="openBillInQBO()">
-                    View Bill in QBO
-                </button>
-            </div>
-            <div class="row-4 ml-auto mr-2" *ngIf="task && task.status === 'COMPLETE' && task.type === 'CREATING_CHECK'">
-                <button class="btn ml-auto main-btn sync-btn" (click)="openCheckInQBO()">
-                    View Check in QBO
-                </button>
-            </div>
-
-            <div class="row-4 ml-auto mr-2" *ngIf="task && task.status === 'COMPLETE' && task.type === 'CREATING_JOURNAL_ENTRY'">
-                <button class="btn ml-auto main-btn sync-btn" (click)="openJournalEntryInQBO()">
-                    View Journal Entry in QBO
-                </button>
-            </div>
-
-            <div class="row-4 ml-auto mr-2" *ngIf="task && task.status === 'COMPLETE' && task.type === 'CREATING_CREDIT_CARD_PURCHASE'">
-                <button class="btn ml-auto main-btn sync-btn" (click)="openCreditCardPurchaseInQBO()">
-                    View Credit Card Purchase in QBO
-                </button>
-            </div>
-            <div class="row-4 ml-auto mr-2" *ngIf="!task || task.status === 'FAILED'">
-                <button class="btn ml-auto main-btn sync-btn" (click)="createQBOItems(expenseGroup.id)">
-                    Export Group
-                </button>
-            </div>
-        </div>
+        <nav mat-tab-nav-bar>
+            <a mat-tab-link (click)="changeState('INFO')" [active]="state==='INFO'">
+                Info
+            </a>
+            <a mat-tab-link (click)="changeState('MAPPING_ERRORS')" [active]="state==='MAPPING_ERRORS'">
+                Mapping Errors
+            </a>
+        </nav>
     </div>
-    <div class="content">
-        <div class="alert alert-light mx-auto warning" *ngIf="!expenses.length">
-            <p>Looks like you don't have any Expense Groups</p>
-        </div>
-        <div class="table-layout" *ngIf="expenses.length">
-            <div class="table-responsive">
-                <table class="table expense-groups-table">
-                    <thead class="table-head">
-                        <tr class="colHeadings">
-                            <th>Expense Id</th>
-                            <th>Spend Date</th>
-                            <th style="width: 20%">Details</th>
-                            <th>Amount</th>
-                            <th>State</th>
-                            <th>View in Fyle</th>
-                        </tr>
-                    </thead>
-                    <tbody *ngFor="let expense of expenses;">
-                        <tr class="expense-groups-row">
-                            <td>{{expense.expense_number}}</td>
-                            <td>{{expense.spent_at | date}}</td>
-                            <td style="width: 20%">{{expense.category}} / {{expense.sub_category}}</td>
-                            <td>{{expense.amount | currency:expense.currency}}</td>
-                            <td *ngIf="expense.state === 'PAYMENT_PROCESSING'">Payment Processing</td>
-                            <td>
-                                <button class="btn" (click)="openExpenseInFyle(expense.expense_id)">
-                                    <i class="material-icons">open_in_new</i>
-                                </button>          
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div>
+        <router-outlet></router-outlet>
     </div>
 </div>

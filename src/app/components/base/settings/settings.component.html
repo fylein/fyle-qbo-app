@@ -31,37 +31,67 @@
     <div class="login center-div mt-5" *ngIf="netsuiteConnected && !isLoading">
         <p>Connected to your NetSuite account</p>
     </div>
-    <div class="schedule-content">
+    <div>
         <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="!netsuiteConnected && !isLoading">
             <label class=" control-label col-md-3">NetSuite Account ID</label>
             <div class="col-md-4">
               <input class="form-control" type="text" formControlName="nsAccountId">
             </div><br/>
+
+            <div class="text-danger mb-2 col-3" *ngIf="!nsAccountIdIsValid">
+                <small>
+                    Account ID cannot be empty
+                </small>
+            </div>
         
             <label class=" control-label col-md-3">NetSuite Consumer Key</label>
             <div class="col-md-4">
               <input class="form-control" type="text" formControlName="nsConsumerKey">
             </div><br/>
+
+            <div class="text-danger mb-2 col-3" *ngIf="!nsConsumerKeyIsValid">
+                <small>
+                    Consumer Key cannot be empty
+                </small>
+            </div>
         
             <label class=" control-label col-md-3">NetSuite Consumer Secret</label>
             <div class="col-md-4">
               <input class="form-control" type="text" formControlName="nsConsumerSecret">
             </div><br/>
 
+            <div class="text-danger mb-2 col-3" *ngIf="!nsConsumerSecretIsValid">
+                <small>
+                    Consumer Secret cannot be empty
+                </small>
+            </div>
+
             <label class=" control-label col-md-3">NetSuite Token ID</label>
             <div class="col-md-4">
               <input class="form-control" type="text" formControlName="nsTokenId">
             </div><br/>
 
+            <div class="text-danger mb-2 col-3" *ngIf="!nsTokenIdIsValid">
+                <small>
+                    Token ID cannot be empty
+                </small>
+            </div>
+
             <label class=" control-label col-md-3">NetSuite Token Secret</label>
             <div class="col-md-4">
               <input class="form-control" type="text" formControlName="nsTokenSecret">
             </div><br/>
+
+            <div class="text-danger mb-2 col-3" *ngIf="!nsTokenSecretIsValid">
+                <small>
+                    Token Secret cannot be empty
+                </small>
+            </div>
     
             <div class="col-md-4">
                 <button class="main-btn btn save-btn" type="submit">Connect</button>
             </div>
-            <div class="text-danger mt-2" *ngIf="error && !netsuiteConnected">
+            <div class="text-danger mt-2" *ngIf="!netsuiteConnected">
                 <p>{{error}}</p>
             </div>
         </form>
@@ -72,6 +102,16 @@
 <div class="tabitem-content" *ngIf="state === 'settings' && !isLoading">
     <div class="schedule-content">
         <form [formGroup]="generalSettingsForm">
+
+            <div class="settings-object">
+                <label for="employeeFieldOptions" class="d-flex">Map Fyle employees to</label>
+                <select formControlName="employeeFieldOptions" id="employeeFieldOptions" class="form-control selectpicker col-4">
+                    <option *ngFor="let option of employeeFieldOptions; let i = index"
+                        [selected]="employeeFieldOptions[i].name === employeeFieldMapping.destination_field" [value]="employeeFieldOptions[i].name">
+                        {{ option.name }}
+                    </option>
+                </select>
+            </div>
     
             <div class="settings-object">
                 <label for="projectFieldOptions" class="d-flex">Map Fyle projects to</label>

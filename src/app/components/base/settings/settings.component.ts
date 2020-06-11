@@ -38,6 +38,8 @@ export class SettingsComponent implements OnInit {
   mappingSettings: any;
   projectFieldMapping: any = {};
   costCenterFieldMapping: any = {};
+  employeeFieldMapping: any = {};
+  employeeFieldOptions: any[];
   projectFieldOptions: any[];
   costCenterFieldOptions: any[];
 
@@ -121,42 +123,46 @@ export class SettingsComponent implements OnInit {
 
 
   submit() {
-    this.nsAccountIdIsValid = true;
-    this.nsConsumerKeyIsValid = true;
-    this.nsConsumerSecretIsValid = true;
-    this.nsTokenIdIsValid = true;
-    this.nsTokenSecretIsValid = true;
+    this.nsAccountIdIsValid = false;
+    this.nsConsumerKeyIsValid = false;
+    this.nsConsumerSecretIsValid = false;
+    this.nsTokenIdIsValid = false;
+    this.nsTokenSecretIsValid = false;
 
-    if (this.form.value.ns_account_id) {
+    let accountId = this.form.value.nsAccountId;
+    let consumerKey = this.form.value.nsConsumerKey;
+    let consumerSecret = this.form.value.nsConsumerSecret;
+    let tokenId = this.form.value.nsTokenId;
+    let tokenSecret = this.form.value.nsTokenSecret;
+
+    if (accountId) {
       this.nsAccountIdIsValid = true;
     }
 
-    if (this.form.value.ns_consumer_key) {
+    if (consumerKey) {
       this.nsConsumerKeyIsValid = true;
     }
 
-    if (this.form.value.ns_consumer_secret) {
+    if (consumerSecret) {
       this.nsConsumerSecretIsValid = true;
     }
 
-    if (this.form.value.ns_token_id) {
+    if (tokenId) {
       this.nsTokenIdIsValid = true;
     }
 
-    if (this.form.value.ns_token_secret) {
+    if (tokenSecret) {
       this.nsTokenSecretIsValid = true;
     }
 
     if (this.nsAccountIdIsValid && this.nsConsumerKeyIsValid && this.nsConsumerSecretIsValid && this.nsTokenIdIsValid && this.nsTokenSecretIsValid) {
-      let accountId = this.form.value.nsAccountId;
-      let consumerKey = this.form.value.nsConsumerKey;
-      let consumerSecret = this.form.value.nsConsumerSecret;
-      let tokenId = this.form.value.nsTokenId;
-      let tokenSecret = this.form.value.nsTokenSecret;
-
       this.isLoading = true;
-      this.settingsService.connectNetSuite(this.workspaceId, accountId, consumerKey, consumerSecret, tokenId, tokenSecret).subscribe(response => {
-        this.getDestination();
+      this.netsuiteConnected = true;
+      this.settingsService.connectNetSuite(this.workspaceId, accountId, consumerKey, consumerSecret, tokenId, tokenSecret).subscribe(credentials => {
+        if (credentials) {
+          this.netsuiteConnected = true;
+          this.isLoading = false;
+        }
       }, error => {
         if (error.status == 400) {
           this.isLoading = false;
@@ -173,6 +179,10 @@ export class SettingsComponent implements OnInit {
     ).subscribe(responses => {
       this.mappingSettings = responses[0]['results'];
 
+      let employeeFieldMapping = this.mappingSettings.filter(
+        settings => settings.source_field === 'EMPLOYEE'
+      )[0];
+
       let projectFieldMapping = this.mappingSettings.filter(
         settings => settings.source_field === 'PROJECT'
       )[0];
@@ -181,13 +191,19 @@ export class SettingsComponent implements OnInit {
         settings => settings.source_field === 'COST_CENTER'
       )[0];
 
+      this.employeeFieldMapping = employeeFieldMapping? employeeFieldMapping: {};
       this.projectFieldMapping = projectFieldMapping? projectFieldMapping: {};
       this.costCenterFieldMapping = costCenterFieldMapping? costCenterFieldMapping: {};
       
       this.generalSettingsForm = this.formBuilder.group({
+        employeeFieldOptions: [this.employeeFieldMapping? this.employeeFieldMapping.destination_field: ''],
         projectFieldOptions: [this.projectFieldMapping? this.projectFieldMapping.destination_field: ''],
         costCenterFieldOptions: [this.costCenterFieldMapping? this.costCenterFieldMapping.destination_field: '']
       });
+
+      if (employeeFieldMapping) {
+        this.generalSettingsForm.controls.employeeFieldOptions.disable();
+      }
       
       if (projectFieldMapping) {
         this.generalSettingsForm.controls.projectFieldOptions.disable();
@@ -205,6 +221,7 @@ export class SettingsComponent implements OnInit {
         this.mappingSettings = {}
         this.isLoading = false;
         this.generalSettingsForm = this.formBuilder.group({
+          employeeFieldOptions: [''],
           projectFieldOptions: [''],
           costCenterFieldOptions: ['']
         });
@@ -214,13 +231,11 @@ export class SettingsComponent implements OnInit {
   }
 
   initializeForm() {
-
     this.generalSettingsForm.controls['projectFieldOptions'].valueChanges.subscribe((value) => {
       setTimeout(() => {
         this.costCenterFieldOptions = [
           { name: 'DEPARTMENT' },
           { name: 'LOCATION' },
-          { name: 'CUSTOMER' }
         ];
         
         if (value) {
@@ -233,7 +248,6 @@ export class SettingsComponent implements OnInit {
       this.projectFieldOptions = [
         { name: 'LOCATION' },
         { name: 'DEPARTMENT' },
-        { name: 'CUSTOMER' }
       ];
 
       setTimeout(() => {
@@ -251,8 +265,16 @@ export class SettingsComponent implements OnInit {
       destination_field: 'ACCOUNT'
     }]
 
+    let employeeMappingObject = this.generalSettingsForm.value.employeeFieldOptions? this.generalSettingsForm.value.employeeFieldOptions: this.employeeFieldMapping.destination_field;
     let costCenterMappingObject = this.generalSettingsForm.value.costCenterFieldOptions? this.generalSettingsForm.value.costCenterFieldOptions: this.costCenterFieldMapping.destination_field;
     let projectMappingObject = this.generalSettingsForm.value.projectFieldOptions? this.generalSettingsForm.value.projectFieldOptions: this.projectFieldMapping.destination_field;
+
+    if (employeeMappingObject) {
+      mappingsSettingsPayload.push({
+        source_field: 'EMPLOYEE',
+        destination_field: employeeMappingObject
+      });
+    }
 
     if (projectMappingObject) {
       mappingsSettingsPayload.push({
@@ -293,16 +315,18 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.employeeFieldOptions = [
+      { name: 'VENDOR' }
+    ];
+
     this.projectFieldOptions = [
       { name: 'DEPARTMENT' },
       { name: 'LOCATION' },
-      { name: 'CUSTOMER' }
     ];
 
     this.costCenterFieldOptions = [
       { name: 'LOCATION' },
       { name: 'DEPARTMENT' },
-      { name: 'CUSTOMER' }
     ];
 
     this.route.params.subscribe(params => {

@@ -17,7 +17,7 @@ export class WorkspacesGuard implements CanActivate {
 
     this.settingsService.getMappingSettings(workspaceId).subscribe(mappings => {
       let state: string
-      if(mappings['count'] == 0) {
+      if(mappings['count'] < 4) {
         state = 'settings'
         let error = 'General Setting not found'
         return this.router.navigateByUrl(`workspaces/${workspaceId}/settings?state=${state}&error=${error}`);

@@ -11,6 +11,7 @@ import { LogoutComponent } from './components/auth/logout/logout.component';
 import { TasksComponent } from './components/base/tasks/tasks.component';
 import { ExpenseGroupsComponent } from './components/base/expense-groups/expense-groups.component';
 import { SettingsComponent } from './components/base/settings/settings.component';
+import { MappingsComponent } from './components/base/mappings/mappings.component';
 import { CallbackComponent } from './components/auth/callback/callback.component';
 import { AuthComponent } from './components/auth/auth.component';
 import { JwtInterceptor } from './components/auth/jwt.interceptor';
@@ -21,6 +22,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ViewExpenseGroupComponent } from './components/base/expense-groups/view-expense-group/view-expense-group.component';
 import { MappingErrorsComponent } from './components/base/tasks/mapping-errors/mapping-errors.component';
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
+import { CategoryComponent } from './components/base/mappings/category/category.component';
+import { EmployeeComponent } from './components/base/mappings/employee/employee.component';
+import { ProjectComponent } from './components/base/mappings/project/project.component';
+import { CostCenterComponent } from './components/base/mappings/cost-center/cost-center.component';
+import { SubsidiaryComponent } from './components/base/mappings/subsidiary/subsidiary.component';
 
 @NgModule({
   declarations: [
@@ -31,12 +37,18 @@ import { Ng2FlatpickrModule } from 'ng2-flatpickr';
     TasksComponent,
     ExpenseGroupsComponent,
     SettingsComponent,
+    MappingsComponent,
     CallbackComponent,
     AuthComponent,
     LoaderComponent,
     FyleCallbackComponent,
     ViewExpenseGroupComponent,
     MappingErrorsComponent,
+    CategoryComponent,
+    EmployeeComponent,
+    ProjectComponent,
+    CostCenterComponent,
+    SubsidiaryComponent,
   ],
   entryComponents: [
   ],

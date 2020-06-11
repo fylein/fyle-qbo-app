@@ -1,6 +1,6 @@
 .qbo {
   &-sidenav {
-    background-color: var(--fy-background);
+    background-color: var(--fy-layout-background);
     border-right: 0;
     min-width: 320px;
     &--header {
@@ -13,11 +13,36 @@
     }
  
     &--nav-item {
+      margin: 0;
       &.mat-list-item {
         padding-left: 45px;
         color: var(--fy-nav-text);
+        font-weight: 500;
+        font-size: 18px;
+      }
+      &.active {
+        background-color: var(--fy-nav-active-background);
+        color: var(--fy-nav-active-text);
       }
     }
+
+    &--nav-sub-item {
+      margin: 0;
+      &.mat-list-item {
+        padding-left: 60px;
+        color: var(--fy-nav-text);
+        font-weight: 500;
+        font-size: 18px;
+      }
+      &.active {
+        background-color: var(--fy-nav-active-background);
+        color: var(--fy-nav-active-text);
+      }
+    }
+  }
+
+  .mat-drawer-content {
+    background-color: var(--fy-background);
   }
 }
 
@@ -27,5 +52,31 @@
     padding: 30px;
     margin: 0;
   }
+}
 
+.page-table {
+  width: 100%;
+  .mat-row:nth-child(odd) {
+    background-color: var(--fy-alt-row);
+    margin: 12px
+
+  }
+  .mat-cell {
+    border: 0;
+  }
+}
+
+.page-info {
+  margin: 8px 24px
+}
+
+.internal-loader {
+  margin-top: 64px;
+}
+
+.simple-search {
+  font-size: 12px;
+  &--icon {
+    color: var(--fy-search-icon)
+  }
 }

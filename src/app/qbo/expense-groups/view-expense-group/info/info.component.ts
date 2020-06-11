@@ -8,7 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'app-info',
   templateUrl: './info.component.html',
-  styleUrls: ['./info.component.scss']
+  styleUrls: ['./info.component.scss','../../../qbo.component.scss']
 })
 export class InfoComponent implements OnInit {
 
@@ -52,8 +52,8 @@ export class InfoComponent implements OnInit {
 
   ngOnInit() {
     let that = this;
-    that.workspaceId = +that.route.snapshot.parent.params['workspace_id'];
-    that.expenseGroupId = +that.route.snapshot.parent.params['expense_group_id'];
+    that.workspaceId = +that.route.snapshot.parent.params.workspace_id;
+    that.expenseGroupId = +that.route.snapshot.parent.params.expense_group_id;
 
     that.isLoading = true;
     forkJoin([

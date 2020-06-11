@@ -38,6 +38,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { InfoComponent } from './expense-groups/view-expense-group/info/info.component';
 import { GroupMappingErrorComponent } from './expense-groups/view-expense-group/group-mapping-error/group-mapping-error.component';
+import { SyncExportComponent } from './sync-export/sync-export.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { SyncComponent } from './sync-export/sync/sync.component';
+import { ExportComponent } from './sync-export/export/export.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+
 @NgModule({
   declarations: [
     QboComponent,
@@ -59,7 +67,11 @@ import { GroupMappingErrorComponent } from './expense-groups/view-expense-group/
     FyleCallbackComponent,
     QBOCallbackComponent,
     InfoComponent,
-    GroupMappingErrorComponent
+    GroupMappingErrorComponent,
+    SyncExportComponent,
+    DashboardComponent,
+    SyncComponent,
+    ExportComponent
   ],
   entryComponents: [
     EmployeeComponent
@@ -82,7 +94,10 @@ import { GroupMappingErrorComponent } from './expense-groups/view-expense-group/
     MatTableModule,
     MatPaginatorModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule
   ]
 })
 export class QboModule { }

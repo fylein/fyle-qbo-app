@@ -8,7 +8,7 @@ import { MappingError } from 'src/app/core/models/mappingError.model';
 @Component({
   selector: 'app-group-mapping-error',
   templateUrl: './group-mapping-error.component.html',
-  styleUrls: ['./group-mapping-error.component.scss']
+  styleUrls: ['./group-mapping-error.component.scss','../../../qbo.component.scss']
 })
 export class GroupMappingErrorComponent implements OnInit {
 

@@ -29,13 +29,13 @@ export class TasksComponent implements OnInit {
   nextPage() {
     this.offset = this.offset + this.limit;
     this.isLoading = true;
-    this.getPaginatedTasks();
+    // this.getPaginatedTasks();
   }
 
   previousPage() {
     this.offset = this.offset - this.limit;
     this.isLoading = true;
-    this.getPaginatedTasks();
+    // this.getPaginatedTasks();
   }
   
   changeState(state: string) {
@@ -57,27 +57,27 @@ export class TasksComponent implements OnInit {
       this.complete = '';
       this.failed = 'active';
     }
-    this.getPaginatedTasks();
+    // this.getPaginatedTasks();
   }
 
-  getPaginatedTasks() {
-    this.tasksService.getTasks(this.workspaceId, this.limit, this.offset, this.state).subscribe(tasks => {
-      this.nextPageLink = tasks.next;
-      this.previousPageLink = tasks.previous;
-      this.count = tasks.count;
-      this.tasks = tasks.results;
-      this.isLoading = false;
+  // getPaginatedTasks() {
+  //   this.tasksService.getTasks(this.workspaceId, this.limit, this.offset, this.state).subscribe(tasks => {
+  //     this.nextPageLink = tasks.next;
+  //     this.previousPageLink = tasks.previous;
+  //     this.count = tasks.count;
+  //     this.tasks = tasks.results;
+  //     this.isLoading = false;
 
-      if(this.state === 'ALL') {
-        interval(3000).pipe(
-          switchMap(() => from(this.tasksService.getTasks(this.workspaceId, this.limit, this.offset, this.state))),
-          takeWhile((response) => response['results'].filter(task => task.status === 'IN_PROGRESS').length, true)
-        ).subscribe(response => {
-          this.tasks = response['results'];
-        })
-      }
-    });
-  }
+  //     if(this.state === 'ALL') {
+  //       interval(3000).pipe(
+  //         switchMap(() => from(this.tasksService.getTasks(this.workspaceId, this.limit, this.offset, this.state))),
+  //         takeWhile((response) => response['results'].filter(task => task.status === 'IN_PROGRESS').length, true)
+  //       ).subscribe(response => {
+  //         this.tasks = response['results'];
+  //       })
+  //     }
+  //   });
+  // }
 
   goToExpenseGroup(id: number) {
     this.router.navigate([]).then(result => {
@@ -92,7 +92,7 @@ export class TasksComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
-      this.getPaginatedTasks();
+      // this.getPaginatedTasks();
     });
   }
 }

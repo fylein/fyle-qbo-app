@@ -1,6 +1,10 @@
+<div fxLayoutAlign="center center" fxFlexFill *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
 <div>
     <div [hidden]="isLoading">
-        <table class="mapping-errors" mat-table [dataSource]="mappingErrors" matSort matSortActive="created_at"
+        <table class="page-table" mat-table [dataSource]="mappingErrors" matSort matSortActive="created_at"
             matSortDisableClear matSortDirection="desc">
             
             <ng-container matColumnDef="category">

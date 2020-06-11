@@ -1,0 +1,38 @@
+<div fxLayoutAlign="center start" fxFlexFill *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
+<div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start start">
+    <div class="export-header">
+        Export Expenses from Fyle App to get Started
+    </div>
+    <div>
+        <mat-card class="export-card">
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div>
+                    <div>
+                        <div *ngIf="!isExporting">
+                            {{exportableExpenseGroups.length}} expenses can be exported
+                        </div>
+                        <div *ngIf="isExporting">
+                            {{exportableExpenseGroups.length}} expenses are being synced
+                        </div>
+                    </div>
+                    <div *ngIf="lastTask">
+                        Synced on {{lastTask.updated_at | date}}
+                    </div>
+                </div>
+                <div>
+                    <button mat-flat-button color="primary" (click)="createQBOItems()">
+                        <div *ngIf="!isExporting">
+                            Export
+                        </div>
+                        <div *ngIf="isExporting">
+                            Exporting
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GeneralService } from 'src/app/core/services/general.service';
 import { Task } from '../models/task.model';
+import { TaskResponse } from '../models/taskReponse.model';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,7 @@ import { Task } from '../models/task.model';
 export class TasksService {
   constructor(private generalService: GeneralService) {}
 
-  getTasks(workspace_id: number, limit: number, offset: number, status: string): Observable<any> {
+  getTasks(workspace_id: number, limit: number, offset: number, status: string): Observable<TaskResponse> {
     return this.generalService.get(
       `/workspaces/${workspace_id}/tasks/all/?limit=${limit}&offset=${offset}&status=${status}`, {}
     );

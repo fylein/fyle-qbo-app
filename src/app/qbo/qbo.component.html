@@ -5,14 +5,22 @@
         <img alt="Fyle" src="../../assets/images/pngs/fyle-logo.png" class="qbo-sidenav--logo" />
       </header>
 
-      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/tasks/" routerLinkActive="active">
+      <!-- <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/tasks/" routerLinkActive="active">
         Tasks
+      </a> -->
+
+      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/dashboard" routerLinkActive="active">
+        Dashboard
       </a>
 
-      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/expense_groups/" routerLinkActive="active">Expense
-        Groups
+      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/sync_export/sync" routerLinkActive="active">
+        Sync & Export
       </a>
 
+      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/expense_groups/" routerLinkActive="active">
+        Expense Groups
+      </a>
+<!-- 
       <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/bills/" routerLinkActive="active"
         *ngIf="generalSettings?.reimbursable_expenses_object == 'BILL'">
         Bills
@@ -31,14 +39,39 @@
       <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/credit_card_purchases/" routerLinkActive="active"
         *ngIf="generalSettings?.corporate_credit_card_expenses_object == 'CREDIT CARD PURCHASE'">
         Credit Card Purchases
-      </a>
+      </a> -->
 
       <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/mappings/general/" routerLinkActive="active">
         Mappings
       </a>
 
-      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/settings/" routerLinkActive="active">
+      <!-- <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/settings/" routerLinkActive="active">
         Settings
+      </a> -->
+
+      <a class="mat-h3 qbo-sidenav--nav-item" mat-list-item>
+        Settings
+      </a>
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item>
+        Configurations
+      </a>
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item>
+        General Mappings
+      </a>
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item>
+        Employee Mappings
+      </a>
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item>
+        Category Mappings
+      </a>
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item>
+        Project Mappings
+      </a>
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item>
+        Cost Centre Mappings
+      </a>
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item>
+        Schedule
       </a>
     </mat-nav-list>
   </mat-sidenav>
@@ -85,7 +118,9 @@
       </div>
 
     </mat-toolbar>
-    <router-outlet></router-outlet>
+    <div class="qbo-body">
+      <router-outlet></router-outlet>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
 

@@ -22,6 +22,10 @@ import { FyleCallbackComponent } from './settings/fyle-callback/fyle-callback.co
 import { QBOCallbackComponent } from './settings/qbo-callback/qbo-callback.component';
 import { InfoComponent } from './expense-groups/view-expense-group/info/info.component';
 import { GroupMappingErrorComponent } from './expense-groups/view-expense-group/group-mapping-error/group-mapping-error.component';
+import { SyncExportComponent } from './sync-export/sync-export.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { SyncComponent } from './sync-export/sync/sync.component';
+import { ExportComponent } from './sync-export/export/export.component';
 
 const routes: Routes = [{
   path: '',
@@ -34,6 +38,26 @@ const routes: Routes = [{
       path: ':workspace_id/expense_groups',
       component: ExpenseGroupsComponent,
       canActivate: [WorkspacesGuard]
+    },
+    {
+      path: ':workspace_id/dashboard', 
+      component: DashboardComponent,
+      canActivate: [WorkspacesGuard]
+    },
+    {
+      path: ':workspace_id/sync_export', 
+      component: SyncExportComponent,
+      canActivate: [WorkspacesGuard],
+      children: [
+        {
+          path: 'sync',
+          component: SyncComponent
+        },
+        {
+          path: 'export',
+          component: ExportComponent
+        }
+      ]
     },
     { 
       path: ':workspace_id/expense_groups/:expense_group_id/view', 

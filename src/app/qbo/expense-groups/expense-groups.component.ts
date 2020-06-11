@@ -8,7 +8,7 @@ import { BillsService } from 'src/app/core/services/bills.service';
 import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
 import { MatTableDataSource } from '@angular/material/table';
 
-@Component({ 
+@Component({
   selector: 'app-expense-groups',
   templateUrl: './expense-groups.component.html',
   styleUrls: ['./expense-groups.component.scss', '../qbo.component.scss'],
@@ -22,7 +22,7 @@ export class ExpenseGroupsComponent implements OnInit {
   generalSettings: any;
   pageNumber: number = 0;
   pageSize: number = 5;
-  columnsToDisplay = ['description', 'employee', 'claimno', 'expensetype', 'view'];
+  columnsToDisplay = ['description', 'employee', 'claimno', 'expensetype'];
 
   constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private router: Router, private billsService: BillsService, private checksService: ChecksService, private JournalEntriesService: JournalEntriesService, private CreditCardPurchasesService: CreditCardPurchasesService) { }
 
@@ -69,45 +69,6 @@ export class ExpenseGroupsComponent implements OnInit {
     }
   }
 
-  // createQBOItems() {
-  //   if (this.generalSettings.reimbursable_expenses_object) {
-  //     let filteredIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected && expenseGroup.fund_source == 'PERSONAL').map(expenseGroup => expenseGroup.id);
-  //     if (filteredIds.length > 0) {
-  //       if (this.generalSettings.reimbursable_expenses_object == 'BILL') {
-  //         this.billsService.createBills(this.workspaceId, filteredIds).subscribe(result => {
-  //           this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-  //         });
-  //       }
-  //       else if (this.generalSettings.reimbursable_expenses_object == 'CHECK') {
-  //         this.checksService.createChecks(this.workspaceId, filteredIds).subscribe(result => {
-  //           this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-  //         });
-  //       }
-  //       else {
-  //         this.JournalEntriesService.createJournalEntries(this.workspaceId, filteredIds).subscribe(result => {
-  //           this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-  //         });
-  //       }
-  //     }
-  //   }
-
-  //   if (this.generalSettings.corporate_credit_card_expenses_object) {
-  //     let filteredIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected && expenseGroup.fund_source == 'CCC').map(expenseGroup => expenseGroup.id);
-  //     if (filteredIds.length > 0) {
-  //       if (this.generalSettings.corporate_credit_card_expenses_object == 'JOURNAL ENTRY') {
-  //         this.JournalEntriesService.createJournalEntries(this.workspaceId, filteredIds).subscribe(result => {
-  //           this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-  //         });
-  //       }
-  //       else {
-  //         this.CreditCardPurchasesService.createCreditCardPurchases(this.workspaceId, filteredIds).subscribe(result => {
-  //           this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-  //         });
-  //       }
-  //     }
-  //   }
-  // }
-
   getPaginatedExpenseGroups() {
     return this.expenseGroupService.getExpenseGroups(this.workspaceId, this.pageSize, this.pageNumber * this.pageSize, this.state).subscribe(expenseGroups => {
       this.count = expenseGroups.count;
@@ -119,34 +80,29 @@ export class ExpenseGroupsComponent implements OnInit {
   }
 
   goToExpenseGroup(id: number) {
-    this.router.navigate([]).then(result => { // look into why later on
-      window.open(`workspaces/${this.workspaceId}/expense_groups/${id}/view`, '_blank')
-    });
+    this.router.navigate([`workspaces/${this.workspaceId}/expense_groups/${id}/view`]);
   }
 
   reset() {
     var that = this;
-    that.route.params.subscribe(params => {
-      that.workspaceId = +params.workspace_id;
-      that.pageNumber = +that.route.snapshot.queryParams.page_number || 0;
-      that.pageSize = +that.route.snapshot.queryParams.page_size || 5;
-      that.state = that.route.snapshot.queryParams.state || 'READY';
+    that.workspaceId = +that.route.snapshot.params.workspace_id;
+    that.pageNumber = +that.route.snapshot.queryParams.page_number || 0;
+    that.pageSize = +that.route.snapshot.queryParams.page_size || 5;
+    that.state = that.route.snapshot.queryParams.state || 'READY';
 
-      that.getPaginatedExpenseGroups();
-      that.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
+    that.getPaginatedExpenseGroups();
+    that.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
 
-    });
-
-    this.router.events.subscribe(event => {
+    that.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {
         let pageNumber = +event.snapshot.queryParams.page_number || 0;
         let pageSize = +event.snapshot.queryParams.page_size || 5;
         let state = event.snapshot.queryParams.state || 'READY';
 
-        if (this.pageNumber !== pageNumber || this.pageSize !== pageSize || this.state !== state) {
-          this.pageNumber = pageNumber;
-          this.pageSize = pageSize;
-          this.state = state;
+        if (that.pageNumber !== pageNumber || that.pageSize !== pageSize || that.state !== state) {
+          that.pageNumber = pageNumber;
+          that.pageSize = pageSize;
+          that.state = state;
           that.getPaginatedExpenseGroups();
         }
       }

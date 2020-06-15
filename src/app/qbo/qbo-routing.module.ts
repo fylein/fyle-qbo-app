@@ -27,6 +27,12 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SyncComponent } from './sync-export/sync/sync.component';
 import { ExportComponent } from './sync-export/export/export.component';
 import { ConfigurationComponent } from './settings/configuration/configuration.component';
+import { GeneralMappingsComponent } from './settings/general-mappings/general-mappings.component';
+import { EmployeeMappingsComponent } from './settings/employee-mappings/employee-mappings.component';
+import { CategoryMappingsComponent } from './settings/category-mappings/category-mappings.component';
+import { ProjectMappingsComponent } from './settings/project-mappings/project-mappings.component';
+import { ScheduleComponent } from './settings/schedule/schedule.component';
+import { CostCenterMappingsComponent } from './settings/cost-center-mappings/cost-center-mappings.component';
 
 const routes: Routes = [{
   path: '',
@@ -95,11 +101,38 @@ const routes: Routes = [{
         { path: 'cost_centers', component: CostCenterComponent },
       ]
     },
-    { 
-      path: ':workspace_id/settings', 
+    {
+      path: ':workspace_id/settings',
       component: SettingsComponent,
       children: [
-        { path: 'configurations', component: ConfigurationComponent}
+        {
+          path: 'configurations',
+          component: ConfigurationComponent
+        },
+        {
+          path: 'general_mappings',
+          component: GeneralMappingsComponent
+        },
+        {
+          path: 'employee_mappings',
+          component: EmployeeMappingsComponent
+        },
+        {
+          path: 'category_mappings',
+          component: CategoryMappingsComponent
+        },
+        {
+          path: 'project_mappings',
+          component: ProjectMappingsComponent
+        },
+        {
+          path: 'cost_center_mappings',
+          component: CostCenterMappingsComponent
+        },
+        {
+          path: 'schedule',
+          component: ScheduleComponent
+        }
       ]
     },
     { path: 'fyle/callback', component: FyleCallbackComponent },

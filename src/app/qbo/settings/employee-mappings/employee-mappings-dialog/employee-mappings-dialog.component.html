@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>
+    <div>
+        <div class="mat-title">
+            Create New Mapping
+
+        </div>
+        <div>
+            <button type="button">X</button>
+        </div>
+    </div>
+</h2>
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="form">
+
+        <mat-form-field>
+            <input type="text" formControlName="fyleEmployee" placeholder="Pick employee" matInput
+                [matAutocomplete]="fyEmp">
+            <mat-autocomplete #fyEmp="matAutocomplete">
+                <mat-option *ngFor="let option of employeeOptions" [value]="option">
+                    {{option | json}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
+            <input type="text" formControlName="qboVendor" placeholder="Pick vendor" matInput [matAutocomplete]="fyEmp">
+            <mat-autocomplete #fyEmp="matAutocomplete">
+                <mat-option *ngFor="let option of vendorOptions" [value]="option">
+                    {{option | json}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
+            <input type="text" formControlName="qboEmployee" placeholder="Employee" matInput [matAutocomplete]="fyEmp">
+            <mat-autocomplete #fyEmp="matAutocomplete">
+                <mat-option *ngFor="let option of qboEmployeeOptions" [value]="option">
+                    {{option | json}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="generalSettings.corporate_credit_card_expenses_object">
+            <input type="text" formControlName="creditCardAccount" placeholder="Account" matInput
+                [matAutocomplete]="fyEmp">
+            <mat-autocomplete #fyEmp="matAutocomplete">
+                <mat-option *ngFor="let option of qboEmployeeOptions" [value]="option">
+                    {{option | json}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>Create</button>
+</mat-dialog-actions>

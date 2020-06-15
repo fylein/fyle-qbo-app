@@ -1,0 +1,16 @@
+.general-mappings {
+    &--header {
+        border-bottom: 1px solid var(--fy-layout-background);
+    }
+
+    &--form {
+        font-size: 10px;
+        margin: 24px;
+        max-width: 360px;
+        color: var(--fy-nav-text);
+    }
+
+    &--save-btn {
+        max-width: 32px;
+    }
+}

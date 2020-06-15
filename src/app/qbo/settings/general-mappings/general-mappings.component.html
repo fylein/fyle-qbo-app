@@ -2,10 +2,15 @@
     <app-loader></app-loader>
 </div>
 
-<div class="content" *ngIf="!isLoading">
-    <form [formGroup]="form" (ngSubmit)="submit()">
+<div class="general-mappings" *ngIf="!isLoading">
+    <div class="page-header general-mappings--header">
+        <div class="page-header--name mat-h2">
+            General Mappings
+        </div>
+    </div>
+    <form class="general-mappings--form" [formGroup]="form" (ngSubmit)="submit()">
         <div fxLayout="column" fxLayoutAlign="start stretch">
-            <div class="mat-body-strong">
+            <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
                 <strong>
                     Accounts Payable
                 </strong>
@@ -19,7 +24,11 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-
+            <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
+                <strong>
+                    Bank Account
+                </strong>
+            </div>
             <mat-form-field floatLabel="always" appearance="outline" required
                 *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
                 <mat-select placeholder="select bank account" formControlName="bankAccounts">
@@ -29,19 +38,24 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-
-            <mat-form-field floatLabel="always" appearance="outline" required *ngIf="generalSettings.corporate_credit_card_expenses_object">
+            <div class="mat-body-strong">
+                <strong>
+                    Default Corporate Credit Card Account
+                </strong>
+            </div>
+            <mat-form-field floatLabel="always" appearance="outline" required
+                *ngIf="generalSettings.corporate_credit_card_expenses_object">
                 <mat-select placeholder="select ccc account" formControlName="cccAccounts">
                     <mat-option *ngFor="let cccAccount of cccAccounts; let i = index"
-                    [value]="cccAccounts[i].destination_id">
-                    {{cccAccounts[i].value}}
+                        [value]="cccAccounts[i].destination_id">
+                        {{cccAccounts[i].value}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
 
-        <div class="save-schedule">
-            <button class="main-btn btn save-btn" type="submit">Save</button>
-        </div>
+        <button [disabled]="isSaveDisabled" class="configurations--save-btn" mat-flat-button color="primary" (click)="submit()" type="button">
+            Save
+        </button>
     </form>
 </div>

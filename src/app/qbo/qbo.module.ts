@@ -47,6 +47,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfigurationComponent } from './settings/configuration/configuration.component';
 import { MatSelectModule } from '@angular/material/select';
+import { GeneralMappingsComponent } from './settings/general-mappings/general-mappings.component';
+import { EmployeeMappingsComponent } from './settings/employee-mappings/employee-mappings.component';
+import { CategoryMappingsComponent } from './settings/category-mappings/category-mappings.component';
+import { ProjectMappingsComponent } from './settings/project-mappings/project-mappings.component';
+import { CostCenterMappingsComponent } from './settings/cost-center-mappings/cost-center-mappings.component';
+import { ScheduleComponent } from './settings/schedule/schedule.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { EmployeeMappingsDialogComponent } from './settings/employee-mappings/employee-mappings-dialog/employee-mappings-dialog.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
 @NgModule({
   declarations: [
     QboComponent,
@@ -73,10 +83,18 @@ import { MatSelectModule } from '@angular/material/select';
     DashboardComponent,
     SyncComponent,
     ExportComponent,
-    ConfigurationComponent
+    ConfigurationComponent,
+    GeneralMappingsComponent,
+    EmployeeMappingsComponent,
+    CategoryMappingsComponent,
+    ProjectMappingsComponent,
+    CostCenterMappingsComponent,
+    ScheduleComponent,
+    EmployeeMappingsDialogComponent
   ],
   entryComponents: [
-    EmployeeComponent
+    EmployeeComponent,
+    EmployeeMappingsDialogComponent
   ],
   imports: [
     CommonModule,
@@ -100,7 +118,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDialogModule,
+    MatAutocompleteModule
   ]
 })
 export class QboModule { }

@@ -100,7 +100,7 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <button class="configurations--save-btn" mat-flat-button color="primary" (click)="save()" type="button">
+            <button [disabled]="isSaveDisabled" class="configurations--save-btn" mat-flat-button color="primary" (click)="save()" type="button">
                 Save
             </button>
         </div>

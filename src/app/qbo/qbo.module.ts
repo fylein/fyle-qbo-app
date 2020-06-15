@@ -45,7 +45,8 @@ import { ExportComponent } from './sync-export/export/export.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-
+import { ConfigurationComponent } from './settings/configuration/configuration.component';
+import { MatSelectModule } from '@angular/material/select';
 @NgModule({
   declarations: [
     QboComponent,
@@ -71,7 +72,8 @@ import { MatIconModule } from '@angular/material/icon';
     SyncExportComponent,
     DashboardComponent,
     SyncComponent,
-    ExportComponent
+    ExportComponent,
+    ConfigurationComponent
   ],
   entryComponents: [
     EmployeeComponent
@@ -97,7 +99,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatCardModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatSelectModule
   ]
 })
 export class QboModule { }

@@ -11,5 +11,18 @@ body {
 
 .fy-theme {
   // use our theme with angular-material-theme mixin
-  @include angular-material-theme($fy-theme);
+  @include angular-material-theme($fy-theme);  
+}
+ 
+// some issue is there with mat select options going transparent
+.mat-select-panel {
+  background: #fff;
+}
+
+.mat-option:hover {
+  background: #0000000a;
+}
+
+.mat-select-panel:not([class*=mat-elevation-z]) {
+  box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
 }

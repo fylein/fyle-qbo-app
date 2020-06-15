@@ -26,6 +26,7 @@ import { SyncExportComponent } from './sync-export/sync-export.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SyncComponent } from './sync-export/sync/sync.component';
 import { ExportComponent } from './sync-export/export/export.component';
+import { ConfigurationComponent } from './settings/configuration/configuration.component';
 
 const routes: Routes = [{
   path: '',
@@ -94,7 +95,13 @@ const routes: Routes = [{
         { path: 'cost_centers', component: CostCenterComponent },
       ]
     },
-    { path: ':workspace_id/settings', component: SettingsComponent },
+    { 
+      path: ':workspace_id/settings', 
+      component: SettingsComponent,
+      children: [
+        { path: 'configurations', component: ConfigurationComponent}
+      ]
+    },
     { path: 'fyle/callback', component: FyleCallbackComponent },
     { path: 'qbo/callback', component: QBOCallbackComponent }
   ]

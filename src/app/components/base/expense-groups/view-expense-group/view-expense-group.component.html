@@ -20,7 +20,7 @@
                 </button>
             </div>
             <div class="row-4 ml-auto mr-2" *ngIf="!task || task.status === 'FAILED'">
-                <button class="btn ml-auto main-btn sync-btn" (click)="createNetSuiteItems(expenseGroup.id)">
+                <button class="btn ml-auto main-btn sync-btn" (click)="createBills(expenseGroup.id)">
                     Export Group
                 </button>
             </div>

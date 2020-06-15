@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ExpenseGroupsService } from '../expense-groups.service';
 import { forkJoin } from 'rxjs';
 import { TasksService } from '../../tasks/tasks.service';
+import { BillsService } from '../../bills/bills.service';
 
 @Component({
   selector: 'app-view-expense-group',
@@ -17,7 +18,13 @@ export class ViewExpenseGroupComponent implements OnInit {
   expenseGroup: any;
   task: any;
 
-  constructor(private route: ActivatedRoute, private router: Router, private expenseGroupsService: ExpenseGroupsService, private tasksService: TasksService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private expenseGroupsService: ExpenseGroupsService, private tasksService: TasksService, private billsService: BillsService) { }
+
+  createBills(expense_group_id: number) { 
+    this.billsService.createBills(this.workspaceId, [expense_group_id]).subscribe(result => {
+      this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+    });
+  }
 
   openExpenseInFyle(expenseId: string) {
     const clusterDomain = localStorage.getItem('clusterDomain');

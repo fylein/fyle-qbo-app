@@ -27,6 +27,7 @@ import { EmployeeComponent } from './components/base/mappings/employee/employee.
 import { ProjectComponent } from './components/base/mappings/project/project.component';
 import { CostCenterComponent } from './components/base/mappings/cost-center/cost-center.component';
 import { SubsidiaryComponent } from './components/base/mappings/subsidiary/subsidiary.component';
+import { BillsComponent } from './components/base/bills/bills.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { SubsidiaryComponent } from './components/base/mappings/subsidiary/subsi
     ProjectComponent,
     CostCenterComponent,
     SubsidiaryComponent,
+    BillsComponent,
   ],
   entryComponents: [
   ],

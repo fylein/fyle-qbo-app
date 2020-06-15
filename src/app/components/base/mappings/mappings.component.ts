@@ -20,6 +20,7 @@ export class MappingsComponent implements OnInit {
 
   updateDimensionTables(workspaceId: number) {
     concat(
+        this.mappingService.postNetSuiteSubsidiaries(workspaceId),
         this.mappingService.postExpenseAccounts(workspaceId),
         this.mappingService.postNetSuiteVendors(workspaceId),
         this.mappingService.postNetSuiteLocations(workspaceId),

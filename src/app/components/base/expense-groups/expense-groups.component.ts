@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExpenseGroupsService } from './expense-groups.service';
+import { BillsService } from '../bills/bills.service';
 
 
 @Component({
@@ -23,9 +24,8 @@ export class ExpenseGroupsComponent implements OnInit {
   all: string
   allSelected: boolean;
   selectedGroups: any[] = [];
-  generalSettings: any;
 
-  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private router: Router) {}
+  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private router: Router, private billsService: BillsService,) {}
 
   syncExpenseGroups() {
     this.expenseGroupService.syncExpenseGroups(this.workspaceId).subscribe(task => {
@@ -71,6 +71,13 @@ export class ExpenseGroupsComponent implements OnInit {
     this.getPaginatedExpenseGroups();
   }
 
+  createBills() { 
+    let expenseGroupIds = this.expenseGroups.filter(expenseGroup => expenseGroup.selected).map(expenseGroup => expenseGroup.id);
+    this.billsService.createBills(this.workspaceId, expenseGroupIds).subscribe(result => {
+      this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
+    });
+  }
+
   toggleSelectAll() {
     this.expenseGroups.map(expenseGroup => expenseGroup.selected = this.allSelected);
     this.selectedGroups = this.expenseGroups.filter(expenseGroup => expenseGroup.selected == true);
@@ -97,7 +104,6 @@ export class ExpenseGroupsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
       this.getPaginatedExpenseGroups();
-      this.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
     });
   }
 }

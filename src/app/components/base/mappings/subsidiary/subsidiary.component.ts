@@ -23,7 +23,7 @@ export class SubsidiaryComponent implements OnInit {
 
   submit() {
     this.subsidiaryIsValid = false;
-    
+
     let subsidiaryId = this.form.value.netsuiteSubsidiaries;
     let netsuiteSubsidiary = this.netsuiteSubsidiaries.filter(filteredSubsidiary => filteredSubsidiary.destination_id === subsidiaryId)[0];
 
@@ -34,7 +34,7 @@ export class SubsidiaryComponent implements OnInit {
 
     if(this.subsidiaryIsValid){
       this.isLoading = true;
-      this.mappingsService.postSubsidiaryMappings(this.workspaceId, netsuiteSubsidiary.value, netsuiteSubsidiary.destination_id,).subscribe(response => {
+      this.mappingsService.postSubsidiaryMappings(this.workspaceId, netsuiteSubsidiary.destination_id, netsuiteSubsidiary.value,).subscribe(response => {
         this.getSubsidiaryMappings();
       });
     }
@@ -44,16 +44,15 @@ export class SubsidiaryComponent implements OnInit {
     this.mappingsService.getSubsidiaryMappings(this.workspaceId).subscribe(subsidiaryMappings => {
       this.subsidiaryMappings = subsidiaryMappings;
       this.isLoading = false;
-
       this.form = this.formBuilder.group({
-        netsuiteSubsidiaries: [this.subsidiaryMappings? this.subsidiaryMappings['results'][0]['internal_id']: 'TestValue'],
+        netsuiteSubsidiaries: [this.subsidiaryMappings? this.subsidiaryMappings.internal_id: ''],
       });
     }, error => {
       if(error.status == 400) {
         this.subsidiaryMappings = {};
         this.isLoading = false;
         this.form = this.formBuilder.group({
-          netsuiteSubsidiaries: [this.subsidiaryMappings? this.subsidiaryMappings['internal_id']: '']
+          netsuiteSubsidiaries: [this.subsidiaryMappings? this.subsidiaryMappings.internal_id: '']
         });
       }
     });

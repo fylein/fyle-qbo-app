@@ -6,6 +6,7 @@ import { BaseComponent } from './components/base/base.component';
 
 import { TasksComponent } from './components/base/tasks/tasks.component';
 import { ExpenseGroupsComponent } from './components/base/expense-groups/expense-groups.component';
+import { BillsComponent } from './components/base/bills/bills.component';
 import { SettingsComponent } from './components/base/settings/settings.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { CallbackComponent } from './components/auth/callback/callback.component';
@@ -68,6 +69,7 @@ const baseModuleRoutes: Routes = [
         canActivate: [WorkspacesGuard]
       },
       { path: ':workspace_id/expense_groups/:expense_group_id/view', component: ViewExpenseGroupComponent, canActivate: [WorkspacesGuard] },
+      { path: ':workspace_id/bills', component: BillsComponent , canActivate: [WorkspacesGuard]},
       { path: ':workspace_id/settings', component: SettingsComponent },
       { path: 'fyle/callback', component: FyleCallbackComponent },
       { 

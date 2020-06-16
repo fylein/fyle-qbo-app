@@ -9,10 +9,7 @@ body {
   height: 100%;
 }
 
-.fy-theme {
-  // use our theme with angular-material-theme mixin
-  @include angular-material-theme($fy-theme);  
-}
+@include angular-material-theme($fy-theme);  
  
 // some issue is there with mat select options going transparent
 .mat-select-panel {
@@ -30,4 +27,9 @@ body {
 .mat-dialog-container {
   background-color: var(--fy-background);
   border-radius: 4px;
+}
+
+.mat-autocomplete-panel {
+  background-color: #fff;
+  border: 1px solid #d3d3d373;
 }

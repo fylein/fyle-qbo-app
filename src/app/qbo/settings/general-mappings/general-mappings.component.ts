@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { MappingsService } from '../../mappings/mappings.service';
+import { MappingsService } from '../../../core/services/mappings.service';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 
 @Component({

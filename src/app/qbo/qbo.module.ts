@@ -12,12 +12,6 @@ import { BillsComponent } from './bills/bills.component';
 import { ChecksComponent } from './checks/checks.component';
 import { JournalEntriesComponent } from './journal-entries/journal-entries.component';
 import { CreditCardPurchasesComponent } from './credit-card-purchases/credit-card-purchases.component';
-import { MappingsComponent } from './mappings/mappings.component';
-import { GeneralComponent } from './mappings/general/general.component';
-import { CategoryComponent } from './mappings/category/category.component';
-import { EmployeeComponent } from './mappings/employee/employee.component';
-import { ProjectComponent } from './mappings/project/project.component';
-import { CostCenterComponent } from './mappings/cost-center/cost-center.component';
 import { SettingsComponent } from './settings/settings.component';
 import { FyleCallbackComponent } from './settings/fyle-callback/fyle-callback.component';
 import { QBOCallbackComponent } from './settings/qbo-callback/qbo-callback.component';
@@ -56,7 +50,12 @@ import { ScheduleComponent } from './settings/schedule/schedule.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { EmployeeMappingsDialogComponent } from './settings/employee-mappings/employee-mappings-dialog/employee-mappings-dialog.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-
+import { CategoryMappingsDialogComponent } from './settings/category-mappings/category-mappings-dialog/category-mappings-dialog.component';
+import { ProjectMappingsDialogComponent } from './settings/project-mappings/project-mappings-dialog/project-mappings-dialog.component';
+import { CostCenterMappingsDialogComponent } from './settings/cost-center-mappings/cost-center-mappings-dialog/cost-center-mappings-dialog.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 @NgModule({
   declarations: [
     QboComponent,
@@ -68,12 +67,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     ChecksComponent,
     JournalEntriesComponent,
     CreditCardPurchasesComponent,
-    MappingsComponent,
-    GeneralComponent,
-    CategoryComponent,
-    EmployeeComponent,
-    ProjectComponent,
-    CostCenterComponent,
     SettingsComponent,
     FyleCallbackComponent,
     QBOCallbackComponent,
@@ -90,11 +83,16 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     ProjectMappingsComponent,
     CostCenterMappingsComponent,
     ScheduleComponent,
-    EmployeeMappingsDialogComponent
+    EmployeeMappingsDialogComponent,
+    CategoryMappingsDialogComponent,
+    ProjectMappingsDialogComponent,
+    CostCenterMappingsDialogComponent
   ],
   entryComponents: [
-    EmployeeComponent,
-    EmployeeMappingsDialogComponent
+    EmployeeMappingsDialogComponent,
+    CategoryMappingsDialogComponent,
+    ProjectMappingsDialogComponent,
+    CostCenterMappingsDialogComponent
   ],
   imports: [
     CommonModule,
@@ -120,7 +118,10 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatIconModule,
     MatSelectModule,
     MatDialogModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSlideToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ]
 })
 export class QboModule { }

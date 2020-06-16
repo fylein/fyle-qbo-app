@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { Task } from 'src/app/core/models/task.model';
-import { MappingsService } from '../../mappings/mappings.service';
+import { MappingsService } from '../../../core/services/mappings.service';
 import { concat } from 'rxjs/internal/observable/concat';
 
 @Component({

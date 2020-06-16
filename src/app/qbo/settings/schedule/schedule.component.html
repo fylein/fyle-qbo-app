@@ -1,1 +1,48 @@
-<p>schedule works!</p>
+<div class="internal-loader" fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
+        <app-loader></app-loader>
+    </div>
+<div *ngIf="!isLoading">
+    <div class="page-header schedule--header">
+        <div class="page-header--name mat-h2">
+            Schedule
+        </div>
+    </div>
+    <form class="schedule--form" [formGroup]="form">
+        <div fxLayout="column" fxLayoutAlign="start stretch">
+            <mat-slide-toggle color="primary" formControlName="scheduleEnabled">Status</mat-slide-toggle>
+
+            <mat-card *ngIf="form.controls.scheduleEnabled.value" class="mat-elevation-z0 schedule--inner-form">
+                <div fxLayout="column" fxLayoutAlign="start stretch">
+                    <div class="mat-body-strong">
+                        <strong>
+                            Hours
+                        </strong>
+                    </div>
+                    <mat-form-field floatLabel="always" appearance="outline" required>
+                        <mat-select placeholder="select hours" formControlName="hours">
+                            <mat-option *ngFor="let hour of hours" [value]="hour">
+                                {{hour}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <div class="mat-body-strong">
+                        <strong>
+                            Date
+                        </strong>
+                    </div>
+
+                    <mat-form-field floatLabel="always" appearance="outline" required>
+                        <input [min]="minDate" placeholder="MMM DD, YYYY" formControlName="datetime" matInput
+                            [matDatepicker]="myDatepicker">
+                        <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #myDatepicker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </mat-card>
+            <button *ngIf="form.controls.scheduleEnabled.value" class="schedule--save-btn" mat-flat-button color="primary" type="button" (click)="submit()">
+                Save
+            </button>
+        </div>
+    </form>
+</div>

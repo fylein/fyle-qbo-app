@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>
+    <div class="projects-mappings--header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="mat-title">
+            Create New Mapping
+        </div>
+        <div>
+            <mat-icon aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
+        </div>
+    </div>
+</h2>
+<mat-dialog-content>
+    <div class="internal-loader" fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
+        <app-loader></app-loader>
+    </div>
+    <form *ngIf="!isLoading" class="projects-mappings--form" [formGroup]="form">
+        <div fxLayout="column" fxLayoutAlign="start stretch">
+            <div class="mat-body-strong">
+                <strong>
+                    Pick Fyle Project
+                </strong>
+            </div>
+            <mat-form-field appearance="outline">
+                <input required type="text" formControlName="fyleProject" placeholder="Pick Fyle Project" matInput
+                    [matAutocomplete]="fyProj">
+                <mat-autocomplete #fyProj="matAutocomplete" [displayWith]="mappingDisplay">
+                    <mat-option *ngFor="let option of fyleProjectOptions" [value]="option">
+                        {{option.value}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+
+            <div class="mat-body-strong">
+                <strong>
+                    Pick {{ generalSettings.project_field_mapping | titlecase}}
+                </strong>
+            </div>
+            <mat-form-field appearance="outline">
+                <input type="text" formControlName="qboObject" placeholder="Pick entity" matInput
+                    [matAutocomplete]="qboEl">
+                <mat-autocomplete #qboEl="matAutocomplete" [displayWith]="mappingDisplay">
+                    <mat-option *ngFor="let option of qboOptions" [value]="option">
+                        {{option.value}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-flat-button mat-dialog-close>Cancel</button>
+    <button class="projects-mappings--save-btn" mat-flat-button color="primary" type="button" (click)="submit()">
+        Save
+    </button>
+</mat-dialog-actions>

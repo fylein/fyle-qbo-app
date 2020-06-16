@@ -42,7 +42,6 @@
                             <th *ngIf="state !== 'ALL'">Status</th>
                             <th>Employee</th>
                             <th>Claim No.</th>
-                            <th>Expense Type</th>
                             <th>View</th>
                         </tr>
                     </thead>
@@ -64,12 +63,9 @@
                             <td>{{expenseGroup.description.employee_email}}</td>
                             <td>{{expenseGroup.description.claim_number}}</td>
                             <td>
-                                {{expenseGroup.fund_source === 'PERSONAL' ? 'Reimbursable' : 'Corporate Credit Card'  }}
-                            </td>
-                            <td>
                                 <button class="btn" (click)="goToExpenseGroup(expenseGroup.id)">
                                     <i class="material-icons">open_in_new</i>
-                                </button>          
+                                </button>
                             </td>
                         </tr>
                     </tbody>

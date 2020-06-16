@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExpenseGroupsService } from './expense-groups.service';
 import { BillsService } from '../bills/bills.service';
+import { SettingsService} from '../settings/settings.service';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class ExpenseGroupsComponent implements OnInit {
   allSelected: boolean;
   selectedGroups: any[] = [];
 
-  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private router: Router, private billsService: BillsService,) {}
+  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private router: Router, private billsService: BillsService, private settingsService: SettingsService) {}
 
   syncExpenseGroups() {
     this.expenseGroupService.syncExpenseGroups(this.workspaceId).subscribe(task => {
@@ -104,6 +105,9 @@ export class ExpenseGroupsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];
       this.getPaginatedExpenseGroups();
+    });
+    this.settingsService.getNetSuiteCredentials(this.workspaceId).subscribe(settings => {
+      localStorage.setItem('ns_account_id', (settings.ns_account_id).toLowerCase());
     });
   }
 }

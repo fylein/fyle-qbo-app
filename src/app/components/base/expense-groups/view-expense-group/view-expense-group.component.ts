@@ -31,6 +31,11 @@ export class ViewExpenseGroupComponent implements OnInit {
     window.open(`${clusterDomain}/app/main/#/enterprise/view_expense/${expenseId}`, '_blank');
   }
 
+  openBillInNetSuite() {
+    let nsAccountId = localStorage.getItem('ns_account_id');
+    window.open(`https://${nsAccountId}.app.netsuite.com/app/accounting/transactions/vendbill.nl?id=${this.task['detail']['internalId']}`, '_blank');
+  }
+
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.workspaceId = +params['workspace_id'];

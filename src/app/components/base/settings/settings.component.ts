@@ -82,6 +82,7 @@ export class SettingsComponent implements OnInit {
       if (settings) {
         this.netsuiteConnected = true;
         this.isLoading = false;
+        localStorage.setItem('ns_account_id', (settings.ns_account_id).toLowerCase());
       }
     }, error => {
       if (error.status == 400) {

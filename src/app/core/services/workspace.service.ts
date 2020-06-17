@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GeneralService } from './general.service'
+import { GeneralService } from './general.service';
 import { Observable } from 'rxjs';
 
 @Injectable({

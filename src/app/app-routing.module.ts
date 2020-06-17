@@ -7,20 +7,20 @@ const baseModuleRoutes: Routes = [
     redirectTo: '/workspaces',
     pathMatch: 'full'
   },
-  { 
-    path: 'workspaces', 
-    loadChildren: () => import('./qbo/qbo.module').then(m => m.QboModule) 
+  {
+    path: 'workspaces',
+    loadChildren: () => import('./qbo/qbo.module').then(m => m.QboModule)
   },
-  { 
-    path: 'auth', 
-    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) 
+  {
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
   {
     path: '**',
     redirectTo: 'workspaces',
     pathMatch: 'full'
   }
-]
+];
 
 @NgModule({
   imports: [

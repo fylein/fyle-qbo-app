@@ -14,13 +14,13 @@ export class BillsComponent implements OnInit {
   nextPageLink: string;
   previousPageLink: string;
   count: number;
-  limit: number = 20;
-  offset: number = 0;
+  limit = 20;
+  offset = 0;
 
 
   constructor(private route: ActivatedRoute, private router: Router, private billsService: BillsService) {}
 
-  
+
   nextPage() {
     this.offset = this.offset + this.limit;
     this.isLoading = true;
@@ -45,13 +45,13 @@ export class BillsComponent implements OnInit {
 
   goToExpenseGroup(id: number) {
     this.router.navigate([]).then(result => {
-      window.open(`workspaces/${this.workspaceId}/expense_groups/${id}/view`, '_blank')
+      window.open(`workspaces/${this.workspaceId}/expense_groups/${id}/view`, '_blank');
     });
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.workspaceId = +params['workspace_id'];
+      this.workspaceId = +params.workspace_id;
       this.getPaginatedBills();
     });
   }

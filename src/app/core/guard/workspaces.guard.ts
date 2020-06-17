@@ -13,8 +13,8 @@ export class WorkspacesGuard implements CanActivate {
   constructor(private settingsService: SettingsService, private router: Router, private billsService: BillsService) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    let params = next.params;
-    let workspaceId = +params['workspace_id']
+    const params = next.params;
+    const workspaceId = +params.workspace_id;
 
     return forkJoin(
       [
@@ -24,16 +24,16 @@ export class WorkspacesGuard implements CanActivate {
         this.billsService.getPreferences(workspaceId)
       ]
     ).pipe(
-      map(response => response? true: false),
+      map(response => response ? true : false),
       catchError(error => {
-        let state: string
+        let state: string;
         if (error.status == 400) {
-          if(error.error.message === 'QBO Credentials not found in this workspace') {
+          if (error.error.message === 'QBO Credentials not found in this workspace') {
             state = 'destination';
-          } else if(error.error.message === 'General Settings does not exist in workspace') {
+          } else if (error.error.message === 'General Settings does not exist in workspace') {
             state = 'settings';
-          } else if(error.error.message === 'Quickbooks Online connection expired') {
-            this.settingsService.deleteQBOCredentials(workspaceId).subscribe()
+          } else if (error.error.message === 'Quickbooks Online connection expired') {
+            this.settingsService.deleteQBOCredentials(workspaceId).subscribe();
             state = 'destination';
           } else {
             state = 'source';

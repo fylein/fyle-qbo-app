@@ -14,11 +14,11 @@ export class ScheduleComponent implements OnInit {
   isLoading = false;
   minDate: Date = new Date();
   defaultDate: string;
-  hours = [...Array(24).keys()]
+  hours = [...Array(24).keys()];
   constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private route: ActivatedRoute) { }
 
   getSettings() {
-    let that = this;
+    const that = this;
     that.isLoading = true;
     that.settingsService.getSettings(that.workspaceId).subscribe(settings => {
       if (settings && settings.schedule) {
@@ -52,7 +52,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   ngOnInit() {
-    let that = this;
+    const that = this;
     that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
     this.form = this.formBuilder.group({
       datetime: [new Date(), Validators.required],

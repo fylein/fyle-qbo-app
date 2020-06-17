@@ -29,7 +29,7 @@ export class CostCenterMappingsDialogComponent implements OnInit {
   }
 
   submit() {
-    let that = this;
+    const that = this;
     if (that.form.valid) {
       that.isLoading = true;
       that.mappingsService.postMappings(that.data.workspaceId, {

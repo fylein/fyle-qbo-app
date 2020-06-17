@@ -41,7 +41,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
   }
 
   submit() {
-    let that = this;
+    const that = this;
     const fyleEmployee = that.form.value.fyleEmployee;
     const qboVendor = that.generalSettings.employee_field_mapping === 'VENDOR' ? that.form.value.qboVendor : '';
     const qboEmployee = that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.form.value.qboEmployee : '';
@@ -66,7 +66,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
             source_value: fyleEmployee.value,
             destination_value: creditCardAccount
           })
-        )
+        );
       }
       that.isLoading = true;
       forkJoin(employeeMapping).subscribe(responses => {
@@ -78,7 +78,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    let that = this;
+    const that = this;
     that.workSpaceId = that.data.workspaceId;
 
     const getFyleEmployees = that.mappingsService.getFyleEmployees(that.workSpaceId).toPromise().then((fyleEmployees) => {

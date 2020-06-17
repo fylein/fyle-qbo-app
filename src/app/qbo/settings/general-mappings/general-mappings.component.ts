@@ -12,15 +12,15 @@ import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 export class GeneralMappingsComponent implements OnInit {
   form: FormGroup;
   workspaceId: number;
-  accountPayableAccounts: any[]
-  bankAccounts: any[]
-  cccAccounts: any[]
+  accountPayableAccounts: any[];
+  bankAccounts: any[];
+  cccAccounts: any[];
   generalMappings: any;
   generalSettings: any;
-  isLoading: boolean = true;
-  accountsPayableIsValid: boolean = true;
-  bankAccountIsValid: boolean = true;
-  cccAccountIsValid: boolean = true;
+  isLoading = true;
+  accountsPayableIsValid = true;
+  bankAccountIsValid = true;
+  cccAccountIsValid = true;
 
   constructor(private route: ActivatedRoute, private mappingsService: MappingsService, private formBuilder: FormBuilder) {
   }
@@ -29,15 +29,15 @@ export class GeneralMappingsComponent implements OnInit {
     this.accountsPayableIsValid = false;
     this.bankAccountIsValid = false;
     this.cccAccountIsValid = false;
-    
-    let accountPayableAccountId = this.generalSettings.employee_field_mapping === 'VENDOR' ? this.form.value.accountPayableAccounts : '';
-    let accountPayableAccount = this.generalSettings.employee_field_mapping === 'VENDOR' ? this.accountPayableAccounts.filter(filteredAccountsPayableAccount => filteredAccountsPayableAccount.destination_id === accountPayableAccountId)[0] : '';
 
-    let bankAccountId = this.generalSettings.employee_field_mapping === 'EMPLOYEE' ? this.form.value.bankAccounts : '';
-    let bankAccount = this.generalSettings.employee_field_mapping === 'EMPLOYEE' ? this.bankAccounts.filter(filteredBankAccount => filteredBankAccount.destination_id === bankAccountId)[0] : '';
+    const accountPayableAccountId = this.generalSettings.employee_field_mapping === 'VENDOR' ? this.form.value.accountPayableAccounts : '';
+    const accountPayableAccount = this.generalSettings.employee_field_mapping === 'VENDOR' ? this.accountPayableAccounts.filter(filteredAccountsPayableAccount => filteredAccountsPayableAccount.destination_id === accountPayableAccountId)[0] : '';
 
-    let cccAccountId = this.generalSettings.corporate_credit_card_expenses_object ? this.form.value.cccAccounts: '';
-    let cccAccount = this.generalSettings.corporate_credit_card_expenses_object ? this.cccAccounts.filter(filteredCCCAccount => filteredCCCAccount.destination_id === cccAccountId)[0] : '';
+    const bankAccountId = this.generalSettings.employee_field_mapping === 'EMPLOYEE' ? this.form.value.bankAccounts : '';
+    const bankAccount = this.generalSettings.employee_field_mapping === 'EMPLOYEE' ? this.bankAccounts.filter(filteredBankAccount => filteredBankAccount.destination_id === bankAccountId)[0] : '';
+
+    const cccAccountId = this.generalSettings.corporate_credit_card_expenses_object ? this.form.value.cccAccounts : '';
+    const cccAccount = this.generalSettings.corporate_credit_card_expenses_object ? this.cccAccounts.filter(filteredCCCAccount => filteredCCCAccount.destination_id === cccAccountId)[0] : '';
 
     if (accountPayableAccountId != null) {
       this.accountsPayableIsValid = true;
@@ -49,7 +49,7 @@ export class GeneralMappingsComponent implements OnInit {
       this.cccAccountIsValid = true;
     }
 
-    if(this.accountsPayableIsValid && this.bankAccountIsValid && this.cccAccountIsValid){
+    if (this.accountsPayableIsValid && this.bankAccountIsValid && this.cccAccountIsValid) {
       this.isLoading = true;
       this.mappingsService.postGeneralMappings(this.workspaceId, accountPayableAccount.destination_id, accountPayableAccount.value, bankAccount.destination_id, bankAccount.value, cccAccount.destination_id, cccAccount.value).subscribe(response => {
         this.getGeneralMappings();
@@ -63,18 +63,18 @@ export class GeneralMappingsComponent implements OnInit {
       this.isLoading = false;
 
       this.form = this.formBuilder.group({
-        accountPayableAccounts: [this.generalMappings? this.generalMappings['accounts_payable_id']: ''],
-        bankAccounts: [this.generalMappings? this.generalMappings['bank_account_id']: ''],
-        cccAccounts: [this.generalMappings? this.generalMappings['default_ccc_account_id']: '']
+        accountPayableAccounts: [this.generalMappings ? this.generalMappings.accounts_payable_id : ''],
+        bankAccounts: [this.generalMappings ? this.generalMappings.bank_account_id : ''],
+        cccAccounts: [this.generalMappings ? this.generalMappings.default_ccc_account_id : '']
       });
     }, error => {
-      if(error.status == 400) {
+      if (error.status == 400) {
         this.generalMappings = {};
         this.isLoading = false;
         this.form = this.formBuilder.group({
-          accountPayableAccounts: [this.generalMappings? this.generalMappings['accounts_payable_id']: ''],
-          bankAccounts: [this.generalMappings? this.generalMappings['bank_account_id']: ''],
-          cccAccounts: [this.generalMappings? this.generalMappings['default_ccc_account_id']: '']
+          accountPayableAccounts: [this.generalMappings ? this.generalMappings.accounts_payable_id : ''],
+          bankAccounts: [this.generalMappings ? this.generalMappings.bank_account_id : ''],
+          cccAccounts: [this.generalMappings ? this.generalMappings.default_ccc_account_id : '']
         });
       }
     });
@@ -83,7 +83,7 @@ export class GeneralMappingsComponent implements OnInit {
 
     ngOnInit() {
       this.route.parent.params.subscribe(params => {
-        this.workspaceId = +params['workspace_id'];
+        this.workspaceId = +params.workspace_id;
         this.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
         forkJoin(
           [
@@ -92,9 +92,9 @@ export class GeneralMappingsComponent implements OnInit {
             this.mappingsService.getAccountsPayables(this.workspaceId)
           ]
         ).subscribe(responses => {
-          this.bankAccounts = responses[0]
-          this.cccAccounts = responses[1]
-          this.accountPayableAccounts = responses[2]
+          this.bankAccounts = responses[0];
+          this.cccAccounts = responses[1];
+          this.accountPayableAccounts = responses[2];
           this.getGeneralMappings();
         });
       });

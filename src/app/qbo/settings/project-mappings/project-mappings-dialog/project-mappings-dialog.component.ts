@@ -29,7 +29,7 @@ export class ProjectMappingsDialogComponent implements OnInit {
   }
 
   submit() {
-    let that = this;
+    const that = this;
     if (that.form.valid) {
       that.isLoading = true;
       that.mappingsService.postMappings(that.data.workspaceId, {
@@ -53,7 +53,7 @@ export class ProjectMappingsDialogComponent implements OnInit {
     });
 
     let qboPromise;
-    if (that.generalSettings.project_field_mapping === 'CUSTOMER') { 
+    if (that.generalSettings.project_field_mapping === 'CUSTOMER') {
       qboPromise = that.mappingsService.getQBOCustomers(that.data.workspaceId).toPromise().then(objects => {
         that.qboElements = objects;
       });

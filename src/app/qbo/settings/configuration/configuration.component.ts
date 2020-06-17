@@ -125,7 +125,7 @@ export class ConfigurationComponent implements OnInit {
     }, error => {
       if (error.status == 400) {
         that.generalSettings = {};
-        that.mappingSettings = {}
+        that.mappingSettings = {};
         that.isLoading = false;
         that.generalSettingsForm = that.formBuilder.group({
           employees: ['', Validators.required],

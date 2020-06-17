@@ -20,8 +20,8 @@ export class ExpenseGroupsComponent implements OnInit {
   count: number;
   state: string;
   generalSettings: any;
-  pageNumber: number = 0;
-  pageSize: number = 5;
+  pageNumber = 0;
+  pageSize = 5;
   columnsToDisplay = ['description', 'employee', 'claimno', 'expensetype'];
 
   constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private router: Router, private billsService: BillsService, private checksService: ChecksService, private JournalEntriesService: JournalEntriesService, private CreditCardPurchasesService: CreditCardPurchasesService) { }
@@ -38,10 +38,10 @@ export class ExpenseGroupsComponent implements OnInit {
   }
 
   onPageChange(event) {
-    let that = this;
+    const that = this;
 
     that.isLoading = true;
-    let navigationExtras: NavigationExtras = {
+    const navigationExtras: NavigationExtras = {
       queryParams: {
         page_number: event.pageIndex,
         page_size: event.pageSize,
@@ -54,10 +54,10 @@ export class ExpenseGroupsComponent implements OnInit {
 
 
   changeState(state: string) {
-    let that = this;
+    const that = this;
     if (that.state !== state) {
       that.isLoading = true;
-      let navigationExtras: NavigationExtras = {
+      const navigationExtras: NavigationExtras = {
         queryParams: {
           page_number: 0,
           page_size: that.pageSize,
@@ -84,7 +84,7 @@ export class ExpenseGroupsComponent implements OnInit {
   }
 
   reset() {
-    var that = this;
+    const that = this;
     that.workspaceId = +that.route.snapshot.params.workspace_id;
     that.pageNumber = +that.route.snapshot.queryParams.page_number || 0;
     that.pageSize = +that.route.snapshot.queryParams.page_size || 5;
@@ -95,9 +95,9 @@ export class ExpenseGroupsComponent implements OnInit {
 
     that.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {
-        let pageNumber = +event.snapshot.queryParams.page_number || 0;
-        let pageSize = +event.snapshot.queryParams.page_size || 5;
-        let state = event.snapshot.queryParams.state || 'READY';
+        const pageNumber = +event.snapshot.queryParams.page_number || 0;
+        const pageSize = +event.snapshot.queryParams.page_size || 5;
+        const state = event.snapshot.queryParams.state || 'READY';
 
         if (that.pageNumber !== pageNumber || that.pageSize !== pageSize || that.state !== state) {
           that.pageNumber = pageNumber;

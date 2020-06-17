@@ -18,7 +18,7 @@ export class CategoryMappingsComponent implements OnInit {
   constructor(private mappingsService: MappingsService, private route: ActivatedRoute, public dialog: MatDialog) { }
 
   open(content) {
-    let that= this;
+    const that = this;
     const dialogRef = that.dialog.open(CategoryMappingsDialogComponent, {
       width: '450px',
       data: {
@@ -39,7 +39,7 @@ export class CategoryMappingsComponent implements OnInit {
       that.categoryMappings = categoryMappings.results;
       that.isLoading = false;
     });
-  } 
+  }
 
   ngOnInit() {
     const that = this;

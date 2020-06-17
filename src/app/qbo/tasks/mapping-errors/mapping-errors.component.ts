@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class MappingErrorsComponent implements OnInit {
   errors: any[];
   task: any;
-  isLoading: boolean = true;
+  isLoading = true;
   workspaceId: number;
 
   constructor(private tasksService: TasksService, private route: ActivatedRoute, private router: Router) { }
@@ -22,13 +22,13 @@ export class MappingErrorsComponent implements OnInit {
   }
 
   ngOnInit() {
-    let params = this.route.snapshot.params
-    let taskId = +params['task_id'];
-    this.workspaceId = +params['workspace_id']
+    const params = this.route.snapshot.params;
+    const taskId = +params.task_id;
+    this.workspaceId = +params.workspace_id;
     this.tasksService.getTaskById(this.workspaceId, taskId).subscribe(response => {
       if (response.length && response[0].detail.length) {
         this.task = response[0];
-        this.errors = this.task['detail'];
+        this.errors = this.task.detail;
       } else {
         this.router.navigateByUrl('/workspaces');
       }

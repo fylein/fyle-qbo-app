@@ -26,15 +26,15 @@ export class EmployeeMappingsComponent implements OnInit {
   isLoading = true;
   generalSettings: any;
   filteredAccounts: any[];
-  columnsToDisplay = ['employee_email', 'qbo']
+  columnsToDisplay = ['employee_email', 'qbo'];
 
   constructor(public dialog: MatDialog,
-              private route: ActivatedRoute, 
+              private route: ActivatedRoute,
               private mappingsService: MappingsService) {
   }
 
   open(content) {
-    let that= this;
+    const that = this;
     const dialogRef = that.dialog.open(EmployeeMappingsDialogComponent, {
       width: '450px',
       data: {

@@ -12,14 +12,14 @@ import { scan, tap, delay, takeWhile, switchMap, map } from 'rxjs/operators';
 export class TasksComponent implements OnInit {
   workspaceId: number;
   tasks: any;
-  limit: number = 20;
-  offset: number = 0;
-  state: string = 'ALL';
+  limit = 20;
+  offset = 0;
+  state = 'ALL';
   nextPageLink: string;
   previousPageLink: string;
   count: number;
-  isLoading: boolean = true;
-  inProgress: string = 'active';
+  isLoading = true;
+  inProgress = 'active';
   complete: string;
   failed: string;
   error: any[];
@@ -37,21 +37,21 @@ export class TasksComponent implements OnInit {
     this.isLoading = true;
     // this.getPaginatedTasks();
   }
-  
+
   changeState(state: string) {
     this.isLoading = true;
     this.offset = 0;
-    if(state === 'ALL') {
+    if (state === 'ALL') {
       this.state = 'ALL';
       this.inProgress = 'active';
       this.complete = '';
       this.failed = '';
-    } else if(state === 'COMPLETE') {
+    } else if (state === 'COMPLETE') {
       this.state = 'COMPLETE';
       this.inProgress = '';
       this.complete = 'active';
       this.failed = '';
-    } else if(state === 'FAILED') {
+    } else if (state === 'FAILED') {
       this.state = 'FAILED';
       this.inProgress = '';
       this.complete = '';
@@ -86,12 +86,12 @@ export class TasksComponent implements OnInit {
   }
 
   showErrors(taskId: number, errors: any[]) {
-    this.router.navigateByUrl(`workspaces/${this.workspaceId}/tasks/${taskId}/errors`, {queryParams: {errors: errors}});
+    this.router.navigateByUrl(`workspaces/${this.workspaceId}/tasks/${taskId}/errors`, {queryParams: {errors}});
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.workspaceId = +params['workspace_id'];
+      this.workspaceId = +params.workspace_id;
       // this.getPaginatedTasks();
     });
   }

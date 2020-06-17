@@ -8,7 +8,7 @@ import { MappingError } from 'src/app/core/models/mappingError.model';
 @Component({
   selector: 'app-group-mapping-error',
   templateUrl: './group-mapping-error.component.html',
-  styleUrls: ['./group-mapping-error.component.scss','../../../qbo.component.scss']
+  styleUrls: ['./group-mapping-error.component.scss', '../../../qbo.component.scss']
 })
 export class GroupMappingErrorComponent implements OnInit {
 
@@ -22,12 +22,12 @@ export class GroupMappingErrorComponent implements OnInit {
   constructor(private taskService: TasksService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    var that = this;
-    that.workspaceId = +that.route.snapshot.parent.params['workspace_id'];
-    that.expenseGroupId = +that.route.snapshot.parent.params['expense_group_id'];
+    const that = this;
+    that.workspaceId = +that.route.snapshot.parent.params.workspace_id;
+    that.expenseGroupId = +that.route.snapshot.parent.params.expense_group_id;
     that.isLoading = true;
-    that.taskService.getTasksByExpenseGroupId(that.workspaceId, that.expenseGroupId).subscribe(function (res:Task[]) {
-      that.mappingErrors = new MatTableDataSource(res.map(task => task.detail).reduce((arr1,arr2) => arr1.concat(arr2)));
+    that.taskService.getTasksByExpenseGroupId(that.workspaceId, that.expenseGroupId).subscribe(function(res: Task[]) {
+      that.mappingErrors = new MatTableDataSource(res.map(task => task.detail).reduce((arr1, arr2) => arr1.concat(arr2)));
       that.isLoading = false;
     });
   }

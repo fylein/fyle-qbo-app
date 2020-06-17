@@ -19,7 +19,7 @@ export class ViewExpenseGroupComponent implements OnInit {
   workspaceId: number;
   expenseGroupId: number;
   expenses: ExpenseGroup[];
-  isLoading: boolean = true;
+  isLoading = true;
   expenseGroup: ExpenseGroup;
   task: any;
   generalSettings: any;
@@ -30,7 +30,7 @@ export class ViewExpenseGroupComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, private expenseGroupsService: ExpenseGroupsService, private tasksService: TasksService, private billsService: BillsService, private checksService: ChecksService, private JournalEntriesService: JournalEntriesService, private CreditCardPurchasesService: CreditCardPurchasesService) { }
 
   changeState(state: string) {
-    let that = this;
+    const that = this;
     if (that.state !== state) {
       that.state = state;
       that.router.navigate([`workspaces/${this.workspaceId}/expense_groups/${this.expenseGroupId}/view/${state.toLowerCase()}`]);
@@ -38,19 +38,19 @@ export class ViewExpenseGroupComponent implements OnInit {
   }
 
   openBillInQBO() {
-    window.open(`${environment.qbo_app_url}/app/bill?txnId=${this.task['detail'].Bill.Id}`, '_blank')
+    window.open(`${environment.qbo_app_url}/app/bill?txnId=${this.task.detail.Bill.Id}`, '_blank');
   }
 
   openCheckInQBO() {
-    window.open(`${environment.qbo_app_url}/app/check?txnId=${this.task['detail'].Purchase.Id}`, '_blank')
+    window.open(`${environment.qbo_app_url}/app/check?txnId=${this.task.detail.Purchase.Id}`, '_blank');
   }
 
   openJournalEntryInQBO() {
-    window.open(`${environment.qbo_app_url}/app/journal?txnId=${this.task['detail'].JournalEntry.Id}`, '_blank')
+    window.open(`${environment.qbo_app_url}/app/journal?txnId=${this.task.detail.JournalEntry.Id}`, '_blank');
   }
 
   openCreditCardPurchaseInQBO() {
-    window.open(`${environment.qbo_app_url}/app/expense?txnId=${this.task['detail'].Purchase.Id}`, '_blank')
+    window.open(`${environment.qbo_app_url}/app/expense?txnId=${this.task.detail.Purchase.Id}`, '_blank');
   }
 
   openExpenseInFyle(expenseId: string) {
@@ -59,16 +59,16 @@ export class ViewExpenseGroupComponent implements OnInit {
   }
 
   initExpenseGroupDetails() {
-    let that = this;
-    return that.expenseGroupsService.getExpensesGroupById(that.workspaceId, that.expenseGroupId).toPromise().then(function (expenseGroup) {
+    const that = this;
+    return that.expenseGroupsService.getExpensesGroupById(that.workspaceId, that.expenseGroupId).toPromise().then(function(expenseGroup) {
       that.expenseGroup = expenseGroup;
       return expenseGroup;
     });
   }
 
   initTasks() {
-    let that = this;
-    return that.tasksService.getTasksByExpenseGroupId(that.workspaceId, that.expenseGroupId).toPromise().then(function (tasks) {
+    const that = this;
+    return that.tasksService.getTasksByExpenseGroupId(that.workspaceId, that.expenseGroupId).toPromise().then(function(tasks) {
       if (tasks.length) {
         that.task = tasks[0];
       }

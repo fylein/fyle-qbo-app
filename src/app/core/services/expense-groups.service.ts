@@ -12,22 +12,22 @@ export class ExpenseGroupsService {
 
   getExpenseGroups(workspaceId: number, limit: number, offset: number, state: string): Observable<ExpenseGroupResponse> {
     return this.generalService.get(
-      `/workspaces/${workspaceId}/fyle/expense_groups/?limit=${limit}&offset=${offset}&state=${state}`, 
+      `/workspaces/${workspaceId}/fyle/expense_groups/?limit=${limit}&offset=${offset}&state=${state}`,
       {}
     );
   }
 
   getAllExpenseGroups(workspaceId: number, state: string): Observable<ExpenseGroupResponse> {
-    let limit = 10;
-    let offset = 0;
+    const limit = 10;
+    const offset = 0;
     let allExpenseGroupsResponse;
-    
+
     return from(this.getAllExpenseGroupsInternal(workspaceId, limit, offset, state, allExpenseGroupsResponse));
   }
 
   private getAllExpenseGroupsInternal(workspaceId: number, limit: number, offset: number, state: string, allExpenseGroupsResponse: ExpenseGroupResponse): Promise<ExpenseGroupResponse> {
-    let that = this;
-    return that.getExpenseGroups(workspaceId, limit, offset, state).toPromise().then(function (expenseGroupRes) {
+    const that = this;
+    return that.getExpenseGroups(workspaceId, limit, offset, state).toPromise().then(function(expenseGroupRes) {
       if (!allExpenseGroupsResponse) {
         allExpenseGroupsResponse = expenseGroupRes;
       } else {
@@ -39,14 +39,14 @@ export class ExpenseGroupsService {
       } else {
         return allExpenseGroupsResponse;
       }
-    })
+    });
   }
 
-  getExpensesByExpenseGroupId(workspaceId: number, expenseGroupOd:number): Observable<ExpenseGroup[]> {
+  getExpensesByExpenseGroupId(workspaceId: number, expenseGroupOd: number): Observable<ExpenseGroup[]> {
     return this.generalService.get(`/workspaces/${workspaceId}/fyle/expense_groups/${expenseGroupOd}/expenses/`, {});
   }
 
-  getExpensesGroupById(workspaceId: number, expenseGroupOd:number): Observable<ExpenseGroup> {
+  getExpensesGroupById(workspaceId: number, expenseGroupOd: number): Observable<ExpenseGroup> {
     return this.generalService.get(`/workspaces/${workspaceId}/fyle/expense_groups/${expenseGroupOd}/`, {});
   }
 

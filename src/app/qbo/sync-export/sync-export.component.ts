@@ -14,7 +14,7 @@ export class SyncExportComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router) { }
 
   changeState(state) {
-    let that = this;
+    const that = this;
     if (that.state !== state) {
       that.state = state;
       that.router.navigate([`workspaces/${that.workspaceId}/sync_export/${that.state.toLowerCase()}`]);

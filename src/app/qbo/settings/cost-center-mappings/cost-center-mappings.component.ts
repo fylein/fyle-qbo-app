@@ -19,7 +19,7 @@ export class CostCenterMappingsComponent implements OnInit {
   constructor(private mappingsService: MappingsService, private route: ActivatedRoute, public dialog: MatDialog) { }
 
   open(content) {
-    let that= this;
+    const that = this;
     const dialogRef = that.dialog.open(CostCenterMappingsDialogComponent, {
       width: '450px',
       data: {
@@ -40,7 +40,7 @@ export class CostCenterMappingsComponent implements OnInit {
       that.costCenterMappings = costCenterMappings.results;
       that.isLoading = false;
     });
-  } 
+  }
 
   ngOnInit() {
     const that = this;

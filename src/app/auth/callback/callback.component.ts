@@ -10,8 +10,8 @@ import { forkJoin } from 'rxjs';
 })
 export class CallbackComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute,
-    private authService: AuthService) {
-    if(this.authService.isLoggedIn()){
+              private authService: AuthService) {
+    if (this.authService.isLoggedIn()) {
       router.navigate(['/workspaces']);
     }
     this.route.queryParams.subscribe(params => {

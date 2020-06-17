@@ -1,8 +1,8 @@
 import { Task } from './task.model';
 
 export interface TaskResponse {
-    count: number,
-    next: string,
-    previous: string,
-    results: Task[]
+    count: number;
+    next: string;
+    previous: string;
+    results: Task[];
 }

@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-    isRefreshingToken: boolean = false;
+    isRefreshingToken = false;
     tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
     constructor(private authService: AuthService, private router: Router) { }
@@ -30,7 +30,7 @@ export class JwtInterceptor implements HttpInterceptor {
         return next.handle(request).pipe(
             catchError(error => {
                 if (error instanceof HttpErrorResponse) {
-                    switch ((<HttpErrorResponse>error).status) {
+                    switch ((error as HttpErrorResponse).status) {
                         case 403:
                             return this.handle403Error(error);
                         default:

@@ -11,7 +11,7 @@ export class SettingsService {
   getFyleCredentials(workspace_id: number): Observable<any> {
     return this.generalService.get('/workspaces/' + workspace_id + '/credentials/fyle/', {});
   }
-  
+
   deleteFyleCredentials(workspace_id: number): Observable<any> {
     return this.generalService.post('/workspaces/' + workspace_id + '/credentials/fyle/delete/', {});
   }
@@ -33,15 +33,15 @@ export class SettingsService {
   connectQBO(workspace_id: number, authorization_code: string, realm_id: string): Observable<any> {
     return this.generalService.post('/workspaces/' + workspace_id + '/connect_qbo/authorization_code/', {
       code: authorization_code,
-      realm_id: realm_id
+      realm_id
     });
   }
 
   postSettings(workspace_id: number, next_run: string, hours: number, schedule_enabled: boolean) {
     return this.generalService.post(`/workspaces/${workspace_id}/settings/`, {
-      next_run: next_run,
-      hours: hours,
-      schedule_enabled: schedule_enabled
+      next_run,
+      hours,
+      schedule_enabled
     });
   }
 
@@ -55,8 +55,8 @@ export class SettingsService {
 
   postGeneralSettings(workspace_id: number, reimbursable_expenses_object: string, corporate_credit_card_expenses_object: string) {
     return this.generalService.post(`/workspaces/${workspace_id}/settings/general/`, {
-      reimbursable_expenses_object: reimbursable_expenses_object,
-      corporate_credit_card_expenses_object: corporate_credit_card_expenses_object,
+      reimbursable_expenses_object,
+      corporate_credit_card_expenses_object,
     });
   }
 

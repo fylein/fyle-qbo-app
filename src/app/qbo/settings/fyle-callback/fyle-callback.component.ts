@@ -13,8 +13,8 @@ export class FyleCallbackComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      let workspaceId: number = params.state;
-      let code: string = params.code;
+      const workspaceId: number = params.state;
+      const code: string = params.code;
       this.settingsService.connectFyle(workspaceId, code).subscribe(response => {
         if (response) {
           this.router.navigateByUrl('/workspaces/' + workspaceId + '/settings?state=source');

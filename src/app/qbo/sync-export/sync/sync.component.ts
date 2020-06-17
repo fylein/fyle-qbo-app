@@ -21,30 +21,30 @@ export class SyncComponent implements OnInit {
   isExpensesSyncing: boolean;
   isEmployeesSyncing: boolean;
 
-  constructor(private expenseGroupService:ExpenseGroupsService, private route: ActivatedRoute, private taskService: TasksService, private mappingService: MappingsService) { }
+  constructor(private expenseGroupService: ExpenseGroupsService, private route: ActivatedRoute, private taskService: TasksService, private mappingService: MappingsService) { }
 
   syncExpenses() {
-    var that = this;
+    const that = this;
     that.isExpensesSyncing = true;
-    that.expenseGroupService.syncExpenseGroups(that.workspaceId).subscribe(function (res) {
+    that.expenseGroupService.syncExpenseGroups(that.workspaceId).subscribe((res) => {
       that.updateLastSyncStatus();
       that.isExpensesSyncing = false;
     });
   }
 
   updateLastSyncStatus() {
-    let that = this;
+    const that = this;
     that.isLoading = true;
-    that.taskService.getTasks(that.workspaceId, 1, 0, 'ALL').subscribe(function (res) {
+    that.taskService.getTasks(that.workspaceId, 1, 0, 'ALL').subscribe((res) => {
       if (res.count > 0) {
-        that.lastTask = res.results[0];        
+        that.lastTask = res.results[0];
       }
       that.isLoading = false;
     });
   }
 
   updateDimensionTables() {
-    let that = this;
+    const that = this;
     that.isEmployeesSyncing = true;
     concat(
         this.mappingService.postAccountsPayables(that.workspaceId),
@@ -66,7 +66,7 @@ export class SyncComponent implements OnInit {
   }
 
   ngOnInit() {
-    let that = this;
+    const that = this;
     that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
 
     that.isExpensesSyncing = false;

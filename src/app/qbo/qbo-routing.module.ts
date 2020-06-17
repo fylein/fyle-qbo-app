@@ -41,12 +41,12 @@ const routes: Routes = [{
       canActivate: [WorkspacesGuard]
     },
     {
-      path: ':workspace_id/dashboard', 
+      path: ':workspace_id/dashboard',
       component: DashboardComponent,
       canActivate: [WorkspacesGuard]
     },
     {
-      path: ':workspace_id/sync_export', 
+      path: ':workspace_id/sync_export',
       component: SyncExportComponent,
       canActivate: [WorkspacesGuard],
       children: [
@@ -60,9 +60,9 @@ const routes: Routes = [{
         }
       ]
     },
-    { 
-      path: ':workspace_id/expense_groups/:expense_group_id/view', 
-      component: ViewExpenseGroupComponent, 
+    {
+      path: ':workspace_id/expense_groups/:expense_group_id/view',
+      component: ViewExpenseGroupComponent,
       canActivate: [WorkspacesGuard],
       children: [
         {

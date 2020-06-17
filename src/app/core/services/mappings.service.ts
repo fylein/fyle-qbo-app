@@ -9,7 +9,7 @@ import { GeneralService } from 'src/app/core/services/general.service';
 export class MappingsService {
   fyleCategories: Observable<any[]>;
   qboAccounts: Observable<any[]>;
-  
+
   fyleEmployees: Observable<any[]>;
   qboVendors: Observable<any[]>;
   qboEmployees: Observable<any[]>;
@@ -37,7 +37,7 @@ export class MappingsService {
     }
     return this.fyleEmployees;
   }
-  
+
   postFyleCategories(workspace_id: number): Observable<any> {
     if (!this.fyleCategories) {
       this.fyleCategories = this.generalService.post(`/workspaces/${workspace_id}/fyle/categories/`, {}).pipe(
@@ -243,12 +243,12 @@ export class MappingsService {
     this.qboAccounts = null;
     return this.generalService.post(
       `/workspaces/${workspace_id}/mappings/general/`, {
-        accounts_payable_id: accounts_payable_id,
-        accounts_payable_name: accounts_payable_name,
-        bank_account_id: bank_account_id,
-        bank_account_name: bank_account_name,
-        default_ccc_account_id: default_ccc_account_id,
-        default_ccc_account_name: default_ccc_account_name
+        accounts_payable_id,
+        accounts_payable_name,
+        bank_account_id,
+        bank_account_name,
+        default_ccc_account_id,
+        default_ccc_account_name
       }
     );
   }
@@ -280,10 +280,10 @@ export class MappingsService {
     this.qboAccounts = null;
     return this.generalService.post(
       `/workspaces/${workspace_id}/mappings/categories/`, {
-        category: category,
-        sub_category: sub_category,
-        account_name: account_name,
-        account_id: account_id
+        category,
+        sub_category,
+        account_name,
+        account_id
       }
     );
   }
@@ -300,13 +300,13 @@ export class MappingsService {
     this.qboEmployees = null;
     return this.generalService.post(
       `/workspaces/${workspace_id}/mappings/employees/`, {
-        employee_email: employee_email,
-        vendor_display_name: vendor_display_name,
-        vendor_id: vendor_id,
-        employee_display_name: employee_display_name,
-        employee_id: employee_id,
-        ccc_account_name: ccc_account_name,
-        ccc_account_id: ccc_account_id
+        employee_email,
+        vendor_display_name,
+        vendor_id,
+        employee_display_name,
+        employee_id,
+        ccc_account_name,
+        ccc_account_id
       }
     );
   }
@@ -322,9 +322,9 @@ export class MappingsService {
     this.qboCustomers = null;
     return this.generalService.post(
       `/workspaces/${workspace_id}/mappings/projects/`, {
-        project: project,
-        customer_display_name: customer_display_name,
-        customer_id: customer_id
+        project,
+        customer_display_name,
+        customer_id
       }
     );
   }
@@ -341,8 +341,8 @@ export class MappingsService {
     return this.generalService.post(
       `/workspaces/${workspace_id}/mappings/cost_centers/`, {
         cost_center: project,
-        class_name: class_name,
-        class_id: class_id
+        class_name,
+        class_id
       }
     );
   }

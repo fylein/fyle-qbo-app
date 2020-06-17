@@ -1,6 +1,6 @@
 import {
   HttpClient,
-  HttpErrorResponse,  HttpHeaders, 
+  HttpErrorResponse,  HttpHeaders,
   HttpParams
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -45,11 +45,11 @@ export class GeneralService {
   }
 
   get(endpoint: string, apiParams: {}): Observable<any> {
-    
+
     const params = new HttpParams();
 
     Object.keys(apiParams).forEach(key => {
-      params.append(key, apiParams[key])
+      params.append(key, apiParams[key]);
     });
 
     return this.http.get(

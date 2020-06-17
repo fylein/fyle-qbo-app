@@ -43,7 +43,7 @@ export class AuthService {
       .post<Token>(
         API_BASE_URL + '/auth/login/',
         {
-          code: code,
+          code,
         },
         httpOptions
       )
@@ -55,7 +55,7 @@ export class AuthService {
       .post<Token>(
         API_BASE_URL + '/auth/refresh/',
         {
-          refresh_token: refresh_token,
+          refresh_token,
         },
         httpOptions
       )
@@ -79,7 +79,7 @@ export class AuthService {
   }
 
   getClusterDomain(): Observable<any> {
-    return this.generalService.get(`/user/domain/`, {}); 
+    return this.generalService.get(`/user/domain/`, {});
   }
 
   getFyleOrgs(): Observable<any> {

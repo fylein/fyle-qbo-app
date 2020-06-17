@@ -26,7 +26,7 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
   }
   // showModal = false;
   // fyleConnected: boolean;
@@ -208,7 +208,7 @@ export class SettingsComponent implements OnInit {
   //     this.employeeFieldMapping = employeeFieldMapping;
   //     this.projectFieldMapping = projectFieldMapping? projectFieldMapping: {};
   //     this.costCenterFieldMapping = costCenterFieldMapping? costCenterFieldMapping: {};
-      
+
   //     this.generalSettingsForm = this.formBuilder.group({
   //       reimbursableExpensesObjects: [this.generalSettings ? this.generalSettings['reimbursable_expenses_object'] : ''],
   //       cccExpensesObjects: [this.generalSettings ? this.generalSettings['corporate_credit_card_expenses_object'] : ''],
@@ -216,10 +216,10 @@ export class SettingsComponent implements OnInit {
   //       projectFieldOptions: [this.projectFieldMapping? this.projectFieldMapping.destination_field: ''],
   //       costCenterFieldOptions: [this.costCenterFieldMapping? this.costCenterFieldMapping.destination_field: '']
   //     });
-      
+
   //     this.generalSettingsForm.controls.employeeFieldOptions.disable()
   //     this.generalSettingsForm.controls.reimbursableExpensesObjects.disable()
-      
+
   //     if (this.generalSettings.corporate_credit_card_expenses_object) {
   //       this.generalSettingsForm.controls.cccExpensesObjects.disable()
   //     }
@@ -249,7 +249,7 @@ export class SettingsComponent implements OnInit {
   //       });
   //       this.initializeForm();
   //     }
-  //   }); 
+  //   });
   // }
 
 
@@ -272,7 +272,7 @@ export class SettingsComponent implements OnInit {
   //         { name: 'CUSTOMER' },
   //         { name: 'DEPARTMENT' }
   //       ];
-        
+
   //       if (value) {
   //         this.costCenterFieldOptions = this.costCenterFieldOptions.filter(option => option.name !== value);
   //       }

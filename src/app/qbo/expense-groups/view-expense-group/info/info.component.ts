@@ -8,7 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'app-info',
   templateUrl: './info.component.html',
-  styleUrls: ['./info.component.scss','../../../qbo.component.scss']
+  styleUrls: ['./info.component.scss', '../../../qbo.component.scss']
 })
 export class InfoComponent implements OnInit {
 
@@ -19,16 +19,16 @@ export class InfoComponent implements OnInit {
 
   expenseGroup: ExpenseGroup;
 
-  isLoading: boolean = false;
+  isLoading = false;
   expenses: MatTableDataSource<ExpenseGroup> = new MatTableDataSource([]);
   count: number;
-  pageNumber: number = 0;
-  pageSize: number = 5;
+  pageNumber = 0;
+  pageSize = 5;
   columnsToDisplay = ['expense_id', 'claimno'];
 
   initExpenseGroupExpenses() {
-    let that = this;
-    return that.expenseGroupsService.getExpensesByExpenseGroupId(that.workspaceId, that.expenseGroupId).toPromise().then(function (expenses) {
+    const that = this;
+    return that.expenseGroupsService.getExpensesByExpenseGroupId(that.workspaceId, that.expenseGroupId).toPromise().then(function(expenses) {
       that.count = expenses.length;
       that.expenses = new MatTableDataSource(expenses);
       that.expenses.filterPredicate = that.searchByText;
@@ -36,8 +36,8 @@ export class InfoComponent implements OnInit {
   }
 
   initExpenseGroupDetails() {
-    let that = this;
-    return that.expenseGroupsService.getExpensesGroupById(that.workspaceId, that.expenseGroupId).toPromise().then(function (expenseGroup) {
+    const that = this;
+    return that.expenseGroupsService.getExpensesGroupById(that.workspaceId, that.expenseGroupId).toPromise().then(function(expenseGroup) {
       that.expenseGroup = expenseGroup;
     });
   }
@@ -51,7 +51,7 @@ export class InfoComponent implements OnInit {
 
 
   ngOnInit() {
-    let that = this;
+    const that = this;
     that.workspaceId = +that.route.snapshot.parent.params.workspace_id;
     that.expenseGroupId = +that.route.snapshot.parent.params.expense_group_id;
 
@@ -59,9 +59,9 @@ export class InfoComponent implements OnInit {
     forkJoin([
       that.initExpenseGroupExpenses(),
       that.initExpenseGroupDetails()
-    ]).subscribe(function () {
+    ]).subscribe(function() {
       that.isLoading = false;
-    })
+    });
 
   }
 

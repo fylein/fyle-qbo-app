@@ -235,7 +235,7 @@ export class SettingsComponent implements OnInit {
       setTimeout(() => {
         this.costCenterFieldOptions = [
           { name: 'DEPARTMENT' },
-          { name: 'LOCATION' },
+          { name: 'CLASS' },
         ];
         
         if (value) {
@@ -246,7 +246,7 @@ export class SettingsComponent implements OnInit {
 
     this.generalSettingsForm.controls['costCenterFieldOptions'].valueChanges.subscribe((value) => {
       this.projectFieldOptions = [
-        { name: 'LOCATION' },
+        { name: 'CLASS' },
         { name: 'DEPARTMENT' },
       ];
 
@@ -321,11 +321,11 @@ export class SettingsComponent implements OnInit {
 
     this.projectFieldOptions = [
       { name: 'DEPARTMENT' },
-      { name: 'LOCATION' },
+      { name: 'CLASS' },
     ];
 
     this.costCenterFieldOptions = [
-      { name: 'LOCATION' },
+      { name: 'CLASS' },
       { name: 'DEPARTMENT' },
     ];
 

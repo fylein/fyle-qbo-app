@@ -25,6 +25,7 @@ export class MappingsComponent implements OnInit {
         this.mappingService.postNetSuiteVendors(workspaceId),
         this.mappingService.postNetSuiteLocations(workspaceId),
         this.mappingService.postNetSuiteDepartments(workspaceId),
+        this.mappingService.postNetSuiteClasses(workspaceId),
         this.mappingService.postFyleEmployees(workspaceId),
         this.mappingService.postFyleCategories(workspaceId),
         this.mappingService.postFyleCostCenters(workspaceId),

@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MappingsService } from '../mappings.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 
 @Component({
-  selector: 'app-subsidiary',
-  templateUrl: './subsidiary.component.html',
-  styleUrls: ['./subsidiary.component.css', '../../base.component.css']
+  selector: 'app-location',
+  templateUrl: './location.component.html',
+  styleUrls: ['./location.component.css', '../../base.component.css']
 })
-export class SubsidiaryComponent implements OnInit {
+export class LocationComponent implements OnInit {
 
   form: FormGroup;
   workspaceId: number;
@@ -34,22 +34,19 @@ export class SubsidiaryComponent implements OnInit {
 
     if(this.subsidiaryIsValid){
       this.isLoading = true;
-      this.mappingsService.postSubsidiaryMappings(this.workspaceId, netsuiteSubsidiary.destination_id, netsuiteSubsidiary.value,).subscribe(response => {
+      this.mappingsService.postLocationMappings(this.workspaceId, netsuiteSubsidiary.destination_id, netsuiteSubsidiary.value,).subscribe(response => {
         this.getSubsidiaryMappings();
       });
     }
   }
 
   getSubsidiaryMappings() {
-    this.mappingsService.getSubsidiaryMappings(this.workspaceId).subscribe(subsidiaryMappings => {
+    this.mappingsService.getLocationMappings(this.workspaceId).subscribe(subsidiaryMappings => {
       this.subsidiaryMappings = subsidiaryMappings;
       this.isLoading = false;
       this.form = this.formBuilder.group({
         netsuiteSubsidiaries: [this.subsidiaryMappings? this.subsidiaryMappings.internal_id: ''],
       });
-      if (subsidiaryMappings) {
-        this.form.disable();
-      }
     }, error => {
       if(error.status == 400) {
         this.subsidiaryMappings = {};
@@ -67,7 +64,7 @@ export class SubsidiaryComponent implements OnInit {
         this.workspaceId = +params['workspace_id'];
         forkJoin(
           [
-            this.mappingsService.getNetSuiteSubsidiaries(this.workspaceId),
+            this.mappingsService.getNetSuiteLocations(this.workspaceId),
           ]
         ).subscribe(responses => {
           this.netsuiteSubsidiaries = responses[0]
@@ -76,4 +73,3 @@ export class SubsidiaryComponent implements OnInit {
       });
     }
   }
-  

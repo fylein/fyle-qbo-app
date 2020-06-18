@@ -108,8 +108,8 @@ export class CostCenterComponent implements OnInit {
         this.getCostCenterMappings();
       });
 
-      if (this.costCenterSetting == 'LOCATION') { 
-        this.mappingsService.getNetSuiteLocations(this.workspaceId).subscribe(objects => {
+      if (this.costCenterSetting == 'CLASS') { 
+        this.mappingsService.getNetSuiteClasses(this.workspaceId).subscribe(objects => {
           this.netsuiteObjects = objects;
         });
       } else if(this.costCenterSetting === 'DEPARTMENT') {

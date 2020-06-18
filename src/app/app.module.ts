@@ -28,6 +28,7 @@ import { ProjectComponent } from './components/base/mappings/project/project.com
 import { CostCenterComponent } from './components/base/mappings/cost-center/cost-center.component';
 import { SubsidiaryComponent } from './components/base/mappings/subsidiary/subsidiary.component';
 import { BillsComponent } from './components/base/bills/bills.component';
+import { LocationComponent } from './components/base/mappings/location/location.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { BillsComponent } from './components/base/bills/bills.component';
     CostCenterComponent,
     SubsidiaryComponent,
     BillsComponent,
+    LocationComponent,
   ],
   entryComponents: [
   ],

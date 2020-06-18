@@ -20,6 +20,8 @@ export class MappingsService {
   fyleCostCenters: Observable<any[]>;
   netsuiteLocations: Observable<any[]>;
 
+  netsuiteClasses: Observable<any[]>;
+
   netsuiteSubsidiaries: Observable<any[]>;
 
   nsSubs: Observable<any[]>;
@@ -118,6 +120,17 @@ export class MappingsService {
     return this.netsuiteDepartments;
   }
 
+  postNetSuiteClasses(workspace_id: number): Observable<any> {
+    if (!this.netsuiteClasses) {
+      this.netsuiteClasses = this.generalService.post(`/workspaces/${workspace_id}/netsuite/classifications/`, {}).pipe(
+        map(data => data),
+        publishReplay(1),
+        refCount()
+      );
+    }
+    return this.netsuiteClasses;
+  }
+
   postNetSuiteSubsidiaries(workspace_id: number): Observable<any> {
     if (!this.nsSubs) {
       this.nsSubs = this.generalService.post(`/workspaces/${workspace_id}/netsuite/subsidiaries/`, {}).pipe(
@@ -139,6 +152,16 @@ export class MappingsService {
     );
   }
 
+  postLocationMappings(workspace_id: number, internal_id: string, location_name: string): Observable<any> {
+    this.netsuiteSubsidiaries = null;
+    return this.generalService.post(
+      `/workspaces/${workspace_id}/mappings/locations/`, {
+        location_name: location_name,
+        internal_id: internal_id
+      }
+    );
+  }
+
   getFyleEmployees(workspace_id: number): Observable<any> {
     return this.generalService.get(`/workspaces/${workspace_id}/fyle/employees/`, {});
   }
@@ -153,6 +176,10 @@ export class MappingsService {
 
   getNetSuiteLocations(workspace_id: number): Observable<any> {
     return this.generalService.get(`/workspaces/${workspace_id}/netsuite/locations/`, {});
+  }
+
+  getNetSuiteClasses(workspace_id: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspace_id}/netsuite/classifications/`, {});
   }
 
   getFyleProjects(workspace_id: number): Observable<any> {
@@ -190,6 +217,12 @@ export class MappingsService {
   getSubsidiaryMappings(workspace_id: number): Observable<any> {
     return this.generalService.get(
       `/workspaces/${workspace_id}/mappings/subsidiaries/`, {}
+    );
+  }
+
+  getLocationMappings(workspace_id: number): Observable<any> {
+    return this.generalService.get(
+      `/workspaces/${workspace_id}/mappings/locations/`, {}
     );
   }
 }

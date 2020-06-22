@@ -129,7 +129,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
     MatStepperModule,
     MatProgressBarModule
   ],
-  providers:[
+  providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { displayDefaultIndicatorType: true }

@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
 
   currentState = onboardingStates.initialized;
 
-  get allOnboardingStates () {
+  get allOnboardingStates() {
     return onboardingStates;
   }
 

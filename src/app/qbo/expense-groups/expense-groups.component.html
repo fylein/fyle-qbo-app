@@ -3,14 +3,11 @@
         Expense Groups
     </div>
     <nav mat-tab-nav-bar>
-        <a mat-tab-link (click)="changeState('READY')" [active]="state==='READY'">
-            Ready
+        <a mat-tab-link (click)="changeState('FAILED')" [active]="state==='FAILED'">
+            Failed
         </a>
         <a mat-tab-link (click)="changeState('COMPLETE')" [active]="state==='COMPLETE'">
             Complete
-        </a>
-        <a mat-tab-link (click)="changeState('ALL')" [active]="state==='ALL'">
-            All
         </a>
     </nav>
 </div>

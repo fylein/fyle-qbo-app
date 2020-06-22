@@ -33,3 +33,40 @@ body {
   background-color: #fff;
   border: 1px solid #d3d3d373;
 }
+
+.onboarding-stepper {
+  .mat-vertical-stepper-content { 
+    visibility: visible !important; 
+    height: 100% !important; 
+  }
+  
+  .mat-vertical-stepper-header {
+    padding-bottom: 0 !important;
+  }
+
+  .mat-step-icon-selected {
+    background-color: rgba(0, 0, 0, 0.54) !important;
+  }
+
+  .mat-step-icon-state-number {
+    background-color: #48555f !important;
+  }
+
+  .mat-step-icon {
+    height: 32px;
+    width: 32px;
+    position: relative;
+    top: -8px;
+    left: -4px;
+  }
+
+  .mat-step-header {
+    .mat-step-label {
+      position: relative;
+      top: -8px;
+    }
+  }
+  .mat-step-header:hover {
+    background-color: transparent;
+  }
+}

@@ -8,31 +8,53 @@
     </div>
     <div>
         <mat-card class="export-card">
-            <div fxLayout="row" fxLayoutAlign="space-between center">
-                <div>
+            <div fxLayout="column" fxLayoutAlign="start stretch">
+                <div fxLayout="row" fxLayoutAlign="space-between center">
                     <div>
-                        <div *ngIf="!isExporting">
-                            {{exportableExpenseGroups.length}} expenses can be exported
+                        <div>
+                            <div *ngIf="!isExporting">
+                                {{exportableExpenseGroups.length}} expenses can be exported
+                            </div>
+                            <div *ngIf="isExporting">
+                                {{exportableExpenseGroups.length}} expenses are being synced
+                            </div>
                         </div>
-                        <div *ngIf="isExporting">
-                            {{exportableExpenseGroups.length}} expenses are being synced
+                        <div *ngIf="lastTask">
+                            Synced on {{lastTask.updated_at | date}}
                         </div>
                     </div>
-                    <div *ngIf="lastTask">
-                        Synced on {{lastTask.updated_at | date}}
+                    <div>
+                        <button *ngIf="exportableExpenseGroups.length > 0" mat-flat-button color="primary"
+                            (click)="createQBOItems()">
+                            <div *ngIf="!isExporting">
+                                Export
+                            </div>
+                            <div *ngIf="isExporting">
+                                Exporting
+                            </div>
+                        </button>
                     </div>
                 </div>
-                <div>
-                    <button mat-flat-button color="primary" (click)="createQBOItems()">
-                        <div *ngIf="!isExporting">
-                            Export
-                        </div>
-                        <div *ngIf="isExporting">
-                            Exporting
-                        </div>
-                    </button>
+                <div class="export-card--loader" *ngIf="isExporting">
+                    <mat-progress-bar mode="buffer"></mat-progress-bar>
+                </div>
+
+                <div class="export-card--stats" fxLayout="row" fxLayoutAlign="start center" *ngIf="failedExpenseGroupCount">
+                    {{failedExpenseGroupCount}} failed exports
+                    <mat-icon (click)="openFailedExports()">
+                        open_in_new
+                    </mat-icon>
+                </div>
+
+                <div class="export-card--stats"  fxLayout="row" fxLayoutAlign="start center" *ngIf="successfulExpenseGroupCount">
+                    {{successfulExpenseGroupCount}} successful exports
+                    <mat-icon (click)="openSuccessfulExports()">
+                        open_in_new
+                    </mat-icon>
                 </div>
             </div>
+
+
         </mat-card>
     </div>
 </div>

@@ -1,0 +1,37 @@
+.onboarding-stepper {
+    &--stepper {
+        min-width: 700px;
+    }
+
+    &--step {
+        margin: 4px;
+        font-size: 14px;
+    }
+
+    &--step-header {
+        font-size: 16px;
+        font-weight: 500;
+        color: #2c304e;
+    }
+
+    &--check {
+        color: #b3bac7;
+        margin-right: 8px;
+        position: relative;
+        top: -2px;
+        &__complete {
+            color: #28c354;
+        }
+    }
+
+    &--desc {
+        color: #5a5d72;
+    }
+
+    &--navigation {
+        font-weight: 500;
+        &__active {
+            color: #f36;
+        }
+    }
+}

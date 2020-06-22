@@ -56,6 +56,10 @@ import { CostCenterMappingsDialogComponent } from './settings/cost-center-mappin
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+
 @NgModule({
   declarations: [
     QboComponent,
@@ -121,7 +125,15 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatAutocompleteModule,
     MatSlideToggleModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatStepperModule,
+    MatProgressBarModule
+  ],
+  providers:[
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: true }
+    }
   ]
 })
 export class QboModule { }

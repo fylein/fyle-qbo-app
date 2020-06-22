@@ -6,5 +6,14 @@
     &-card {
         margin: 16px 48px;
         min-width: 800px;
+        &--stats {
+            margin: 8px;
+            color: #5a5d72;
+            font-size: 14px;
+        }
+
+        &--loader {
+            margin: 16px 0;
+        }
     }
 }

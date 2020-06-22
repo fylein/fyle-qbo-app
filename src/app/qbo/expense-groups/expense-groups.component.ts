@@ -88,7 +88,7 @@ export class ExpenseGroupsComponent implements OnInit {
     that.workspaceId = +that.route.snapshot.params.workspace_id;
     that.pageNumber = +that.route.snapshot.queryParams.page_number || 0;
     that.pageSize = +that.route.snapshot.queryParams.page_size || 5;
-    that.state = that.route.snapshot.queryParams.state || 'READY';
+    that.state = that.route.snapshot.queryParams.state || 'FAILED';
 
     that.getPaginatedExpenseGroups();
     that.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
@@ -97,7 +97,7 @@ export class ExpenseGroupsComponent implements OnInit {
       if (event instanceof ActivationEnd) {
         const pageNumber = +event.snapshot.queryParams.page_number || 0;
         const pageSize = +event.snapshot.queryParams.page_size || 5;
-        const state = event.snapshot.queryParams.state || 'READY';
+        const state = event.snapshot.queryParams.state || 'FAILED';
 
         if (that.pageNumber !== pageNumber || that.pageSize !== pageSize || that.state !== state) {
           that.pageNumber = pageNumber;

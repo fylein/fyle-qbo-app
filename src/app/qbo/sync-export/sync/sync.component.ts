@@ -20,6 +20,7 @@ export class SyncComponent implements OnInit {
   isLoading: boolean;
   isExpensesSyncing: boolean;
   isEmployeesSyncing: boolean;
+  errorOccurred = false;
 
   constructor(private expenseGroupService: ExpenseGroupsService, private route: ActivatedRoute, private taskService: TasksService, private mappingService: MappingsService) { }
 
@@ -29,6 +30,9 @@ export class SyncComponent implements OnInit {
     that.expenseGroupService.syncExpenseGroups(that.workspaceId).subscribe((res) => {
       that.updateLastSyncStatus();
       that.isExpensesSyncing = false;
+    }, (error) => {
+      that.isExpensesSyncing = false;
+      that.errorOccurred = true;
     });
   }
 

@@ -10,10 +10,10 @@
         <mat-card class="sync-card">
             <div fxLayout="row" fxLayoutAlign="space-between center">
                 <div>
-                    <div>
+                    <div class="sync-card--header">
                         Sync Expenses
                     </div>
-                    <div *ngIf="lastTask">
+                    <div class="sync-card--info" *ngIf="lastTask">
                         Synced on {{lastTask.updated_at | date}}
                     </div>
                 </div>
@@ -26,6 +26,12 @@
                             Syncing
                         </div>
                     </button>
+                </div>
+            </div>
+            <div *ngIf="errorOccurred" class="sync-card--error" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="sync-card--error-icon">error</mat-icon>
+                <div>
+                    An error occurred while syncing the expenses. Please try again.
                 </div>
             </div>
         </mat-card>

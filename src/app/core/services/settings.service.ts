@@ -8,63 +8,63 @@ import { GeneralService } from 'src/app/core/services/general.service';
 export class SettingsService {
   constructor(private generalService: GeneralService) { }
 
-  getFyleCredentials(workspace_id: number): Observable<any> {
-    return this.generalService.get('/workspaces/' + workspace_id + '/credentials/fyle/', {});
+  getFyleCredentials(workspaceId: number): Observable<any> {
+    return this.generalService.get('/workspaces/' + workspaceId + '/credentials/fyle/', {});
   }
 
-  deleteFyleCredentials(workspace_id: number): Observable<any> {
-    return this.generalService.post('/workspaces/' + workspace_id + '/credentials/fyle/delete/', {});
+  deleteFyleCredentials(workspaceId: number): Observable<any> {
+    return this.generalService.post('/workspaces/' + workspaceId + '/credentials/fyle/delete/', {});
   }
 
-  deleteQBOCredentials(workspace_id: number): Observable<any> {
-    return this.generalService.post('/workspaces/' + workspace_id + '/credentials/qbo/delete/', {});
+  deleteQBOCredentials(workspaceId: number): Observable<any> {
+    return this.generalService.post('/workspaces/' + workspaceId + '/credentials/qbo/delete/', {});
   }
 
-  getQBOCredentials(workspace_id: number): Observable<any> {
-    return this.generalService.get('/workspaces/' + workspace_id + '/credentials/qbo/', {});
+  getQBOCredentials(workspaceId: number): Observable<any> {
+    return this.generalService.get('/workspaces/' + workspaceId + '/credentials/qbo/', {});
   }
 
-  connectFyle(workspace_id: number, authorization_code: string): Observable<any> {
-    return this.generalService.post('/workspaces/' + workspace_id + '/connect_fyle/authorization_code/', {
+  connectFyle(workspaceId: number, authorization_code: string): Observable<any> {
+    return this.generalService.post('/workspaces/' + workspaceId + '/connect_fyle/authorization_code/', {
       code: authorization_code
     });
   }
 
-  connectQBO(workspace_id: number, authorization_code: string, realm_id: string): Observable<any> {
-    return this.generalService.post('/workspaces/' + workspace_id + '/connect_qbo/authorization_code/', {
+  connectQBO(workspaceId: number, authorization_code: string, realm_id: string): Observable<any> {
+    return this.generalService.post('/workspaces/' + workspaceId + '/connect_qbo/authorization_code/', {
       code: authorization_code,
       realm_id
     });
   }
 
-  postSettings(workspace_id: number, next_run: string, hours: number, schedule_enabled: boolean) {
-    return this.generalService.post(`/workspaces/${workspace_id}/settings/`, {
+  postSettings(workspaceId: number, next_run: string, hours: number, schedule_enabled: boolean) {
+    return this.generalService.post(`/workspaces/${workspaceId}/settings/`, {
       next_run,
       hours,
       schedule_enabled
     });
   }
 
-  getSettings(workspace_id: number) {
-    return this.generalService.get(`/workspaces/${workspace_id}/settings/`, {});
+  getSettings(workspaceId: number) {
+    return this.generalService.get(`/workspaces/${workspaceId}/settings/`, {});
   }
 
-  getMappingSettings(workspace_id: number) {
-    return this.generalService.get(`/workspaces/${workspace_id}/mappings/settings/`, {});
+  getMappingSettings(workspaceId: number) {
+    return this.generalService.get(`/workspaces/${workspaceId}/mappings/settings/`, {});
   }
 
-  postGeneralSettings(workspace_id: number, reimbursable_expenses_object: string, corporate_credit_card_expenses_object: string) {
-    return this.generalService.post(`/workspaces/${workspace_id}/settings/general/`, {
+  postGeneralSettings(workspaceId: number, reimbursable_expenses_object: string, corporate_credit_card_expenses_object: string) {
+    return this.generalService.post(`/workspaces/${workspaceId}/settings/general/`, {
       reimbursable_expenses_object,
       corporate_credit_card_expenses_object,
     });
   }
 
-  postMappingSettings(workspace_id: number, mappingSettings: any) {
-    return this.generalService.post(`/workspaces/${workspace_id}/mappings/settings/`, mappingSettings);
+  postMappingSettings(workspaceId: number, mappingSettings: any) {
+    return this.generalService.post(`/workspaces/${workspaceId}/mappings/settings/`, mappingSettings);
   }
 
-  getGeneralSettings(workspace_id: number) {
-    return this.generalService.get(`/workspaces/${workspace_id}/settings/general/`, {});
+  getGeneralSettings(workspaceId: number) {
+    return this.generalService.get(`/workspaces/${workspaceId}/settings/general/`, {});
   }
 }

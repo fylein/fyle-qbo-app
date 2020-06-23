@@ -35,3 +35,64 @@
         }
     }
 }
+
+.dashboard {
+    color: #5e5e5e;
+    &--header {
+        margin: 32px;
+    }
+
+    &--actions {
+        min-width: 700px;
+        &-card {
+            min-width: 640px;
+            margin-bottom: 12px;
+            border: 1px solid #a9acbc52;
+            color: #5e5e5e;
+
+        }
+
+        &-header {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        &-action {
+            font-size: 14px;
+            font-weight: 500;
+            color: #f36;
+            cursor: pointer;
+        } 
+
+        &-content {
+            min-height: 60px;
+        }
+    }
+
+    &--stats {
+        min-width: 420px;
+        &-card {
+            min-width: 360px;
+            border: 1px solid #a9acbc52;
+            color: #545454;
+            &-icon {
+                color: #a9acbc;
+            }
+        }
+    }
+
+    .schedule {
+        &--info-icon {
+            color:#5c98e5;
+            margin-right: 8px;
+        }
+
+        &--redirect {
+            margin-left: 32px;
+            &-icon {
+                margin-left: 8px;
+                cursor: pointer;
+            }
+        }
+    }
+}

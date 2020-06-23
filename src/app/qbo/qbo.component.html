@@ -5,10 +5,6 @@
         <img alt="Fyle" src="../../assets/images/pngs/fyle-logo.png" class="qbo-sidenav--logo" />
       </header>
 
-      <!-- <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/tasks/" routerLinkActive="active">
-        Tasks
-      </a> -->
-
       <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/dashboard" routerLinkActive="active">
         Dashboard
       </a>
@@ -19,10 +15,6 @@
 
       <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/expense_groups/" routerLinkActive="active">
         Expense Groups
-      </a>
-
-      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/mappings/general/" routerLinkActive="active">
-        Mappings
       </a>
 
       <a class="mat-h3 qbo-sidenav--nav-item" mat-list-item>
@@ -56,7 +48,7 @@
     <mat-toolbar fxLayoutAlign="space-between center">
       <div fxLayout="row" fxLayoutAlign="space-around center">
         <div class="mat-small">
-          Fyle Org Name: asdasdasd
+          Fyle Org Name: {{user.org_name}}
         </div>
         <div class="mat-small">
           |

@@ -8,19 +8,19 @@ import { GeneralService } from 'src/app/core/services/general.service';
 export class BillsService {
   constructor(private generalService: GeneralService) {}
 
-  createBills(workspace_id: number, expnese_group_ids: any[]): Observable<any> {
+  createBills(workspaceId: number, expnese_group_ids: any[]): Observable<any> {
     return this.generalService.post(
-      `/workspaces/${workspace_id}/qbo/bills/trigger/`, {
+      `/workspaces/${workspaceId}/qbo/bills/trigger/`, {
         expense_group_ids: expnese_group_ids
       }
     );
   }
 
-  getBills(workspace_id: number, limit: number, offset: number): Observable<any> {
-    return this.generalService.get(`/workspaces/${workspace_id}/qbo/bills/?limit=${limit}&offset=${offset}`, {});
+  getBills(workspaceId: number, limit: number, offset: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspaceId}/qbo/bills/?limit=${limit}&offset=${offset}`, {});
   }
 
-  getPreferences(workspace_id: number): Observable<any> {
-    return this.generalService.get(`/workspaces/${workspace_id}/qbo/preferences/`, {});
+  getPreferences(workspaceId: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspaceId}/qbo/preferences/`, {});
   }
 }

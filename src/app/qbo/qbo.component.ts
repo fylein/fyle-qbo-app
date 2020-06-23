@@ -4,6 +4,7 @@ import { forkJoin } from 'rxjs';
 import { AuthService } from '../core/services/auth.service';
 import { WorkspaceService } from '../core/services/workspace.service';
 import { SettingsService } from '../core/services/settings.service';
+import { BillsService } from '../core/services/bills.service';
 
 @Component({
   selector: 'app-qbo',
@@ -25,7 +26,8 @@ export class QboComponent implements OnInit {
     private workspaceService: WorkspaceService,
     private settingsService: SettingsService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private billService: BillsService
     ) {
   }
 
@@ -80,22 +82,32 @@ export class QboComponent implements OnInit {
   }
 
   setupWorkspace() {
-    this.user = this.authService.getUser();
-    this.workspaceService.getWorkspaces(this.user.org_id).subscribe(workspaces => {
+    let that = this;
+    that.user = that.authService.getUser();
+    that.workspaceService.getWorkspaces(that.user.org_id).subscribe(workspaces => {
       if (Array.isArray(workspaces) && workspaces.length) {
-        this.workspace = workspaces[0];
-        this.getSettingsAndNavigate('expense_groups');
+        that.workspace = workspaces[0];
+        that.getSettingsAndNavigate('expense_groups');
       } else {
-        this.workspaceService.createWorkspace().subscribe(workspace => {
-          this.workspace = workspace;
-          this.getSettingsAndNavigate('settings');
+        that.workspaceService.createWorkspace().subscribe(workspace => {
+          that.workspace = workspace;
+          that.getSettingsAndNavigate('settings');
         });
       }
+      that.getQboPreferences();
+    });
+  }
+
+  getQboPreferences() {
+    const that = this;
+    that.billService.getPreferences(that.workspace.id).subscribe((res) => {
+      console.log(res);
     });
   }
 
   ngOnInit() {
-    this.orgsCount = this.authService.getOrgCount();
-    this.setupWorkspace();
+    let that = this;
+    that.orgsCount = that.authService.getOrgCount();
+    that.setupWorkspace();
   }
 }

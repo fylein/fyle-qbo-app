@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { environment } from 'src/environments/environment';
+import { ExpenseGroupsService } from 'src/app/core/services/expense-groups.service';
 
 const FYLE_URL = environment.fyle_url;
 const FYLE_CLIENT_ID = environment.fyle_client_id;
@@ -37,23 +38,13 @@ export class DashboardComponent implements OnInit {
     return onboardingStates;
   }
 
-  // fyleConnected = false;
-  // qboConnected = false;
-  // configurationsDone = false;
-  // generalMappingsDone = false;
-  // employeeMappingsDone = false;
-  // categoryMappingsDone = false;
-  // isOnboarded = false;
-
-  // enum onboardingStates = {
-  //   connectToFyle,
-  //   connectToQbo
-  // }
-
   rippleDisabled = true;
   linearMode = true;
 
-  constructor(private settingsService: SettingsService, private route: ActivatedRoute, private mappingsService: MappingsService) { }
+  successfulExpenseGroupsCount = 0;
+  failedExpenseGroupsCount = 0;
+
+  constructor(private expenseGroupService: ExpenseGroupsService, private settingsService: SettingsService, private route: ActivatedRoute, private mappingsService: MappingsService) { }
 
   connectFyle() {
     window.location.href = `${FYLE_URL}/app/developers/#/oauth/authorize?client_id=${FYLE_CLIENT_ID}&redirect_uri=${APP_URL}/workspaces/fyle/callback&response_type=code&state=${this.workspaceId}`;
@@ -67,7 +58,6 @@ export class DashboardComponent implements OnInit {
     const that = this;
     return that.settingsService.getFyleCredentials(that.workspaceId).toPromise().then(credentials => {
       that.currentState = onboardingStates.fyleConnected;
-      that.isLoading = false;
       return credentials;
     });
   }
@@ -78,7 +68,6 @@ export class DashboardComponent implements OnInit {
 
     return that.settingsService.getQBOCredentials(that.workspaceId).toPromise().then(credentials => {
       that.currentState = onboardingStates.qboConnected;
-      that.isLoading = false;
       return credentials;
     });
   }
@@ -129,28 +118,64 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  loadSuccessfullExpenseGroupsCount() {
+    const that = this;
+    return that.expenseGroupService.getAllExpenseGroups(that.workspaceId, 'COMPLETE').toPromise().then((res) => {
+      that.successfulExpenseGroupsCount = res.results.length;
+      return res;
+    });
+  }
+
+  loadFailedlExpenseGroupsCount() {
+    const that = this;
+    return that.expenseGroupService.getAllExpenseGroups(that.workspaceId, 'FAILED').toPromise().then((res) => {
+      that.failedExpenseGroupsCount = res.results.length;
+      return res;
+    });
+  }
+
+  loadDashboardData() {
+    const that = this;
+    that.isLoading = true;
+    forkJoin([
+      that.loadSuccessfullExpenseGroupsCount(),
+      that.loadFailedlExpenseGroupsCount()
+    ]).subscribe(() => {
+      that.isLoading = false;
+    });
+  }
+
   ngOnInit() {
     const that = this;
     that.workspaceId = +that.route.snapshot.params.workspace_id;
-    // that.isLoading = true;
-    that.checkFyleLoginStatus()
-      .then(() => {
-        return that.getQboStatus();
-      }).then(() => {
-        return that.getConfigurations();
-      }).then(() => {
-        return that.getGeneralMappings();
-      }).then(() => {
-        return that.getEmployeeMappings();
-      }).then(() => {
-        return that.getCategoryMappings();
-      }).then(() => {
-        that.currentState = onboardingStates.isOnboarded;
-      }).catch(() => {
-        // do nothing as this just means some steps are left
-      }).finally(() => {
-        that.isLoading = false;
-      });
+    const onboarded = localStorage.getItem('onboarded');
+
+    if (onboarded === 'true') {
+      that.currentState = onboardingStates.isOnboarded;
+      that.loadDashboardData();
+    } else {
+      that.isLoading = true;
+      that.checkFyleLoginStatus()
+        .then(() => {
+          return that.getQboStatus();
+        }).then(() => {
+          return that.getConfigurations();
+        }).then(() => {
+          return that.getGeneralMappings();
+        }).then(() => {
+          return that.getEmployeeMappings();
+        }).then(() => {
+          return that.getCategoryMappings();
+        }).then(() => {
+          that.currentState = onboardingStates.isOnboarded;
+          localStorage.setItem('onboarded', 'true');
+          that.loadDashboardData();
+        }).catch(() => {
+          // do nothing as this just means some steps are left
+        }).finally(() => {
+          that.isLoading = false;
+        });
+    }
 
   }
 

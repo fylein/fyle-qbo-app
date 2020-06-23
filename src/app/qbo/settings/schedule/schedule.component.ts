@@ -54,11 +54,21 @@ export class ScheduleComponent implements OnInit {
   ngOnInit() {
     const that = this;
     that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
-    this.form = this.formBuilder.group({
+    that.form = that.formBuilder.group({
       datetime: [new Date(), Validators.required],
       hours: ['', Validators.required],
       scheduleEnabled: [false]
     });
+
+    that.form.controls.scheduleEnabled.valueChanges.subscribe((newValue) => {
+      if (!newValue) {
+        that.settingsService.postSettings(that.workspaceId, '', 0, false).subscribe(response => {
+          that.isLoading = false;
+          that.getSettings();
+        });
+      }
+    });
+
     that.getSettings();
   }
 

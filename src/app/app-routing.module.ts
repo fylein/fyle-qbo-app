@@ -25,8 +25,7 @@ const baseModuleRoutes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(
-      baseModuleRoutes,
-      { enableTracing: true }
+      baseModuleRoutes
     )
   ],
   exports: [RouterModule],

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras, ActivationEnd } from '@angular/router';
 import { ExpenseGroupsService } from '../../core/services/expense-groups.service';
-import { ChecksService } from '../checks/checks.service';
-import { JournalEntriesService } from '../journal-entries/journal-entries.service';
-import { CreditCardPurchasesService } from '../credit-card-purchases/credit-card-purchases.service';
+import { ChecksService } from '../../core/services/checks.service';
+import { JournalEntriesService } from '../../core/services/journal-entries.service';
+import { CreditCardPurchasesService } from '../../core/services/credit-card-purchases.service';
 import { BillsService } from 'src/app/core/services/bills.service';
 import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
 import { MatTableDataSource } from '@angular/material/table';

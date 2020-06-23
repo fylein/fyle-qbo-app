@@ -4,14 +4,8 @@ import { CommonModule } from '@angular/common';
 import { QboRoutingModule } from './qbo-routing.module';
 import { QboComponent } from './qbo.component';
 
-import { TasksComponent } from './tasks/tasks.component';
-import { MappingErrorsComponent } from './tasks/mapping-errors/mapping-errors.component';
 import { ExpenseGroupsComponent } from './expense-groups/expense-groups.component';
 import { ViewExpenseGroupComponent } from './expense-groups/view-expense-group/view-expense-group.component';
-import { BillsComponent } from './bills/bills.component';
-import { ChecksComponent } from './checks/checks.component';
-import { JournalEntriesComponent } from './journal-entries/journal-entries.component';
-import { CreditCardPurchasesComponent } from './credit-card-purchases/credit-card-purchases.component';
 import { SettingsComponent } from './settings/settings.component';
 import { FyleCallbackComponent } from './settings/fyle-callback/fyle-callback.component';
 import { QBOCallbackComponent } from './settings/qbo-callback/qbo-callback.component';
@@ -63,14 +57,8 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 @NgModule({
   declarations: [
     QboComponent,
-    TasksComponent,
-    MappingErrorsComponent,
     ExpenseGroupsComponent,
     ViewExpenseGroupComponent,
-    BillsComponent,
-    ChecksComponent,
-    JournalEntriesComponent,
-    CreditCardPurchasesComponent,
     SettingsComponent,
     FyleCallbackComponent,
     QBOCallbackComponent,

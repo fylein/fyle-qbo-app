@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GeneralService } from 'src/app/core/services/general.service';
+import { Cacheable } from 'ngx-cacheable';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +21,7 @@ export class BillsService {
     return this.generalService.get(`/workspaces/${workspaceId}/qbo/bills/?limit=${limit}&offset=${offset}`, {});
   }
 
+  @Cacheable()
   getPreferences(workspaceId: number): Observable<any> {
     return this.generalService.get(`/workspaces/${workspaceId}/qbo/preferences/`, {});
   }

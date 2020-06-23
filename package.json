@@ -28,6 +28,7 @@
     "i": "^0.3.6",
     "jquery": "^3.4.1",
     "ng2-flatpickr": "^9.0.0",
+    "ngx-cacheable": "^1.4.2",
     "normalize.css": "^8.0.1",
     "npm": "^6.13.7",
     "rxjs": "~6.4.0",

@@ -32,7 +32,14 @@ export class WorkspacesGuard implements CanActivate {
             that.settingsService.deleteQBOCredentials(workspaceId).subscribe();
           }
         }
-        return that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`);
+        return that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`).then(a => {
+          console.log(a);
+          return a || true;
+        }).catch(a => {
+          console.log(a);
+          return a || true;
+        })
+        ;
       })
     );
   }

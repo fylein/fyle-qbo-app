@@ -34,8 +34,7 @@ const routes: Routes = [{
     },
     {
       path: ':workspace_id/dashboard',
-      component: DashboardComponent,
-      canActivate: [WorkspacesGuard]
+      component: DashboardComponent
     },
     {
       path: ':workspace_id/sync_export',

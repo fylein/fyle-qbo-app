@@ -12,18 +12,17 @@ export class QBOCallbackComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, private settingsService: SettingsService) { }
 
   ngOnInit() {
-    const workspaceId: number = this.route.snapshot.params.state;
-    const code: string = this.route.snapshot.params.code;
-    const realmId: string = this.route.snapshot.params.realmId;
-    this.settingsService.connectQBO(workspaceId, code, realmId).subscribe(response => {
+    let that = this;
+    const workspaceId: number = that.route.snapshot.queryParams.state;
+    const code: string = that.route.snapshot.queryParams.code;
+    const realmId: string = that.route.snapshot.queryParams.realmId;
+    that.settingsService.connectQBO(workspaceId, code, realmId).subscribe(response => {
       if (response) {
-        this.router.navigateByUrl(`/workspaces/${workspaceId}/settings?state=destination`);
+        that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`);
       }
     },
       error => {
-        if (error.status == 400) {
-          this.router.navigateByUrl(`/workspaces/${workspaceId}/settings?state=destination&error=${error.error.message}`);
-        }
+        that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`);
       });
   }
 

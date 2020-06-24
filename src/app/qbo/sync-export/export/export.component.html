@@ -19,9 +19,6 @@
                                 {{exportableExpenseGroups.length}} expenses are being synced
                             </div>
                         </div>
-                        <div *ngIf="lastTask">
-                            Synced on {{lastTask.updated_at | date}}
-                        </div>
                     </div>
                     <div>
                         <button *ngIf="exportableExpenseGroups.length > 0" mat-flat-button color="primary"

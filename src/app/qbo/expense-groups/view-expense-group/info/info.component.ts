@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
 import { forkJoin } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
+import { Expense } from 'src/app/core/models/expense.model';
 
 @Component({
   selector: 'app-info',
@@ -20,33 +21,36 @@ export class InfoComponent implements OnInit {
   expenseGroup: ExpenseGroup;
 
   isLoading = false;
-  expenses: MatTableDataSource<ExpenseGroup> = new MatTableDataSource([]);
+  expenses: MatTableDataSource<Expense> = new MatTableDataSource([]);
   count: number;
   pageNumber = 0;
   pageSize = 5;
   columnsToDisplay = ['expense_id', 'claimno'];
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.expenses.filter = filterValue.trim().toLowerCase();
+  }
+
   initExpenseGroupExpenses() {
     const that = this;
-    return that.expenseGroupsService.getExpensesByExpenseGroupId(that.workspaceId, that.expenseGroupId).toPromise().then(function(expenses) {
+    return that.expenseGroupsService.getExpensesByExpenseGroupId(that.workspaceId, that.expenseGroupId).toPromise().then((expenses) => {
+      console.log(expenses);
       that.count = expenses.length;
       that.expenses = new MatTableDataSource(expenses);
-      that.expenses.filterPredicate = that.searchByText;
     });
   }
 
   initExpenseGroupDetails() {
     const that = this;
-    return that.expenseGroupsService.getExpensesGroupById(that.workspaceId, that.expenseGroupId).toPromise().then(function(expenseGroup) {
+    return that.expenseGroupsService.getExpensesGroupById(that.workspaceId, that.expenseGroupId).toPromise().then((expenseGroup) => {
       that.expenseGroup = expenseGroup;
     });
   }
 
-  searchByText(data: ExpenseGroup, filterText: string) {
-    return data.description.employee_email.includes(filterText) ||
-      ('Reimbursable'.toLowerCase().includes(filterText) && data.fund_source === 'PERSONAL') ||
-      ('Corporate Credit Card'.toLowerCase().includes(filterText) && data.fund_source !== 'PERSONAL') ||
-      data.description.claim_number.includes(filterText);
+  openExpenseInFyle(expenseId: string) {
+    const clusterDomain = localStorage.getItem('clusterDomain');
+    window.open(`${clusterDomain}/app/main/#/enterprise/view_expense/${expenseId}`, '_blank');
   }
 
 
@@ -59,7 +63,7 @@ export class InfoComponent implements OnInit {
     forkJoin([
       that.initExpenseGroupExpenses(),
       that.initExpenseGroupDetails()
-    ]).subscribe(function() {
+    ]).subscribe(function () {
       that.isLoading = false;
     });
 

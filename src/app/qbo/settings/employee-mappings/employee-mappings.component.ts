@@ -33,7 +33,7 @@ export class EmployeeMappingsComponent implements OnInit {
               private mappingsService: MappingsService) {
   }
 
-  open(content) {
+  open() {
     const that = this;
     const dialogRef = that.dialog.open(EmployeeMappingsDialogComponent, {
       width: '450px',

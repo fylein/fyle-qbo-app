@@ -18,7 +18,7 @@ export class CostCenterMappingsComponent implements OnInit {
 
   constructor(private mappingsService: MappingsService, private route: ActivatedRoute, public dialog: MatDialog) { }
 
-  open(content) {
+  open() {
     const that = this;
     const dialogRef = that.dialog.open(CostCenterMappingsDialogComponent, {
       width: '450px',

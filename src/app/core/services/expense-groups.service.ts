@@ -3,6 +3,7 @@ import { Observable, from } from 'rxjs';
 import { GeneralService } from 'src/app/core/services/general.service';
 import { ExpenseGroupResponse } from 'src/app/core/models/expenseGroupsResponse.model';
 import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
+import { Expense } from '../models/expense.model';
 
 @Injectable({
   providedIn: 'root',
@@ -42,7 +43,7 @@ export class ExpenseGroupsService {
     });
   }
 
-  getExpensesByExpenseGroupId(workspaceId: number, expenseGroupOd: number): Observable<ExpenseGroup[]> {
+  getExpensesByExpenseGroupId(workspaceId: number, expenseGroupOd: number): Observable<Expense[]> {
     return this.generalService.get(`/workspaces/${workspaceId}/fyle/expense_groups/${expenseGroupOd}/expenses/`, {});
   }
 

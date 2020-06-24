@@ -17,7 +17,7 @@ export class CategoryMappingsComponent implements OnInit {
 
   constructor(private mappingsService: MappingsService, private route: ActivatedRoute, public dialog: MatDialog) { }
 
-  open(content) {
+  open() {
     const that = this;
     const dialogRef = that.dialog.open(CategoryMappingsDialogComponent, {
       width: '450px',

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MappingsService } from '../../../core/services/mappings.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { CategoryMappingsDialogComponent } from './category-mappings-dialog/category-mappings-dialog.component';
 
@@ -15,7 +15,7 @@ export class CategoryMappingsComponent implements OnInit {
   categoryMappings: any[];
   columnsToDisplay = ['category', 'qbo'];
 
-  constructor(private mappingsService: MappingsService, private route: ActivatedRoute, public dialog: MatDialog) { }
+  constructor(private mappingsService: MappingsService, private route: ActivatedRoute, public dialog: MatDialog, private router: Router) { }
 
   open() {
     const that = this;
@@ -27,7 +27,12 @@ export class CategoryMappingsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      that.getCategoryMappings();
+      const onboarded = localStorage.getItem('onboarded');
+      if (onboarded === 'true') {
+        that.getCategoryMappings();
+      } else {
+        that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
+      }
     });
   }
 

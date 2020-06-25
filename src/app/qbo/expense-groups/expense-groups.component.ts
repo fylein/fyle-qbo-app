@@ -24,13 +24,7 @@ export class ExpenseGroupsComponent implements OnInit {
   pageSize = 5;
   columnsToDisplay = ['description', 'employee', 'claimno', 'expensetype'];
 
-  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private router: Router, private billsService: BillsService, private checksService: ChecksService, private JournalEntriesService: JournalEntriesService, private CreditCardPurchasesService: CreditCardPurchasesService) { }
-
-  syncExpenseGroups() {
-    this.expenseGroupService.syncExpenseGroups(this.workspaceId).subscribe(task => {
-      this.router.navigateByUrl(`/workspaces/${this.workspaceId}/tasks`);
-    });
-  }
+  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private router: Router) { }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

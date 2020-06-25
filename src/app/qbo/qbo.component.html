@@ -2,7 +2,9 @@
   <mat-sidenav class="qbo-sidenav" mode="side" opened>
     <mat-nav-list>
       <header matSubheader class="qbo-sidenav--header">
-        <img alt="Fyle" src="../../assets/images/pngs/fyle-logo.png" class="qbo-sidenav--logo" />
+        <img alt="Fyle" src="../../assets/images/pngs/fyle-logo.png" class="qbo-sidenav--logo"/>
+        <mat-icon>add</mat-icon>
+        <img alt="qbo" src="../../../assets/images/pngs/qbo-logo.png" class="qbo-sidenav--logo">
       </header>
 
       <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/dashboard" routerLinkActive="active">
@@ -50,11 +52,11 @@
         <div class="mat-small">
           Fyle Org Name: {{user.org_name}}
         </div>
-        <div class="mat-small">
+        <div class="mat-small" *ngIf="qboCompanyName">
           |
         </div>
-        <div class="mat-small">
-          QBO Company Name: qweqweqew
+        <div class="mat-small" *ngIf="qboCompanyName">
+          QBO Company Name: {{qboCompanyName}}
         </div>
       </div>
 

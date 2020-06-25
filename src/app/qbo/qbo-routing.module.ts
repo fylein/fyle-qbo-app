@@ -73,6 +73,7 @@ const routes: Routes = [{
     {
       path: ':workspace_id/settings',
       component: SettingsComponent,
+      // canActivate: [WorkspacesGuard],
       children: [
         {
           path: 'configurations',

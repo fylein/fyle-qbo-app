@@ -30,6 +30,7 @@
                         <div class="onboarding-stepper--desc">Connect to Fyle Account</div>
                     </div>
                     <div class="onboarding-stepper--navigation" (click)="connectFyle()"
+                        *ngIf="currentState === allOnboardingStates.initialized"
                         [ngClass]="{'onboarding-stepper--navigation__active': currentState === allOnboardingStates.initialized}">
                         Connect Fyle
                     </div>
@@ -42,6 +43,7 @@
                         <div class="onboarding-stepper--desc">Connect to QBO Account</div>
                     </div>
                     <div (click)="connectQBO()" class="onboarding-stepper--navigation"
+                        *ngIf="currentState === allOnboardingStates.fyleConnected"
                         [ngClass]="{'onboarding-stepper--navigation__active': currentState === allOnboardingStates.fyleConnected}">
                         Connect Quickbooks
                     </div>
@@ -61,6 +63,7 @@
                         <div class="onboarding-stepper--desc">Map Fyle fields to QBO online fields</div>
                     </div>
                     <div routerLink="../settings/configurations/" class="onboarding-stepper--navigation"
+                    *ngIf="currentState === allOnboardingStates.qboConnected"
                         [ngClass]="{'onboarding-stepper--navigation__active': currentState === allOnboardingStates.qboConnected}">
                         Go to Configurations
                     </div>
@@ -80,6 +83,7 @@
                         <div class="onboarding-stepper--desc">Map expense fields</div>
                     </div>
                     <div routerLink="../settings/general_mappings/" class="onboarding-stepper--navigation"
+                        *ngIf="currentState === allOnboardingStates.configurationsDone"
                         [ngClass]="{'onboarding-stepper--navigation__active': currentState === allOnboardingStates.configurationsDone}">
                         Go to General Mappings
                     </div>
@@ -92,6 +96,7 @@
                         <div class="onboarding-stepper--desc">Map employee fields</div>
                     </div>
                     <div routerLink="../settings/employee_mappings/" class="onboarding-stepper--navigation"
+                        *ngIf="currentState === allOnboardingStates.generalMappingsDone"
                         [ngClass]="{'onboarding-stepper--navigation__active': currentState === allOnboardingStates.generalMappingsDone}">
                         Go to Employee Mappings
                     </div>
@@ -102,6 +107,7 @@
                         <div class="onboarding-stepper--desc">Map category fields</div>
                     </div>
                     <div routerLink="../settings/category_mappings/" class="onboarding-stepper--navigation"
+                        *ngIf="currentState === allOnboardingStates.employeeMappingsDone"
                         [ngClass]="{'onboarding-stepper--navigation__active': currentState === allOnboardingStates.employeeMappingsDone}">
                         Go to Category Mappings
                     </div>
@@ -183,7 +189,7 @@
                     <mat-list-item role="listitem">
                         <mat-icon class="dashboard--stats-card-icon" mat-list-icon>info</mat-icon>
                         <div mat-line>{{failedExpenseGroupsCount}}</div>
-                        <div mat-line> No. of successful exports</div>
+                        <div mat-line> No. of failed exports</div>
                     </mat-list-item>
                 </mat-list>
             </mat-card>

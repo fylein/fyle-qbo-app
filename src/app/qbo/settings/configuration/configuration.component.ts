@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { SettingsService } from 'src/app/core/services/settings.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-configuration',
@@ -22,7 +22,7 @@ export class ConfigurationComponent implements OnInit {
   projectFieldMapping: any;
   costCenterFieldMapping: any;
 
-  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private route: ActivatedRoute) { }
+  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router) { }
 
   getExpenseOptions(employeeMappedTo) {
     return {
@@ -130,9 +130,9 @@ export class ConfigurationComponent implements OnInit {
         that.generalSettingsForm = that.formBuilder.group({
           employees: ['', Validators.required],
           reimburExpense: ['', Validators.required],
-          cccExpense: [''],
-          projects: [''],
-          costCenters: [''],
+          cccExpense: [null],
+          projects: [null],
+          costCenters: [null],
         });
 
         that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
@@ -144,17 +144,18 @@ export class ConfigurationComponent implements OnInit {
   }
 
   save() {
-    if (this.generalSettingsForm.valid) {
+    let that = this;
+    if (that.generalSettingsForm.valid) {
       const mappingsSettingsPayload = [{
         source_field: 'CATEGORY',
         destination_field: 'ACCOUNT'
       }];
 
-      const reimbursableExpensesObject = this.generalSettingsForm.value.reimburExpense || this.generalSettings.reimbursable_expenses_object;
-      const cccExpensesObject = this.generalSettingsForm.value.cccExpense || this.generalSettings.corporate_credit_card_expenses_object;
-      const employeeMappingsObject = this.generalSettingsForm.value.employees || this.employeeFieldMapping.destination_field;
-      const costCenterMappingObject = this.generalSettingsForm.value.costCenters || this.costCenterFieldMapping.destination_field;
-      const projectMappingObject = this.generalSettingsForm.value.projects || this.projectFieldMapping.destination_field;
+      const reimbursableExpensesObject = that.generalSettingsForm.value.reimburExpense || that.generalSettings.reimbursable_expenses_object;
+      const cccExpensesObject = that.generalSettingsForm.value.cccExpense || that.generalSettings.corporate_credit_card_expenses_object;
+      const employeeMappingsObject = that.generalSettingsForm.value.employees || (that.employeeFieldMapping && that.employeeFieldMapping.destination_field);
+      const costCenterMappingObject = that.generalSettingsForm.value.costCenters || (that.costCenterFieldMapping && that.costCenterFieldMapping.destination_field);
+      const projectMappingObject = that.generalSettingsForm.value.projects || (that.projectFieldMapping && that.projectFieldMapping.destination_field);
 
       if (cccExpensesObject) {
         mappingsSettingsPayload.push({
@@ -177,7 +178,7 @@ export class ConfigurationComponent implements OnInit {
         });
       }
 
-      this.isLoading = true;
+      that.isLoading = true;
       mappingsSettingsPayload.push({
         source_field: 'EMPLOYEE',
         destination_field: employeeMappingsObject
@@ -185,15 +186,15 @@ export class ConfigurationComponent implements OnInit {
 
       forkJoin(
         [
-          this.settingsService.postMappingSettings(this.workspaceId, mappingsSettingsPayload),
-          this.settingsService.postGeneralSettings(this.workspaceId, reimbursableExpensesObject, cccExpensesObject)
+          that.settingsService.postMappingSettings(that.workspaceId, mappingsSettingsPayload),
+          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject)
         ]
       ).subscribe(responses => {
-        this.isLoading = true;
-        window.location.href = `/workspaces/${this.workspaceId}/expense_groups`;
+        that.isLoading = true;
+        that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
       });
     } else {
-      this.generalSettingsForm.markAllAsTouched();
+      that.generalSettingsForm.markAllAsTouched();
     }
   }
 

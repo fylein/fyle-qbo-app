@@ -7,7 +7,7 @@ import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChang
 import { filter } from 'rxjs/internal/operators/filter';
 import { map } from 'rxjs/internal/operators/map';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MappingsService } from '../../../core/services/mappings.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EmployeeMappingsDialogComponent } from './employee-mappings-dialog/employee-mappings-dialog.component';
@@ -30,7 +30,8 @@ export class EmployeeMappingsComponent implements OnInit {
 
   constructor(public dialog: MatDialog,
               private route: ActivatedRoute,
-              private mappingsService: MappingsService) {
+              private mappingsService: MappingsService,
+              private router: Router) {
   }
 
   open() {
@@ -46,8 +47,14 @@ export class EmployeeMappingsComponent implements OnInit {
       that.isLoading = true;
       that.mappingsService.getMappings(that.workspaceId, 'EMPLOYEE').subscribe((employees) => {
         that.employeeMappings = employees.results;
-        that.createEmployeeMappingsRows();
         that.isLoading = false;
+        const onboarded = localStorage.getItem('onboarded');
+
+        if (onboarded === 'true') {
+          that.createEmployeeMappingsRows();
+        } else {
+          that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
+        }
       });
     });
   }

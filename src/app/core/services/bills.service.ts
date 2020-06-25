@@ -25,4 +25,8 @@ export class BillsService {
   getPreferences(workspaceId: number): Observable<any> {
     return this.generalService.get(`/workspaces/${workspaceId}/qbo/preferences/`, {});
   }
+
+  getOrgDetails(workspaceId: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspaceId}/qbo/company_info/`, {});
+  }
 }

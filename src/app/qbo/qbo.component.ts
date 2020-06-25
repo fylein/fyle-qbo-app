@@ -21,6 +21,7 @@ export class QboComponent implements OnInit {
   generalSettings: any;
   mappingSettings: any;
   showSwitchOrg = false;
+  qboCompanyName: string;
 
   constructor(
     private workspaceService: WorkspaceService,
@@ -72,11 +73,11 @@ export class QboComponent implements OnInit {
     this.authService.switchWorkspace();
   }
 
-  getSettingsAndNavigate(location) {
+  getSettingsAndNavigate() {
     const pathName = window.location.pathname;
     this.isLoading = false;
     if (pathName === '/workspaces') {
-      this.router.navigateByUrl(`/workspaces/${this.workspace.id}/${location}`);
+      this.router.navigateByUrl(`/workspaces/${this.workspace.id}/dashboard`);
     }
     this.getGeneralSettings();
   }
@@ -87,11 +88,11 @@ export class QboComponent implements OnInit {
     that.workspaceService.getWorkspaces(that.user.org_id).subscribe(workspaces => {
       if (Array.isArray(workspaces) && workspaces.length) {
         that.workspace = workspaces[0];
-        that.getSettingsAndNavigate('expense_groups');
+        that.getSettingsAndNavigate();
       } else {
         that.workspaceService.createWorkspace().subscribe(workspace => {
           that.workspace = workspace;
-          that.getSettingsAndNavigate('settings');
+          that.getSettingsAndNavigate();
         });
       }
       that.getQboPreferences();
@@ -100,8 +101,8 @@ export class QboComponent implements OnInit {
 
   getQboPreferences() {
     const that = this;
-    that.billService.getPreferences(that.workspace.id).subscribe((res) => {
-      console.log(res);
+    that.billService.getOrgDetails(that.workspace.id).subscribe((res) => {
+      that.qboCompanyName = res.CompanyName;
     });
   }
 

@@ -15,16 +15,14 @@ export class FyleCallbackComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       const workspaceId: number = params.state;
       const code: string = params.code;
-      this.settingsService.connectFyle(workspaceId, code).subscribe(response => {
+      const that = this;
+      that.settingsService.connectFyle(workspaceId, code).subscribe(response => {
         if (response) {
-          this.router.navigateByUrl('/workspaces/' + workspaceId + '/settings?state=source');
+          that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`);
         }
       }, error => {
-        if (error.status == 400) {
-          this.router.navigateByUrl(`/workspaces/${workspaceId}/settings?state=source&error=${error.error.message}`);
-        }
+        that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`);
       });
     });
   }
-
 }

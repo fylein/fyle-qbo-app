@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MappingsService } from '../../../core/services/mappings.service';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 
@@ -22,37 +22,43 @@ export class GeneralMappingsComponent implements OnInit {
   bankAccountIsValid = true;
   cccAccountIsValid = true;
 
-  constructor(private route: ActivatedRoute, private mappingsService: MappingsService, private formBuilder: FormBuilder) {
+  constructor(private route: ActivatedRoute, private mappingsService: MappingsService, private formBuilder: FormBuilder, private router: Router) {
   }
 
   submit() {
-    this.accountsPayableIsValid = false;
-    this.bankAccountIsValid = false;
-    this.cccAccountIsValid = false;
+    let that = this;
+    that.accountsPayableIsValid = false;
+    that.bankAccountIsValid = false;
+    that.cccAccountIsValid = false;
 
-    const accountPayableAccountId = this.generalSettings.employee_field_mapping === 'VENDOR' ? this.form.value.accountPayableAccounts : '';
-    const accountPayableAccount = this.generalSettings.employee_field_mapping === 'VENDOR' ? this.accountPayableAccounts.filter(filteredAccountsPayableAccount => filteredAccountsPayableAccount.destination_id === accountPayableAccountId)[0] : '';
+    const accountPayableAccountId = that.generalSettings.employee_field_mapping === 'VENDOR' ? that.form.value.accountPayableAccounts : '';
+    const accountPayableAccount = that.generalSettings.employee_field_mapping === 'VENDOR' ? that.accountPayableAccounts.filter(filteredAccountsPayableAccount => filteredAccountsPayableAccount.destination_id === accountPayableAccountId)[0] : '';
 
-    const bankAccountId = this.generalSettings.employee_field_mapping === 'EMPLOYEE' ? this.form.value.bankAccounts : '';
-    const bankAccount = this.generalSettings.employee_field_mapping === 'EMPLOYEE' ? this.bankAccounts.filter(filteredBankAccount => filteredBankAccount.destination_id === bankAccountId)[0] : '';
+    const bankAccountId = that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.form.value.bankAccounts : '';
+    const bankAccount = that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.bankAccounts.filter(filteredBankAccount => filteredBankAccount.destination_id === bankAccountId)[0] : '';
 
-    const cccAccountId = this.generalSettings.corporate_credit_card_expenses_object ? this.form.value.cccAccounts : '';
-    const cccAccount = this.generalSettings.corporate_credit_card_expenses_object ? this.cccAccounts.filter(filteredCCCAccount => filteredCCCAccount.destination_id === cccAccountId)[0] : '';
+    const cccAccountId = that.generalSettings.corporate_credit_card_expenses_object ? that.form.value.cccAccounts : '';
+    const cccAccount = that.generalSettings.corporate_credit_card_expenses_object ? that.cccAccounts.filter(filteredCCCAccount => filteredCCCAccount.destination_id === cccAccountId)[0] : '';
 
     if (accountPayableAccountId != null) {
-      this.accountsPayableIsValid = true;
+      that.accountsPayableIsValid = true;
     }
     if (bankAccountId != null) {
-      this.bankAccountIsValid = true;
+      that.bankAccountIsValid = true;
     }
     if (cccAccountId != null) {
-      this.cccAccountIsValid = true;
+      that.cccAccountIsValid = true;
     }
 
-    if (this.accountsPayableIsValid && this.bankAccountIsValid && this.cccAccountIsValid) {
-      this.isLoading = true;
-      this.mappingsService.postGeneralMappings(this.workspaceId, accountPayableAccount.destination_id, accountPayableAccount.value, bankAccount.destination_id, bankAccount.value, cccAccount.destination_id, cccAccount.value).subscribe(response => {
-        this.getGeneralMappings();
+    if (that.accountsPayableIsValid && that.bankAccountIsValid && that.cccAccountIsValid) {
+      that.isLoading = true;
+      that.mappingsService.postGeneralMappings(that.workspaceId, accountPayableAccount.destination_id, accountPayableAccount.value, bankAccount.destination_id, bankAccount.value, cccAccount.destination_id, cccAccount.value).subscribe(response => {
+        const onboarded = localStorage.getItem('onboarded');
+        if (onboarded === 'true') {
+          that.getGeneralMappings();
+        } else {
+          that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
+        }
       });
     }
   }

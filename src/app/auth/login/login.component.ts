@@ -24,8 +24,5 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(FYLE_URL);
-    console.log(FYLE_CLIENT_ID);
-    console.log(CALLBACK_URI);
   }
 }

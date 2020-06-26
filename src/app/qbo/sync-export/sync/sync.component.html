@@ -1,4 +1,4 @@
-<div fxLayoutAlign="center start" fxFlexFill *ngIf="isLoading">
+<div fxLayout="column" fxLayoutAlign="center center" *ngIf="isLoading" fxFlexFill>
     <app-loader></app-loader>
 </div>
 
@@ -32,29 +32,6 @@
                 <mat-icon class="sync-card--error-icon">error</mat-icon>
                 <div>
                     An error occurred while syncing the expenses. Please try again.
-                </div>
-            </div>
-        </mat-card>
-
-        <mat-card class="sync-card">
-            <div fxLayout="row" fxLayoutAlign="space-between center">
-                <div>
-                    <div>
-                        Sync Employees
-                    </div>
-                    <div>
-                        
-                    </div>
-                </div>
-                <div>
-                    <button mat-flat-button color="primary" (click)="updateDimensionTables()">
-                        <div *ngIf="!isEmployeesSyncing">
-                            Sync Employees
-                        </div>
-                        <div *ngIf="isEmployeesSyncing">
-                            Syncing
-                        </div>
-                    </button>
                 </div>
             </div>
         </mat-card>

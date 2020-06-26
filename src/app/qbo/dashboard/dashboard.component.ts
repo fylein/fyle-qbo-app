@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, concat } from 'rxjs';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { environment } from 'src/environments/environment';
 import { ExpenseGroupsService } from 'src/app/core/services/expense-groups.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 const FYLE_URL = environment.fyle_url;
 const FYLE_CLIENT_ID = environment.fyle_client_id;
@@ -44,7 +45,7 @@ export class DashboardComponent implements OnInit {
   successfulExpenseGroupsCount = 0;
   failedExpenseGroupsCount = 0;
 
-  constructor(private expenseGroupService: ExpenseGroupsService, private settingsService: SettingsService, private route: ActivatedRoute, private mappingsService: MappingsService) { }
+  constructor(private expenseGroupService: ExpenseGroupsService, private settingsService: SettingsService, private route: ActivatedRoute, private mappingsService: MappingsService, private snackBar: MatSnackBar) { }
 
   connectFyle() {
     window.location.href = `${FYLE_URL}/app/developers/#/oauth/authorize?client_id=${FYLE_CLIENT_ID}&redirect_uri=${APP_URL}/workspaces/fyle/callback&response_type=code&state=${this.workspaceId}`;
@@ -145,6 +146,28 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  // to be callled in background whenever dashboard is opened for sncing fyle data for org
+  updateDimensionTables() {
+    const that = this;
+    concat(
+        this.mappingsService.postAccountsPayables(that.workspaceId),
+        this.mappingsService.postBankAccounts(that.workspaceId),
+        this.mappingsService.postExpenseAccounts(that.workspaceId),
+        this.mappingsService.postCreditCardAccounts(that.workspaceId),
+        this.mappingsService.postQBOEmployees(that.workspaceId),
+        this.mappingsService.postQBOVendors(that.workspaceId),
+        this.mappingsService.postQBOCustomers(that.workspaceId),
+        this.mappingsService.postQBOClasses(that.workspaceId),
+        this.mappingsService.postQBODepartments(that.workspaceId),
+        this.mappingsService.postFyleEmployees(that.workspaceId),
+        this.mappingsService.postFyleCategories(that.workspaceId),
+        this.mappingsService.postFyleCostCenters(that.workspaceId),
+        this.mappingsService.postFyleProjects(that.workspaceId)
+    ).subscribe(() => {
+      // that.snackBar.open('All employee data synced from your fyle account');
+    });
+  }
+
   ngOnInit() {
     const that = this;
     that.workspaceId = +that.route.snapshot.params.workspace_id;
@@ -152,6 +175,7 @@ export class DashboardComponent implements OnInit {
 
     if (onboarded === 'true') {
       that.currentState = onboardingStates.isOnboarded;
+      that.updateDimensionTables();
       that.loadDashboardData();
     } else {
       that.isLoading = true;
@@ -159,6 +183,7 @@ export class DashboardComponent implements OnInit {
         .then(() => {
           return that.getQboStatus();
         }).then(() => {
+          that.updateDimensionTables();
           return that.getConfigurations();
         }).then(() => {
           return that.getGeneralMappings();

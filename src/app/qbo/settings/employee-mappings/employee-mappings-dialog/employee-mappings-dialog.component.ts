@@ -9,6 +9,8 @@ import { ActivatedRoute } from '@angular/router';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { forkJoin, from } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SettingsService } from 'src/app/core/services/settings.service';
 
 @Component({
   selector: 'app-employee-mappings-dialog',
@@ -33,7 +35,9 @@ export class EmployeeMappingsDialogComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               public dialogRef: MatDialogRef<EmployeeMappingsDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              private mappingsService: MappingsService) { }
+              private mappingsService: MappingsService,
+              private snackBar: MatSnackBar,
+              private settingsService: SettingsService) { }
 
 
   mappingDisplay(mappingObject) {
@@ -70,6 +74,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
       }
       that.isLoading = true;
       forkJoin(employeeMapping).subscribe(responses => {
+        that.snackBar.open('Mapping saved successfully!');
         that.isLoading = false;
         that.dialogRef.close();
       });
@@ -77,10 +82,8 @@ export class EmployeeMappingsDialogComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+  reset() {
     const that = this;
-    that.workSpaceId = that.data.workspaceId;
-
     const getFyleEmployees = that.mappingsService.getFyleEmployees(that.workSpaceId).toPromise().then((fyleEmployees) => {
       that.fyleEmployees = fyleEmployees;
     });
@@ -111,8 +114,6 @@ export class EmployeeMappingsDialogComponent implements OnInit {
     ]).subscribe((res) => {
       that.isLoading = false;
     });
-
-    that.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
 
     that.form = that.formBuilder.group({
       fyleEmployee: ['', Validators.required],
@@ -147,6 +148,17 @@ export class EmployeeMappingsDialogComponent implements OnInit {
         that.cccOptions = that.cccObjects
           .filter(cccObject => new RegExp(newValue.toLowerCase(), 'g').test(cccObject.value.toLowerCase()));
       }
+    });
+  }
+
+  ngOnInit() {
+    let that = this;
+    that.workSpaceId = that.data.workspaceId;
+    that.isLoading = true;
+    that.settingsService.getCombinedSettings(that.workSpaceId).subscribe(settings => {
+      that.generalSettings = settings;
+      that.isLoading = false;
+      that.reset();
     });
   }
 

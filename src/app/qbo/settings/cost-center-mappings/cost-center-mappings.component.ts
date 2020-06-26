@@ -3,6 +3,7 @@ import { MappingsService } from '../../../core/services/mappings.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { CostCenterMappingsDialogComponent } from './cost-center-mappings-dialog/cost-center-mappings-dialog.component';
+import { SettingsService } from 'src/app/core/services/settings.service';
 
 @Component({
   selector: 'app-cost-center-mappings',
@@ -14,9 +15,10 @@ export class CostCenterMappingsComponent implements OnInit {
   workspaceId: number;
   costCenterMappings: any[];
   generalSettings: any;
+  isConfigValueSet = false;
   columnsToDisplay = ['costCenter', 'qbo'];
 
-  constructor(private mappingsService: MappingsService, private route: ActivatedRoute, public dialog: MatDialog) { }
+  constructor(private mappingsService: MappingsService, private route: ActivatedRoute, public dialog: MatDialog, private settingsService: SettingsService) { }
 
   open() {
     const that = this;
@@ -45,8 +47,14 @@ export class CostCenterMappingsComponent implements OnInit {
   ngOnInit() {
     const that = this;
     that.workspaceId = that.route.parent.snapshot.params.workspace_id;
-    that.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
-    that.getCostCenterMappings();
+    that.isLoading = true;
+    that.settingsService.getCombinedSettings(that.workspaceId).subscribe((settings) => {
+      that.isLoading = false;
+      that.generalSettings = settings;
+      that.isConfigValueSet = !!that.generalSettings.cost_center_field_mapping;
+      if (that.isConfigValueSet) {
+        that.getCostCenterMappings();
+      }
+    });
   }
-
 }

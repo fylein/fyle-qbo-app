@@ -12,6 +12,7 @@ import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -27,10 +28,18 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     Ng2FlatpickrModule,
     CoreModule,
     SharedModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatSnackBarModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {
+        duration: 2500,
+        horizontalPosition: 'end',
+        verticalPosition: 'top'
+      }
+    },
     NgbActiveModal
   ],
   bootstrap: [AppComponent],

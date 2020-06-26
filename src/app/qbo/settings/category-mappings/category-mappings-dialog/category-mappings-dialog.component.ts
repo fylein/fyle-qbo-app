@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-category-mappings-dialog',
@@ -21,7 +22,9 @@ export class CategoryMappingsDialogComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               public dialogRef: MatDialogRef<CategoryMappingsDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              private mappingsService: MappingsService) { }
+              private mappingsService: MappingsService,
+              private snackBar: MatSnackBar
+              ) { }
 
   mappingDisplay(mappingObject) {
     return mappingObject ? mappingObject.value : '';
@@ -37,6 +40,7 @@ export class CategoryMappingsDialogComponent implements OnInit {
         source_value: that.form.controls.fyleCategory.value.value,
         destination_value: that.form.controls.qboAccount.value.value
       }).subscribe(response => {
+        that.snackBar.open('Mapping saved successfully!');
         that.isLoading = false;
         that.dialogRef.close();
       });

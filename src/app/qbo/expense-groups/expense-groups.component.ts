@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras, ActivationEnd } from '@angular/router';
 import { ExpenseGroupsService } from '../../core/services/expense-groups.service';
-import { ChecksService } from '../../core/services/checks.service';
-import { JournalEntriesService } from '../../core/services/journal-entries.service';
-import { CreditCardPurchasesService } from '../../core/services/credit-card-purchases.service';
-import { BillsService } from 'src/app/core/services/bills.service';
 import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
 import { MatTableDataSource } from '@angular/material/table';
+import { SettingsService } from 'src/app/core/services/settings.service';
 
 @Component({
   selector: 'app-expense-groups',
@@ -19,7 +16,6 @@ export class ExpenseGroupsComponent implements OnInit {
   isLoading = true;
   count: number;
   state: string;
-  generalSettings: any;
   pageNumber = 0;
   pageSize = 5;
   columnsToDisplay = ['description', 'employee', 'claimno', 'expensetype'];
@@ -83,9 +79,7 @@ export class ExpenseGroupsComponent implements OnInit {
     that.pageNumber = +that.route.snapshot.queryParams.page_number || 0;
     that.pageSize = +that.route.snapshot.queryParams.page_size || 5;
     that.state = that.route.snapshot.queryParams.state || 'FAILED';
-
     that.getPaginatedExpenseGroups();
-    that.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
 
     that.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {

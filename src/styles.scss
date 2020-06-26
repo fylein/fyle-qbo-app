@@ -70,3 +70,35 @@ body {
     background-color: transparent;
   }
 }
+
+.qbo {
+  &--menu {
+    &-icon {
+      color: #333;
+      margin: 4px;
+      &__active {
+        color: #333;
+      }
+    }
+
+    &-text {
+      color: #333;
+    }
+  }
+
+  &--title {
+    font-size: 14px;
+    color: #5a5d72;
+    &-fyle-org {
+      font-weight: 500;
+    }
+
+    &-separator {
+      margin: 8px;
+    }
+
+    &-qbo-org {
+      font-weight: 500;
+    }
+  }
+}

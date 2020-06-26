@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MappingsService } from '../../../core/services/mappings.service';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
+import { SettingsService } from 'src/app/core/services/settings.service';
 
 @Component({
   selector: 'app-general-mappings',
@@ -22,7 +23,7 @@ export class GeneralMappingsComponent implements OnInit {
   bankAccountIsValid = true;
   cccAccountIsValid = true;
 
-  constructor(private route: ActivatedRoute, private mappingsService: MappingsService, private formBuilder: FormBuilder, private router: Router) {
+  constructor(private route: ActivatedRoute, private mappingsService: MappingsService, private formBuilder: FormBuilder, private router: Router, private settingsService: SettingsService) {
   }
 
   submit() {
@@ -64,45 +65,56 @@ export class GeneralMappingsComponent implements OnInit {
   }
 
   getGeneralMappings() {
-    this.mappingsService.getGeneralMappings(this.workspaceId).subscribe(generalMappings => {
-      this.generalMappings = generalMappings;
-      this.isLoading = false;
+    let that = this;
+    that.isLoading = true;
+    that.mappingsService.getGeneralMappings(that.workspaceId).subscribe(generalMappings => {
+      that.generalMappings = generalMappings;
+      that.isLoading = false;
 
-      this.form = this.formBuilder.group({
-        accountPayableAccounts: [this.generalMappings ? this.generalMappings.accounts_payable_id : ''],
-        bankAccounts: [this.generalMappings ? this.generalMappings.bank_account_id : ''],
-        cccAccounts: [this.generalMappings ? this.generalMappings.default_ccc_account_id : '']
+      that.form = that.formBuilder.group({
+        accountPayableAccounts: [that.generalMappings ? that.generalMappings.accounts_payable_id : ''],
+        bankAccounts: [that.generalMappings ? that.generalMappings.bank_account_id : ''],
+        cccAccounts: [that.generalMappings ? that.generalMappings.default_ccc_account_id : '']
       });
     }, error => {
       if (error.status == 400) {
-        this.generalMappings = {};
-        this.isLoading = false;
-        this.form = this.formBuilder.group({
-          accountPayableAccounts: [this.generalMappings ? this.generalMappings.accounts_payable_id : ''],
-          bankAccounts: [this.generalMappings ? this.generalMappings.bank_account_id : ''],
-          cccAccounts: [this.generalMappings ? this.generalMappings.default_ccc_account_id : '']
+        that.generalMappings = {};
+        that.isLoading = false;
+        that.form = that.formBuilder.group({
+          accountPayableAccounts: [that.generalMappings ? that.generalMappings.accounts_payable_id : ''],
+          bankAccounts: [that.generalMappings ? that.generalMappings.bank_account_id : ''],
+          cccAccounts: [that.generalMappings ? that.generalMappings.default_ccc_account_id : '']
         });
       }
     });
   }
 
+  reset() {
+    let that = this;
+    that.isLoading = true;
+    forkJoin(
+      [
+        that.mappingsService.getBankAccounts(that.workspaceId),
+        that.mappingsService.getCreditCardAccounts(that.workspaceId),
+        that.mappingsService.getAccountsPayables(that.workspaceId)
+      ]
+    ).subscribe(responses => {
+      that.isLoading = false;
+      that.bankAccounts = responses[0];
+      that.cccAccounts = responses[1];
+      that.accountPayableAccounts = responses[2];
+      that.getGeneralMappings();
+    });
+  }
 
-    ngOnInit() {
-      this.route.parent.params.subscribe(params => {
-        this.workspaceId = +params.workspace_id;
-        this.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
-        forkJoin(
-          [
-            this.mappingsService.getBankAccounts(this.workspaceId),
-            this.mappingsService.getCreditCardAccounts(this.workspaceId),
-            this.mappingsService.getAccountsPayables(this.workspaceId)
-          ]
-        ).subscribe(responses => {
-          this.bankAccounts = responses[0];
-          this.cccAccounts = responses[1];
-          this.accountPayableAccounts = responses[2];
-          this.getGeneralMappings();
-        });
-      });
-    }
+  ngOnInit() {
+    let that = this;
+    that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
+    that.isLoading = true;
+    that.settingsService.getCombinedSettings(that.workspaceId).subscribe(settings => {
+      that.generalSettings = settings;
+      that.isLoading = false;
+      that.reset();
+    });
+  }
 }

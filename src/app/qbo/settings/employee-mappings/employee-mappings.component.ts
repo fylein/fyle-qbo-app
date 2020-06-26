@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MappingsService } from '../../../core/services/mappings.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EmployeeMappingsDialogComponent } from './employee-mappings-dialog/employee-mappings-dialog.component';
+import { SettingsService } from 'src/app/core/services/settings.service';
 
 @Component({
   selector: 'app-employee-mappings',
@@ -31,7 +32,8 @@ export class EmployeeMappingsComponent implements OnInit {
   constructor(public dialog: MatDialog,
               private route: ActivatedRoute,
               private mappingsService: MappingsService,
-              private router: Router) {
+              private router: Router,
+              private settingsService: SettingsService) {
   }
 
   open() {
@@ -60,25 +62,24 @@ export class EmployeeMappingsComponent implements OnInit {
   }
 
   createEmployeeMappingsRows() {
-    const employeeEVMappings = this.employeeMappings.filter(mapping => mapping.destination_type !== 'CREDIT_CARD_ACCOUNT');
+    const that = this;
+    const employeeEVMappings = that.employeeMappings.filter(mapping => mapping.destination_type !== 'CREDIT_CARD_ACCOUNT');
     const mappings = [];
 
     employeeEVMappings.forEach(employeeEVMapping => {
       mappings.push({
         fyle_value: employeeEVMapping.source.value,
         qbo_value: employeeEVMapping.destination.value,
-        ccc_account: this.employeeMappings
+        ccc_account: that.employeeMappings
           .filter(evMapping => evMapping.destination_type === 'CREDIT_CARD_ACCOUNT'
             && evMapping.source.value === employeeEVMapping.source.value)[0].destination.value
       });
     });
-    this.employeeMappings = mappings;
+    that.employeeMappings = mappings;
   }
 
-  ngOnInit() {
+  reset() {
     const that = this;
-    that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
-
     that.isLoading = true;
     that.mappingsService.getMappings(that.workspaceId, 'EMPLOYEE').subscribe((employees) => {
       that.employeeMappings = employees.results;
@@ -86,9 +87,19 @@ export class EmployeeMappingsComponent implements OnInit {
       that.isLoading = false;
     });
 
-    that.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
     if (that.generalSettings.corporate_credit_card_expenses_object) {
       that.columnsToDisplay.push('ccc');
     }
+  }
+
+  ngOnInit() {
+    const that = this;
+    that.isLoading = true;
+    that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
+    that.settingsService.getCombinedSettings(that.workspaceId).subscribe(settings => {
+      that.generalSettings = settings;
+      that.isLoading = false;
+      that.reset();
+    });
   }
 }

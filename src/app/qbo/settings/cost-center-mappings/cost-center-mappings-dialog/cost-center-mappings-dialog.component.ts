@@ -4,6 +4,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { forkJoin } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SettingsService } from 'src/app/core/services/settings.service';
 
 @Component({
   selector: 'app-cost-center-mappings-dialog',
@@ -22,7 +24,9 @@ export class CostCenterMappingsDialogComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               public dialogRef: MatDialogRef<CostCenterMappingsDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              private mappingsService: MappingsService) { }
+              private mappingsService: MappingsService,
+              private settingsService: SettingsService,
+              private snackBar: MatSnackBar) { }
 
   mappingDisplay(mappingObject) {
     return mappingObject ? mappingObject.value : '';
@@ -38,15 +42,15 @@ export class CostCenterMappingsDialogComponent implements OnInit {
         source_value: that.form.controls.fyleCostCenter.value.value,
         destination_value: that.form.controls.qboObject.value.value
       }).subscribe(response => {
+        that.snackBar.open('Mapping saved successfully!');
         that.isLoading = false;
         that.dialogRef.close();
       });
     }
   }
 
-  ngOnInit() {
+  reset() {
     const that = this;
-    that.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
 
     const getFyleCostCenters = that.mappingsService.getFyleCostCenters(that.data.workspaceId).toPromise().then(costCenters => {
       that.fyleCostCenters = costCenters;
@@ -81,18 +85,28 @@ export class CostCenterMappingsDialogComponent implements OnInit {
     });
 
     that.form.controls.fyleCostCenter.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-      if (typeof(newValue) === 'string') {
+      if (typeof (newValue) === 'string') {
         that.fyleCostCenterOptions = that.fyleCostCenters
-        .filter(fyleCostCenter => new RegExp(newValue.toLowerCase(), 'g').test(fyleCostCenter.value.toLowerCase()));
+          .filter(fyleCostCenter => new RegExp(newValue.toLowerCase(), 'g').test(fyleCostCenter.value.toLowerCase()));
       }
     });
 
 
     that.form.controls.qboObject.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-      if (typeof(newValue) === 'string') {
+      if (typeof (newValue) === 'string') {
         that.qboOptions = that.qboElements
-        .filter(qboElement => new RegExp(newValue.toLowerCase(), 'g').test(qboElement.value.toLowerCase()));
+          .filter(qboElement => new RegExp(newValue.toLowerCase(), 'g').test(qboElement.value.toLowerCase()));
       }
+    });
+  }
+
+  ngOnInit() {
+    const that = this;
+    that.isLoading = true;
+    that.settingsService.getCombinedSettings(that.data.workspaceId).subscribe((settings) => {
+      that.isLoading = false;
+      that.generalSettings = settings;
+      that.reset();
     });
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-schedule',
@@ -15,7 +16,7 @@ export class ScheduleComponent implements OnInit {
   minDate: Date = new Date();
   defaultDate: string;
   hours = [...Array(24).keys()];
-  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private route: ActivatedRoute) { }
+  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private route: ActivatedRoute, private snackBar: MatSnackBar) { }
 
   getSettings() {
     const that = this;
@@ -45,6 +46,7 @@ export class ScheduleComponent implements OnInit {
       that.isLoading = true;
       that.settingsService.postSettings(that.workspaceId, nextRun, hours, scheduleEnabled).subscribe(response => {
         that.isLoading = false;
+        that.snackBar.open('Scheduling saved!');
         that.getSettings();
       });
     }
@@ -64,9 +66,12 @@ export class ScheduleComponent implements OnInit {
       if (!newValue) {
         that.settingsService.postSettings(that.workspaceId, '', 0, false).subscribe(response => {
           that.isLoading = false;
+          that.snackBar.open('Scheduling turned off');
           that.getSettings();
         });
       }
+    }, err => {
+      that.snackBar.open('Something went wrong');
     });
 
     that.getSettings();

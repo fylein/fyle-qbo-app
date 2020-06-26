@@ -3,6 +3,7 @@ import { MappingsService } from '../../../core/services/mappings.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ProjectMappingsDialogComponent } from './project-mappings-dialog/project-mappings-dialog.component';
+import { SettingsService } from 'src/app/core/services/settings.service';
 
 @Component({
   selector: 'app-project-mappings',
@@ -14,9 +15,10 @@ export class ProjectMappingsComponent implements OnInit {
   workspaceId: number;
   projectMappings: any[];
   generalSettings: any;
+  isConfigValueSet = false;
   columnsToDisplay = ['projects', 'qbo'];
 
-  constructor(private mappingsService: MappingsService, private route: ActivatedRoute, public dialog: MatDialog) { }
+  constructor(private mappingsService: MappingsService, private route: ActivatedRoute, public dialog: MatDialog, private settingsService: SettingsService) { }
 
   open() {
     const that = this;
@@ -45,8 +47,15 @@ export class ProjectMappingsComponent implements OnInit {
   ngOnInit() {
     const that = this;
     that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
-    that.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
-    that.getCategoryMappings();
+    that.isLoading = true;
+    that.settingsService.getCombinedSettings(that.workspaceId).subscribe( settings => {
+      that.generalSettings = settings;
+      that.isLoading = false;
+      that.isConfigValueSet = !!that.generalSettings.project_field_mapping;
+      if (that.isConfigValueSet) {
+        that.getCategoryMappings();
+      }
+    });
   }
 
 }

@@ -51,4 +51,6 @@
     </div>
 </div>
 
-<app-loader *ngIf="isLoading"></app-loader>
+<div class="internal-loader" fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
+    <app-loader></app-loader>
+</div>

@@ -4,6 +4,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SettingsService } from 'src/app/core/services/settings.service';
 
 @Component({
   selector: 'app-project-mappings-dialog',
@@ -22,7 +24,9 @@ export class ProjectMappingsDialogComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               public dialogRef: MatDialogRef<ProjectMappingsDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              private mappingsService: MappingsService) { }
+              private mappingsService: MappingsService,
+              private settingsService: SettingsService,
+              private snackBar: MatSnackBar) { }
 
   mappingDisplay(mappingObject) {
     return mappingObject ? mappingObject.value : '';
@@ -38,16 +42,15 @@ export class ProjectMappingsDialogComponent implements OnInit {
         source_value: that.form.controls.fyleProject.value.value,
         destination_value: that.form.controls.qboObject.value.value
       }).subscribe(response => {
+        that.snackBar.open('Mapping saved successfully!');
         that.isLoading = false;
         that.dialogRef.close();
       });
     }
   }
 
-  ngOnInit() {
+  reset() {
     const that = this;
-    that.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
-
     const getFyleCateogories = that.mappingsService.getFyleProjects(that.data.workspaceId).toPromise().then(projects => {
       that.fyleProjects = projects;
     });
@@ -82,8 +85,7 @@ export class ProjectMappingsDialogComponent implements OnInit {
 
     that.form.controls.fyleProject.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
       if (typeof(newValue) === 'string') {
-        that.fyleProjectOptions = that.fyleProjects
-        .filter(fyleProject => new RegExp(newValue.toLowerCase(), 'g').test(fyleProject.value.toLowerCase()));
+        that.fyleProjectOptions = that.fyleProjects.filter(fyleProject => new RegExp(newValue.toLowerCase(), 'g').test(fyleProject.value.toLowerCase()));
       }
     });
 
@@ -93,6 +95,17 @@ export class ProjectMappingsDialogComponent implements OnInit {
         that.qboOptions = that.qboElements
         .filter(qboElement => new RegExp(newValue.toLowerCase(), 'g').test(qboElement.value.toLowerCase()));
       }
+    });
+  }
+
+  ngOnInit() {
+    const that = this;
+
+    that.isLoading = true;
+    that.settingsService.getCombinedSettings(that.data.workspaceId).subscribe( settings => {
+      that.generalSettings = settings;
+      that.isLoading = false;
+      that.reset();
     });
   }
 }

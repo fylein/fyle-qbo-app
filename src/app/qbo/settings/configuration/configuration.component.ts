@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-configuration',
@@ -22,7 +23,7 @@ export class ConfigurationComponent implements OnInit {
   projectFieldMapping: any;
   costCenterFieldMapping: any;
 
-  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) { }
 
   getExpenseOptions(employeeMappedTo) {
     return {
@@ -191,6 +192,7 @@ export class ConfigurationComponent implements OnInit {
         ]
       ).subscribe(responses => {
         that.isLoading = true;
+        that.snackBar.open('Configuration saved successfully');
         that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
       });
     } else {

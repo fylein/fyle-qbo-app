@@ -6,6 +6,7 @@ import { TasksService } from 'src/app/core/services/tasks.service';
 import { Task } from 'src/app/core/models/task.model';
 import { MappingsService } from '../../../core/services/mappings.service';
 import { concat } from 'rxjs/internal/observable/concat';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-sync',
@@ -22,16 +23,18 @@ export class SyncComponent implements OnInit {
   isEmployeesSyncing: boolean;
   errorOccurred = false;
 
-  constructor(private expenseGroupService: ExpenseGroupsService, private route: ActivatedRoute, private taskService: TasksService, private mappingService: MappingsService) { }
+  constructor(private expenseGroupService: ExpenseGroupsService, private route: ActivatedRoute, private taskService: TasksService, private mappingService: MappingsService, private snackBar: MatSnackBar) { }
 
   syncExpenses() {
     const that = this;
     that.isExpensesSyncing = true;
     that.expenseGroupService.syncExpenseGroups(that.workspaceId).subscribe((res) => {
       that.updateLastSyncStatus();
+      that.snackBar.open('Syncing Complete');
       that.isExpensesSyncing = false;
     }, (error) => {
       that.isExpensesSyncing = false;
+      that.snackBar.open('Syncing Failed');
       that.errorOccurred = true;
     });
   }
@@ -47,6 +50,7 @@ export class SyncComponent implements OnInit {
     });
   }
 
+  // to be callled in background whenever dashboard is opened
   updateDimensionTables() {
     const that = this;
     that.isEmployeesSyncing = true;

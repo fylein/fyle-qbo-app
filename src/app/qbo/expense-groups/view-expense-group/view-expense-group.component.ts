@@ -22,12 +22,12 @@ export class ViewExpenseGroupComponent implements OnInit {
   isLoading = true;
   expenseGroup: ExpenseGroup;
   task: any;
-  generalSettings: any;
   state: string;
   pageSize: number;
   pageNumber: number;
+  status:string;
 
-  constructor(private route: ActivatedRoute, private router: Router, private expenseGroupsService: ExpenseGroupsService, private tasksService: TasksService, private billsService: BillsService, private checksService: ChecksService, private JournalEntriesService: JournalEntriesService, private CreditCardPurchasesService: CreditCardPurchasesService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private expenseGroupsService: ExpenseGroupsService, private tasksService: TasksService) { }
 
   changeState(state: string) {
     const that = this;
@@ -60,7 +60,7 @@ export class ViewExpenseGroupComponent implements OnInit {
 
   initExpenseGroupDetails() {
     const that = this;
-    return that.expenseGroupsService.getExpensesGroupById(that.workspaceId, that.expenseGroupId).toPromise().then(function(expenseGroup) {
+    return that.expenseGroupsService.getExpensesGroupById(that.workspaceId, that.expenseGroupId).toPromise().then((expenseGroup) => {
       that.expenseGroup = expenseGroup;
       return expenseGroup;
     });
@@ -68,9 +68,11 @@ export class ViewExpenseGroupComponent implements OnInit {
 
   initTasks() {
     const that = this;
-    return that.tasksService.getTasksByExpenseGroupId(that.workspaceId, that.expenseGroupId).toPromise().then(function(tasks) {
+    return that.tasksService.getTasksByExpenseGroupId(that.workspaceId, that.expenseGroupId).toPromise().then((tasks) => {
       if (tasks.length) {
         that.task = tasks[0];
+        that.status = that.task.status;
+        console.log(that.status);
       }
     });
   }
@@ -78,7 +80,6 @@ export class ViewExpenseGroupComponent implements OnInit {
   ngOnInit() {
     this.workspaceId = +this.route.snapshot.params.workspace_id;
     this.expenseGroupId = +this.route.snapshot.params.expense_group_id;
-    this.generalSettings = JSON.parse(localStorage.getItem('generalSettings'));
     this.state = this.route.snapshot.firstChild.routeConfig.path.toUpperCase() || 'INFO';
 
     forkJoin(

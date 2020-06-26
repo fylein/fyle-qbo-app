@@ -2,45 +2,55 @@
   <mat-sidenav class="qbo-sidenav" mode="side" opened>
     <mat-nav-list>
       <header matSubheader class="qbo-sidenav--header">
-        <img alt="Fyle" src="../../assets/images/pngs/fyle-logo.png" class="qbo-sidenav--logo"/>
+        <img alt="Fyle" src="../../assets/images/pngs/fyle-logo.png" class="qbo-sidenav--logo" />
         <mat-icon>add</mat-icon>
         <img alt="qbo" src="../../../assets/images/pngs/qbo-logo.png" class="qbo-sidenav--logo">
       </header>
 
-      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/dashboard" routerLinkActive="active">
+      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/dashboard"
+        routerLinkActive="active">
         Dashboard
       </a>
 
-      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/sync_export/sync" routerLinkActive="active">
+      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/sync_export/sync"
+        routerLinkActive="active">
         Sync & Export
       </a>
 
-      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/expense_groups/" routerLinkActive="active">
+      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/expense_groups/"
+        routerLinkActive="active">
         Expense Groups
       </a>
 
       <a class="mat-h3 qbo-sidenav--nav-item" mat-list-item>
         Settings
       </a>
-      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/configurations/" routerLinkActive="active">
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/configurations/"
+        routerLinkActive="active">
         Configurations
       </a>
-      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/general_mappings/" routerLinkActive="active">
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/general_mappings/"
+        routerLinkActive="active">
         General Mappings
       </a>
-      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/employee_mappings/" routerLinkActive="active">
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item
+        routerLink="{{workspace.id}}/settings/employee_mappings/" routerLinkActive="active">
         Employee Mappings
       </a>
-      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/category_mappings/" routerLinkActive="active">
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item
+        routerLink="{{workspace.id}}/settings/category_mappings/" routerLinkActive="active">
         Category Mappings
       </a>
-      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/project_mappings/" routerLinkActive="active">
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/project_mappings/"
+        routerLinkActive="active">
         Project Mappings
       </a>
-      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/cost_center_mappings/" routerLinkActive="active">
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item
+        routerLink="{{workspace.id}}/settings/cost_center_mappings/" routerLinkActive="active">
         Cost Centre Mappings
       </a>
-      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/schedule/" routerLinkActive="active">
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/schedule/"
+        routerLinkActive="active">
         Schedule
       </a>
     </mat-nav-list>
@@ -48,42 +58,56 @@
 
   <mat-sidenav-content>
     <mat-toolbar fxLayoutAlign="space-between center">
-      <div fxLayout="row" fxLayoutAlign="space-around center">
+      <div class="qbo--title" fxLayout="row" fxLayoutAlign="space-around center">
         <div class="mat-small">
-          Fyle Org Name: {{user.org_name}}
+          Fyle Org Name:
+          <span class="qbo--title-fyle-org">
+            {{user.org_name}}
+          </span>
         </div>
-        <div class="mat-small" *ngIf="qboCompanyName">
+        <div class="mat-small qbo--title-separator" *ngIf="qboCompanyName">
           |
         </div>
         <div class="mat-small" *ngIf="qboCompanyName">
-          QBO Company Name: {{qboCompanyName}}
+          QBO Company Name:
+          <span class="qbo--title-qbo-org">
+            {{qboCompanyName}}
+          </span>
         </div>
       </div>
 
-      <mat-menu #appMenu="matMenu">
+      <mat-menu class="qbo--menu" #appMenu="matMenu" xPosition="before">
         <button type="button" mat-menu-item *ngIf="orgsCount > 0" (click)="switchWorkspace()">
           <div fxLayoutAlign="space-around center">
-            <strong>
-              <p class="signout-text">Switch Org</p>
+            <mat-icon class="qbo--menu-icon">
+              swap_horiz
+            </mat-icon>
+            <strong class="qbo--menu-text">
+              Switch Org
             </strong>
           </div>
         </button>
         <button type="button" mat-menu-item [routerLink]="['../auth/logout']">
           <div fxLayoutAlign="space-around center">
-            <strong>
-              <p class="signout-text">Signout</p>
+            <mat-icon class="qbo--menu-icon">
+              power_settings_new
+            </mat-icon>
+            <strong class="qbo--menu-text">
+              Signout
             </strong>
           </div>
         </button>
       </mat-menu>
 
-      <div [matMenuTriggerFor]="appMenu">
+      <div class="qbo--menu" [matMenuTriggerFor]="appMenu">
         <div fxLayoutAlign="space-around center">
-          <i class="material-icons user-icon">account_circle</i>
-          <div>
-            <strong class="user-name">{{user.full_name}}</strong>
-          </div>
-          <i class="material-icons arrow-down">keyboard_arrow_down</i>
+          <mat-icon class="qbo--menu-icon">
+            account_circle
+          </mat-icon>
+          <strong class="qbo--menu-text">{{user.full_name}}</strong>
+          <mat-icon class="qbo--menu-icon qbo--menu-icon__active">
+            keyboard_arrow_down
+          </mat-icon>
         </div>
       </div>
 

@@ -53,7 +53,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
   declarations: [
     QboComponent,

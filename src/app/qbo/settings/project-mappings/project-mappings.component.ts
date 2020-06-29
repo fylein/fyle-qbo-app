@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MappingsService } from '../../../core/services/mappings.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ProjectMappingsDialogComponent } from './project-mappings-dialog/project-mappings-dialog.component';
 import { SettingsService } from 'src/app/core/services/settings.service';
@@ -18,7 +18,7 @@ export class ProjectMappingsComponent implements OnInit {
   isConfigValueSet = false;
   columnsToDisplay = ['projects', 'qbo'];
 
-  constructor(private mappingsService: MappingsService, private route: ActivatedRoute, public dialog: MatDialog, private settingsService: SettingsService) { }
+  constructor(private mappingsService: MappingsService, private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private settingsService: SettingsService) { }
 
   open() {
     const that = this;
@@ -42,6 +42,10 @@ export class ProjectMappingsComponent implements OnInit {
       that.projectMappings = projectMappings.results;
       that.isLoading = false;
     });
+  }
+
+  goToCongurations() {
+    this.router.navigate([`/workspaces/${this.workspaceId}/settings/configurations/`]);
   }
 
   ngOnInit() {

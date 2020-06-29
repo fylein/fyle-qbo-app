@@ -64,7 +64,7 @@ export class ScheduleComponent implements OnInit {
 
     that.form.controls.scheduleEnabled.valueChanges.subscribe((newValue) => {
       if (!newValue) {
-        that.settingsService.postSettings(that.workspaceId, '', 0, false).subscribe(response => {
+        that.settingsService.postSettings(that.workspaceId, new Date().toISOString(), 0, false).subscribe(response => {
           that.isLoading = false;
           that.snackBar.open('Scheduling turned off');
           that.getSettings();

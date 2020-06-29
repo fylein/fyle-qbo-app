@@ -1,24 +1,24 @@
 <div *ngIf="!isLoading">
     <div *ngIf="isConfigValueSet">
-        <div class="page-header cateogry-mappings--header">
+        <div class="page-header cost-center-mappings--header">
             <div class="page-header--name mat-h2">
                 Cost Center Mappings
             </div>
         </div>
-        <div class="page-info" fxLayoutAlign="start center">
-            Your mappings for cost centers. Read more.
-        </div>
-        <div class="page-info" fxLayoutAlign="start center">
-            <button mat-flat-button color="primary" type="button" (click)="open()">
+        <div class="page-info">
+            <div fxLayout="row" fxLayoutAlign="start center" class="page-info--description">
+                Your mappings for cost centers. Read more <mat-icon>open_in_new</mat-icon>
+            </div>
+            <button class="page-info--primary-action" mat-flat-button color="primary" type="button" (click)="open()">
                 New Cost Center Mapping
             </button>
         </div>
 
-        <div class="mat-h2" *ngIf="!costCenterMappings.length">
-            <p>Looks like you don't have any cost center mappings</p>
+        <div *ngIf="!costCenterMappings.length && !isLoading">
+            <zero-state message="You have no cost center mappings yet"></zero-state>
         </div>
 
-        <div [hidden]="isLoading">
+        <div *ngIf="costCenterMappings.length" [hidden]="isLoading">
             <table mat-table [dataSource]="costCenterMappings" class="page-table" matSort matSortActive="created_at"
                 matSortDisableClear matSortDirection="desc">
                 <ng-container matColumnDef="costCenter">
@@ -43,13 +43,13 @@
         </div>
     </div>
     <div *ngIf="!isConfigValueSet">
-        <div class="page-header cateogry-mappings--header">
+        <div class="page-header cost-center-mappings--header">
             <div class="page-header--name mat-h2">
                 Cost Center Mappings
             </div>
         </div>
-        <div class="page-info" fxLayoutAlign="start center">
-            Please go to <a routerLink="../settings/configurations/">Configurations</a> and set the value for cost centers to create mappings. 
+        <div class="page-info" fxLayoutAlign="center center">
+            <zero-state message="Your cost centers arent enabled yet" link="Go to Configurations" (click)="goToCongurations()"></zero-state>
         </div>
     </div>
 </div>

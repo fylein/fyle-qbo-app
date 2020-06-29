@@ -26,7 +26,11 @@
     </mat-form-field>
 </div>
 
-<div [hidden]="isLoading">
+<div *ngIf="!count && !isLoading">
+    <zero-state message="You have no expense groups yet"></zero-state>
+</div>
+
+<div *ngIf="count" [hidden]="isLoading">
     <table mat-table [dataSource]="expenseGroups" class="page-table" matSort matSortActive="created_at"
         matSortDisableClear matSortDirection="desc">
         <ng-container matColumnDef="description">

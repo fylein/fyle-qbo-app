@@ -1,0 +1,13 @@
+.zero-state {
+    font-size: 14px;
+    min-height: 400px;
+    &--image {
+        max-height: 300px;
+    }
+
+    &--description {
+        font-size: 14px;
+        color: #5a5d72;
+        margin: 30px;
+    }
+}

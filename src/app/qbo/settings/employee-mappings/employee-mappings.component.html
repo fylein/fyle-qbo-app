@@ -4,20 +4,21 @@
             Employee Mappings
         </div>
     </div>
-    <div class="page-info" fxLayoutAlign="start center">
-        Please select Fyle fields to be mapped to Quickbooks online field. Read more.
-    </div>
-    <div class="page-info" fxLayoutAlign="start center">
-        <button mat-flat-button color="primary" type="button" (click)="open()">New Employee
-            Mapping
+    <div class="page-info">
+        <div fxLayout="row" fxLayoutAlign="start center" class="page-info--description">
+            Please select Fyle fields to be mapped to Quickbooks online field. Read more <mat-icon>open_in_new</mat-icon>
+        </div>
+        <button class="page-info--primary-action" mat-flat-button color="primary" type="button" (click)="open()">
+            New Employee Mapping
         </button>
     </div>
 
-    <div class="mat-h2" *ngIf="!employeeMappings.length">
-        <p>Looks like you don't have any employee mappings</p>
+
+    <div class="mat-h2" *ngIf="!employeeMappings.length && !isLoading">
+        <zero-state message="You have no employee mappings yet"></zero-state>
     </div>
 
-    <div [hidden]="isLoading">
+    <div *ngIf="employeeMappings.length" [hidden]="isLoading">
         <table mat-table [dataSource]="employeeMappings" class="page-table" matSort matSortActive="created_at"
             matSortDisableClear matSortDirection="desc">
             <ng-container matColumnDef="employee_email">

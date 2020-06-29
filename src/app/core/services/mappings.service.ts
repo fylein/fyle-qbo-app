@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, publishReplay, refCount } from 'rxjs/operators';
 import { GeneralService } from 'src/app/core/services/general.service';
+import { GeneralMapping } from '../models/generalMapping.model';
+import { MappingsResponse } from '../models/mappingsResponse.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,9 +29,9 @@ export class MappingsService {
 
   constructor(private generalService: GeneralService) {}
 
-  postFyleEmployees(workspace_id: number): Observable<any> {
+  postFyleEmployees(workspaceId: number): Observable<any> {
     if (!this.fyleEmployees) {
-      this.fyleEmployees = this.generalService.post(`/workspaces/${workspace_id}/fyle/employees/`, {}).pipe(
+      this.fyleEmployees = this.generalService.post(`/workspaces/${workspaceId}/fyle/employees/`, {}).pipe(
         map(data => data),
         publishReplay(1),
         refCount()
@@ -38,9 +40,9 @@ export class MappingsService {
     return this.fyleEmployees;
   }
 
-  postFyleCategories(workspace_id: number): Observable<any> {
+  postFyleCategories(workspaceId: number): Observable<any> {
     if (!this.fyleCategories) {
-      this.fyleCategories = this.generalService.post(`/workspaces/${workspace_id}/fyle/categories/`, {}).pipe(
+      this.fyleCategories = this.generalService.post(`/workspaces/${workspaceId}/fyle/categories/`, {}).pipe(
         map(data => data),
         publishReplay(1),
         refCount()
@@ -49,9 +51,9 @@ export class MappingsService {
     return this.fyleCategories;
   }
 
-  postFyleProjects(workspace_id: number): Observable<any> {
+  postFyleProjects(workspaceId: number): Observable<any> {
     if (!this.fyleProjects) {
-      this.fyleProjects = this.generalService.post(`/workspaces/${workspace_id}/fyle/projects/`, {}).pipe(
+      this.fyleProjects = this.generalService.post(`/workspaces/${workspaceId}/fyle/projects/`, {}).pipe(
         map(data => data),
         publishReplay(1),
         refCount()
@@ -60,9 +62,9 @@ export class MappingsService {
     return this.fyleProjects;
   }
 
-  postFyleCostCenters(workspace_id: number): Observable<any> {
+  postFyleCostCenters(workspaceId: number): Observable<any> {
     if (!this.fyleCostCenters) {
-      this.fyleCostCenters = this.generalService.post(`/workspaces/${workspace_id}/fyle/cost_centers/`, {}).pipe(
+      this.fyleCostCenters = this.generalService.post(`/workspaces/${workspaceId}/fyle/cost_centers/`, {}).pipe(
         map(data => data),
         publishReplay(1),
         refCount()
@@ -71,9 +73,9 @@ export class MappingsService {
     return this.fyleCostCenters;
   }
 
-  postQBOVendors(workspace_id: number): Observable<any> {
+  postQBOVendors(workspaceId: number): Observable<any> {
     if (!this.qboVendors) {
-      this.qboVendors = this.generalService.post(`/workspaces/${workspace_id}/qbo/vendors/`, {}).pipe(
+      this.qboVendors = this.generalService.post(`/workspaces/${workspaceId}/qbo/vendors/`, {}).pipe(
         map(data => data),
         publishReplay(1),
         refCount()
@@ -82,9 +84,9 @@ export class MappingsService {
     return this.qboVendors;
   }
 
-  postQBOEmployees(workspace_id: number): Observable<any> {
+  postQBOEmployees(workspaceId: number): Observable<any> {
     if (!this.qboEmployees) {
-      this.qboEmployees = this.generalService.post(`/workspaces/${workspace_id}/qbo/employees/`, {}).pipe(
+      this.qboEmployees = this.generalService.post(`/workspaces/${workspaceId}/qbo/employees/`, {}).pipe(
         map(data => data),
         publishReplay(1),
         refCount()
@@ -94,9 +96,9 @@ export class MappingsService {
   }
 
 
-  postQBOCustomers(workspace_id: number): Observable<any> {
+  postQBOCustomers(workspaceId: number): Observable<any> {
     if (!this.qboCustomers) {
-      this.qboCustomers = this.generalService.post(`/workspaces/${workspace_id}/qbo/customers/`, {}).pipe(
+      this.qboCustomers = this.generalService.post(`/workspaces/${workspaceId}/qbo/customers/`, {}).pipe(
         map(data => data),
         publishReplay(1),
         refCount()
@@ -105,10 +107,10 @@ export class MappingsService {
     return this.qboCustomers;
   }
 
-  postExpenseAccounts(workspace_id: number): Observable<any> {
+  postExpenseAccounts(workspaceId: number): Observable<any> {
     if (!this.qboAccounts) {
       this.qboAccounts = this.generalService.post(
-        `/workspaces/${workspace_id}/qbo/accounts/`, {}
+        `/workspaces/${workspaceId}/qbo/accounts/`, {}
       ).pipe(
         map(data => data),
         publishReplay(1),
@@ -118,10 +120,10 @@ export class MappingsService {
     return this.qboAccounts;
   }
 
-  postBankAccounts(workspace_id: number): Observable<any> {
+  postBankAccounts(workspaceId: number): Observable<any> {
     if (!this.bankAccounts) {
       this.bankAccounts = this.generalService.post(
-        `/workspaces/${workspace_id}/qbo/bank_accounts/`, {}
+        `/workspaces/${workspaceId}/qbo/bank_accounts/`, {}
       ).pipe(
         map(data => data),
         publishReplay(1),
@@ -131,10 +133,10 @@ export class MappingsService {
     return this.bankAccounts;
   }
 
-  postAccountsPayables(workspace_id: number): Observable<any> {
+  postAccountsPayables(workspaceId: number): Observable<any> {
     if (!this.accountPayables) {
       this.accountPayables = this.generalService.post(
-        `/workspaces/${workspace_id}/qbo/accounts_payables/`, {}
+        `/workspaces/${workspaceId}/qbo/accounts_payables/`, {}
       ).pipe(
         map(data => data),
         publishReplay(1),
@@ -144,10 +146,10 @@ export class MappingsService {
     return this.accountPayables;
   }
 
-  postCreditCardAccounts(workspace_id: number): Observable<any> {
+  postCreditCardAccounts(workspaceId: number): Observable<any> {
     if (!this.creditCardAccounts) {
       this.creditCardAccounts = this.generalService.post(
-        `/workspaces/${workspace_id}/qbo/credit_card_accounts/`, {}
+        `/workspaces/${workspaceId}/qbo/credit_card_accounts/`, {}
       ).pipe(
         map(data => data),
         publishReplay(1),
@@ -157,9 +159,9 @@ export class MappingsService {
     return this.creditCardAccounts;
   }
 
-  postQBOClasses(workspace_id: number): Observable<any> {
+  postQBOClasses(workspaceId: number): Observable<any> {
     if (!this.qboClasses) {
-      this.qboClasses = this.generalService.post(`/workspaces/${workspace_id}/qbo/classes/`, {}).pipe(
+      this.qboClasses = this.generalService.post(`/workspaces/${workspaceId}/qbo/classes/`, {}).pipe(
         map(data => data),
         publishReplay(1),
         refCount()
@@ -168,9 +170,9 @@ export class MappingsService {
     return this.qboClasses;
   }
 
-  postQBODepartments(workspace_id: number): Observable<any> {
+  postQBODepartments(workspaceId: number): Observable<any> {
     if (!this.qboDepartments) {
-      this.qboDepartments = this.generalService.post(`/workspaces/${workspace_id}/qbo/departments/`, {}).pipe(
+      this.qboDepartments = this.generalService.post(`/workspaces/${workspaceId}/qbo/departments/`, {}).pipe(
         map(data => data),
         publishReplay(1),
         refCount()
@@ -179,63 +181,63 @@ export class MappingsService {
     return this.qboDepartments;
   }
 
-  getFyleEmployees(workspace_id: number): Observable<any> {
-    return this.generalService.get(`/workspaces/${workspace_id}/fyle/employees/`, {});
+  getFyleEmployees(workspaceId: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspaceId}/fyle/employees/`, {});
   }
 
-  getFyleCategories(workspace_id: number): Observable<any> {
-    return this.generalService.get(`/workspaces/${workspace_id}/fyle/categories/`, {});
+  getFyleCategories(workspaceId: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspaceId}/fyle/categories/`, {});
   }
 
-  getQBOVendors(workspace_id: number): Observable<any> {
-    return this.generalService.get(`/workspaces/${workspace_id}/qbo/vendors/`, {});
+  getQBOVendors(workspaceId: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspaceId}/qbo/vendors/`, {});
   }
 
-  getQBOEmployees(workspace_id: number): Observable<any> {
-    return this.generalService.get(`/workspaces/${workspace_id}/qbo/employees/`, {});
+  getQBOEmployees(workspaceId: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspaceId}/qbo/employees/`, {});
   }
 
-  getQBOCustomers(workspace_id: number): Observable<any> {
-    return this.generalService.get(`/workspaces/${workspace_id}/qbo/customers/`, {});
+  getQBOCustomers(workspaceId: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspaceId}/qbo/customers/`, {});
   }
 
-  getFyleProjects(workspace_id: number): Observable<any> {
-    return this.generalService.get(`/workspaces/${workspace_id}/fyle/projects/`, {});
+  getFyleProjects(workspaceId: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspaceId}/fyle/projects/`, {});
   }
 
-  getQBOClasses(workspace_id: number): Observable<any> {
-    return this.generalService.get(`/workspaces/${workspace_id}/qbo/classes/`, {});
+  getQBOClasses(workspaceId: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspaceId}/qbo/classes/`, {});
   }
 
-  getQBODepartments(workspace_id: number): Observable<any> {
-    return this.generalService.get(`/workspaces/${workspace_id}/qbo/departments/`, {});
+  getQBODepartments(workspaceId: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspaceId}/qbo/departments/`, {});
   }
 
-  getFyleCostCenters(workspace_id: number): Observable<any> {
-      return this.generalService.get(`/workspaces/${workspace_id}/fyle/cost_centers/`, {});
+  getFyleCostCenters(workspaceId: number): Observable<any> {
+      return this.generalService.get(`/workspaces/${workspaceId}/fyle/cost_centers/`, {});
   }
 
-  getExpenseAccounts(workspace_id: number): Observable<any> {
+  getExpenseAccounts(workspaceId: number): Observable<any> {
     return this.generalService.get(
-      `/workspaces/${workspace_id}/qbo/accounts/`, {}
+      `/workspaces/${workspaceId}/qbo/accounts/`, {}
     );
   }
 
-  getBankAccounts(workspace_id: number): Observable<any> {
+  getBankAccounts(workspaceId: number): Observable<any> {
     return this.generalService.get(
-      `/workspaces/${workspace_id}/qbo/bank_accounts/`, {}
+      `/workspaces/${workspaceId}/qbo/bank_accounts/`, {}
     );
   }
 
-  getAccountsPayables(workspace_id: number): Observable<any> {
+  getAccountsPayables(workspaceId: number): Observable<any> {
     return this.generalService.get(
-      `/workspaces/${workspace_id}/qbo/accounts_payables/`, {}
+      `/workspaces/${workspaceId}/qbo/accounts_payables/`, {}
     );
   }
 
-  getCreditCardAccounts(workspace_id: number): Observable<any> {
+  getCreditCardAccounts(workspaceId: number): Observable<any> {
     return this.generalService.get(
-      `/workspaces/${workspace_id}/qbo/credit_card_accounts/`, {}
+      `/workspaces/${workspaceId}/qbo/credit_card_accounts/`, {}
     );
   }
 
@@ -253,25 +255,25 @@ export class MappingsService {
     );
   }
 
-  getGeneralMappings(workspace_id: number): Observable<any> {
+  getGeneralMappings(workspaceId: number): Observable<GeneralMapping> {
     return this.generalService.get(
-      `/workspaces/${workspace_id}/mappings/general/`, {}
+      `/workspaces/${workspaceId}/mappings/general/`, {}
     );
   }
 
-  getMappings(workspace_id: number, source_type): Observable<any> {
+  getMappings(workspaceId: number, sourceType): Observable<MappingsResponse> {
     return this.generalService.get(
-      `/workspaces/${workspace_id}/mappings/?source_type=${source_type}`, {}
+      `/workspaces/${workspaceId}/mappings/?source_type=${sourceType}`, {}
     );
   }
 
-  postMappings(workspace_id: number, mapping: any) {
-    return this.generalService.post(`/workspaces/${workspace_id}/mappings/`, mapping);
+  postMappings(workspaceId: number, mapping: any) {
+    return this.generalService.post(`/workspaces/${workspaceId}/mappings/`, mapping);
   }
 
-  getCategoryMappings(workspace_id: number): Observable<any> {
+  getCategoryMappings(workspaceId: number): Observable<any> {
     return this.generalService.get(
-      `/workspaces/${workspace_id}/mappings/categories/`, {}
+      `/workspaces/${workspaceId}/mappings/categories/`, {}
     );
   }
 
@@ -288,9 +290,9 @@ export class MappingsService {
     );
   }
 
-  getEmployeeMappings(workspace_id: number): Observable<any> {
+  getEmployeeMappings(workspaceId: number): Observable<any> {
     return this.generalService.get(
-      `/workspaces/${workspace_id}/mappings/employees/`, {}
+      `/workspaces/${workspaceId}/mappings/employees/`, {}
     );
   }
 
@@ -311,9 +313,9 @@ export class MappingsService {
     );
   }
 
-  getProjectMappings(workspace_id: number): Observable<any> {
+  getProjectMappings(workspaceId: number): Observable<any> {
     return this.generalService.get(
-      `/workspaces/${workspace_id}/mappings/projects/`, {}
+      `/workspaces/${workspaceId}/mappings/projects/`, {}
     );
   }
 
@@ -329,9 +331,9 @@ export class MappingsService {
     );
   }
 
-  getCostCenterMappings(workspace_id: number): Observable<any> {
+  getCostCenterMappings(workspaceId: number): Observable<any> {
     return this.generalService.get(
-      `/workspaces/${workspace_id}/mappings/cost_centers/`, {}
+      `/workspaces/${workspaceId}/mappings/cost_centers/`, {}
     );
   }
 

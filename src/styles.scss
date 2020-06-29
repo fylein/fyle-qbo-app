@@ -101,4 +101,11 @@ body {
       font-weight: 500;
     }
   }
+
+  .simple-search {
+    &>.mat-form-field-wrapper {
+      padding: 0;
+    }
+  }
+  
 }

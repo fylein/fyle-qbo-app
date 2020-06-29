@@ -5,10 +5,10 @@
 <div *ngIf="!isLoading">
     <div class="page-info" fxLayoutAlign="space-between center">
         <div fxLayout="column" fxLayoutAlign="space-around start">
-            <div>
+            <div class="page-info--sub-header">
                 Expenses Grouped By {{expenseGroupId}}
             </div>
-            <div>
+            <div class="page-info--created-by">
                 {{expenseGroup.description.employee_email}}
             </div>
         </div>
@@ -24,9 +24,7 @@
     </div>
     <div>
         <div [hidden]="isLoading">
-            <table mat-table [dataSource]="expenses" class="page-table" matSort matSortActive="created_at"
-                matSortDisableClear matSortDirection="desc">
-                
+            <table mat-table [dataSource]="expenses" class="page-table">
                 <ng-container matColumnDef="expense_id">
                     <th mat-header-cell *matHeaderCellDef> Expense Id </th>
                     <td mat-cell *matCellDef="let element">

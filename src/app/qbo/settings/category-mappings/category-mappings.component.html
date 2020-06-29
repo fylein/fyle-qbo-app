@@ -4,20 +4,20 @@
             Category Mappings
         </div>
     </div>
-    <div class="page-info" fxLayoutAlign="start center">
-        Your mappings for cateogry. Read more.
-    </div>
-    <div class="page-info" fxLayoutAlign="start center">
-        <button mat-flat-button color="primary" type="button" (click)="open()">
+    <div class="page-info">
+        <div fxLayout="row" fxLayoutAlign="start center" class="page-info--description">
+            Your mappings for category. Read more <mat-icon>open_in_new</mat-icon>
+        </div>
+        <button class="page-info--primary-action" mat-flat-button color="primary" type="button" (click)="open()">
             New Category Mapping
         </button>
     </div>
 
-    <div class="mat-h2" *ngIf="!categoryMappings.length">
-        <p>Looks like you don't have any category mappings</p>
+    <div *ngIf="!categoryMappings.length && !isLoading">
+        <zero-state message="You have no category mappings yet"></zero-state>
     </div>
 
-    <div [hidden]="isLoading">
+    <div *ngIf="categoryMappings.length" [hidden]="isLoading">
         <table mat-table [dataSource]="categoryMappings" class="page-table" matSort matSortActive="created_at"
             matSortDisableClear matSortDirection="desc">
             <ng-container matColumnDef="category">

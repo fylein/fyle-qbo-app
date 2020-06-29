@@ -58,6 +58,11 @@
   .mat-drawer-content {
     background-color: var(--fy-background);
   }
+
+  .qbo-table {
+    background: yellow;
+  }
+
 }
 
 .page-header {
@@ -70,18 +75,37 @@
 
 .page-table {
   width: 100%;
+  border-top: 1px solid #dfe3e8;
+  border-bottom: 1px solid #dfe3e8;
   .mat-row:nth-child(odd) {
     background-color: var(--fy-alt-row);
-    margin: 12px
-
+    margin: 12px;
   }
   .mat-cell {
     border: 0;
+    font-size: 14px;
+  }
+
+  .mat-header-cell {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1c2024;
   }
 }
 
 .page-info {
-  margin: 8px 24px
+  margin: 16px 24px;
+  &--description {
+    color: #414562;
+    margin: 12px 0;
+  }
+
+  &--primary-action {
+    font-size: 14px;
+    min-width: 200px;
+    margin: 8px 0;
+    font-weight: normal;
+  }
 }
 
 .internal-loader {

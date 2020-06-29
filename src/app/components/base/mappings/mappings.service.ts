@@ -22,10 +22,9 @@ export class MappingsService {
 
   netsuiteClasses: Observable<any[]>;
 
-  netsuiteSubsidiaries: Observable<any[]>;
+  generalMappings: Observable<any[]>;
 
-  nsSubs: Observable<any[]>;
-
+  accountPayables: Observable<any[]>;
 
   constructor(private generalService: GeneralService) {}
 
@@ -98,6 +97,20 @@ export class MappingsService {
     return this.netsuiteAccounts;
   }
 
+  postAccountsPayables(workspace_id: number): Observable<any> {
+    if (!this.accountPayables) {
+      this.accountPayables = this.generalService.post(
+        `/workspaces/${workspace_id}/netsuite/accounts_payables/`, {}
+      ).pipe(
+        map(data => data),
+        publishReplay(1),
+        refCount()
+      );
+    }
+    return this.accountPayables;
+  }
+
+
   postNetSuiteLocations(workspace_id: number): Observable<any> {
     if (!this.netsuiteLocations) {
       this.netsuiteLocations = this.generalService.post(`/workspaces/${workspace_id}/netsuite/locations/`, {}).pipe(
@@ -131,33 +144,14 @@ export class MappingsService {
     return this.netsuiteClasses;
   }
 
-  postNetSuiteSubsidiaries(workspace_id: number): Observable<any> {
-    if (!this.nsSubs) {
-      this.nsSubs = this.generalService.post(`/workspaces/${workspace_id}/netsuite/subsidiaries/`, {}).pipe(
-        map(data => data),
-        publishReplay(1),
-        refCount()
-      );
-    }
-    return this.nsSubs;
-  }
-
-  postSubsidiaryMappings(workspace_id: number, internal_id: string, subsidiary_name: string): Observable<any> {
-    this.netsuiteSubsidiaries = null;
+  postGeneralMappings(workspace_id: number, location_name: string, location_id: string, accounts_payable_name: string, accounts_payable_id: string): Observable<any> {
+    this.generalMappings = null;
     return this.generalService.post(
-      `/workspaces/${workspace_id}/mappings/subsidiaries/`, {
-        subsidiary_name: subsidiary_name,
-        internal_id: internal_id
-      }
-    );
-  }
-
-  postLocationMappings(workspace_id: number, internal_id: string, location_name: string): Observable<any> {
-    this.netsuiteSubsidiaries = null;
-    return this.generalService.post(
-      `/workspaces/${workspace_id}/mappings/locations/`, {
+      `/workspaces/${workspace_id}/mappings/general/`, {
         location_name: location_name,
-        internal_id: internal_id
+        location_id: location_id,
+        accounts_payable_name: accounts_payable_name,
+        accounts_payable_id: accounts_payable_id
       }
     );
   }
@@ -190,10 +184,6 @@ export class MappingsService {
     return this.generalService.get(`/workspaces/${workspace_id}/netsuite/departments/`, {});
   }
 
-  getNetSuiteSubsidiaries(workspace_id: number): Observable<any> {
-    return this.generalService.get(`/workspaces/${workspace_id}/netsuite/subsidiaries/`, {});
-  }
-
   getFyleCostCenters(workspace_id: number): Observable<any> {
       return this.generalService.get(`/workspaces/${workspace_id}/fyle/cost_centers/`, {});
   }
@@ -201,6 +191,12 @@ export class MappingsService {
   getExpenseAccounts(workspace_id: number): Observable<any> {
     return this.generalService.get(
       `/workspaces/${workspace_id}/netsuite/accounts/`, {}
+    );
+  }
+
+  getAccountsPayables(workspace_id: number): Observable<any> {
+    return this.generalService.get(
+      `/workspaces/${workspace_id}/netsuite/accounts_payables/`, {}
     );
   }
 
@@ -214,15 +210,9 @@ export class MappingsService {
     return this.generalService.post(`/workspaces/${workspace_id}/mappings/`, mapping);
   }
 
-  getSubsidiaryMappings(workspace_id: number): Observable<any> {
+  getGeneralMappings(workspace_id: number): Observable<any> {
     return this.generalService.get(
-      `/workspaces/${workspace_id}/mappings/subsidiaries/`, {}
-    );
-  }
-
-  getLocationMappings(workspace_id: number): Observable<any> {
-    return this.generalService.get(
-      `/workspaces/${workspace_id}/mappings/locations/`, {}
+      `/workspaces/${workspace_id}/mappings/general/`, {}
     );
   }
 }

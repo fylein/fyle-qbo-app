@@ -24,6 +24,7 @@ import { ProjectComponent } from './components/base/mappings/project/project.com
 import { CostCenterComponent } from './components/base/mappings/cost-center/cost-center.component';
 import { SubsidiaryComponent } from './components/base/mappings/subsidiary/subsidiary.component';
 import { LocationComponent } from './components/base/mappings/location/location.component';
+import { GeneralComponent } from './components/base/mappings/general/general.component';
 
 const authRoutes: Routes = [
   {
@@ -78,6 +79,7 @@ const baseModuleRoutes: Routes = [
         component: MappingsComponent,
         canActivate: [WorkspacesGuard],
         children: [
+          { path: 'general', component: GeneralComponent },
           { path: 'subsidiaries', component: SubsidiaryComponent },
           { path: 'locations', component: LocationComponent },
           { path: 'categories', component: CategoryComponent },

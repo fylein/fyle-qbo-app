@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MappingsService } from './mappings.service';
-import { concat } from 'rxjs';
+import { concat, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-mappings',
@@ -20,7 +20,7 @@ export class MappingsComponent implements OnInit {
 
   updateDimensionTables(workspaceId: number) {
     concat(
-        this.mappingService.postNetSuiteSubsidiaries(workspaceId),
+        this.mappingService.postAccountsPayables(workspaceId),
         this.mappingService.postExpenseAccounts(workspaceId),
         this.mappingService.postNetSuiteVendors(workspaceId),
         this.mappingService.postNetSuiteLocations(workspaceId),

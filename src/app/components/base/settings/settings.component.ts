@@ -19,11 +19,13 @@ export class SettingsComponent implements OnInit {
   showModal = false;
   fyleConnected: boolean;
   netsuiteConnected: boolean;
+  invalidLogin: boolean;
   isLoading = true;
   state: string = 'source';
   source: string = 'active';
   destination: string;
   settings: string;
+  subsidiary: string;
   workspaceId: number;
   form: FormGroup;
   error: string;
@@ -42,6 +44,10 @@ export class SettingsComponent implements OnInit {
   employeeFieldOptions: any[];
   projectFieldOptions: any[];
   costCenterFieldOptions: any[];
+  netsuiteSubsidiaries: any[];
+  subsidiaryMappings: any;
+  subsidiaryForm: FormGroup;
+  subsidiaryIsValid: boolean = true;
 
   constructor(private modalService: NgbModal, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
@@ -106,17 +112,21 @@ export class SettingsComponent implements OnInit {
       this.source = 'active';
       this.destination = '';
       this.settings = '';
+      this.subsidiary= '';
     } else if (this.state === 'destination') {
       this.source = '';
       this.destination = 'active';
       this.settings = '';
-    } else if (this.state === 'schedule') {
+      this.subsidiary= '';
+    } else if (this.state === 'subsidiary') {
       this.source = '';
       this.destination = '';
       this.settings = '';
+      this.subsidiary= 'active';
     } else if (this.state === 'settings') {
       this.source = '';
       this.destination = '';
+      this.subsidiary= '';
       this.settings = 'active';
     }
   }
@@ -157,15 +167,20 @@ export class SettingsComponent implements OnInit {
 
     if (this.nsAccountIdIsValid && this.nsConsumerKeyIsValid && this.nsConsumerSecretIsValid && this.nsTokenIdIsValid && this.nsTokenSecretIsValid) {
       this.isLoading = true;
-      this.netsuiteConnected = true;
+      this.netsuiteConnected = false;
       this.settingsService.connectNetSuite(this.workspaceId, accountId, consumerKey, consumerSecret, tokenId, tokenSecret).subscribe(credentials => {
         if (credentials) {
+          this.settingsService.postNetSuiteSubsidiaries(this.workspaceId).subscribe(response => {
+            this.netsuiteSubsidiaries = response
+          });
           this.netsuiteConnected = true;
           this.isLoading = false;
         }
       }, error => {
         if (error.status == 400) {
           this.isLoading = false;
+          this.invalidLogin = true;
+          this.netsuiteConnected = false
       }
     });
     }
@@ -314,6 +329,46 @@ export class SettingsComponent implements OnInit {
     this.showModal = !this.showModal;
   }
 
+  submitSubsidiary() {
+    this.subsidiaryIsValid = false;
+
+    let subsidiaryId = this.subsidiaryForm.value.netsuiteSubsidiaries;
+    let netsuiteSubsidiary = this.netsuiteSubsidiaries.filter(filteredSubsidiary => filteredSubsidiary.destination_id === subsidiaryId)[0];
+
+    if (subsidiaryId != null) {
+      this.subsidiaryIsValid = true;
+    }
+
+
+    if(this.subsidiaryIsValid){
+      this.settingsService.postSubsidiaryMappings(this.workspaceId, netsuiteSubsidiary.destination_id, netsuiteSubsidiary.value,).subscribe(response => {
+        this.closeModal();
+        window.location.href= `/workspaces/${this.workspaceId}/expense_groups`;
+      });
+    }
+  }
+
+  getSubsidiaryMappings() {
+    this.settingsService.getSubsidiaryMappings(this.workspaceId).subscribe(subsidiaryMappings => {
+      this.subsidiaryMappings = subsidiaryMappings;
+      this.isLoading = false;
+      this.subsidiaryForm = this.formBuilder.group({
+        netsuiteSubsidiaries: [this.subsidiaryMappings? this.subsidiaryMappings.internal_id: ''],
+      });
+      if (subsidiaryMappings) {
+        this.subsidiaryForm.disable();
+      }
+    }, error => {
+      if(error.status == 400) {
+        this.subsidiaryMappings = {};
+        this.isLoading = false;
+        this.subsidiaryForm = this.formBuilder.group({
+          netsuiteSubsidiaries: [this.subsidiaryMappings? this.subsidiaryMappings.internal_id: '']
+        });
+      }
+    });
+  }
+
   ngOnInit() {
     this.employeeFieldOptions = [
       { name: 'VENDOR' }
@@ -334,6 +389,7 @@ export class SettingsComponent implements OnInit {
       this.route.queryParams.subscribe(queryParams => {
         this.getSource();
         this.getDestination();
+        this.getSubsidiaryMappings();
         if (queryParams.state) {
           this.toggleState(queryParams.state);
           this.error = queryParams.error;
@@ -344,6 +400,9 @@ export class SettingsComponent implements OnInit {
       });
       this.getAllSettings();
     });
-
+    this.settingsService.getNetSuiteSubsidiaries(this.workspaceId).subscribe(response => {
+      this.netsuiteSubsidiaries = response
+      this.isLoading = false;
+    });
   }
 }

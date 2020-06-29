@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GeneralService } from '../general.service';
+import { map, publishReplay, refCount } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SettingsService {
+
+  netsuiteSubsidiaries: Observable<any[]>;
+  nsSubs: Observable<any[]>;
+  
   constructor(private generalService: GeneralService) { }
 
   getFyleCredentials(workspace_id: number): Observable<any> {
@@ -40,7 +45,36 @@ export class SettingsService {
     return this.generalService.get(`/workspaces/${workspace_id}/mappings/settings/`, {});
   }
 
+  getSubsidiaryMappings(workspace_id: number) {
+    return this.generalService.get(`/workspaces/${workspace_id}/mappings/subsidiaries/`, {});
+  }
+
+  getNetSuiteSubsidiaries(workspace_id: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspace_id}/netsuite/subsidiaries/`, {});
+  }
+
   postMappingSettings(workspace_id: number, mappingSettings: any) {
     return this.generalService.post(`/workspaces/${workspace_id}/mappings/settings/`, mappingSettings);
+  }
+
+  postNetSuiteSubsidiaries(workspace_id: number): Observable<any> {
+    if (!this.nsSubs) {
+      this.nsSubs = this.generalService.post(`/workspaces/${workspace_id}/netsuite/subsidiaries/`, {}).pipe(
+        map(data => data),
+        publishReplay(1),
+        refCount()
+      );
+    }
+    return this.nsSubs;
+  }
+
+  postSubsidiaryMappings(workspace_id: number, internal_id: string, subsidiary_name: string): Observable<any> {
+    this.netsuiteSubsidiaries = null;
+    return this.generalService.post(
+      `/workspaces/${workspace_id}/mappings/subsidiaries/`, {
+        subsidiary_name: subsidiary_name,
+        internal_id: internal_id
+      }
+    );
   }
 }

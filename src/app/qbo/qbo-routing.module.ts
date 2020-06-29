@@ -73,7 +73,6 @@ const routes: Routes = [{
     {
       path: ':workspace_id/settings',
       component: SettingsComponent,
-      // canActivate: [WorkspacesGuard],
       children: [
         {
           path: 'configurations',
@@ -81,27 +80,33 @@ const routes: Routes = [{
         },
         {
           path: 'general_mappings',
-          component: GeneralMappingsComponent
+          component: GeneralMappingsComponent,
+          canActivate: [WorkspacesGuard]
         },
         {
           path: 'employee_mappings',
-          component: EmployeeMappingsComponent
+          component: EmployeeMappingsComponent,
+          canActivate: [WorkspacesGuard]
         },
         {
           path: 'category_mappings',
-          component: CategoryMappingsComponent
+          component: CategoryMappingsComponent,
+          canActivate: [WorkspacesGuard]
         },
         {
           path: 'project_mappings',
-          component: ProjectMappingsComponent
+          component: ProjectMappingsComponent,
+          canActivate: [WorkspacesGuard]
         },
         {
           path: 'cost_center_mappings',
-          component: CostCenterMappingsComponent
+          component: CostCenterMappingsComponent,
+          canActivate: [WorkspacesGuard]
         },
         {
           path: 'schedule',
-          component: ScheduleComponent
+          component: ScheduleComponent,
+          canActivate: [WorkspacesGuard]
         }
       ]
     },

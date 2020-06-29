@@ -38,13 +38,12 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <div class="mat-body-strong">
+            <div class="mat-body-strong" *ngIf="generalSettings.corporate_credit_card_expenses_object">
                 <strong>
                     Default Corporate Credit Card Account
                 </strong>
             </div>
-            <mat-form-field floatLabel="always" appearance="outline" required
-                *ngIf="generalSettings.corporate_credit_card_expenses_object">
+            <mat-form-field floatLabel="always" appearance="outline" required *ngIf="generalSettings.corporate_credit_card_expenses_object">
                 <mat-select placeholder="select ccc account" formControlName="cccAccounts">
                     <mat-option *ngFor="let cccAccount of cccAccounts; let i = index"
                         [value]="cccAccounts[i].destination_id">

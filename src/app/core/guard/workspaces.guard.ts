@@ -16,7 +16,7 @@ export class WorkspacesGuard implements CanActivate {
 
   canActivate(next: ActivatedRouteSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const params = next.params;
-    const workspaceId = +params.workspace_id;
+    const workspaceId = +(params.workspace_id || next.parent.params.workspace_id);
 
     return forkJoin(
       [
@@ -38,7 +38,7 @@ export class WorkspacesGuard implements CanActivate {
           }
         }
         return that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`).then((res) => {
-          that.snackBar.open('You need to complete onboarding to access this page');
+          that.snackBar.open('You cannot access this page yet. Please follow the onboarding steps in the dashboard');
           return res;
         });
       })

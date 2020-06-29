@@ -70,12 +70,16 @@ export class EmployeeMappingsComponent implements OnInit {
       mappings.push({
         fyle_value: employeeEVMapping.source.value,
         qbo_value: employeeEVMapping.destination.value,
-        ccc_account: that.employeeMappings
-          .filter(evMapping => evMapping.destination_type === 'CREDIT_CARD_ACCOUNT'
-            && evMapping.source.value === employeeEVMapping.source.value)[0].destination.value
+        ccc_account: that.getCCCAccount(that.employeeMappings, employeeEVMapping)
       });
     });
     that.employeeMappings = mappings;
+  }
+
+  getCCCAccount(employeeMappings, employeeEVMapping) {
+    var empMapping = employeeMappings.filter(evMapping => evMapping.destination_type === 'CREDIT_CARD_ACCOUNT' && evMapping.source.value === employeeEVMapping.source.value);
+
+    return empMapping.length ? empMapping[0].destination.value : null;
   }
 
   reset() {

@@ -52,7 +52,6 @@ export class EmployeeMappingsDialogComponent implements OnInit {
     const creditCardAccount = that.form.value.creditCardAccount ? that.form.value.creditCardAccount.value : that.generalMappings.default_ccc_account_name;
 
     if (that.form.valid && (qboVendor || qboEmployee)) {
-
       const employeeMapping = [
         that.mappingsService.postMappings(that.workSpaceId, {
           source_type: 'EMPLOYEE',
@@ -62,7 +61,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
         })
       ];
 
-      if (creditCardAccount || !(that.generalSettings.corporate_credit_card_expenses_object)) {
+      if (creditCardAccount || that.generalSettings.corporate_credit_card_expenses_object) {
         employeeMapping.push(
           that.mappingsService.postMappings(that.workSpaceId, {
             source_type: 'EMPLOYEE',

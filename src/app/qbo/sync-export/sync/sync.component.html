@@ -1,12 +1,12 @@
-<div fxLayout="column" fxLayoutAlign="center center" *ngIf="isLoading" fxFlexFill>
+<div class="internal-loader" fxLayout="column" fxLayoutAlign="center center" *ngIf="isLoading" fxFlexFill>
     <app-loader></app-loader>
 </div>
 
-<div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start start">
+<div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start stretch">
     <div class="sync-header">
         Sync Expenses from Fyle App to get Started
     </div>
-    <div>
+    <div fxLayout="column" fxLayoutAlign="start center">
         <mat-card class="sync-card">
             <div fxLayout="row" fxLayoutAlign="space-between center">
                 <div>

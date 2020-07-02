@@ -14,7 +14,7 @@ import { SettingsService } from 'src/app/core/services/settings.service';
 @Component({
   selector: 'app-export',
   templateUrl: './export.component.html',
-  styleUrls: ['./export.component.scss']
+  styleUrls: ['./export.component.scss', '../../qbo.component.scss']
 })
 export class ExportComponent implements OnInit {
 

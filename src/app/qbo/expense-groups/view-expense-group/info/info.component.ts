@@ -5,6 +5,7 @@ import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
 import { forkJoin } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { Expense } from 'src/app/core/models/expense.model';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-info',
@@ -13,7 +14,7 @@ import { Expense } from 'src/app/core/models/expense.model';
 })
 export class InfoComponent implements OnInit {
 
-  constructor(private expenseGroupsService: ExpenseGroupsService, private route: ActivatedRoute) { }
+  constructor(private expenseGroupsService: ExpenseGroupsService, private route: ActivatedRoute, private authService: AuthService) { }
 
   expenseGroupId: number;
   workspaceId: number;
@@ -25,7 +26,7 @@ export class InfoComponent implements OnInit {
   count: number;
   pageNumber = 0;
   pageSize = 5;
-  columnsToDisplay = ['expense_id', 'claimno'];
+  columnsToDisplay = ['expense_id', 'claimno', 'view'];
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -48,9 +49,11 @@ export class InfoComponent implements OnInit {
     });
   }
 
-  openExpenseInFyle(expenseId: string) {
+  openExpenseInFyle(expense) {
+    let that = this;
     const clusterDomain = localStorage.getItem('clusterDomain');
-    window.open(`${clusterDomain}/app/main/#/enterprise/view_expense/${expenseId}`, '_blank');
+    let user = that.authService.getUser();
+    window.open(`${clusterDomain}/app/main/#/enterprise/view_expense/${expense.expense_id}?org_id=${user.org_id}`, '_blank');
   }
 
 

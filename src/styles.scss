@@ -3,6 +3,7 @@
 @import "~@angular/material/theming";
 @include mat-core();
 @import "./assets/stylesheets/fy-theme.scss";
+@import 'variables.scss';
 
 html,
 body {
@@ -13,11 +14,11 @@ body {
  
 // some issue is there with mat select options going transparent
 .mat-select-panel {
-  background: #fff;
+  background: $fy-white;
 }
 
 .mat-option:hover {
-  background: #0000000a;
+  background: $fy-nav-hover;
 }
 
 .mat-select-panel:not([class*=mat-elevation-z]) {
@@ -25,13 +26,13 @@ body {
 }
 
 .mat-dialog-container {
-  background-color: var(--fy-background);
+  background-color: $fy-white;
   border-radius: 4px;
 }
 
 .mat-autocomplete-panel {
-  background-color: #fff;
-  border: 1px solid #d3d3d373;
+  background-color: $fy-white;
+  border: 1px solid $fy-autocomplete-border;
 }
 
 .onboarding-stepper {
@@ -45,11 +46,11 @@ body {
   }
 
   .mat-step-icon-selected {
-    background-color: rgba(0, 0, 0, 0.54) !important;
+    background-color: $fy-stepper-selected-icon !important;
   }
 
   .mat-step-icon-state-number {
-    background-color: #48555f !important;
+    background-color: $fy-steppper-number !important;
   }
 
   .mat-step-icon {
@@ -69,26 +70,33 @@ body {
   .mat-step-header:hover {
     background-color: transparent;
   }
+
+  .mat-vertical-content {
+    background-color: $fy-highlighted-background;
+    margin: 0 16px 16px 32px;
+    padding: 0 8px 12px 12px;
+    max-width: 600px;
+  }
 }
 
 .qbo {
   &--menu {
     &-icon {
-      color: #333;
+      color: $fy-menu-text;
       margin: 4px;
       &__active {
-        color: #333;
+        color: $fy-menu-text;
       }
     }
 
     &-text {
-      color: #333;
+      color: $fy-menu-text;
     }
   }
 
   &--title {
     font-size: 14px;
-    color: #5a5d72;
+    color: $fy-title-text;
     &-fyle-org {
       font-weight: 500;
     }

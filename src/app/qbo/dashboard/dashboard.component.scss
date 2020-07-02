@@ -1,44 +1,60 @@
+@import 'variables.scss';
+
 .onboarding-stepper {
     &--stepper {
         min-width: 700px;
     }
 
     &--step {
-        margin: 4px;
         font-size: 14px;
     }
 
     &--step-header {
         font-size: 16px;
         font-weight: 500;
-        color: #2c304e;
+        color: $fy-dashboard-text-dark;
+        background-color: $fy-highlighted-background;
+        padding: 8px;
+        min-width: 600px
     }
 
     &--check {
-        color: #b3bac7;
+        color: $fy-stepper-check;
         margin-right: 8px;
         position: relative;
         top: -2px;
         &__complete {
-            color: #28c354;
+            color: $fy-stepper-check-complete;
         }
     }
 
     &--desc {
-        color: #5a5d72;
+        color: $fy-title-text;
     }
 
     &--navigation {
         font-weight: 500;
         cursor: pointer;
         &__active {
-            color: #f36;
+            color: $fy-primary;
         }
+    }
+
+    &--title {
+        margin: 52px 0 16px 0;
+    }
+
+    &--logos {
+        margin: 12px;
+    }
+
+    &--subheader {
+        margin: 8px;
     }
 }
 
 .dashboard {
-    color: #5e5e5e;
+    color: $fy-dashboard-text;
     &--header {
         margin: 32px;
     }
@@ -48,8 +64,8 @@
         &-card {
             min-width: 640px;
             margin-bottom: 12px;
-            border: 1px solid #a9acbc52;
-            color: #5e5e5e;
+            border: 1px solid $fy-card-border;
+            color: $fy-dashboard-text;
 
         }
 
@@ -61,7 +77,7 @@
         &-action {
             font-size: 14px;
             font-weight: 500;
-            color: #f36;
+            color: $fy-primary;
             cursor: pointer;
         } 
 
@@ -75,17 +91,17 @@
         &-card {
             min-width: 360px;
             max-height: 200px;
-            border: 1px solid #a9acbc52;
-            color: #545454;
+            border: 1px solid $fy-card-border;
+            color: $fy-dashboard-text;
             &-icon {
-                color: #a9acbc;
+                color: $fy-dashboard-stat-icon;
             }
         }
     }
 
     .schedule {
         &--info-icon {
-            color:#5c98e5;
+            color:$fy-info;
             margin-right: 8px;
         }
 

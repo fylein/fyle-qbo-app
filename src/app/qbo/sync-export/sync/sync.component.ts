@@ -11,7 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-sync',
   templateUrl: './sync.component.html',
-  styleUrls: ['./sync.component.scss']
+  styleUrls: ['./sync.component.scss', '../../qbo.component.scss']
 })
 export class SyncComponent implements OnInit {
 

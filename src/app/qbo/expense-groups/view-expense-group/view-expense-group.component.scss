@@ -1,15 +1,9 @@
-.rounded-pill.complete {
-    background-color: rgb(34, 175, 34);
-    padding: 4px;
-    color: #fff;
-    text-align: center;
-    width: 125px;
-}
+.page-header {
+    &__border {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
 
-.rounded-pill.ready {
-    background-color: rgb(168, 166, 5);
-    padding: 4px;
-    color: #fff;
-    text-align: center;
-    width: 125px;
+    &--go-back {
+        margin-right: 12px;
+    }
 }

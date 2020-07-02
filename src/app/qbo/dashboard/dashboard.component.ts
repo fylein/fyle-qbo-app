@@ -27,7 +27,7 @@ enum onboardingStates {
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss', '../qbo.component.scss']
 })
 export class DashboardComponent implements OnInit {
   workspaceId: number;

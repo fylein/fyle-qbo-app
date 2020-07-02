@@ -1,6 +1,8 @@
+@import 'variables.scss';
+
 .qbo {
   &-sidenav {
-    background-color: var(--fy-layout-background);
+    background-color: $fy-layout-background;
     border-right: 0;
     min-width: 320px;
     &--header {
@@ -14,15 +16,15 @@
 
     &--menu {
       &-icon {
-        color: var(--fy-nav-text);
+        color: $fy-nav-text;
         margin: 4px;
         &__active {
-          color: var(--fy-nav-active-text);
+          color: $fy-primary;
         }
       }
 
       &-text {
-        color: var(--fy-nav-text);
+        color: $fy-nav-text;
       }
     }
 
@@ -30,13 +32,13 @@
       margin: 0;
       &.mat-list-item {
         padding-left: 45px;
-        color: var(--fy-nav-text);
+        color: $fy-nav-text;
         font-weight: 500;
         font-size: 18px;
       }
       &.active {
-        background-color: var(--fy-nav-active-background);
-        color: var(--fy-nav-active-text);
+        background-color: $fy-nav-active-background;
+        color: $fy-primary;
       }
     }
 
@@ -44,30 +46,25 @@
       margin: 0;
       &.mat-list-item {
         padding-left: 60px;
-        color: var(--fy-nav-text);
+        color: $fy-nav-text;
         font-weight: 500;
         font-size: 18px;
       }
       &.active {
-        background-color: var(--fy-nav-active-background);
-        color: var(--fy-nav-active-text);
+        background-color: $fy-nav-active-background;
+        color: $fy-primary;
       }
     }
   }
 
   .mat-drawer-content {
-    background-color: var(--fy-background);
+    background-color: $fy-white;
   }
-
-  .qbo-table {
-    background: yellow;
-  }
-
 }
 
 .page-header {
   &--name {
-    color: var(--fy-nav-text);
+    color: $fy-nav-text;
     padding: 30px;
     margin: 0;
   }
@@ -75,10 +72,10 @@
 
 .page-table {
   width: 100%;
-  border-top: 1px solid #dfe3e8;
-  border-bottom: 1px solid #dfe3e8;
+  border-top: 1px solid $fy-table-border;
+  border-bottom: 1px solid $fy-table-border;
   .mat-row:nth-child(odd) {
-    background-color: var(--fy-alt-row);
+    background-color: $fy-alt-row;
     margin: 12px;
   }
   .mat-cell {
@@ -89,14 +86,20 @@
   .mat-header-cell {
     font-size: 14px;
     font-weight: 500;
-    color: #1c2024;
+    color: $fy-page-header;
+  }
+
+  &--row {
+    &__pointer {
+      cursor: pointer;
+    }
   }
 }
 
 .page-info {
   margin: 16px 24px;
   &--description {
-    color: #414562;
+    color: $fy-page-info-desc;
     margin: 12px 0;
   }
 
@@ -104,7 +107,6 @@
     font-size: 14px;
     min-width: 200px;
     margin: 8px 0;
-    font-weight: normal;
   }
 }
 
@@ -115,6 +117,6 @@
 .simple-search {
   font-size: 12px;
   &--icon {
-    color: var(--fy-search-icon)
+    color: $fy-search-icon
   }
 }

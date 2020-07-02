@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ValidatorFn } from '@angular/forms';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -50,6 +50,12 @@ export class ConfigurationComponent implements OnInit {
     }[employeeMappedTo];
   }
 
+  configurationProjectCostCenterValidator: ValidatorFn = (fg: FormGroup) => {
+    const project = fg.get('projects').value;
+    const costCenter = fg.get('costCenters').value;
+    return project === costCenter ? { projectCostCenterSame: true } : null;
+  }
+
   getAllSettings() {
     const that = this;
     that.isLoading = true;
@@ -84,7 +90,9 @@ export class ConfigurationComponent implements OnInit {
         cccExpense: [that.generalSettings ? that.generalSettings.corporate_credit_card_expenses_object : ''],
         employees: [that.employeeFieldMapping ? that.employeeFieldMapping.destination_field : ''],
         projects: [that.projectFieldMapping ? that.projectFieldMapping.destination_field : ''],
-        costCenters: [that.costCenterFieldMapping ? that.costCenterFieldMapping.destination_field : '']
+        costCenters: [that.costCenterFieldMapping ? that.costCenterFieldMapping.destination_field : ''],
+      }, {
+        validators: [that.configurationProjectCostCenterValidator]
       });
 
       if (that.generalSettings.reimbursable_expenses_object) {
@@ -134,6 +142,8 @@ export class ConfigurationComponent implements OnInit {
           cccExpense: [null],
           projects: [null],
           costCenters: [null],
+        }, {
+          validators: [that.configurationProjectCostCenterValidator]
         });
 
         that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {

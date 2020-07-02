@@ -1,3 +1,5 @@
+@import 'variables.scss';
+
 .zero-state {
     font-size: 14px;
     min-height: 400px;
@@ -7,7 +9,7 @@
 
     &--description {
         font-size: 14px;
-        color: #5a5d72;
+        color: $fy-title-text;
         margin: 30px;
     }
 }

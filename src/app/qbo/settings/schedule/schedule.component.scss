@@ -1,17 +1,19 @@
+@import 'variables.scss';
+
 .schedule {
     &--header {
-        border-bottom: 1px solid var(--fy-layout-background);
+        border-bottom: 1px solid $fy-layout-background;
     }
 
     &--form {
-        color: var(--fy-nav-text);
+        color: $fy-nav-text;
         margin: 24px;
         max-width: 360px;
         font-size: 10px;
     }
 
     &--inner-form {
-        background-color: var(--fy-panel);
+        background-color: $fy-panel;
         border-radius: 4px;
         padding: 12px;
         margin: 16px 0;

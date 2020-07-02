@@ -4,13 +4,13 @@
 
 <div *ngIf="currentState !== allOnboardingStates.isOnboarded && !isLoading"
     class="onboarding-stepper onboarding-stepper--container" fxLayout="column" fxLayoutAlign="start center">
-    <h1 class="text-center">Welcome to Fyle-QBO app for Quickbooks Integrations</h1>
-    <div fxLayout="row" fxLayoutAlign="center center">
+    <h1 class="text-center onboarding-stepper--title">Welcome to Fyle-QBO app for Quickbooks Integrations</h1>
+    <div fxLayout="row" fxLayoutAlign="center center" class="onboarding-stepper--logos">
         <img src="../../../assets/images/pngs/fyle-logo.png" alt="fyle">
         <mat-icon>add</mat-icon>
         <img src="../../../assets/images/pngs/qbo-logo.png" alt="qbo">
     </div>
-    <div>
+    <div class="onboarding-stepper--subheader">
         Let's get you on board with a few quick steps!
     </div>
     <div>

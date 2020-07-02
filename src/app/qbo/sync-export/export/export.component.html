@@ -1,12 +1,12 @@
-<div fxLayout="column" fxLayoutAlign="center center" *ngIf="isLoading" fxFlexFill>
+<div class="internal-loader" fxLayout="column" fxLayoutAlign="center center" *ngIf="isLoading" fxFlexFill>
     <app-loader></app-loader>
 </div>
 
-<div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start start">
+<div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start stretch">
     <div class="export-header">
         Export Expenses from Fyle App to get Started
     </div>
-    <div>
+    <div fxLayout="column" fxLayoutAlign="start center">
         <mat-card class="export-card">
             <div fxLayout="column" fxLayoutAlign="start stretch">
                 <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -36,22 +36,22 @@
                     <mat-progress-bar mode="buffer"></mat-progress-bar>
                 </div>
 
-                <div class="export-card--stats" fxLayout="row" fxLayoutAlign="start center" *ngIf="failedExpenseGroupCount">
+                <div class="export-card--stats" fxLayout="row" fxLayoutAlign="start center"
+                    *ngIf="failedExpenseGroupCount">
                     {{failedExpenseGroupCount}} failed exports
                     <mat-icon (click)="openFailedExports()">
                         open_in_new
                     </mat-icon>
                 </div>
 
-                <div class="export-card--stats"  fxLayout="row" fxLayoutAlign="start center" *ngIf="successfulExpenseGroupCount">
+                <div class="export-card--stats" fxLayout="row" fxLayoutAlign="start center"
+                    *ngIf="successfulExpenseGroupCount">
                     {{successfulExpenseGroupCount}} successful exports
                     <mat-icon (click)="openSuccessfulExports()">
                         open_in_new
                     </mat-icon>
                 </div>
             </div>
-
-
         </mat-card>
     </div>
 </div>

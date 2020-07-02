@@ -100,7 +100,15 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <button [disabled]="isSaveDisabled" class="configurations--save-btn" mat-flat-button color="primary" (click)="save()" type="button">
+            <div class="configurations--errors" *ngIf="generalSettingsForm.errors">
+                <div *ngFor="let error of generalSettingsForm.errors | keyvalue">
+                    <div *ngIf="error.key === 'projectCostCenterSame'">
+                        Projects and Cost Centers cannot have the same value
+                    </div>
+                </div>
+            </div>
+            <button [disabled]="isSaveDisabled || !generalSettingsForm.valid" class="configurations--save-btn" mat-flat-button color="primary"
+                (click)="save()" type="button">
                 Save
             </button>
         </div>

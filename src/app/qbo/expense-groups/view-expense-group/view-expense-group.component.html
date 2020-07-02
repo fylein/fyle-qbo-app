@@ -3,13 +3,13 @@
 </div>
 <div *ngIf="!isLoading">
     <div class="page-header">
-        <div class="page-header--name mat-h2" fxLayoutAlign="start center" >
-            <mat-icon aria-hidden="false" aria-label="Go back to previous page" routerLink="/workspaces/{{workspaceId}}/expense_groups/">
+        <div class="page-header--name mat-h2" [ngClass]="{'page-header__border': status !== 'FAILED'}" fxLayoutAlign="start center">
+            <mat-icon class="page-header--go-back" aria-hidden="false" aria-label="Go back to previous page" routerLink="/workspaces/{{workspaceId}}/expense_groups/">
                 keyboard_backspace
             </mat-icon>
 
             <div>
-                Claim Number - {{ expenseGroup.description.claim_number }} 
+                Claim Number - {{ expenseGroup.description.claim_number }}
             </div>
         </div>
         <nav *ngIf="status === 'FAILED'" mat-tab-nav-bar>

@@ -1,20 +1,20 @@
-@import 'variables.scss';
+@import "variables.scss";
 
 .page-info {
-    &--sub-header {
-        font-size: 16px;
-        font-weight: 500;
-        color: $fy-info-dark;
-    }
+  &--sub-header {
+    font-size: 16px;
+    font-weight: 500;
+    color: $fy-info-dark;
+  }
 
-    &--created-by {
-        font-size: 14px;
-        color: $fy-info;
-    }
+  &--created-by {
+    font-size: 14px;
+    color: $fy-info;
+  }
 }
 
 .page-table {
-    &--icon {
-        cursor: pointer;
-    }
+  &--icon {
+    cursor: pointer;
+  }
 }

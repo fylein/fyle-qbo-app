@@ -8,15 +8,15 @@ import { GeneralService } from 'src/app/core/services/general.service';
 export class ChecksService {
   constructor(private generalService: GeneralService) {}
 
-  createChecks(workspace_id: number, expnese_group_ids: any[]): Observable<any> {
+  createChecks(workspaceId: number, expenseGroupIds: any[]): Observable<any> {
     return this.generalService.post(
-      `/workspaces/${workspace_id}/qbo/checks/trigger/`, {
-        expense_group_ids: expnese_group_ids
+      `/workspaces/${workspaceId}/qbo/checks/trigger/`, {
+        expense_group_ids: expenseGroupIds
       }
     );
   }
 
-  getChecks(workspace_id: number, limit: number, offset: number): Observable<any> {
-    return this.generalService.get(`/workspaces/${workspace_id}/qbo/checks/?limit=${limit}&offset=${offset}`, {});
+  getChecks(workspaceId: number, limit: number, offset: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspaceId}/qbo/checks/?limit=${limit}&offset=${offset}`, {});
   }
 }

@@ -50,12 +50,12 @@ export class AuthService {
       .pipe(catchError(this.handleError));
   }
 
-  refreshToken(refresh_token: string): Observable<Token> {
+  refreshToken(refreshToken: string): Observable<Token> {
     return this.http
       .post<Token>(
         API_BASE_URL + '/auth/refresh/',
         {
-          refresh_token,
+          refreshToken,
         },
         httpOptions
       )

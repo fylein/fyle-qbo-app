@@ -77,7 +77,7 @@ export class EmployeeMappingsComponent implements OnInit {
   }
 
   getCCCAccount(employeeMappings, employeeEVMapping) {
-    var empMapping = employeeMappings.filter(evMapping => evMapping.destination_type === 'CREDIT_CARD_ACCOUNT' && evMapping.source.value === employeeEVMapping.source.value);
+    const empMapping = employeeMappings.filter(evMapping => evMapping.destination_type === 'CREDIT_CARD_ACCOUNT' && evMapping.source.value === employeeEVMapping.source.value);
 
     return empMapping.length ? empMapping[0].destination.value : null;
   }

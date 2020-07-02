@@ -83,7 +83,7 @@ export class QboComponent implements OnInit {
   }
 
   setupWorkspace() {
-    let that = this;
+    const that = this;
     that.user = that.authService.getUser();
     that.workspaceService.getWorkspaces(that.user.org_id).subscribe(workspaces => {
       if (Array.isArray(workspaces) && workspaces.length) {
@@ -107,7 +107,7 @@ export class QboComponent implements OnInit {
   }
 
   ngOnInit() {
-    let that = this;
+    const that = this;
     that.orgsCount = that.authService.getOrgCount();
     that.setupWorkspace();
   }

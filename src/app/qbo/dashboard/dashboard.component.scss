@@ -1,116 +1,115 @@
-@import 'variables.scss';
+@import "variables.scss";
 
 .onboarding-stepper {
-    &--stepper {
-        min-width: 700px;
-    }
+  &--stepper {
+    min-width: 700px;
+  }
 
-    &--step {
-        font-size: 14px;
-    }
+  &--step {
+    font-size: 14px;
+  }
 
-    &--step-header {
-        font-size: 16px;
-        font-weight: 500;
-        color: $fy-dashboard-text-dark;
-        background-color: $fy-highlighted-background;
-        padding: 8px;
-        min-width: 600px
-    }
+  &--step-header {
+    font-size: 16px;
+    font-weight: 500;
+    color: $fy-dashboard-text-dark;
+    background-color: $fy-highlighted-background;
+    padding: 8px;
+    min-width: 600px;
+  }
 
-    &--check {
-        color: $fy-stepper-check;
-        margin-right: 8px;
-        position: relative;
-        top: -2px;
-        &__complete {
-            color: $fy-stepper-check-complete;
-        }
+  &--check {
+    color: $fy-stepper-check;
+    margin-right: 8px;
+    position: relative;
+    top: -2px;
+    &__complete {
+      color: $fy-stepper-check-complete;
     }
+  }
 
-    &--desc {
-        color: $fy-title-text;
-    }
+  &--desc {
+    color: $fy-title-text;
+  }
 
-    &--navigation {
-        font-weight: 500;
-        cursor: pointer;
-        &__active {
-            color: $fy-primary;
-        }
+  &--navigation {
+    font-weight: 500;
+    cursor: pointer;
+    &__active {
+      color: $fy-primary;
     }
+  }
 
-    &--title {
-        margin: 52px 0 16px 0;
-    }
+  &--title {
+    margin: 52px 0 16px 0;
+  }
 
-    &--logos {
-        margin: 12px;
-    }
+  &--logos {
+    margin: 12px;
+  }
 
-    &--subheader {
-        margin: 8px;
-    }
+  &--subheader {
+    margin: 8px;
+  }
 }
 
 .dashboard {
-    color: $fy-dashboard-text;
-    &--header {
-        margin: 32px;
+  color: $fy-dashboard-text;
+  &--header {
+    margin: 32px;
+  }
+
+  &--actions {
+    min-width: 700px;
+    &-card {
+      min-width: 640px;
+      margin-bottom: 12px;
+      border: 1px solid $fy-card-border;
+      color: $fy-dashboard-text;
     }
 
-    &--actions {
-        min-width: 700px;
-        &-card {
-            min-width: 640px;
-            margin-bottom: 12px;
-            border: 1px solid $fy-card-border;
-            color: $fy-dashboard-text;
-
-        }
-
-        &-header {
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        &-action {
-            font-size: 14px;
-            font-weight: 500;
-            color: $fy-primary;
-            cursor: pointer;
-        } 
-
-        &-content {
-            min-height: 60px;
-        }
+    &-header {
+      font-size: 16px;
+      font-weight: 500;
     }
 
-    &--stats {
-        min-width: 420px;
-        &-card {
-            min-width: 360px;
-            max-height: 200px;
-            border: 1px solid $fy-card-border;
-            color: $fy-dashboard-text;
-            &-icon {
-                color: $fy-dashboard-stat-icon;
-            }
-        }
+    &-action {
+      font-size: 14px;
+      font-weight: 500;
+      color: $fy-primary;
+      cursor: pointer;
     }
 
-    .schedule {
-        &--info-icon {
-            color:$fy-info;
-            margin-right: 8px;
-        }
-
-        &--redirect {
-            margin-left: 32px;
-            &-icon {
-                margin-left: 8px;
-                cursor: pointer;
-            }
-        }
+    &-content {
+      min-height: 60px;
     }
+  }
+
+  &--stats {
+    min-width: 420px;
+    &-card {
+      min-width: 360px;
+      max-height: 200px;
+      border: 1px solid $fy-card-border;
+      color: $fy-dashboard-text;
+      &-icon {
+        color: $fy-dashboard-stat-icon;
+      }
+    }
+  }
+
+  .schedule {
+    &--info-icon {
+      color: $fy-info;
+      margin-right: 8px;
+    }
+
+    &--redirect {
+      margin-left: 32px;
+      &-icon {
+        margin-left: 8px;
+        cursor: pointer;
+      }
+    }
+  }
 }

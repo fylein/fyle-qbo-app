@@ -132,7 +132,7 @@ export class ConfigurationComponent implements OnInit {
 
       that.isLoading = false;
     }, error => {
-      if (error.status == 400) {
+      if (error.status === 400) {
         that.generalSettings = {};
         that.mappingSettings = {};
         that.isLoading = false;
@@ -155,7 +155,7 @@ export class ConfigurationComponent implements OnInit {
   }
 
   save() {
-    let that = this;
+    const that = this;
     if (that.generalSettingsForm.valid) {
       const mappingsSettingsPayload = [{
         source_field: 'CATEGORY',

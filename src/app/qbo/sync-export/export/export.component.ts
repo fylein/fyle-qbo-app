@@ -45,7 +45,7 @@ export class ExportComponent implements OnInit {
     return handlerMap[reimbursableExpensesObject] || handlerMap.JOURNAL;
   }
 
-  exportCCCExpenses(corporateCreditCardExpensesObject): Function {
+  exportCCCExpenses(corporateCreditCardExpensesObject) {
     const that = this;
     const handlerMap = {
       'JOURNAL ENTRY': (workspaceId, filteredIds) => {
@@ -92,7 +92,7 @@ export class ExportComponent implements OnInit {
           });
         }
       } else if (that.generalSettings.corporate_credit_card_expenses_object) {
-        const filteredIds = that.exportableExpenseGroups.filter(expenseGroup => expenseGroup.fund_source == 'CCC').map(expenseGroup => expenseGroup.id);
+        const filteredIds = that.exportableExpenseGroups.filter(expenseGroup => expenseGroup.fund_source === 'CCC').map(expenseGroup => expenseGroup.id);
         if (filteredIds.length > 0) {
           that.exportCCCExpenses(that.workspaceId)(that.workspaceId, filteredIds).subscribe((res) => {
             that.loadExportableExpenseGroups();
@@ -106,7 +106,7 @@ export class ExportComponent implements OnInit {
   loadExportableExpenseGroups() {
     const that = this;
     that.isLoading = true;
-    that.expenseGroupService.getAllExpenseGroups(that.workspaceId, 'READY').subscribe(function (res) {
+    that.expenseGroupService.getAllExpenseGroups(that.workspaceId, 'READY').subscribe((res) => {
       that.exportableExpenseGroups = res.results;
       that.isLoading = false;
     });

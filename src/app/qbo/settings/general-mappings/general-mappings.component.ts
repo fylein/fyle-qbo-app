@@ -27,7 +27,7 @@ export class GeneralMappingsComponent implements OnInit {
   }
 
   submit() {
-    let that = this;
+    const that = this;
     that.accountsPayableIsValid = false;
     that.bankAccountIsValid = false;
     that.cccAccountIsValid = false;
@@ -65,7 +65,7 @@ export class GeneralMappingsComponent implements OnInit {
   }
 
   getGeneralMappings() {
-    let that = this;
+    const that = this;
     that.isLoading = true;
     that.mappingsService.getGeneralMappings(that.workspaceId).subscribe(generalMappings => {
       that.generalMappings = generalMappings;
@@ -77,7 +77,7 @@ export class GeneralMappingsComponent implements OnInit {
         cccAccounts: [that.generalMappings ? that.generalMappings.default_ccc_account_id : '']
       });
     }, error => {
-      if (error.status == 400) {
+      if (error.status === 400) {
         that.generalMappings = {};
         that.isLoading = false;
         that.form = that.formBuilder.group({
@@ -90,7 +90,7 @@ export class GeneralMappingsComponent implements OnInit {
   }
 
   reset() {
-    let that = this;
+    const that = this;
     that.isLoading = true;
     forkJoin(
       [
@@ -108,7 +108,7 @@ export class GeneralMappingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    let that = this;
+    const that = this;
     that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
     that.isLoading = true;
     that.settingsService.getCombinedSettings(that.workspaceId).subscribe(settings => {

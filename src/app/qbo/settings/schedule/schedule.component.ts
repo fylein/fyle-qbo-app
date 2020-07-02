@@ -31,7 +31,7 @@ export class ScheduleComponent implements OnInit {
       }
       that.isLoading = false;
     }, error => {
-      if (error.status == 400) {
+      if (error.status === 400) {
         that.isLoading = false;
       }
     });

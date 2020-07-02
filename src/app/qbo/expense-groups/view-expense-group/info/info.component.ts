@@ -50,9 +50,9 @@ export class InfoComponent implements OnInit {
   }
 
   openExpenseInFyle(expense) {
-    let that = this;
+    const that = this;
     const clusterDomain = localStorage.getItem('clusterDomain');
-    let user = that.authService.getUser();
+    const user = that.authService.getUser();
     window.open(`${clusterDomain}/app/main/#/enterprise/view_expense/${expense.expense_id}?org_id=${user.org_id}`, '_blank');
   }
 
@@ -66,7 +66,7 @@ export class InfoComponent implements OnInit {
     forkJoin([
       that.initExpenseGroupExpenses(),
       that.initExpenseGroupDetails()
-    ]).subscribe(function () {
+    ]).subscribe(() => {
       that.isLoading = false;
     });
 

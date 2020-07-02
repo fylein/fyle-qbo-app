@@ -3,10 +3,6 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 
-const FYLE_URL = environment.fyle_url;
-const FYLE_CLIENT_ID = environment.fyle_client_id;
-const CALLBACK_URI = environment.callback_uri;
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

@@ -33,18 +33,18 @@ export class CallbackComponent implements OnInit {
             });
           },
           error => {
-            this.router.navigate(['auth/login']).then(function() {
+            this.router.navigate(['auth/login']).then(() => {
               window.location.reload();
             });
           }
         );
       } else if (params.error) {
-        this.router.navigate(['auth/login']).then(function() {
+        this.router.navigate(['auth/login']).then(() => {
           window.location.reload();
         });
       }
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }

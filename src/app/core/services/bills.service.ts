@@ -9,10 +9,10 @@ import { Cacheable } from 'ngx-cacheable';
 export class BillsService {
   constructor(private generalService: GeneralService) {}
 
-  createBills(workspaceId: number, expnese_group_ids: any[]): Observable<any> {
+  createBills(workspaceId: number, expenseGroupIds: any[]): Observable<any> {
     return this.generalService.post(
       `/workspaces/${workspaceId}/qbo/bills/trigger/`, {
-        expense_group_ids: expnese_group_ids
+        expense_group_ids: expenseGroupIds
       }
     );
   }

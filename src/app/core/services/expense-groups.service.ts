@@ -21,6 +21,8 @@ export class ExpenseGroupsService {
   getAllExpenseGroups(workspaceId: number, state: string): Observable<ExpenseGroupResponse> {
     const limit = 10;
     const offset = 0;
+    // this would require to create a default object - not much benefit in doing so imho @Dhar
+    // tslint:disable-next-line: prefer-const
     let allExpenseGroupsResponse;
 
     return from(this.getAllExpenseGroupsInternal(workspaceId, limit, offset, state, allExpenseGroupsResponse));
@@ -28,7 +30,7 @@ export class ExpenseGroupsService {
 
   private getAllExpenseGroupsInternal(workspaceId: number, limit: number, offset: number, state: string, allExpenseGroupsResponse: ExpenseGroupResponse): Promise<ExpenseGroupResponse> {
     const that = this;
-    return that.getExpenseGroups(workspaceId, limit, offset, state).toPromise().then(function(expenseGroupRes) {
+    return that.getExpenseGroups(workspaceId, limit, offset, state).toPromise().then((expenseGroupRes) => {
       if (!allExpenseGroupsResponse) {
         allExpenseGroupsResponse = expenseGroupRes;
       } else {

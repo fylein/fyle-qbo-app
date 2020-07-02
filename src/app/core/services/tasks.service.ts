@@ -19,7 +19,12 @@ export class TasksService {
   getAllTasks(workspaceId: number, status: string): Observable<TaskResponse> {
     const limit = 10;
     const offset = 0;
-    let allTasks;
+    const allTasks: TaskResponse = {
+      count: 0,
+      next: null,
+      previous: null,
+      results: []
+    };
 
     return from(this.getAllTasksInternal(workspaceId, limit, offset, status, allTasks));
   }
@@ -27,7 +32,7 @@ export class TasksService {
   private getAllTasksInternal(workspaceId: number, limit: number, offset: number, status: string, allTasks: TaskResponse): Promise<TaskResponse> {
     const that = this;
     return that.getTasks(workspaceId, limit, offset, status).toPromise().then((taskResponse) => {
-      if (!allTasks) {
+      if (allTasks.count === 0 ) {
         allTasks = taskResponse;
       } else {
         allTasks.results = allTasks.results.concat(taskResponse.results);

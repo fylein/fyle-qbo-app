@@ -151,7 +151,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    let that = this;
+    const that = this;
     that.workSpaceId = that.data.workspaceId;
     that.isLoading = true;
     that.settingsService.getCombinedSettings(that.workSpaceId).subscribe(settings => {

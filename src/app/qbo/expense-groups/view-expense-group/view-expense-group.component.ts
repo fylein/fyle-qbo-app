@@ -25,7 +25,7 @@ export class ViewExpenseGroupComponent implements OnInit {
   state: string;
   pageSize: number;
   pageNumber: number;
-  status:string;
+  status: string;
 
   constructor(private route: ActivatedRoute, private router: Router, private expenseGroupsService: ExpenseGroupsService, private tasksService: TasksService) { }
 

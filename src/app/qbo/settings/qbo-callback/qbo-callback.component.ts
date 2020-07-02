@@ -12,7 +12,7 @@ export class QBOCallbackComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, private settingsService: SettingsService) { }
 
   ngOnInit() {
-    let that = this;
+    const that = this;
     const workspaceId: number = that.route.snapshot.queryParams.state;
     const code: string = that.route.snapshot.queryParams.code;
     const realmId: string = that.route.snapshot.queryParams.realmId;

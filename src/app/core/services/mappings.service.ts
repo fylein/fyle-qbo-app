@@ -241,16 +241,16 @@ export class MappingsService {
     );
   }
 
-  postGeneralMappings(workspace_id: number, accounts_payable_id: string, accounts_payable_name: string, bank_account_id: string, bank_account_name: string, default_ccc_account_id: string, default_ccc_account_name: string): Observable<any> {
+  postGeneralMappings(workspaceId: number, accountsPayableId: string, accountsPayableName: string, bankAccountId: string, bankAccountName: string, defaultCCCAccountId: string, defaultCCCAccountName: string): Observable<any> {
     this.qboAccounts = null;
     return this.generalService.post(
-      `/workspaces/${workspace_id}/mappings/general/`, {
-        accounts_payable_id,
-        accounts_payable_name,
-        bank_account_id,
-        bank_account_name,
-        default_ccc_account_id,
-        default_ccc_account_name
+      `/workspaces/${workspaceId}/mappings/general/`, {
+        accounts_payable_id: accountsPayableId,
+        accounts_payable_name: accountsPayableName,
+        bank_account_id: bankAccountId,
+        bank_account_name: bankAccountName,
+        default_ccc_account_id: defaultCCCAccountId,
+        default_ccc_account_name: defaultCCCAccountName
       }
     );
   }
@@ -277,15 +277,15 @@ export class MappingsService {
     );
   }
 
-  postCategoryMappings(workspace_id: number, category: string, sub_category: string, account_name: string, account_id: string): Observable<any> {
+  postCategoryMappings(workspaceId: number, category: string, subCategory: string, accountName: string, accountId: string): Observable<any> {
     this.fyleCategories = null;
     this.qboAccounts = null;
     return this.generalService.post(
-      `/workspaces/${workspace_id}/mappings/categories/`, {
+      `/workspaces/${workspaceId}/mappings/categories/`, {
         category,
-        sub_category,
-        account_name,
-        account_id
+        sub_category: subCategory,
+        account_name: accountName,
+        account_id: accountId
       }
     );
   }
@@ -296,19 +296,19 @@ export class MappingsService {
     );
   }
 
-  postEmployeeMappings(workspace_id: number, employee_email: string, vendor_display_name: string, vendor_id: string, employee_display_name: string, employee_id: string, ccc_account_name: string, ccc_account_id: string): Observable<any> {
+  postEmployeeMappings(workspaceId: number, employeeEmail: string, vendorDisplayName: string, vendorId: string, employeeDisplayName: string, employeeId: string, cccAccountName: string, cccAccountId: string): Observable<any> {
     this.fyleEmployees = null;
     this.qboVendors = null;
     this.qboEmployees = null;
     return this.generalService.post(
-      `/workspaces/${workspace_id}/mappings/employees/`, {
-        employee_email,
-        vendor_display_name,
-        vendor_id,
-        employee_display_name,
-        employee_id,
-        ccc_account_name,
-        ccc_account_id
+      `/workspaces/${workspaceId}/mappings/employees/`, {
+        employee_email: employeeEmail,
+        vendor_display_name: vendorDisplayName,
+        vendor_id: vendorId,
+        employee_display_name: employeeDisplayName,
+        employee_id: employeeId,
+        ccc_account_name: cccAccountName,
+        ccc_account_id: cccAccountId
       }
     );
   }
@@ -319,14 +319,14 @@ export class MappingsService {
     );
   }
 
-  postProjectMappings(workspace_id: number, project: string, customer_display_name: string, customer_id: string): Observable<any> {
+  postProjectMappings(workspaceId: number, project: string, customerDisplayName: string, customerId: string): Observable<any> {
     this.fyleProjects = null;
     this.qboCustomers = null;
     return this.generalService.post(
-      `/workspaces/${workspace_id}/mappings/projects/`, {
+      `/workspaces/${workspaceId}/mappings/projects/`, {
         project,
-        customer_display_name,
-        customer_id
+        customer_display_name: customerDisplayName,
+        customer_id: customerId
       }
     );
   }
@@ -337,14 +337,14 @@ export class MappingsService {
     );
   }
 
-  postCostCenterMappings(workspace_id: number, project: string, class_name: string, class_id: string): Observable<any> {
+  postCostCenterMappings(workspaceId: number, project: string, className: string, classId: string): Observable<any> {
     this.fyleCostCenters = null;
     this.qboClasses = null;
     return this.generalService.post(
-      `/workspaces/${workspace_id}/mappings/cost_centers/`, {
+      `/workspaces/${workspaceId}/mappings/cost_centers/`, {
         cost_center: project,
-        class_name,
-        class_id
+        class_name: className,
+        class_id: classId
       }
     );
   }

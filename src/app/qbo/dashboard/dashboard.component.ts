@@ -150,19 +150,19 @@ export class DashboardComponent implements OnInit {
   updateDimensionTables() {
     const that = this;
     concat(
-        this.mappingsService.postAccountsPayables(that.workspaceId),
-        this.mappingsService.postBankAccounts(that.workspaceId),
-        this.mappingsService.postExpenseAccounts(that.workspaceId),
-        this.mappingsService.postCreditCardAccounts(that.workspaceId),
-        this.mappingsService.postQBOEmployees(that.workspaceId),
-        this.mappingsService.postQBOVendors(that.workspaceId),
-        this.mappingsService.postQBOCustomers(that.workspaceId),
-        this.mappingsService.postQBOClasses(that.workspaceId),
-        this.mappingsService.postQBODepartments(that.workspaceId),
-        this.mappingsService.postFyleEmployees(that.workspaceId),
-        this.mappingsService.postFyleCategories(that.workspaceId),
-        this.mappingsService.postFyleCostCenters(that.workspaceId),
-        this.mappingsService.postFyleProjects(that.workspaceId)
+      this.mappingsService.postAccountsPayables(that.workspaceId),
+      this.mappingsService.postBankAccounts(that.workspaceId),
+      this.mappingsService.postExpenseAccounts(that.workspaceId),
+      this.mappingsService.postCreditCardAccounts(that.workspaceId),
+      this.mappingsService.postQBOEmployees(that.workspaceId),
+      this.mappingsService.postQBOVendors(that.workspaceId),
+      this.mappingsService.postQBOCustomers(that.workspaceId),
+      this.mappingsService.postQBOClasses(that.workspaceId),
+      this.mappingsService.postQBODepartments(that.workspaceId),
+      this.mappingsService.postFyleEmployees(that.workspaceId),
+      this.mappingsService.postFyleCategories(that.workspaceId),
+      this.mappingsService.postFyleCostCenters(that.workspaceId),
+      this.mappingsService.postFyleProjects(that.workspaceId)
     ).subscribe(() => {
       // that.snackBar.open('All employee data synced from your fyle account');
     });

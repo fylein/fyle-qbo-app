@@ -3,53 +3,53 @@ import { HttpRequest, HttpHandler, HttpInterceptor, HttpSentEvent, HttpHeaderRes
 import { Observable, BehaviorSubject, throwError as observableThrowError } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
-import { catchError} from 'rxjs/internal/operators';
+import { catchError } from 'rxjs/internal/operators';
 import { Router } from '@angular/router';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-    isRefreshingToken = false;
-    tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  isRefreshingToken = false;
+  tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
-    constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
-    addToken(request: HttpRequest<any>): HttpRequest<any> {
-        if (this.authService.isLoggedIn()) {
-            request = request.clone({
-                setHeaders: {
-                    Authorization: `Bearer ${localStorage.getItem('access_token')}`
-                }
-            });
+  addToken(request: HttpRequest<any>): HttpRequest<any> {
+    if (this.authService.isLoggedIn()) {
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
-        return request;
+      });
     }
+    return request;
+  }
 
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>> {
-        request = this.addToken(request);
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>> {
+    request = this.addToken(request);
 
-        return next.handle(request).pipe(
-            catchError(error => {
-                if (error instanceof HttpErrorResponse) {
-                    switch ((error as HttpErrorResponse).status) {
-                        case 403:
-                            return this.handle403Error(error);
-                        default:
-                            return observableThrowError(error);
-                    }
-                } else {
-                    return observableThrowError(error);
-                }
-            }));
-    }
+    return next.handle(request).pipe(
+      catchError(error => {
+        if (error instanceof HttpErrorResponse) {
+          switch ((error as HttpErrorResponse).status) {
+            case 403:
+              return this.handle403Error(error);
+            default:
+              return observableThrowError(error);
+          }
+        } else {
+          return observableThrowError(error);
+        }
+      }));
+  }
 
-    handle403Error(error) {
-        return this.logoutUser();
-    }
+  handle403Error(error) {
+    return this.logoutUser();
+  }
 
-    logoutUser() {
-        this.authService.logout();
-        this.router.navigate(['/auth/login']);
-        return observableThrowError('');
-    }
+  logoutUser() {
+    this.authService.logout();
+    this.router.navigate(['/auth/login']);
+    return observableThrowError('');
+  }
 
 }

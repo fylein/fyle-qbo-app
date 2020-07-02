@@ -1,57 +1,57 @@
 <div fxLayoutAlign="center center" fxFlexFill *ngIf="isLoading">
-    <app-loader></app-loader>
+  <app-loader></app-loader>
 </div>
 
 <div *ngIf="!isLoading">
-    <div class="page-info" fxLayoutAlign="space-between center">
-        <div fxLayout="column" fxLayoutAlign="space-around start">
-            <div class="page-info--sub-header">
-                Expenses Grouped By {{expenseGroup && expenseGroup.fyle_group_id}}
-            </div>
-            <div class="page-info--created-by">
-                {{expenseGroup.description.employee_email}}
-            </div>
-        </div>
-        <div fxLayoutAlign="end center">
-            <mat-form-field class="simple-search" appearance="outline">
-                <mat-label>Search</mat-label>
-                <input matInput (keyup)="applyFilter($event)">
-                <span matPrefix>
-                    <mat-icon class="simple-search--icon" aria-hidden="false" aria-label="Search">search </mat-icon>
-                </span>
-            </mat-form-field>
-        </div>
+  <div class="page-info" fxLayoutAlign="space-between center">
+    <div fxLayout="column" fxLayoutAlign="space-around start">
+      <div class="page-info--sub-header">
+        Expenses Grouped By {{expenseGroup && expenseGroup.fyle_group_id}}
+      </div>
+      <div class="page-info--created-by">
+        {{expenseGroup.description.employee_email}}
+      </div>
     </div>
-    <div>
-        <div [hidden]="isLoading">
-            <table mat-table [dataSource]="expenses" class="page-table">
-                <ng-container matColumnDef="expense_id">
-                    <th mat-header-cell *matHeaderCellDef> Expense Id </th>
-                    <td mat-cell *matCellDef="let element">
-                        {{element.expense_id}}
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="claimno">
-                    <th mat-header-cell *matHeaderCellDef> Claim No. </th>
-                    <td mat-cell *matCellDef="let element">
-                        {{element.claim_number}}
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="view">
-                    <th mat-header-cell *matHeaderCellDef> View </th>
-                    <td mat-cell *matCellDef="let element">
-                        <mat-icon class="page-table--icon" (click)="openExpenseInFyle(element)">
-                            open_in_new
-                        </mat-icon>
-                    </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-                <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
-            </table>
-
-        </div>
+    <div fxLayoutAlign="end center">
+      <mat-form-field class="simple-search" appearance="outline">
+        <mat-label>Search</mat-label>
+        <input matInput (keyup)="applyFilter($event)">
+        <span matPrefix>
+          <mat-icon class="simple-search--icon" aria-hidden="false" aria-label="Search">search </mat-icon>
+        </span>
+      </mat-form-field>
     </div>
+  </div>
+  <div>
+    <div [hidden]="isLoading">
+      <table mat-table [dataSource]="expenses" class="page-table">
+        <ng-container matColumnDef="expense_id">
+          <th mat-header-cell *matHeaderCellDef> Expense Id </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.expense_id}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="claimno">
+          <th mat-header-cell *matHeaderCellDef> Claim No. </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.claim_number}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="view">
+          <th mat-header-cell *matHeaderCellDef> View </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-icon class="page-table--icon" (click)="openExpenseInFyle(element)">
+              open_in_new
+            </mat-icon>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+      </table>
+
+    </div>
+  </div>
 </div>

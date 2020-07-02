@@ -46,28 +46,28 @@ export class SettingsService {
   @CacheBuster({
     cacheBusterNotifier: fyleCredentialsCache
   })
-  connectFyle(workspaceId: number, authorization_code: string): Observable<any> {
+  connectFyle(workspaceId: number, authorizationCode: string): Observable<any> {
     return this.generalService.post('/workspaces/' + workspaceId + '/connect_fyle/authorization_code/', {
-      code: authorization_code
+      code: authorizationCode
     });
   }
 
   @CacheBuster({
     cacheBusterNotifier: qboCredentialsCache
   })
-  connectQBO(workspaceId: number, authorization_code: string, realm_id: string): Observable<any> {
+  connectQBO(workspaceId: number, authorizationCode: string, realmId: string): Observable<any> {
     globalCacheBusterNotifier.next();
     return this.generalService.post('/workspaces/' + workspaceId + '/connect_qbo/authorization_code/', {
-      code: authorization_code,
-      realm_id
+      code: authorizationCode,
+      realm_id: realmId
     });
   }
 
-  postSettings(workspaceId: number, next_run: string, hours: number, schedule_enabled: boolean) {
+  postSettings(workspaceId: number, nextRun: string, hours: number, scheduleEnabled: boolean) {
     return this.generalService.post(`/workspaces/${workspaceId}/settings/`, {
-      next_run,
+      next_run: nextRun,
       hours,
-      schedule_enabled
+      schedule_enabled: scheduleEnabled
     });
   }
 
@@ -85,10 +85,10 @@ export class SettingsService {
   @CacheBuster({
     cacheBusterNotifier: generalSettingsCache
   })
-  postGeneralSettings(workspaceId: number, reimbursable_expenses_object: string, corporate_credit_card_expenses_object: string) {
+  postGeneralSettings(workspaceId: number, reimbursableExpensesObject: string, corporateCreditCardExpensesObject: string) {
     return this.generalService.post(`/workspaces/${workspaceId}/settings/general/`, {
-      reimbursable_expenses_object,
-      corporate_credit_card_expenses_object,
+      reimbursable_expenses_object: reimbursableExpensesObject,
+      corporate_credit_card_expenses_object: corporateCreditCardExpensesObject,
     });
   }
 

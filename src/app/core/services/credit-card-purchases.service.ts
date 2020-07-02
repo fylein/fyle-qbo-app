@@ -8,15 +8,15 @@ import { GeneralService } from 'src/app/core/services/general.service';
 export class CreditCardPurchasesService {
   constructor(private generalService: GeneralService) {}
 
-  createCreditCardPurchases(workspace_id: number, expnese_group_ids: any[]): Observable<any> {
+  createCreditCardPurchases(workspaceId: number, expenseGroupIds: any[]): Observable<any> {
     return this.generalService.post(
-      `/workspaces/${workspace_id}/qbo/credit_card_purchases/trigger/`, {
-        expense_group_ids: expnese_group_ids
+      `/workspaces/${workspaceId}/qbo/credit_card_purchases/trigger/`, {
+        expense_group_ids: expenseGroupIds
       }
     );
   }
 
-  getCreditCardPurchases(workspace_id: number, limit: number, offset: number): Observable<any> {
-    return this.generalService.get(`/workspaces/${workspace_id}/qbo/credit_card_purchases/?limit=${limit}&offset=${offset}`, {});
+  getCreditCardPurchases(workspaceId: number, limit: number, offset: number): Observable<any> {
+    return this.generalService.get(`/workspaces/${workspaceId}/qbo/credit_card_purchases/?limit=${limit}&offset=${offset}`, {});
   }
 }

@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class WorkspacesGuard implements CanActivate {
 
-  constructor(private settingsService: SettingsService, private router: Router, private billsService: BillsService, private authService: AuthService, private snackBar: MatSnackBar ) { }
+  constructor(private settingsService: SettingsService, private router: Router, private billsService: BillsService, private authService: AuthService, private snackBar: MatSnackBar) { }
 
   canActivate(next: ActivatedRouteSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const params = next.params;

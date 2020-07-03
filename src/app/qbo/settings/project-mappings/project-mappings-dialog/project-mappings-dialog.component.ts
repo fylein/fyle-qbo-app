@@ -45,6 +45,9 @@ export class ProjectMappingsDialogComponent implements OnInit {
         that.snackBar.open('Mapping saved successfully!');
         that.isLoading = false;
         that.dialogRef.close();
+      }, err => {
+        that.snackBar.open('Something went wrong');
+        that.isLoading = false;
       });
     }
   }

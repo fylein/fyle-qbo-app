@@ -16,11 +16,12 @@ export class ExpenseGroupsComponent implements OnInit {
   isLoading = true;
   count: number;
   state: string;
+  settings;
   pageNumber = 0;
   pageSize = 5;
-  columnsToDisplay = ['description', 'employee', 'claimno', 'expensetype'];
+  columnsToDisplay = ['description', 'employee', 'export', 'expensetype'];
 
-  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private router: Router, private settingsService: SettingsService) { }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -79,7 +80,11 @@ export class ExpenseGroupsComponent implements OnInit {
     that.pageNumber = +that.route.snapshot.queryParams.page_number || 0;
     that.pageSize = +that.route.snapshot.queryParams.page_size || 5;
     that.state = that.route.snapshot.queryParams.state || 'FAILED';
-    that.getPaginatedExpenseGroups();
+    that.settingsService.getCombinedSettings(that.workspaceId).subscribe((settings) => {
+      that.settings = settings;
+      console.log(that.settings);
+      that.getPaginatedExpenseGroups();
+    });
 
     that.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {

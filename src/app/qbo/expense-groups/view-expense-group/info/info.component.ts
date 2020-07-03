@@ -36,7 +36,6 @@ export class InfoComponent implements OnInit {
   initExpenseGroupExpenses() {
     const that = this;
     return that.expenseGroupsService.getExpensesByExpenseGroupId(that.workspaceId, that.expenseGroupId).toPromise().then((expenses) => {
-      console.log(expenses);
       that.count = expenses.length;
       that.expenses = new MatTableDataSource(expenses);
     });

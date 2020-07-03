@@ -72,7 +72,6 @@ export class ViewExpenseGroupComponent implements OnInit {
       if (tasks.length) {
         that.task = tasks[0];
         that.status = that.task.status;
-        console.log(that.status);
       }
     });
   }

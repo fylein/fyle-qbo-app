@@ -111,8 +111,7 @@ export class CostCenterMappingsDialogComponent implements OnInit {
             .filter(fyleCostCenter => new RegExp(newValue.toLowerCase(), 'g').test(fyleCostCenter.value.toLowerCase()));
         }
       });
-  
-  
+
       that.form.controls.qboObject.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
         if (typeof (newValue) === 'string') {
           that.qboOptions = that.qboElements

@@ -2,6 +2,7 @@
 
 .auth {
   background-color: $fy-violet-background;
+  overflow-y: hidden;
   .auth-header {
     padding: 16px;
     &--logo {

@@ -1,11 +1,19 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ErrorStateMatcher } from '@angular/material/core';
 
+/** Error when invalid control is dirty, touched, or submitted. */
+export class MappingErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 @Component({
   selector: 'app-category-mappings-dialog',
   templateUrl: './category-mappings-dialog.component.html',
@@ -18,6 +26,7 @@ export class CategoryMappingsDialogComponent implements OnInit {
   qboAccounts: any[];
   fyleCategoryOptions: any[];
   qboAccountOptions: any[];
+  matcher = new MappingErrorStateMatcher();
 
   constructor(private formBuilder: FormBuilder,
               public dialogRef: MatDialogRef<CategoryMappingsDialogComponent>,
@@ -30,8 +39,22 @@ export class CategoryMappingsDialogComponent implements OnInit {
     return mappingObject ? mappingObject.value : '';
   }
 
+  forbiddenSelectionValidator(options: any[]): ValidatorFn {
+    return (control: AbstractControl): {[key: string]: any} | null => {
+      const forbidden = !options.some((option) => {
+        return control.value.id && option.id === control.value.id;
+      });
+      return forbidden ? {
+        forbiddenOption: {
+          value: control.value
+        }
+      } : null;
+    };
+  }
+
   submit() {
     const that = this;
+
     if (that.form.valid) {
       that.isLoading = true;
       that.mappingsService.postMappings(that.data.workspaceId, {
@@ -67,27 +90,27 @@ export class CategoryMappingsDialogComponent implements OnInit {
       getExpenseAccounts
     ]).subscribe(() => {
       that.isLoading = false;
+
+      that.form = that.formBuilder.group({
+        fyleCategory: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleCategories)])],
+        qboAccount: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.qboAccounts)])]
+      });
+
+      that.form.controls.fyleCategory.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
+        if (typeof(newValue) === 'string') {
+          that.fyleCategoryOptions = that.fyleCategories
+          .filter(fyleCategory => new RegExp(newValue.toLowerCase(), 'g').test(fyleCategory.value.toLowerCase()));
+        }
+      });
+
+      that.form.controls.qboAccount.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
+        if (typeof(newValue) === 'string') {
+          that.qboAccountOptions = that.qboAccounts
+          .filter(qboAccount => new RegExp(newValue.toLowerCase(), 'g').test(qboAccount.value.toLowerCase()));
+        }
+      });
     });
 
-    that.form = that.formBuilder.group({
-      fyleCategory: ['', Validators.required],
-      qboAccount: ['', Validators.required]
-    });
-
-    that.form.controls.fyleCategory.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-      if (typeof(newValue) === 'string') {
-        that.fyleCategoryOptions = that.fyleCategories
-        .filter(fyleCategory => new RegExp(newValue.toLowerCase(), 'g').test(fyleCategory.value.toLowerCase()));
-      }
-    });
-
-
-    that.form.controls.qboAccount.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-      if (typeof(newValue) === 'string') {
-        that.qboAccountOptions = that.qboAccounts
-        .filter(qboAccount => new RegExp(newValue.toLowerCase(), 'g').test(qboAccount.value.toLowerCase()));
-      }
-    });
   }
 
 }

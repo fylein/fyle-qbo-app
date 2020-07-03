@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, FormGroupDirective, NgForm, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged';
@@ -11,7 +11,14 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { forkJoin, from } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from 'src/app/core/services/settings.service';
+import { ErrorStateMatcher } from '@angular/material/core';
 
+export class MappingErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 @Component({
   selector: 'app-employee-mappings-dialog',
   templateUrl: './employee-mappings-dialog.component.html',
@@ -31,6 +38,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
   cccOptions: any[];
   qboVendorOptions: any[];
   generalMappings: any;
+  matcher = new MappingErrorStateMatcher();
 
   constructor(private formBuilder: FormBuilder,
               public dialogRef: MatDialogRef<EmployeeMappingsDialogComponent>,
@@ -84,6 +92,19 @@ export class EmployeeMappingsDialogComponent implements OnInit {
     }
   }
 
+  forbiddenSelectionValidator(options: any[]): ValidatorFn {
+    return (control: AbstractControl): {[key: string]: any} | null => {
+      const forbidden = !options.some((option) => {
+        return control.value.id && option.id === control.value.id;
+      });
+      return forbidden ? {
+        forbiddenOption: {
+          value: control.value
+        }
+      } : null;
+    };
+  }
+
   reset() {
     const that = this;
     const getFyleEmployees = that.mappingsService.getFyleEmployees(that.workSpaceId).toPromise().then((fyleEmployees) => {
@@ -115,41 +136,40 @@ export class EmployeeMappingsDialogComponent implements OnInit {
       from(getGeneralMappings)
     ]).subscribe((res) => {
       that.isLoading = false;
-    });
+      that.form = that.formBuilder.group({
+        fyleEmployee: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleEmployees)])],
+        qboVendor: ['', that.generalSettings.employee_field_mapping === 'VENDOR' ? that.forbiddenSelectionValidator(that.qboVendors) : null],
+        qboEmployee: ['', that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.forbiddenSelectionValidator(that.qboEmployees) : null],
+        creditCardAccount: ['', that.generalSettings.corporate_credit_card_expenses_object ? that.forbiddenSelectionValidator(that.cccObjects) : null]
+      });
 
-    that.form = that.formBuilder.group({
-      fyleEmployee: ['', Validators.required],
-      qboVendor: [''],
-      qboEmployee: [''],
-      creditCardAccount: ['']
-    });
+      that.form.controls.fyleEmployee.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
+        if (typeof (newValue) === 'string') {
+          that.employeeOptions = that.fyleEmployees
+            .filter(fyleEmployee => new RegExp(newValue.toLowerCase(), 'g').test(fyleEmployee.value.toLowerCase()));
+        }
+      });
 
-    that.form.controls.fyleEmployee.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-      if (typeof (newValue) === 'string') {
-        that.employeeOptions = that.fyleEmployees
-          .filter(fyleEmployee => new RegExp(newValue.toLowerCase(), 'g').test(fyleEmployee.value.toLowerCase()));
-      }
-    });
+      that.form.controls.qboVendor.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
+        if (typeof (newValue) === 'string') {
+          that.qboVendorOptions = that.qboVendors
+            .filter(qboVendor => new RegExp(newValue.toLowerCase(), 'g').test(qboVendor.value.toLowerCase()));
+        }
+      });
 
-    that.form.controls.qboVendor.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-      if (typeof (newValue) === 'string') {
-        that.qboVendorOptions = that.qboVendors
-          .filter(qboVendor => new RegExp(newValue.toLowerCase(), 'g').test(qboVendor.value.toLowerCase()));
-      }
-    });
+      that.form.controls.qboEmployee.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
+        if (typeof (newValue) === 'string') {
+          that.qboEmployeeOptions = that.qboEmployees
+            .filter(qboEmployee => new RegExp(newValue.toLowerCase(), 'g').test(qboEmployee.value.toLowerCase()));
+        }
+      });
 
-    that.form.controls.qboEmployee.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-      if (typeof (newValue) === 'string') {
-        that.qboEmployeeOptions = that.qboEmployees
-          .filter(qboEmployee => new RegExp(newValue.toLowerCase(), 'g').test(qboEmployee.value.toLowerCase()));
-      }
-    });
-
-    that.form.controls.creditCardAccount.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-      if (typeof (newValue) === 'string') {
-        that.cccOptions = that.cccObjects
-          .filter(cccObject => new RegExp(newValue.toLowerCase(), 'g').test(cccObject.value.toLowerCase()));
-      }
+      that.form.controls.creditCardAccount.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
+        if (typeof (newValue) === 'string') {
+          that.cccOptions = that.cccObjects
+            .filter(cccObject => new RegExp(newValue.toLowerCase(), 'g').test(cccObject.value.toLowerCase()));
+        }
+      });
     });
   }
 

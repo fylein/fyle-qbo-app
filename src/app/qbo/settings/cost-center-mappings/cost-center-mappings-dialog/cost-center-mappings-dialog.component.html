@@ -20,13 +20,15 @@
                     </strong>
                 </div>
                 <mat-form-field appearance="outline">
-                    <input required type="text" formControlName="fyleCostCenter" placeholder="Pick Fyle Cost Center" matInput
-                        [matAutocomplete]="fyProj">
+                    <input required type="text" formControlName="fyleCostCenter" placeholder="Pick Fyle Cost Center" matInput [matAutocomplete]="fyProj" [errorStateMatcher]="matcher">
                     <mat-autocomplete #fyProj="matAutocomplete" [displayWith]="mappingDisplay">
                         <mat-option *ngFor="let option of fyleCostCenterOptions" [value]="option">
                             {{option.value}}
                         </mat-option>
                     </mat-autocomplete>
+                    <mat-error *ngIf="form.controls.fyleCostCenter.hasError('forbiddenOption')">
+                        This value does not exist
+                    </mat-error>
                 </mat-form-field>
     
                 <div class="mat-body-strong">
@@ -35,20 +37,22 @@
                     </strong>
                 </div>
                 <mat-form-field appearance="outline">
-                    <input type="text" formControlName="qboObject" placeholder="Pick entity" matInput
-                        [matAutocomplete]="qboEl">
+                    <input type="text" formControlName="qboObject" placeholder="Pick entity" matInput [matAutocomplete]="qboEl" [errorStateMatcher]="matcher">
                     <mat-autocomplete #qboEl="matAutocomplete" [displayWith]="mappingDisplay">
                         <mat-option *ngFor="let option of qboOptions" [value]="option">
                             {{option.value}}
                         </mat-option>
                     </mat-autocomplete>
+                    <mat-error *ngIf="form.controls.qboObject.hasError('forbiddenOption')">
+                        This value does not exist
+                    </mat-error>
                 </mat-form-field>
             </div>
         </form>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
         <button mat-flat-button mat-dialog-close>Cancel</button>
-        <button class="cost-center-mappings--save-btn" mat-flat-button color="primary" type="button" (click)="submit()">
+        <button [disabled]="form && !form.valid" class="cost-center-mappings--save-btn" mat-flat-button color="primary" type="button" (click)="submit()">
             Save
         </button>
     </mat-dialog-actions>

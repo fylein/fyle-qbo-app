@@ -1,12 +1,19 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm, ValidatorFn, AbstractControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from 'src/app/core/services/settings.service';
+import { ErrorStateMatcher } from '@angular/material/core';
 
+export class MappingErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 @Component({
   selector: 'app-project-mappings-dialog',
   templateUrl: './project-mappings-dialog.component.html',
@@ -20,6 +27,7 @@ export class ProjectMappingsDialogComponent implements OnInit {
   fyleProjectOptions: any[];
   qboOptions: any[];
   generalSettings: any;
+  matcher = new MappingErrorStateMatcher();
 
   constructor(private formBuilder: FormBuilder,
               public dialogRef: MatDialogRef<ProjectMappingsDialogComponent>,
@@ -30,6 +38,19 @@ export class ProjectMappingsDialogComponent implements OnInit {
 
   mappingDisplay(mappingObject) {
     return mappingObject ? mappingObject.value : '';
+  }
+
+  forbiddenSelectionValidator(options: any[]): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const forbidden = !options.some((option) => {
+        return control.value.id && option.id === control.value.id;
+      });
+      return forbidden ? {
+        forbiddenOption: {
+          value: control.value
+        }
+      } : null;
+    };
   }
 
   submit() {
@@ -79,25 +100,23 @@ export class ProjectMappingsDialogComponent implements OnInit {
       qboPromise
     ]).subscribe(() => {
       that.isLoading = false;
-    });
+      that.form = that.formBuilder.group({
+        fyleProject: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleProjects)])],
+        qboObject: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.qboElements)])]
+      });
 
-    that.form = that.formBuilder.group({
-      fyleProject: ['', Validators.required],
-      qboObject: ['', Validators.required]
-    });
+      that.form.controls.fyleProject.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
+        if (typeof (newValue) === 'string') {
+          that.fyleProjectOptions = that.fyleProjects.filter(fyleProject => new RegExp(newValue.toLowerCase(), 'g').test(fyleProject.value.toLowerCase()));
+        }
+      });
 
-    that.form.controls.fyleProject.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-      if (typeof(newValue) === 'string') {
-        that.fyleProjectOptions = that.fyleProjects.filter(fyleProject => new RegExp(newValue.toLowerCase(), 'g').test(fyleProject.value.toLowerCase()));
-      }
-    });
-
-
-    that.form.controls.qboObject.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-      if (typeof(newValue) === 'string') {
-        that.qboOptions = that.qboElements
-        .filter(qboElement => new RegExp(newValue.toLowerCase(), 'g').test(qboElement.value.toLowerCase()));
-      }
+      that.form.controls.qboObject.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
+        if (typeof (newValue) === 'string') {
+          that.qboOptions = that.qboElements
+            .filter(qboElement => new RegExp(newValue.toLowerCase(), 'g').test(qboElement.value.toLowerCase()));
+        }
+      });
     });
   }
 
@@ -105,7 +124,7 @@ export class ProjectMappingsDialogComponent implements OnInit {
     const that = this;
 
     that.isLoading = true;
-    that.settingsService.getCombinedSettings(that.data.workspaceId).subscribe( settings => {
+    that.settingsService.getCombinedSettings(that.data.workspaceId).subscribe(settings => {
       that.generalSettings = settings;
       that.isLoading = false;
       that.reset();

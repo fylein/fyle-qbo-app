@@ -27,6 +27,9 @@
                         {{option.value}}
                     </mat-option>
                 </mat-autocomplete>
+                <mat-error *ngIf="form.controls.fyleProject.hasError('forbiddenOption')">
+                    This value does not exist
+                </mat-error>
             </mat-form-field>
 
             <div class="mat-body-strong">
@@ -42,13 +45,17 @@
                         {{option.value}}
                     </mat-option>
                 </mat-autocomplete>
+                <mat-error *ngIf="form.controls.qboObject.hasError('forbiddenOption')">
+                    This value does not exist
+                </mat-error>
             </mat-form-field>
         </div>
     </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-flat-button mat-dialog-close>Cancel</button>
-    <button class="projects-mappings--save-btn" mat-flat-button color="primary" type="button" (click)="submit()">
+    <button [disabled]="form && !form.valid" class="projects-mappings--save-btn" mat-flat-button color="primary"
+        type="button" (click)="submit()">
         Save
     </button>
 </mat-dialog-actions>

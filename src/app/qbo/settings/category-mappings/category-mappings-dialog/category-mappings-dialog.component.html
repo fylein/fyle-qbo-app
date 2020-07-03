@@ -20,12 +20,15 @@
                 </strong>
             </div>
             <mat-form-field appearance="outline">
-                <input required type="text" formControlName="fyleCategory" placeholder="Pick fyle category" matInput [matAutocomplete]="fyCat">
+                <input required type="text" formControlName="fyleCategory" placeholder="Pick fyle category" matInput [matAutocomplete]="fyCat" [errorStateMatcher]="matcher">
                 <mat-autocomplete #fyCat="matAutocomplete" [displayWith]="mappingDisplay">
                     <mat-option *ngFor="let option of fyleCategoryOptions" [value]="option">
                         {{option.value}}
                     </mat-option>
                 </mat-autocomplete>
+                <mat-error *ngIf="form.controls.fyleCategory.hasError('forbiddenOption')">
+                    This value does not exist
+                </mat-error>
             </mat-form-field>
 
             <div class="mat-body-strong">
@@ -34,20 +37,22 @@
                 </strong>
             </div>
             <mat-form-field appearance="outline">
-                <input type="text" formControlName="qboAccount" placeholder="Pick qbo account" matInput
-                    [matAutocomplete]="qboAc">
+                <input type="text" formControlName="qboAccount" placeholder="Pick qbo account" matInput [matAutocomplete]="qboAc" [errorStateMatcher]="matcher">
                 <mat-autocomplete #qboAc="matAutocomplete" [displayWith]="mappingDisplay">
                     <mat-option *ngFor="let option of qboAccountOptions" [value]="option">
                         {{option.value}}
                     </mat-option>
                 </mat-autocomplete>
+                <mat-error *ngIf="form.controls.qboAccount.hasError('forbiddenOption')">
+                    This value does not exist
+                </mat-error>
             </mat-form-field>
         </div>
     </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-flat-button mat-dialog-close>Cancel</button>
-    <button class="cateogry-mappings--save-btn" mat-flat-button color="primary" type="button" (click)="submit()">
+    <button [disabled]="form && !form.valid" class="cateogry-mappings--save-btn" mat-flat-button color="primary" type="button" (click)="submit()">
         Save
     </button>
 </mat-dialog-actions>

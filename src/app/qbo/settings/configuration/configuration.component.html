@@ -1,116 +1,116 @@
 <div class="internal-loader" fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
-    <app-loader></app-loader>
+  <app-loader></app-loader>
 </div>
 <div class="configurations" *ngIf="!isLoading">
-    <div class="page-header configurations--header">
-        <div class="page-header--name mat-h2">
-            Configurations
-        </div>
+  <div class="page-header configurations--header">
+    <div class="page-header--name mat-h2">
+      Configurations
     </div>
-    <form class="configurations--form" [formGroup]="generalSettingsForm">
-        <div fxLayout="column" fxLayoutAlign="start stretch">
-            <div class="mat-body-strong">
-                <strong>
-                    Map Fyle employees to
-                </strong>
-            </div>
-            <mat-form-field floatLabel="always" appearance="outline" required>
-                <mat-select placeholder="select employees" formControlName="employees">
-                    <mat-option value="VENDOR">
-                        Vendor
-                    </mat-option>
-                    <mat-option value="EMPLOYEE">
-                        Employee
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+  </div>
+  <form class="configurations--form" [formGroup]="generalSettingsForm">
+    <div fxLayout="column" fxLayoutAlign="start stretch">
+      <div class="mat-body-strong">
+        <strong>
+          Map Fyle employees to
+        </strong>
+      </div>
+      <mat-form-field floatLabel="always" appearance="outline" required>
+        <mat-select placeholder="select employees" formControlName="employees">
+          <mat-option value="VENDOR">
+            Vendor
+          </mat-option>
+          <mat-option value="EMPLOYEE">
+            Employee
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-            <div class="mat-body-strong">
-                <strong>
-                    Map Reimbursible Expenses To
-                </strong>
-            </div>
-            <mat-form-field floatLabel="always" appearance="outline" required>
-                <mat-select placeholder="select reimburExpense" formControlName="reimburExpense">
-                    <mat-option *ngFor="let option of expenseOptions" [value]="option.value">
-                        {{option.label}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+      <div class="mat-body-strong">
+        <strong>
+          Map Reimbursible Expenses To
+        </strong>
+      </div>
+      <mat-form-field floatLabel="always" appearance="outline" required>
+        <mat-select placeholder="select reimburExpense" formControlName="reimburExpense">
+          <mat-option *ngFor="let option of expenseOptions" [value]="option.value">
+            {{option.label}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-            <div class="mat-body-strong">
-                <strong>
-                    Map corporate credit card expenses to
-                </strong>
-            </div>
-            <mat-form-field floatLabel="always" appearance="outline">
-                <mat-select placeholder="select cccExpense" formControlName="cccExpense">
-                    <mat-option>
-                        None
-                    </mat-option>
-                    <mat-option value="CREDIT CARD PURCHASE">
-                        Credit Card Purchases
-                    </mat-option>
-                    <mat-option value="JOURNAL ENTRY">
-                        Jounral Entries
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+      <div class="mat-body-strong">
+        <strong>
+          Map corporate credit card expenses to
+        </strong>
+      </div>
+      <mat-form-field floatLabel="always" appearance="outline">
+        <mat-select placeholder="select cccExpense" formControlName="cccExpense">
+          <mat-option>
+            None
+          </mat-option>
+          <mat-option value="CREDIT CARD PURCHASE">
+            Credit Card Purchases
+          </mat-option>
+          <mat-option value="JOURNAL ENTRY">
+            Jounral Entries
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-            <div class="mat-body-strong">
-                <strong>
-                    Map Fyle projects to
-                </strong>
-            </div>
-            <mat-form-field floatLabel="always" appearance="outline">
-                <mat-select placeholder="select projects" formControlName="projects">
-                    <mat-option>
-                        None
-                    </mat-option>
-                    <mat-option value="DEPARTMENT">
-                        Department
-                    </mat-option>
-                    <mat-option value="CLASS">
-                        Class
-                    </mat-option>
-                    <mat-option value="CUSTOMER">
-                        Customer
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+      <div class="mat-body-strong">
+        <strong>
+          Map Fyle projects to
+        </strong>
+      </div>
+      <mat-form-field floatLabel="always" appearance="outline">
+        <mat-select placeholder="select projects" formControlName="projects">
+          <mat-option>
+            None
+          </mat-option>
+          <mat-option value="DEPARTMENT">
+            Department
+          </mat-option>
+          <mat-option value="CLASS">
+            Class
+          </mat-option>
+          <mat-option value="CUSTOMER">
+            Customer
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-            <div class="mat-body-strong">
-                <strong>
-                    Map Fyle cost centers to
-                </strong>
-            </div>
-            <mat-form-field floatLabel="always" appearance="outline">
-                <mat-select placeholder="select costCenters" formControlName="costCenters">
-                    <mat-option>
-                        None
-                    </mat-option>
-                    <mat-option value="DEPARTMENT">
-                        Department
-                    </mat-option>
-                    <mat-option value="CLASS">
-                        Class
-                    </mat-option>
-                    <mat-option value="CUSTOMER">
-                        Customer
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div class="configurations--errors" *ngIf="generalSettingsForm.errors">
-                <div *ngFor="let error of generalSettingsForm.errors | keyvalue">
-                    <div *ngIf="error.key === 'projectCostCenterSame'">
-                        Projects and Cost Centers cannot have the same value
-                    </div>
-                </div>
-            </div>
-            <button [disabled]="isSaveDisabled || !generalSettingsForm.valid" class="configurations--save-btn" mat-flat-button color="primary"
-                (click)="save()" type="button">
-                Save
-            </button>
+      <div class="mat-body-strong">
+        <strong>
+          Map Fyle cost centers to
+        </strong>
+      </div>
+      <mat-form-field floatLabel="always" appearance="outline">
+        <mat-select placeholder="select costCenters" formControlName="costCenters">
+          <mat-option>
+            None
+          </mat-option>
+          <mat-option value="DEPARTMENT">
+            Department
+          </mat-option>
+          <mat-option value="CLASS">
+            Class
+          </mat-option>
+          <mat-option value="CUSTOMER">
+            Customer
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="configurations--errors" *ngIf="generalSettingsForm.errors">
+        <div *ngFor="let error of generalSettingsForm.errors | keyvalue">
+          <div *ngIf="error.key === 'projectCostCenterSame'">
+            Projects and Cost Centers cannot have the same value
+          </div>
         </div>
-    </form>
+      </div>
+      <button [disabled]="isSaveDisabled || !generalSettingsForm.valid" class="configurations--save-btn" mat-flat-button
+        color="primary" (click)="save()" type="button">
+        Save
+      </button>
+    </div>
+  </form>
 </div>

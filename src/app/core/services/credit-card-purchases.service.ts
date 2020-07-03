@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { GeneralService } from 'src/app/core/services/general.service';
+import { ApiService } from 'src/app/core/services/general.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CreditCardPurchasesService {
-  constructor(private generalService: GeneralService) {}
+  constructor(private apiService: ApiService) {}
 
   createCreditCardPurchases(workspaceId: number, expenseGroupIds: any[]): Observable<any> {
-    return this.generalService.post(
+    return this.apiService.post(
       `/workspaces/${workspaceId}/qbo/credit_card_purchases/trigger/`, {
         expense_group_ids: expenseGroupIds
       }
@@ -17,6 +17,6 @@ export class CreditCardPurchasesService {
   }
 
   getCreditCardPurchases(workspaceId: number, limit: number, offset: number): Observable<any> {
-    return this.generalService.get(`/workspaces/${workspaceId}/qbo/credit_card_purchases/?limit=${limit}&offset=${offset}`, {});
+    return this.apiService.get(`/workspaces/${workspaceId}/qbo/credit_card_purchases/?limit=${limit}&offset=${offset}`, {});
   }
 }

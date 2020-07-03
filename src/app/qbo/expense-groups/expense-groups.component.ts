@@ -82,7 +82,6 @@ export class ExpenseGroupsComponent implements OnInit {
     that.state = that.route.snapshot.queryParams.state || 'FAILED';
     that.settingsService.getCombinedSettings(that.workspaceId).subscribe((settings) => {
       that.settings = settings;
-      console.log(that.settings);
       that.getPaginatedExpenseGroups();
     });
 

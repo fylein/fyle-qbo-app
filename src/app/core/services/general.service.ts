@@ -19,7 +19,7 @@ const API_BASE_URL = environment.api_url;
 @Injectable({
   providedIn: 'root'
 })
-export class GeneralService {
+export class ApiService {
 
   constructor(private http: HttpClient) { }
 

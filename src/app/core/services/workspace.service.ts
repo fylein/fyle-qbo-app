@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GeneralService } from './general.service';
+import { ApiService } from './general.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -7,13 +7,13 @@ import { Observable } from 'rxjs';
 })
 export class WorkspaceService {
 
-  constructor(private generalService: GeneralService) { }
+  constructor(private apiService: ApiService) { }
 
   createWorkspace(): Observable<any> {
-    return this.generalService.post('/workspaces/', {});
+    return this.apiService.post('/workspaces/', {});
   }
 
   getWorkspaces(orgId): Observable<any> {
-    return this.generalService.get(`/workspaces/?org_id=${orgId}`, {});
+    return this.apiService.get(`/workspaces/?org_id=${orgId}`, {});
   }
 }

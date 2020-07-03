@@ -1,22 +1,22 @@
-@import 'variables.scss';
+@import "variables.scss";
 
 .export {
-    &-header {
-        margin: 16px 32px;
+  &-header {
+    margin: 16px 32px;
+  }
+
+  &-card {
+    margin: 16px 48px;
+    min-width: 800px;
+    border: 1px solid $fy-card-border;
+    &--stats {
+      margin: 8px;
+      color: $fy-title-text;
+      font-size: 14px;
     }
 
-    &-card {
-        margin: 16px 48px;
-        min-width: 800px;
-        border: 1px solid $fy-card-border;
-        &--stats {
-            margin: 8px;
-            color: $fy-title-text;
-            font-size: 14px;
-        }
-
-        &--loader {
-            margin: 16px 0;
-        }
+    &--loader {
+      margin: 16px 0;
     }
+  }
 }

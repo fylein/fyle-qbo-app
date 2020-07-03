@@ -1,35 +1,35 @@
-@import 'variables.scss';
+@import "variables.scss";
 
 .sync {
-    &-header {
-        margin: 16px 32px;
+  &-header {
+    margin: 16px 32px;
+  }
+
+  &-card {
+    margin: 16px 48px;
+    min-width: 800px;
+    border: 1px solid $fy-card-border;
+    &--header {
+      font-size: 16px;
+      font-weight: 500;
     }
 
-    &-card {
-        margin: 16px 48px;
-        min-width: 800px;
-        border: 1px solid $fy-card-border;
-        &--header {
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        &--info {
-            font-size: 14px;
-            margin-top: 20px;
-            color: $fy-title-text;
-        }
-
-        &--error {
-            margin: 12px 0;
-            padding: 12px;
-            border: solid 1px $fy-error-border;
-            background-color: $fy-error-background;
-            color: $fy-title-text;
-            &-icon {
-                color: $fy-error;
-                margin-right: 8px;
-            }
-        }
+    &--info {
+      font-size: 14px;
+      margin-top: 20px;
+      color: $fy-title-text;
     }
+
+    &--error {
+      margin: 12px 0;
+      padding: 12px;
+      border: solid 1px $fy-error-border;
+      background-color: $fy-error-background;
+      color: $fy-title-text;
+      &-icon {
+        color: $fy-error;
+        margin-right: 8px;
+      }
+    }
+  }
 }

@@ -1,22 +1,22 @@
-@import 'variables.scss';
+@import "variables.scss";
 
 .configurations {
-    &--header {
-        border-bottom: 1px solid $fy-layout-background;
-    }
+  &--header {
+    border-bottom: 1px solid $fy-layout-background;
+  }
 
-    &--form {
-        font-size: 10px;
-        margin: 24px;
-        max-width: 360px;
-        color: $fy-nav-text;
-    }
+  &--form {
+    font-size: 10px;
+    margin: 24px;
+    max-width: 360px;
+    color: $fy-nav-text;
+  }
 
-    &--save-btn {
-        max-width: 32px;
-    }
+  &--save-btn {
+    max-width: 32px;
+  }
 
-    &--errors {
-        margin: 0 0 16px;
-    }
+  &--errors {
+    margin: 0 0 16px;
+  }
 }

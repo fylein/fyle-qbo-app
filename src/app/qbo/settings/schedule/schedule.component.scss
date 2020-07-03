@@ -1,25 +1,25 @@
-@import 'variables.scss';
+@import "variables.scss";
 
 .schedule {
-    &--header {
-        border-bottom: 1px solid $fy-layout-background;
-    }
+  &--header {
+    border-bottom: 1px solid $fy-layout-background;
+  }
 
-    &--form {
-        color: $fy-nav-text;
-        margin: 24px;
-        max-width: 360px;
-        font-size: 10px;
-    }
+  &--form {
+    color: $fy-nav-text;
+    margin: 24px;
+    max-width: 360px;
+    font-size: 10px;
+  }
 
-    &--inner-form {
-        background-color: $fy-panel;
-        border-radius: 4px;
-        padding: 12px;
-        margin: 16px 0;
-    }
+  &--inner-form {
+    background-color: $fy-panel;
+    border-radius: 4px;
+    padding: 12px;
+    margin: 16px 0;
+  }
 
-    &--save-btn {
-        max-width: 120px;
-    }
+  &--save-btn {
+    max-width: 120px;
+  }
 }

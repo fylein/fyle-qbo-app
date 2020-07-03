@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GeneralService } from './services/general.service';
+import { ApiService } from './services/general.service';
 import { WorkspaceService } from './services/workspace.service';
 
 
@@ -11,7 +11,7 @@ import { WorkspaceService } from './services/workspace.service';
     CommonModule
   ],
   providers: [
-    GeneralService,
+    ApiService,
     WorkspaceService
   ]
 })

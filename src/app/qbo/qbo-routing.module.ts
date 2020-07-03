@@ -110,8 +110,14 @@ const routes: Routes = [{
         }
       ]
     },
-    { path: 'fyle/callback', component: FyleCallbackComponent },
-    { path: 'qbo/callback', component: QBOCallbackComponent }
+    {
+      path: 'fyle/callback',
+      component: FyleCallbackComponent
+    },
+    {
+      path: 'qbo/callback',
+      component: QBOCallbackComponent
+    }
   ]
 }];
 

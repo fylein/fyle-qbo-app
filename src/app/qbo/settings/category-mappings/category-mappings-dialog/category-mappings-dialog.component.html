@@ -1,58 +1,61 @@
 <h2 mat-dialog-title>
-    <div class="cateogry-mappings--header" fxLayout="row" fxLayoutAlign="space-between center">
-        <div class="mat-title">
-            Create New Mapping
-        </div>
-        <div>
-            <mat-icon aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
-        </div>
+  <div class="cateogry-mappings--header" fxLayout="row" fxLayoutAlign="space-between center">
+    <div class="mat-title">
+      Create New Mapping
     </div>
+    <div>
+      <mat-icon aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
+    </div>
+  </div>
 </h2>
 <mat-dialog-content>
-    <div class="internal-loader" fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
-        <app-loader></app-loader>
-    </div>
-    <form *ngIf="!isLoading" class="cateogry-mappings--form" [formGroup]="form">
-        <div fxLayout="column" fxLayoutAlign="start stretch">
-            <div class="mat-body-strong">
-                <strong>
-                    Pick Fyle Category
-                </strong>
-            </div>
-            <mat-form-field appearance="outline">
-                <input required type="text" formControlName="fyleCategory" placeholder="Pick fyle category" matInput [matAutocomplete]="fyCat" [errorStateMatcher]="matcher">
-                <mat-autocomplete #fyCat="matAutocomplete" [displayWith]="mappingDisplay">
-                    <mat-option *ngFor="let option of fyleCategoryOptions" [value]="option">
-                        {{option.value}}
-                    </mat-option>
-                </mat-autocomplete>
-                <mat-error *ngIf="form.controls.fyleCategory.hasError('forbiddenOption')">
-                    This value does not exist
-                </mat-error>
-            </mat-form-field>
+  <div class="internal-loader" fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
+    <app-loader></app-loader>
+  </div>
+  <form *ngIf="!isLoading" class="cateogry-mappings--form" [formGroup]="form">
+    <div fxLayout="column" fxLayoutAlign="start stretch">
+      <div class="mat-body-strong">
+        <strong>
+          Pick Fyle Category
+        </strong>
+      </div>
+      <mat-form-field appearance="outline">
+        <input required type="text" formControlName="fyleCategory" placeholder="Pick fyle category" matInput
+          [matAutocomplete]="fyCat" [errorStateMatcher]="matcher">
+        <mat-autocomplete #fyCat="matAutocomplete" [displayWith]="mappingDisplay">
+          <mat-option *ngFor="let option of fyleCategoryOptions" [value]="option">
+            {{option.value}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="form.controls.fyleCategory.hasError('forbiddenOption')">
+          This value does not exist
+        </mat-error>
+      </mat-form-field>
 
-            <div class="mat-body-strong">
-                <strong>
-                    Account
-                </strong>
-            </div>
-            <mat-form-field appearance="outline">
-                <input type="text" formControlName="qboAccount" placeholder="Pick qbo account" matInput [matAutocomplete]="qboAc" [errorStateMatcher]="matcher">
-                <mat-autocomplete #qboAc="matAutocomplete" [displayWith]="mappingDisplay">
-                    <mat-option *ngFor="let option of qboAccountOptions" [value]="option">
-                        {{option.value}}
-                    </mat-option>
-                </mat-autocomplete>
-                <mat-error *ngIf="form.controls.qboAccount.hasError('forbiddenOption')">
-                    This value does not exist
-                </mat-error>
-            </mat-form-field>
-        </div>
-    </form>
+      <div class="mat-body-strong">
+        <strong>
+          Account
+        </strong>
+      </div>
+      <mat-form-field appearance="outline">
+        <input type="text" formControlName="qboAccount" placeholder="Pick qbo account" matInput
+          [matAutocomplete]="qboAc" [errorStateMatcher]="matcher">
+        <mat-autocomplete #qboAc="matAutocomplete" [displayWith]="mappingDisplay">
+          <mat-option *ngFor="let option of qboAccountOptions" [value]="option">
+            {{option.value}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="form.controls.qboAccount.hasError('forbiddenOption')">
+          This value does not exist
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-flat-button mat-dialog-close>Cancel</button>
-    <button [disabled]="form && !form.valid" class="cateogry-mappings--save-btn" mat-flat-button color="primary" type="button" (click)="submit()">
-        Save
-    </button>
+  <button mat-flat-button mat-dialog-close>Cancel</button>
+  <button [disabled]="form && !form.valid" class="cateogry-mappings--save-btn" mat-flat-button color="primary"
+    type="button" (click)="submit()">
+    Save
+  </button>
 </mat-dialog-actions>

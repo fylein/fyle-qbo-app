@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, merge, forkJoin, from } from 'rxjs';
-import { GeneralService } from 'src/app/core/services/general.service';
+import { ApiService } from 'src/app/core/services/general.service';
 import { Cacheable, CacheBuster, globalCacheBusterNotifier } from 'ngx-cacheable';
 
 const fyleCredentialsCache = new Subject<void>();
@@ -12,20 +12,20 @@ const mappingsSettingsCache = new Subject<void>();
   providedIn: 'root',
 })
 export class SettingsService {
-  constructor(private generalService: GeneralService) { }
+  constructor(private apiService: ApiService) { }
 
   @Cacheable({
     cacheBusterObserver: fyleCredentialsCache
   })
   getFyleCredentials(workspaceId: number): Observable<any> {
-    return this.generalService.get('/workspaces/' + workspaceId + '/credentials/fyle/', {});
+    return this.apiService.get('/workspaces/' + workspaceId + '/credentials/fyle/', {});
   }
 
   @CacheBuster({
     cacheBusterNotifier: fyleCredentialsCache
   })
   deleteFyleCredentials(workspaceId: number): Observable<any> {
-    return this.generalService.post('/workspaces/' + workspaceId + '/credentials/fyle/delete/', {});
+    return this.apiService.post('/workspaces/' + workspaceId + '/credentials/fyle/delete/', {});
   }
 
   @CacheBuster({
@@ -33,21 +33,21 @@ export class SettingsService {
   })
   deleteQBOCredentials(workspaceId: number): Observable<any> {
     globalCacheBusterNotifier.next();
-    return this.generalService.post('/workspaces/' + workspaceId + '/credentials/qbo/delete/', {});
+    return this.apiService.post('/workspaces/' + workspaceId + '/credentials/qbo/delete/', {});
   }
 
   @Cacheable({
     cacheBusterObserver: qboCredentialsCache
   })
   getQBOCredentials(workspaceId: number): Observable<any> {
-    return this.generalService.get('/workspaces/' + workspaceId + '/credentials/qbo/', {});
+    return this.apiService.get('/workspaces/' + workspaceId + '/credentials/qbo/', {});
   }
 
   @CacheBuster({
     cacheBusterNotifier: fyleCredentialsCache
   })
   connectFyle(workspaceId: number, authorizationCode: string): Observable<any> {
-    return this.generalService.post('/workspaces/' + workspaceId + '/connect_fyle/authorization_code/', {
+    return this.apiService.post('/workspaces/' + workspaceId + '/connect_fyle/authorization_code/', {
       code: authorizationCode
     });
   }
@@ -57,14 +57,14 @@ export class SettingsService {
   })
   connectQBO(workspaceId: number, authorizationCode: string, realmId: string): Observable<any> {
     globalCacheBusterNotifier.next();
-    return this.generalService.post('/workspaces/' + workspaceId + '/connect_qbo/authorization_code/', {
+    return this.apiService.post('/workspaces/' + workspaceId + '/connect_qbo/authorization_code/', {
       code: authorizationCode,
       realm_id: realmId
     });
   }
 
   postSettings(workspaceId: number, nextRun: string, hours: number, scheduleEnabled: boolean) {
-    return this.generalService.post(`/workspaces/${workspaceId}/settings/`, {
+    return this.apiService.post(`/workspaces/${workspaceId}/settings/`, {
       next_run: nextRun,
       hours,
       schedule_enabled: scheduleEnabled
@@ -72,21 +72,21 @@ export class SettingsService {
   }
 
   getSettings(workspaceId: number) {
-    return this.generalService.get(`/workspaces/${workspaceId}/settings/`, {});
+    return this.apiService.get(`/workspaces/${workspaceId}/settings/`, {});
   }
 
   @Cacheable({
     cacheBusterObserver: mappingsSettingsCache
   })
   getMappingSettings(workspaceId: number) {
-    return this.generalService.get(`/workspaces/${workspaceId}/mappings/settings/`, {});
+    return this.apiService.get(`/workspaces/${workspaceId}/mappings/settings/`, {});
   }
 
   @CacheBuster({
     cacheBusterNotifier: generalSettingsCache
   })
   postGeneralSettings(workspaceId: number, reimbursableExpensesObject: string, corporateCreditCardExpensesObject: string) {
-    return this.generalService.post(`/workspaces/${workspaceId}/settings/general/`, {
+    return this.apiService.post(`/workspaces/${workspaceId}/settings/general/`, {
       reimbursable_expenses_object: reimbursableExpensesObject,
       corporate_credit_card_expenses_object: corporateCreditCardExpensesObject,
     });
@@ -96,14 +96,14 @@ export class SettingsService {
     cacheBusterNotifier: mappingsSettingsCache
   })
   postMappingSettings(workspaceId: number, mappingSettings: any) {
-    return this.generalService.post(`/workspaces/${workspaceId}/mappings/settings/`, mappingSettings);
+    return this.apiService.post(`/workspaces/${workspaceId}/mappings/settings/`, mappingSettings);
   }
 
   @Cacheable({
     cacheBusterObserver: generalSettingsCache
   })
   getGeneralSettings(workspaceId: number) {
-    return this.generalService.get(`/workspaces/${workspaceId}/settings/general/`, {});
+    return this.apiService.get(`/workspaces/${workspaceId}/settings/general/`, {});
   }
 
   @Cacheable({

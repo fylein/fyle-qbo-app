@@ -1,16 +1,16 @@
-@import 'variables.scss';
+@import "variables.scss";
 
 .employee-mappings {
-    &--header {
-        color: $fy-nav-text;
-    }
+  &--header {
+    color: $fy-nav-text;
+  }
 
-    &--form {
-        color: $fy-nav-text;
-        font-size: 12px;
-    }
-    &--save-btn {
-        background: $fy-primary;
-        color: $fy-white;
-    }
+  &--form {
+    color: $fy-nav-text;
+    font-size: 12px;
+  }
+  &--save-btn {
+    background: $fy-primary;
+    color: $fy-white;
+  }
 }

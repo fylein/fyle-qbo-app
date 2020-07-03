@@ -1,93 +1,92 @@
 <h2 mat-dialog-title>
-    <div class="employee-mappings--header" fxLayout="row" fxLayoutAlign="space-between center">
-        <div class="mat-title">
-            Create New Mapping
+  <div class="employee-mappings--header" fxLayout="row" fxLayoutAlign="space-between center">
+    <div class="mat-title">
+      Create New Mapping
 
-        </div>
-        <div>
-            <mat-icon aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
-        </div>
     </div>
+    <div>
+      <mat-icon aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
+    </div>
+  </div>
 </h2>
 <mat-dialog-content>
-    <div class="internal-loader" fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
-        <app-loader></app-loader>
+  <div class="internal-loader" fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
+    <app-loader></app-loader>
+  </div>
+  <form *ngIf="!isLoading" class="employee-mappings--form" [formGroup]="form">
+    <div fxLayout="column" fxLayoutAlign="start stretch">
+      <div class="mat-body-strong">
+        <strong>
+          Pick Fyle Employee
+        </strong>
+      </div>
+      <mat-form-field appearance="outline">
+        <input required type="text" formControlName="fyleEmployee" placeholder="Pick employee" matInput
+          [matAutocomplete]="fyEmp">
+        <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
+          <mat-option *ngFor="let option of employeeOptions" [value]="option">
+            {{option.value}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="form.controls.fyleEmployee.hasError('forbiddenOption')">
+          This value does not exist
+        </mat-error>
+      </mat-form-field>
+      <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
+        <strong>
+          Pick Vendor
+        </strong>
+      </div>
+      <mat-form-field appearance="outline" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
+        <input type="text" formControlName="qboVendor" placeholder="Pick vendor" matInput [matAutocomplete]="fyEmp">
+        <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
+          <mat-option *ngFor="let option of qboVendorOptions" [value]="option">
+            {{option.value}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="form.controls.qboVendor.hasError('forbiddenOption')">
+          This value does not exist
+        </mat-error>
+      </mat-form-field>
+      <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
+        <strong>
+          Pick Qbo Employee
+        </strong>
+      </div>
+      <mat-form-field appearance="outline" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
+        <input type="text" formControlName="qboEmployee" placeholder="Employee" matInput [matAutocomplete]="qboEmp">
+        <mat-autocomplete #qboEmp="matAutocomplete" [displayWith]="mappingDisplay">
+          <mat-option *ngFor="let option of qboEmployeeOptions" [value]="option">
+            {{option.value}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="form.controls.qboEmployee.hasError('forbiddenOption')">
+          This value does not exist
+        </mat-error>
+      </mat-form-field>
+      <div class="mat-body-strong" *ngIf="generalSettings.corporate_credit_card_expenses_object">
+        <strong>
+          Pick CCC Object
+        </strong>
+      </div>
+      <mat-form-field appearance="outline" *ngIf="generalSettings.corporate_credit_card_expenses_object">
+        <input type="text" formControlName="creditCardAccount" placeholder="Account" matInput [matAutocomplete]="fyEmp">
+        <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
+          <mat-option *ngFor="let option of cccOptions" [value]="option">
+            {{option.value}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="form.controls.creditCardAccount.hasError('forbiddenOption')">
+          This value does not exist
+        </mat-error>
+      </mat-form-field>
     </div>
-    <form *ngIf="!isLoading" class="employee-mappings--form" [formGroup]="form">
-        <div fxLayout="column" fxLayoutAlign="start stretch">
-            <div class="mat-body-strong">
-                <strong>
-                    Pick Fyle Employee
-                </strong>
-            </div>
-            <mat-form-field appearance="outline">
-                <input required type="text" formControlName="fyleEmployee" placeholder="Pick employee" matInput [matAutocomplete]="fyEmp">
-                <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
-                    <mat-option *ngFor="let option of employeeOptions" [value]="option">
-                        {{option.value}}
-                    </mat-option>
-                </mat-autocomplete>
-                <mat-error *ngIf="form.controls.fyleEmployee.hasError('forbiddenOption')">
-                    This value does not exist
-                </mat-error>
-            </mat-form-field>
-            <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
-                <strong>
-                    Pick Vendor
-                </strong>
-            </div>
-            <mat-form-field appearance="outline" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
-                <input type="text" formControlName="qboVendor" placeholder="Pick vendor" matInput
-                    [matAutocomplete]="fyEmp">
-                <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
-                    <mat-option *ngFor="let option of qboVendorOptions" [value]="option">
-                        {{option.value}}
-                    </mat-option>
-                </mat-autocomplete>
-                <mat-error *ngIf="form.controls.qboVendor.hasError('forbiddenOption')">
-                    This value does not exist
-                </mat-error>
-            </mat-form-field>
-            <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
-                <strong>
-                    Pick Qbo Employee
-                </strong>
-            </div>
-            <mat-form-field appearance="outline" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
-                <input type="text" formControlName="qboEmployee" placeholder="Employee" matInput
-                    [matAutocomplete]="qboEmp">
-                <mat-autocomplete #qboEmp="matAutocomplete" [displayWith]="mappingDisplay">
-                    <mat-option *ngFor="let option of qboEmployeeOptions" [value]="option">
-                        {{option.value}}
-                    </mat-option>
-                </mat-autocomplete>
-                <mat-error *ngIf="form.controls.qboEmployee.hasError('forbiddenOption')">
-                    This value does not exist
-                </mat-error>
-            </mat-form-field>
-            <div class="mat-body-strong" *ngIf="generalSettings.corporate_credit_card_expenses_object">
-                <strong>
-                    Pick CCC Object
-                </strong>
-            </div>
-            <mat-form-field appearance="outline" *ngIf="generalSettings.corporate_credit_card_expenses_object">
-                <input type="text" formControlName="creditCardAccount" placeholder="Account" matInput
-                    [matAutocomplete]="fyEmp">
-                <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
-                    <mat-option *ngFor="let option of cccOptions" [value]="option">
-                        {{option.value}}
-                    </mat-option>
-                </mat-autocomplete>
-                <mat-error *ngIf="form.controls.creditCardAccount.hasError('forbiddenOption')">
-                    This value does not exist
-                </mat-error>
-            </mat-form-field>
-        </div>
-    </form>
-</mat-dialog-content> 
+  </form>
+</mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-flat-button mat-dialog-close>Cancel</button>
-    <button [disabled]="form && !form.valid" class="employee-mappings--save-btn" mat-flat-button color="primary" type="button" (click)="submit()">
-        Save
-    </button>
+  <button mat-flat-button mat-dialog-close>Cancel</button>
+  <button [disabled]="form && !form.valid" class="employee-mappings--save-btn" mat-flat-button color="primary"
+    type="button" (click)="submit()">
+    Save
+  </button>
 </mat-dialog-actions>

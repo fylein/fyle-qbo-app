@@ -1,58 +1,61 @@
 <h2 mat-dialog-title>
-        <div class="cost-center-mappings--header" fxLayout="row" fxLayoutAlign="space-between center">
-            <div class="mat-title">
-                Create New Mapping
-            </div>
-            <div>
-                <mat-icon aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
-            </div>
-        </div>
-    </h2>
-    <mat-dialog-content>
-        <div class="internal-loader" fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
-            <app-loader></app-loader>
-        </div>
-        <form *ngIf="!isLoading" class="cost-center-mappings--form" [formGroup]="form">
-            <div fxLayout="column" fxLayoutAlign="start stretch">
-                <div class="mat-body-strong">
-                    <strong>
-                        Pick Fyle Cost Center
-                    </strong>
-                </div>
-                <mat-form-field appearance="outline">
-                    <input required type="text" formControlName="fyleCostCenter" placeholder="Pick Fyle Cost Center" matInput [matAutocomplete]="fyProj" [errorStateMatcher]="matcher">
-                    <mat-autocomplete #fyProj="matAutocomplete" [displayWith]="mappingDisplay">
-                        <mat-option *ngFor="let option of fyleCostCenterOptions" [value]="option">
-                            {{option.value}}
-                        </mat-option>
-                    </mat-autocomplete>
-                    <mat-error *ngIf="form.controls.fyleCostCenter.hasError('forbiddenOption')">
-                        This value does not exist
-                    </mat-error>
-                </mat-form-field>
-    
-                <div class="mat-body-strong">
-                    <strong>
-                        Pick {{ generalSettings.project_field_mapping | titlecase}}
-                    </strong>
-                </div>
-                <mat-form-field appearance="outline">
-                    <input type="text" formControlName="qboObject" placeholder="Pick entity" matInput [matAutocomplete]="qboEl" [errorStateMatcher]="matcher">
-                    <mat-autocomplete #qboEl="matAutocomplete" [displayWith]="mappingDisplay">
-                        <mat-option *ngFor="let option of qboOptions" [value]="option">
-                            {{option.value}}
-                        </mat-option>
-                    </mat-autocomplete>
-                    <mat-error *ngIf="form.controls.qboObject.hasError('forbiddenOption')">
-                        This value does not exist
-                    </mat-error>
-                </mat-form-field>
-            </div>
-        </form>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-        <button mat-flat-button mat-dialog-close>Cancel</button>
-        <button [disabled]="form && !form.valid" class="cost-center-mappings--save-btn" mat-flat-button color="primary" type="button" (click)="submit()">
-            Save
-        </button>
-    </mat-dialog-actions>
+  <div class="cost-center-mappings--header" fxLayout="row" fxLayoutAlign="space-between center">
+    <div class="mat-title">
+      Create New Mapping
+    </div>
+    <div>
+      <mat-icon aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
+    </div>
+  </div>
+</h2>
+<mat-dialog-content>
+  <div class="internal-loader" fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
+    <app-loader></app-loader>
+  </div>
+  <form *ngIf="!isLoading" class="cost-center-mappings--form" [formGroup]="form">
+    <div fxLayout="column" fxLayoutAlign="start stretch">
+      <div class="mat-body-strong">
+        <strong>
+          Pick Fyle Cost Center
+        </strong>
+      </div>
+      <mat-form-field appearance="outline">
+        <input required type="text" formControlName="fyleCostCenter" placeholder="Pick Fyle Cost Center" matInput
+          [matAutocomplete]="fyProj" [errorStateMatcher]="matcher">
+        <mat-autocomplete #fyProj="matAutocomplete" [displayWith]="mappingDisplay">
+          <mat-option *ngFor="let option of fyleCostCenterOptions" [value]="option">
+            {{option.value}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="form.controls.fyleCostCenter.hasError('forbiddenOption')">
+          This value does not exist
+        </mat-error>
+      </mat-form-field>
+
+      <div class="mat-body-strong">
+        <strong>
+          Pick {{ generalSettings.project_field_mapping | titlecase}}
+        </strong>
+      </div>
+      <mat-form-field appearance="outline">
+        <input type="text" formControlName="qboObject" placeholder="Pick entity" matInput [matAutocomplete]="qboEl"
+          [errorStateMatcher]="matcher">
+        <mat-autocomplete #qboEl="matAutocomplete" [displayWith]="mappingDisplay">
+          <mat-option *ngFor="let option of qboOptions" [value]="option">
+            {{option.value}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="form.controls.qboObject.hasError('forbiddenOption')">
+          This value does not exist
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button mat-dialog-close>Cancel</button>
+  <button [disabled]="form && !form.valid" class="cost-center-mappings--save-btn" mat-flat-button color="primary"
+    type="button" (click)="submit()">
+    Save
+  </button>
+</mat-dialog-actions>

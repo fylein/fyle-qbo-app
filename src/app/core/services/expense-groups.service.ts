@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
-import { GeneralService } from 'src/app/core/services/general.service';
+import { ApiService } from 'src/app/core/services/general.service';
 import { ExpenseGroupResponse } from 'src/app/core/models/expenseGroupsResponse.model';
 import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
 import { Expense } from '../models/expense.model';
@@ -9,10 +9,10 @@ import { Expense } from '../models/expense.model';
   providedIn: 'root',
 })
 export class ExpenseGroupsService {
-  constructor(private generalService: GeneralService) {}
+  constructor(private apiService: ApiService) {}
 
   getExpenseGroups(workspaceId: number, limit: number, offset: number, state: string): Observable<ExpenseGroupResponse> {
-    return this.generalService.get(
+    return this.apiService.get(
       `/workspaces/${workspaceId}/fyle/expense_groups/?limit=${limit}&offset=${offset}&state=${state}`,
       {}
     );
@@ -46,14 +46,14 @@ export class ExpenseGroupsService {
   }
 
   getExpensesByExpenseGroupId(workspaceId: number, expenseGroupOd: number): Observable<Expense[]> {
-    return this.generalService.get(`/workspaces/${workspaceId}/fyle/expense_groups/${expenseGroupOd}/expenses/`, {});
+    return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_groups/${expenseGroupOd}/expenses/`, {});
   }
 
   getExpensesGroupById(workspaceId: number, expenseGroupOd: number): Observable<ExpenseGroup> {
-    return this.generalService.get(`/workspaces/${workspaceId}/fyle/expense_groups/${expenseGroupOd}/`, {});
+    return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_groups/${expenseGroupOd}/`, {});
   }
 
   syncExpenseGroups(workspaceId: number): Observable<any> {
-    return this.generalService.post(`/workspaces/${workspaceId}/fyle/expense_groups/trigger/`, {});
+    return this.apiService.post(`/workspaces/${workspaceId}/fyle/expense_groups/trigger/`, {});
   }
 }

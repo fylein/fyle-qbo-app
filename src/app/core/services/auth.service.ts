@@ -9,7 +9,7 @@ import { catchError } from 'rxjs/operators';
 import { Token } from '../tokens';
 
 import { environment } from 'src/environments/environment';
-import { GeneralService } from 'src/app/core/services/general.service';
+import { ApiService } from 'src/app/core/services/general.service';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ const CALLBACK_URI = environment.callback_uri;
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient, private generalService: GeneralService) {}
+  constructor(private http: HttpClient, private apiService: ApiService) {}
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
@@ -75,15 +75,15 @@ export class AuthService {
   }
 
   setUserProfile(): Observable<any> {
-    return this.generalService.get('/user/profile/', {});
+    return this.apiService.get('/user/profile/', {});
   }
 
   getClusterDomain(): Observable<any> {
-    return this.generalService.get(`/user/domain/`, {});
+    return this.apiService.get(`/user/domain/`, {});
   }
 
   getFyleOrgs(): Observable<any> {
-    return this.generalService.get(`/user/orgs/`, {});
+    return this.apiService.get(`/user/orgs/`, {});
   }
 
   logout() {

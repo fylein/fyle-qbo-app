@@ -1,60 +1,59 @@
 <div class="internal-loader" fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
-    <app-loader></app-loader>
+  <app-loader></app-loader>
 </div>
 
 <div class="general-mappings" *ngIf="!isLoading">
-    <div class="page-header general-mappings--header">
-        <div class="page-header--name mat-h2">
-            General Mappings
-        </div>
+  <div class="page-header general-mappings--header">
+    <div class="page-header--name mat-h2">
+      General Mappings
     </div>
-    <form class="general-mappings--form" [formGroup]="form" (ngSubmit)="submit()">
-        <div fxLayout="column" fxLayoutAlign="start stretch">
-            <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
-                <strong>
-                    Accounts Payable
-                </strong>
-            </div>
-            <mat-form-field floatLabel="always" appearance="outline" required
-                *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
-                <mat-select placeholder="select accounts payable" formControlName="accountPayableAccounts">
-                    <mat-option *ngFor="let accountPayableAccount of accountPayableAccounts; let i = index"
-                        [value]="accountPayableAccounts[i].destination_id">
-                        {{accountPayableAccounts[i].value}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
-                <strong>
-                    Bank Account
-                </strong>
-            </div>
-            <mat-form-field floatLabel="always" appearance="outline" required
-                *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
-                <mat-select placeholder="select bank account" formControlName="bankAccounts">
-                    <mat-option *ngFor="let bankAccount of bankAccounts; let i = index"
-                        [value]="bankAccounts[i].destination_id">
-                        {{bankAccounts[i].value}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div class="mat-body-strong" *ngIf="generalSettings.corporate_credit_card_expenses_object">
-                <strong>
-                    Default Corporate Credit Card Account
-                </strong>
-            </div>
-            <mat-form-field floatLabel="always" appearance="outline" required *ngIf="generalSettings.corporate_credit_card_expenses_object">
-                <mat-select placeholder="select ccc account" formControlName="cccAccounts">
-                    <mat-option *ngFor="let cccAccount of cccAccounts; let i = index"
-                        [value]="cccAccounts[i].destination_id">
-                        {{cccAccounts[i].value}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
+  </div>
+  <form class="general-mappings--form" [formGroup]="form" (ngSubmit)="submit()">
+    <div fxLayout="column" fxLayoutAlign="start stretch">
+      <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
+        <strong>
+          Accounts Payable
+        </strong>
+      </div>
+      <mat-form-field floatLabel="always" appearance="outline" required
+        *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
+        <mat-select placeholder="select accounts payable" formControlName="accountPayableAccounts">
+          <mat-option *ngFor="let accountPayableAccount of accountPayableAccounts; let i = index"
+            [value]="accountPayableAccounts[i].destination_id">
+            {{accountPayableAccounts[i].value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
+        <strong>
+          Bank Account
+        </strong>
+      </div>
+      <mat-form-field floatLabel="always" appearance="outline" required
+        *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
+        <mat-select placeholder="select bank account" formControlName="bankAccounts">
+          <mat-option *ngFor="let bankAccount of bankAccounts; let i = index" [value]="bankAccounts[i].destination_id">
+            {{bankAccounts[i].value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="mat-body-strong" *ngIf="generalSettings.corporate_credit_card_expenses_object">
+        <strong>
+          Default Corporate Credit Card Account
+        </strong>
+      </div>
+      <mat-form-field floatLabel="always" appearance="outline" required
+        *ngIf="generalSettings.corporate_credit_card_expenses_object">
+        <mat-select placeholder="select ccc account" formControlName="cccAccounts">
+          <mat-option *ngFor="let cccAccount of cccAccounts; let i = index" [value]="cccAccounts[i].destination_id">
+            {{cccAccounts[i].value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-        <button class="configurations--save-btn" mat-flat-button color="primary" (click)="submit()" type="button">
-            Save
-        </button>
-    </form>
+    <button class="configurations--save-btn" mat-flat-button color="primary" (click)="submit()" type="button">
+      Save
+    </button>
+  </form>
 </div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
-import { GeneralService } from 'src/app/core/services/general.service';
+import { ApiService } from 'src/app/core/services/general.service';
 import { Task } from '../models/task.model';
 import { TaskResponse } from '../models/taskReponse.model';
 
@@ -8,10 +8,10 @@ import { TaskResponse } from '../models/taskReponse.model';
   providedIn: 'root',
 })
 export class TasksService {
-  constructor(private generalService: GeneralService) {}
+  constructor(private apiService: ApiService) {}
 
   getTasks(workspaceId: number, limit: number, offset: number, status: string): Observable<TaskResponse> {
-    return this.generalService.get(
+    return this.apiService.get(
       `/workspaces/${workspaceId}/tasks/all/?limit=${limit}&offset=${offset}&status=${status}`, {}
     );
   }
@@ -47,13 +47,13 @@ export class TasksService {
   }
 
   getTaskById(workspaceId: number, id: number): Observable<any> {
-    return this.generalService.get(
+    return this.apiService.get(
       `/workspaces/${workspaceId}/tasks/?id=${id}`, {}
     );
   }
 
   getTasksByExpenseGroupId(workspaceId: number, expenseGroupId: number): Observable<Task[]> {
-    return this.generalService.get(
+    return this.apiService.get(
       `/workspaces/${workspaceId}/tasks/expense_group/${expenseGroupId}/`, {}
     );
   }

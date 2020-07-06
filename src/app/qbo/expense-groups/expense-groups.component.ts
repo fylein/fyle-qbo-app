@@ -4,6 +4,8 @@ import { ExpenseGroupsService } from '../../core/services/expense-groups.service
 import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { SettingsService } from 'src/app/core/services/settings.service';
+import { TasksService } from 'src/app/core/services/tasks.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-expense-groups',
@@ -21,7 +23,7 @@ export class ExpenseGroupsComponent implements OnInit {
   pageSize = 5;
   columnsToDisplay = ['description', 'employee', 'export', 'expensetype'];
 
-  constructor(private route: ActivatedRoute, private expenseGroupService: ExpenseGroupsService, private router: Router, private settingsService: SettingsService) { }
+  constructor(private route: ActivatedRoute, private taskService: TasksService, private expenseGroupService: ExpenseGroupsService, private router: Router, private settingsService: SettingsService) { }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -81,6 +83,12 @@ export class ExpenseGroupsComponent implements OnInit {
     that.pageSize = +that.route.snapshot.queryParams.page_size || 5;
     that.state = that.route.snapshot.queryParams.state || 'FAILED';
     that.settingsService.getCombinedSettings(that.workspaceId).subscribe((settings) => {
+      if (that.state === 'COMPLETE') {
+        that.columnsToDisplay = ['description', 'employee', 'export', 'expensetype', 'openQbo'];
+      } else {
+        that.columnsToDisplay = ['description', 'employee', 'export', 'expensetype'];
+      }
+
       that.settings = settings;
       that.getPaginatedExpenseGroups();
     });
@@ -92,11 +100,57 @@ export class ExpenseGroupsComponent implements OnInit {
         const state = event.snapshot.queryParams.state || 'FAILED';
 
         if (that.pageNumber !== pageNumber || that.pageSize !== pageSize || that.state !== state) {
+          if (state === 'COMPLETE') {
+            that.columnsToDisplay = ['description', 'employee', 'export', 'expensetype', 'openQbo'];
+          } else {
+            that.columnsToDisplay = ['description', 'employee', 'export', 'expensetype'];
+          }
+
           that.pageNumber = pageNumber;
           that.pageSize = pageSize;
           that.state = state;
           that.getPaginatedExpenseGroups();
         }
+      }
+    });
+  }
+
+  openInQBO(type, id) {
+    window.open(`${environment.qbo_app_url}/app/${type}?txnId=${id}`, '_blank')
+  }
+
+  openInQboHandler(clickedExpenseGroup: ExpenseGroup) {
+    // tslint:disable-next-line: deprecation
+    event.preventDefault();
+    // tslint:disable-next-line: deprecation
+    event.stopPropagation();
+    const that = this;
+    that.isLoading = true;
+    that.taskService.getTasksByExpenseGroupId(that.workspaceId, clickedExpenseGroup.id).subscribe(tasks => {
+      that.isLoading = false;
+      const completeTask = tasks.filter(task => task.status === 'COMPLETE')[0];
+
+      if (completeTask) {
+        const typeMap = {
+          CREATING_BILL: {
+            type: 'bill',
+            getId: (task) => task.detail.Bill.Id
+          },
+          CREATING_CHECK: {
+            type: 'check',
+            getId: (task) => task.detail.Purchase.Id
+          },
+          CREATING_JOURNAL_ENTRY: {
+            type: 'journal',
+            getId: (task) => task.detail.JournalEntry.Id
+          },
+          CREATING_CREDIT_CARD_PURCHASE: {
+            type: 'expense',
+            getId: (task) => task.detail.Purchase.Id
+          }
+        };
+
+        that.openInQBO(typeMap[completeTask.type].type, typeMap[completeTask.type].getId(completeTask));
       }
     });
   }

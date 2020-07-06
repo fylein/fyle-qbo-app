@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { JwtInterceptor } from './core/interceptor/jwt.interceptor';
-import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { CoreModule } from './core/core.module';
@@ -23,7 +22,6 @@ import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/mater
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    NgbModule,
     ReactiveFormsModule,
     Ng2FlatpickrModule,
     CoreModule,
@@ -39,8 +37,7 @@ import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/mater
         horizontalPosition: 'end',
         verticalPosition: 'top'
       }
-    },
-    NgbActiveModal
+    }
   ],
   bootstrap: [AppComponent],
 })

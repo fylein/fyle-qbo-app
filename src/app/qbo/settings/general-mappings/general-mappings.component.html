@@ -11,9 +11,7 @@
   <form class="general-mappings--form" [formGroup]="form" (ngSubmit)="submit()">
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
-        <strong>
           Accounts Payable
-        </strong>
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required
         *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
@@ -25,9 +23,7 @@
         </mat-select>
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
-        <strong>
           Bank Account
-        </strong>
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required
         *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
@@ -38,9 +34,7 @@
         </mat-select>
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.corporate_credit_card_expenses_object">
-        <strong>
           Default Corporate Credit Card Account
-        </strong>
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required
         *ngIf="generalSettings.corporate_credit_card_expenses_object">

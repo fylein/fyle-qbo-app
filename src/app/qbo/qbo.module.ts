@@ -12,7 +12,6 @@ import { QBOCallbackComponent } from './settings/qbo-callback/qbo-callback.compo
 import { SharedModule } from '../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -92,7 +91,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     SharedModule,
     HttpClientModule,
     FormsModule,
-    NgbModule,
     ReactiveFormsModule,
     Ng2FlatpickrModule,
     FlexLayoutModule,

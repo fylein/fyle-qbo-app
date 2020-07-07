@@ -1,15 +1,21 @@
 @import "variables.scss";
 
-.general-mappings {
+::ng-deep .general-mappings {
   &--header {
     border-bottom: 1px solid $fy-layout-background;
   }
 
   &--form {
-    font-size: 10px;
+    font-size: 14px;
     margin: 24px;
     max-width: 360px;
     color: $fy-nav-text;
+  }
+
+  &--input {
+    .mat-select-value-text {
+      color: $fy-nav-text;
+    }
   }
 
   &--save-btn {

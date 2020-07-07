@@ -21,7 +21,7 @@ export class ExpenseGroupsComponent implements OnInit {
   settings;
   pageNumber = 0;
   pageSize = 5;
-  columnsToDisplay = ['description', 'employee', 'export', 'expensetype'];
+  columnsToDisplay = ['description', 'employee', 'expensetype'];
 
   constructor(private route: ActivatedRoute, private taskService: TasksService, private expenseGroupService: ExpenseGroupsService, private router: Router, private settingsService: SettingsService) { }
 
@@ -86,7 +86,7 @@ export class ExpenseGroupsComponent implements OnInit {
       if (that.state === 'COMPLETE') {
         that.columnsToDisplay = ['description', 'employee', 'export', 'expensetype', 'openQbo'];
       } else {
-        that.columnsToDisplay = ['description', 'employee', 'export', 'expensetype'];
+        that.columnsToDisplay = ['description', 'employee', 'expensetype'];
       }
 
       that.settings = settings;
@@ -103,7 +103,7 @@ export class ExpenseGroupsComponent implements OnInit {
           if (state === 'COMPLETE') {
             that.columnsToDisplay = ['description', 'employee', 'export', 'expensetype', 'openQbo'];
           } else {
-            that.columnsToDisplay = ['description', 'employee', 'export', 'expensetype'];
+            that.columnsToDisplay = ['description', 'employee', 'expensetype'];
           }
 
           that.pageNumber = pageNumber;

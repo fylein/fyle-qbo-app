@@ -70,14 +70,32 @@
   }
 }
 
-.page-table {
+::ng-deep .page-table {
   width: 100%;
   border-top: 1px solid $fy-table-border;
   border-bottom: 1px solid $fy-table-border;
+  border-collapse: collapse;
+  overflow: hidden;
+
+  .mat-row {
+    min-height: 54px;
+  }
+
   .mat-row:nth-child(odd) {
     background-color: $fy-alt-row;
-    margin: 12px;
+    border: 12px solid $fy-white;
   }
+
+  tbody {
+    box-shadow: 0px 0px 0px 7px $fy-table-border;
+  }
+
+  .mat-row:nth-child(even) {
+    .mat-cell:first-child {
+      padding-left: 30px;
+    }
+  }
+
   .mat-cell {
     border: 0;
     font-size: 14px;

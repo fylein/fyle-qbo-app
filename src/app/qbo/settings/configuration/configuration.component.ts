@@ -53,6 +53,10 @@ export class ConfigurationComponent implements OnInit {
   configurationProjectCostCenterValidator: ValidatorFn = (fg: FormGroup) => {
     const project = fg.get('projects').value;
     const costCenter = fg.get('costCenters').value;
+    if (!project || !costCenter) {
+      return null;
+    }
+
     return project === costCenter ? { projectCostCenterSame: true } : null;
   }
 
@@ -85,6 +89,8 @@ export class ConfigurationComponent implements OnInit {
       that.projectFieldMapping = projectFieldMapping ? projectFieldMapping : {};
       that.costCenterFieldMapping = costCenterFieldMapping ? costCenterFieldMapping : {};
 
+      that.expenseOptions = that.getExpenseOptions(that.employeeFieldMapping.destination_field);
+
       that.generalSettingsForm = that.formBuilder.group({
         reimburExpense: [that.generalSettings ? that.generalSettings.reimbursable_expenses_object : ''],
         cccExpense: [that.generalSettings ? that.generalSettings.corporate_credit_card_expenses_object : ''],
@@ -102,7 +108,7 @@ export class ConfigurationComponent implements OnInit {
         },
         {
           label: 'Journal Entry',
-          value: 'JOURNAL_ENTRY'
+          value: 'JOURNAL ENTRY'
         },
         {
           label: 'Check',

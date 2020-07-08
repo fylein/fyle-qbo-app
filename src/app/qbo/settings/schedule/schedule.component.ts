@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged';
+import { pairwise } from 'rxjs/internal/operators/pairwise';
 
 @Component({
   selector: 'app-schedule',
@@ -62,8 +64,11 @@ export class ScheduleComponent implements OnInit {
       scheduleEnabled: [false]
     });
 
-    that.form.controls.scheduleEnabled.valueChanges.subscribe((newValue) => {
-      if (!newValue) {
+    that.form.controls.scheduleEnabled.valueChanges.pipe(
+      distinctUntilChanged(),
+      pairwise()
+    ).subscribe(([oldValue, newValue]) => {
+      if (!newValue && oldValue !== newValue) {
         that.settingsService.postSettings(that.workspaceId, new Date().toISOString(), 0, false).subscribe(response => {
           that.isLoading = false;
           that.snackBar.open('Scheduling turned off');

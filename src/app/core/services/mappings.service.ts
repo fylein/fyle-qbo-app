@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, publishReplay, refCount } from 'rxjs/operators';
-import { ApiService } from 'src/app/core/services/general.service';
+import { ApiService } from 'src/app/core/services/api.service';
 import { GeneralMapping } from '../models/generalMapping.model';
 import { MappingsResponse } from '../models/mappingsResponse.model';
 

@@ -86,6 +86,11 @@ export class ExportComponent implements OnInit {
                 that.failedExpenseGroupCount = taskResponse.count;
                 that.successfulExpenseGroupCount = filteredIds.length - that.failedExpenseGroupCount;
                 that.isExporting = false;
+                that.expenseGroupService.getAllExpenseGroups(that.workspaceId, 'READY').subscribe((res) => {
+                  that.exportableExpenseGroups = res.results;
+                  that.isLoading = false;
+                });
+                that.loadExportableExpenseGroups();
                 that.snackBar.open('Export Complete');
               });
             });

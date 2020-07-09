@@ -50,29 +50,6 @@ export class SyncComponent implements OnInit {
     });
   }
 
-  // to be callled in background whenever dashboard is opened
-  updateDimensionTables() {
-    const that = this;
-    that.isEmployeesSyncing = true;
-    concat(
-        this.mappingService.postAccountsPayables(that.workspaceId),
-        this.mappingService.postBankAccounts(that.workspaceId),
-        this.mappingService.postExpenseAccounts(that.workspaceId),
-        this.mappingService.postCreditCardAccounts(that.workspaceId),
-        this.mappingService.postQBOEmployees(that.workspaceId),
-        this.mappingService.postQBOVendors(that.workspaceId),
-        this.mappingService.postQBOCustomers(that.workspaceId),
-        this.mappingService.postQBOClasses(that.workspaceId),
-        this.mappingService.postQBODepartments(that.workspaceId),
-        this.mappingService.postFyleEmployees(that.workspaceId),
-        this.mappingService.postFyleCategories(that.workspaceId),
-        this.mappingService.postFyleCostCenters(that.workspaceId),
-        this.mappingService.postFyleProjects(that.workspaceId)
-    ).subscribe((response) => {
-      that.isEmployeesSyncing = false;
-    });
-  }
-
   ngOnInit() {
     const that = this;
     that.workspaceId = +that.route.parent.snapshot.params.workspace_id;

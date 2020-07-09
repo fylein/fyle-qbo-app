@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
-import { ApiService } from 'src/app/core/services/general.service';
+import { ApiService } from 'src/app/core/services/api.service';
 import { ExpenseGroupResponse } from 'src/app/core/models/expenseGroupsResponse.model';
 import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
 import { Expense } from '../models/expense.model';

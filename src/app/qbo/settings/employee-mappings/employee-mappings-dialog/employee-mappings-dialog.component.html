@@ -2,7 +2,6 @@
   <div class="employee-mappings--header" fxLayout="row" fxLayoutAlign="space-between center">
     <div class="mat-title">
       Create New Mapping
-
     </div>
     <div>
       <mat-icon aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
@@ -17,11 +16,11 @@
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="mat-body-strong">
         <strong>
-          Pick Fyle Employee
+          Pick Fyle Employee Email
         </strong>
       </div>
       <mat-form-field appearance="outline">
-        <input required type="text" formControlName="fyleEmployee" placeholder="Pick employee" matInput
+        <input required type="text" formControlName="fyleEmployee" placeholder="Pick Employee" matInput
           [matAutocomplete]="fyEmp">
         <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of employeeOptions" [value]="option">
@@ -29,7 +28,7 @@
           </mat-option>
         </mat-autocomplete>
         <mat-error *ngIf="form.controls.fyleEmployee.hasError('forbiddenOption')">
-          This value does not exist
+          Please enter a valid value
         </mat-error>
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
@@ -38,14 +37,14 @@
         </strong>
       </div>
       <mat-form-field appearance="outline" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
-        <input type="text" formControlName="qboVendor" placeholder="Pick vendor" matInput [matAutocomplete]="fyEmp">
+        <input type="text" formControlName="qboVendor" placeholder="Pick Vendor" matInput [matAutocomplete]="fyEmp">
         <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboVendorOptions" [value]="option">
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
         <mat-error *ngIf="form.controls.qboVendor.hasError('forbiddenOption')">
-          This value does not exist
+          Please enter a valid value
         </mat-error>
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
@@ -54,30 +53,30 @@
         </strong>
       </div>
       <mat-form-field appearance="outline" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
-        <input type="text" formControlName="qboEmployee" placeholder="Employee" matInput [matAutocomplete]="qboEmp">
+        <input type="text" formControlName="qboEmployee" placeholder="Pick Employee" matInput [matAutocomplete]="qboEmp">
         <mat-autocomplete #qboEmp="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboEmployeeOptions" [value]="option">
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
         <mat-error *ngIf="form.controls.qboEmployee.hasError('forbiddenOption')">
-          This value does not exist
+          Please enter a valid value
         </mat-error>
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.corporate_credit_card_expenses_object">
         <strong>
-          Pick CCC Object
+          Pick Corporate Credit Card Account
         </strong>
       </div>
       <mat-form-field appearance="outline" *ngIf="generalSettings.corporate_credit_card_expenses_object">
-        <input type="text" formControlName="creditCardAccount" placeholder="Account" matInput [matAutocomplete]="fyEmp">
+        <input type="text" formControlName="creditCardAccount" placeholder="corporate credit card account" matInput [matAutocomplete]="fyEmp">
         <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of cccOptions" [value]="option">
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
         <mat-error *ngIf="form.controls.creditCardAccount.hasError('forbiddenOption')">
-          This value does not exist
+          Please enter a valid value
         </mat-error>
       </mat-form-field>
     </div>

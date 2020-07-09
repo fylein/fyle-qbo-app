@@ -28,13 +28,13 @@
           </mat-option>
         </mat-autocomplete>
         <mat-error *ngIf="form.controls.fyleCostCenter.hasError('forbiddenOption')">
-          This value does not exist
+          Please enter a valid value
         </mat-error>
       </mat-form-field>
 
       <div class="mat-body-strong">
         <strong>
-          Pick {{ generalSettings.project_field_mapping | titlecase}}
+          Pick {{ generalSettings.cost_center_field_mapping | titlecase}}
         </strong>
       </div>
       <mat-form-field appearance="outline">
@@ -46,7 +46,7 @@
           </mat-option>
         </mat-autocomplete>
         <mat-error *ngIf="form.controls.qboObject.hasError('forbiddenOption')">
-          This value does not exist
+          Please enter a valid value
         </mat-error>
       </mat-form-field>
     </div>

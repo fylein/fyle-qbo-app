@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, merge, forkJoin, from } from 'rxjs';
-import { ApiService } from 'src/app/core/services/general.service';
+import { ApiService } from 'src/app/core/services/api.service';
 import { Cacheable, CacheBuster, globalCacheBusterNotifier } from 'ngx-cacheable';
 
 const fyleCredentialsCache = new Subject<void>();

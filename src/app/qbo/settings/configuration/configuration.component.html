@@ -7,13 +7,18 @@
       Configurations
     </div>
   </div>
+  <div class="page-info">
+    <div fxLayout="row" fxLayoutAlign="start center" class="page-info--description">
+      Please map the following Fyle entities to their Quickbooks equivalent. Read more. <mat-icon>open_in_new</mat-icon>
+    </div>
+  </div>
   <form class="configurations--form" [formGroup]="generalSettingsForm">
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="configurations--label">
-          Map Fyle employees to
+        Map Employees from Fyle to
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required>
-        <mat-select placeholder="select employees" formControlName="employees">
+        <mat-select placeholder="Choose QBO equivalent of Employees" formControlName="employees">
           <mat-option value="VENDOR">
             Vendor
           </mat-option>
@@ -24,10 +29,10 @@
       </mat-form-field>
 
       <div class="configurations--label">
-          Map Reimbursible Expenses To
+        Map Reimbursible Expenses from Fyle to
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required>
-        <mat-select placeholder="select reimburExpense" formControlName="reimburExpense">
+        <mat-select placeholder="Choose QBO equivalent of Reimbursible Expenses" formControlName="reimburExpense">
           <mat-option *ngFor="let option of expenseOptions" [value]="option.value">
             {{option.label}}
           </mat-option>
@@ -35,10 +40,10 @@
       </mat-form-field>
 
       <div class="configurations--label">
-          Map corporate credit card expenses to
+        Map Corporate Credit Card Expenses from Fyle to
       </div>
       <mat-form-field floatLabel="always" appearance="outline">
-        <mat-select placeholder="select cccExpense" formControlName="cccExpense">
+        <mat-select placeholder="Choose QBO equivalent of Corporate Credit Card Expenses" formControlName="cccExpense">
           <mat-option>
             None
           </mat-option>
@@ -52,10 +57,10 @@
       </mat-form-field>
 
       <div class="configurations--label">
-          Map Fyle projects to
+        Map Projects from Fyle to
       </div>
       <mat-form-field floatLabel="always" appearance="outline">
-        <mat-select placeholder="select projects" formControlName="projects">
+        <mat-select placeholder="Choose QBO equivalent of Projects" formControlName="projects">
           <mat-option>
             None
           </mat-option>
@@ -72,10 +77,10 @@
       </mat-form-field>
 
       <div class="configurations--label">
-          Map Fyle cost centers to
+        Map Cost Centers from Fyle to
       </div>
       <mat-form-field floatLabel="always" appearance="outline">
-        <mat-select placeholder="select costCenters" formControlName="costCenters">
+        <mat-select placeholder="Choose QBO equivalent of Cost Centers" formControlName="costCenters">
           <mat-option>
             None
           </mat-option>

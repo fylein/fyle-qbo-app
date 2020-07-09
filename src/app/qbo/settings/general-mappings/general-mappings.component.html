@@ -8,14 +8,19 @@
       General Mappings
     </div>
   </div>
+  <div class="page-info">
+    <div fxLayout="row" fxLayoutAlign="start center" class="page-info--description">
+      Please select Fyle fields to be mapped to Quickbooks online field. Read more.<mat-icon>open_in_new</mat-icon>
+    </div>
+  </div>
   <form class="general-mappings--form" [formGroup]="form" (ngSubmit)="submit()">
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
-          Accounts Payable
+        Accounts Payable
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required
         *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
-        <mat-select class="general-mappings--input" placeholder="select accounts payable" formControlName="accountPayableAccounts">
+        <mat-select class="general-mappings--input" placeholder="select accounts" formControlName="accountPayableAccounts">
           <mat-option *ngFor="let accountPayableAccount of accountPayableAccounts; let i = index"
             [value]="accountPayableAccounts[i].destination_id">
             {{accountPayableAccounts[i].value}}
@@ -23,7 +28,7 @@
         </mat-select>
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
-          Bank Account
+        Bank Account
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required
         *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
@@ -34,7 +39,7 @@
         </mat-select>
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.corporate_credit_card_expenses_object">
-          Default Corporate Credit Card Account
+        Default Corporate Credit Card Account
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required
         *ngIf="generalSettings.corporate_credit_card_expenses_object">

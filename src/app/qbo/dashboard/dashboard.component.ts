@@ -168,6 +168,11 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  openSchedule() {
+    const that = this;
+    window.open(`workspaces/${that.workspaceId}/settings/schedule`, '_blank');
+  }
+
   ngOnInit() {
     const that = this;
     that.workspaceId = +that.route.snapshot.params.workspace_id;

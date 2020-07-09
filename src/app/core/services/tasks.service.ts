@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
-import { ApiService } from 'src/app/core/services/general.service';
+import { ApiService } from 'src/app/core/services/api.service';
 import { Task } from '../models/task.model';
 import { TaskResponse } from '../models/taskReponse.model';
 

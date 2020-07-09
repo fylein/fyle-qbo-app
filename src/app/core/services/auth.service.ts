@@ -9,7 +9,7 @@ import { catchError } from 'rxjs/operators';
 import { Token } from '../tokens';
 
 import { environment } from 'src/environments/environment';
-import { ApiService } from 'src/app/core/services/general.service';
+import { ApiService } from 'src/app/core/services/api.service';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',

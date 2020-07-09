@@ -38,7 +38,7 @@
         </strong>
       </div>
       <mat-form-field appearance="outline">
-        <input type="text" formControlName="qboObject" placeholder="Pick entity" matInput [matAutocomplete]="qboEl">
+        <input type="text" formControlName="qboObject" placeholder="Pick {{ generalSettings.project_field_mapping | titlecase}}" matInput [matAutocomplete]="qboEl">
         <mat-autocomplete #qboEl="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboOptions" [value]="option">
             {{option.value}}

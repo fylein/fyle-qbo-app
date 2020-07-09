@@ -4,7 +4,7 @@
 
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start stretch">
   <div class="export-header">
-    Export Expenses from Fyle App to get Started
+    Export Expenses from Fyle App
   </div>
   <div fxLayout="column" fxLayoutAlign="start center">
     <mat-card class="export-card">
@@ -16,7 +16,7 @@
                 {{exportableExpenseGroups.length}} expense groups can be exported
               </div>
               <div *ngIf="isExporting">
-                {{exportableExpenseGroups.length}} expense groups are being synced
+                {{exportableExpenseGroups.length}} expense groups are being exported
               </div>
             </div>
           </div>

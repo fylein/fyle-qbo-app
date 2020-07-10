@@ -60,7 +60,7 @@
             <mat-icon class="onboarding-stepper--check"
               [ngClass]="{'onboarding-stepper--check__complete': currentState === allOnboardingStates.configurationsDone || currentState === allOnboardingStates.generalMappingsDone || currentState === allOnboardingStates.employeeMappingsDone}">
               check_circle</mat-icon>
-            <div class="onboarding-stepper--desc">Map Fyle fields to Quickbooks online fields</div>
+            <div class="onboarding-stepper--desc">Map Fyle fields to Quickbooks Online fields</div>
           </div>
           <div routerLink="../settings/configurations/" class="onboarding-stepper--navigation"
             *ngIf="currentState === allOnboardingStates.qboConnected"

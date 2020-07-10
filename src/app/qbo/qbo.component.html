@@ -12,12 +12,12 @@
         Dashboard
       </a>
 
-      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/sync_export/sync"
+      <a class="mat-h2 qbo-sidenav--nav-item" [ngClass]="{'qbo-sidenav--nav-item__disabled': navDisabled}" mat-list-item routerLink="{{workspace.id}}/sync_export/sync"
         routerLinkActive="active">
         Import & Export
       </a>
 
-      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/expense_groups/"
+      <a class="mat-h2 qbo-sidenav--nav-item" [ngClass]="{'qbo-sidenav--nav-item__disabled': navDisabled}" mat-list-item routerLink="{{workspace.id}}/expense_groups/"
         routerLinkActive="active">
         Expense Groups
       </a>
@@ -29,27 +29,27 @@
         routerLinkActive="active">
         Configurations
       </a>
-      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/general_mappings/"
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item routerLink="{{workspace.id}}/settings/general_mappings/"
         routerLinkActive="active">
         General Mappings
       </a>
-      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item
         routerLink="{{workspace.id}}/settings/employee_mappings/" routerLinkActive="active">
         Employee Mappings
       </a>
-      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item
         routerLink="{{workspace.id}}/settings/category_mappings/" routerLinkActive="active">
         Category Mappings
       </a>
-      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/project_mappings/"
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item routerLink="{{workspace.id}}/settings/project_mappings/"
         routerLinkActive="active">
         Project Mappings
       </a>
-      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item
         routerLink="{{workspace.id}}/settings/cost_center_mappings/" routerLinkActive="active">
         Cost Center Mappings
       </a>
-      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/schedule/"
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item routerLink="{{workspace.id}}/settings/schedule/"
         routerLinkActive="active">
         Automated Import/Export
       </a>

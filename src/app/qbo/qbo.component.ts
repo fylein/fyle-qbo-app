@@ -22,6 +22,7 @@ export class QboComponent implements OnInit {
   mappingSettings: any;
   showSwitchOrg = false;
   qboCompanyName: string;
+  navDisabled = true;
 
   constructor(
     private workspaceService: WorkspaceService,
@@ -29,7 +30,7 @@ export class QboComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private billService: BillsService
-    ) {
+  ) {
   }
 
   getGeneralSettings() {
@@ -44,7 +45,7 @@ export class QboComponent implements OnInit {
 
       const employeeFieldMapping = this.mappingSettings.filter(
         setting => (setting.source_field === 'EMPLOYEE') &&
-        (setting.destination_field === 'EMPLOYEE' || setting.destination_field === 'VENDOR')
+          (setting.destination_field === 'EMPLOYEE' || setting.destination_field === 'VENDOR')
       )[0];
 
       const projectFieldMapping = this.mappingSettings.filter(
@@ -82,6 +83,17 @@ export class QboComponent implements OnInit {
     this.getGeneralSettings();
   }
 
+  getConfigurations() {
+    const that = this;
+
+    return forkJoin(
+      [
+        that.settingsService.getGeneralSettings(that.workspace.id),
+        that.settingsService.getMappingSettings(that.workspace.id)
+      ]
+    ).toPromise();
+  }
+
   setupWorkspace() {
     const that = this;
     that.user = that.authService.getUser();
@@ -96,6 +108,23 @@ export class QboComponent implements OnInit {
         });
       }
       that.getQboPreferences();
+
+      that.getConfigurations().then(() => {
+        that.navDisabled = false;
+      }).catch(() => {
+        // do nothing
+      });
+
+      that.router.events.subscribe(() => {
+        const onboarded = localStorage.getItem('onboarded');
+        if (onboarded !== 'true') {
+          that.getConfigurations().then(() => {
+            that.navDisabled = false;
+          }).catch(() => {
+            // do nothing
+          });
+        }
+      });
     });
   }
 
@@ -108,6 +137,8 @@ export class QboComponent implements OnInit {
 
   ngOnInit() {
     const that = this;
+    const onboarded = localStorage.getItem('onboarded');
+    that.navDisabled = onboarded !== 'true';
     that.orgsCount = that.authService.getOrgCount();
     that.setupWorkspace();
   }

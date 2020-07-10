@@ -41,6 +41,12 @@
         background-color: $fy-nav-active-background;
         color: $fy-primary;
       }
+
+      &__disabled {
+        &.mat-list-item {
+          opacity: .6;
+        }
+      }
     }
 
     &--nav-sub-item {
@@ -55,6 +61,12 @@
       &.active {
         background-color: $fy-nav-active-background;
         color: $fy-primary;
+      }
+
+      &__disabled {
+        &.mat-list-item {
+          opacity: .6;
+        }
       }
     }
   }

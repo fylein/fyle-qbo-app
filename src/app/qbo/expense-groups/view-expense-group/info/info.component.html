@@ -4,12 +4,9 @@
 
 <div *ngIf="!isLoading">
   <div class="page-info" fxLayoutAlign="space-between center">
-    <div class="page-info--sub-header-container" fxLayout="column" fxLayoutAlign="space-between start">
+    <div class="page-info--sub-header-container" fxLayout="row" fxLayoutAlign="start center">
       <div class="page-info--sub-header">
-        Expenses grouped By {{expenseGroup && expenseGroup.fyle_group_id}}
-      </div>
-      <div class="page-info--created-by">
-        {{expenseGroup.description.employee_email}}
+        Expenses grouped By <strong>{{expenseGroup && expenseGroup.fyle_group_id}}</strong>  <span class="page-info--created-by"> belonging to <strong>{{expenseGroup.description.employee_email}}</strong> </span> 
       </div>
     </div>
     <div fxLayoutAlign="end center">

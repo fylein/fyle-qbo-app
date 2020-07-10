@@ -30,11 +30,11 @@ export class SyncComponent implements OnInit {
     that.isExpensesSyncing = true;
     that.expenseGroupService.syncExpenseGroups(that.workspaceId).subscribe((res) => {
       that.updateLastSyncStatus();
-      that.snackBar.open('Syncing Complete');
+      that.snackBar.open('Importing Complete');
       that.isExpensesSyncing = false;
     }, (error) => {
       that.isExpensesSyncing = false;
-      that.snackBar.open('Syncing Failed');
+      that.snackBar.open('Importing Failed');
       that.errorOccurred = true;
     });
   }

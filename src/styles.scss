@@ -36,6 +36,11 @@ body {
   border: 1px solid $fy-autocomplete-border;
 }
 
+simple-snack-bar span { // @vikas wanted a center aligned snack-bar :P
+  margin: auto;
+  text-align: center;
+}
+
 .onboarding-stepper {
   .mat-vertical-stepper-content { 
     visibility: visible !important; 

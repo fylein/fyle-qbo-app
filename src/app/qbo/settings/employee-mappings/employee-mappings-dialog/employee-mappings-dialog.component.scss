@@ -10,8 +10,16 @@
     font-size: 14px;
   }
 
+  &--label {
+    font-weight: 500;
+  }
+
   &--form-element {
     margin: 12px 0;
+  }
+
+  &--close {
+    cursor: pointer;
   }
 
   &--error {

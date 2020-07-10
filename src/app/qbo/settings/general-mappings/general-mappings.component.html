@@ -22,7 +22,7 @@
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required
         *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
-        <mat-select class="general-mappings--input" placeholder="select accounts" formControlName="accountPayableAccounts">
+        <mat-select class="general-mappings--input" placeholder="Select accounts" formControlName="accountPayableAccounts">
           <mat-option *ngFor="let accountPayableAccount of accountPayableAccounts; let i = index"
             [value]="accountPayableAccounts[i].destination_id">
             {{accountPayableAccounts[i].value}}
@@ -34,7 +34,7 @@
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required
         *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
-        <mat-select class="general-mappings--input" placeholder="select bank account" formControlName="bankAccounts">
+        <mat-select class="general-mappings--input" placeholder="Select bank account" formControlName="bankAccounts">
           <mat-option *ngFor="let bankAccount of bankAccounts; let i = index" [value]="bankAccounts[i].destination_id">
             {{bankAccounts[i].value}}
           </mat-option>
@@ -45,7 +45,7 @@
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required
         *ngIf="generalSettings.corporate_credit_card_expenses_object">
-        <mat-select class="general-mappings--input" placeholder="select credit card account" formControlName="cccAccounts">
+        <mat-select class="general-mappings--input" placeholder="Select credit card account" formControlName="cccAccounts">
           <mat-option *ngFor="let cccAccount of cccAccounts; let i = index" [value]="cccAccounts[i].destination_id">
             {{cccAccounts[i].value}}
           </mat-option>

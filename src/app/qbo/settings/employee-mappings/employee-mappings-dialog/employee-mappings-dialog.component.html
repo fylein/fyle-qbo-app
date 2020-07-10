@@ -4,7 +4,7 @@
       Create New Mapping
     </div>
     <div>
-      <mat-icon aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
+      <mat-icon class="employee-mappings--close" aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
     </div>
   </div>
 </h2>
@@ -15,12 +15,12 @@
   <form *ngIf="!isLoading" class="employee-mappings--form" [formGroup]="form">
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="mat-body-strong">
-        <strong>
-          Pick Fyle Employee Email
+        <strong class="employee-mappings--label">
+          Choose Fyle Employee Email
         </strong>
       </div>
       <mat-form-field class="employee-mappings--form-element" appearance="outline">
-        <input required type="text" formControlName="fyleEmployee" placeholder="Pick Employee" matInput
+        <input required type="text" formControlName="fyleEmployee" placeholder="Choose Employee" matInput
           [matAutocomplete]="fyEmp">
         <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of employeeOptions" [value]="option">
@@ -32,12 +32,12 @@
         </mat-error>
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
-        <strong>
-          Pick Vendor
+        <strong class="employee-mappings--label">
+          Choose Vendor
         </strong>
       </div>
       <mat-form-field class="employee-mappings--form-element" appearance="outline" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
-        <input type="text" formControlName="qboVendor" placeholder="Pick Vendor" matInput [matAutocomplete]="fyEmp">
+        <input type="text" formControlName="qboVendor" placeholder="Choose Vendor" matInput [matAutocomplete]="fyEmp">
         <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboVendorOptions" [value]="option">
             {{option.value}}
@@ -48,12 +48,12 @@
         </mat-error>
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
-        <strong>
-          Pick Quickbooks Online Employee
+        <strong class="employee-mappings--label">
+          Choose Quickbooks Online Employee
         </strong>
       </div>
       <mat-form-field class="employee-mappings--form-element" appearance="outline" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
-        <input type="text" formControlName="qboEmployee" placeholder="Pick Employee" matInput [matAutocomplete]="qboEmp">
+        <input type="text" formControlName="qboEmployee" placeholder="Choose Employee" matInput [matAutocomplete]="qboEmp">
         <mat-autocomplete #qboEmp="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboEmployeeOptions" [value]="option">
             {{option.value}}
@@ -64,12 +64,12 @@
         </mat-error>
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.corporate_credit_card_expenses_object">
-        <strong>
-          Pick Credit Card Account
+        <strong class="employee-mappings--label">
+          Choose Credit Card Account
         </strong>
       </div>
       <mat-form-field class="employee-mappings--form-element" appearance="outline" *ngIf="generalSettings.corporate_credit_card_expenses_object">
-        <input type="text" formControlName="creditCardAccount" placeholder="corporate credit card account" matInput [matAutocomplete]="fyEmp">
+        <input type="text" formControlName="creditCardAccount" placeholder="Corporate credit card account" matInput [matAutocomplete]="fyEmp">
         <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of cccOptions" [value]="option">
             {{option.value}}

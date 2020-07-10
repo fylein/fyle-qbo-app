@@ -9,7 +9,7 @@
   </div>
   <div class="page-info">
     <div fxLayout="row" fxLayoutAlign="start center" class="page-info--description">
-      Create a Schedule to automate the processes of Import and Export. 
+      Create a schedule to automate the processes of Import and Export. 
       <a href="" class="read-more-link" fxLayout="row" fxLayoutAlign="start center">Read more<mat-icon class="read-more-link--icon">open_in_new</mat-icon></a>
     </div>
   </div>
@@ -27,7 +27,7 @@
             </strong>
           </div>
           <mat-form-field floatLabel="always" appearance="outline" required>
-            <mat-select placeholder="select hours" formControlName="hours">
+            <mat-select placeholder="Select hours" formControlName="hours">
               <mat-option *ngFor="let hour of hours" [value]="hour">
                 {{hour}}
               </mat-option>

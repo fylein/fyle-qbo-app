@@ -38,7 +38,7 @@
 
         <div class="export-card--stats" fxLayout="row" fxLayoutAlign="start center" *ngIf="failedExpenseGroupCount">
           <div>
-            {{failedExpenseGroupCount}} line entries failed export
+            {{failedExpenseGroupCount}} line <span *ngIf="failedExpenseGroupCount > 1">entries</span><span *ngIf="failedExpenseGroupCount === 1">entry</span> failed export
           </div>
           <mat-icon class="export-card--icon" (click)="openFailedExports()">
             open_in_new
@@ -47,7 +47,7 @@
 
         <div class="export-card--stats" fxLayout="row" fxLayoutAlign="start center" *ngIf="successfulExpenseGroupCount">
           <div>
-            {{successfulExpenseGroupCount}} line entry exported
+            {{successfulExpenseGroupCount}} line <span *ngIf="successfulExpenseGroupCount > 1">entries</span><span *ngIf="successfulExpenseGroupCount === 1">entry</span> exported
           </div>
           <mat-icon class="export-card--icon" (click)="openSuccessfulExports()">
             open_in_new

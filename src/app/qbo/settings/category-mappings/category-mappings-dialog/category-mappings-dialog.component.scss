@@ -14,8 +14,16 @@
     margin: 12px 0;
   }
 
+  &--label {
+    font-weight: 500;
+  }
+
   &--error {
     font-size: 14px;
+  }
+
+  &--close {
+    cursor: pointer;
   }
 
   &--save-btn {

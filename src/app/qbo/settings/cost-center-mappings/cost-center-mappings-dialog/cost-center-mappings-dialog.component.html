@@ -19,7 +19,7 @@
           Pick Fyle Cost Center
         </strong>
       </div>
-      <mat-form-field appearance="outline">
+      <mat-form-field class="cost-center-mappings--field" appearance="outline">
         <input required type="text" formControlName="fyleCostCenter" placeholder="Pick Fyle Cost Center" matInput
           [matAutocomplete]="fyProj" [errorStateMatcher]="matcher">
         <mat-autocomplete #fyProj="matAutocomplete" [displayWith]="mappingDisplay">
@@ -27,7 +27,7 @@
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error *ngIf="form.controls.fyleCostCenter.hasError('forbiddenOption')">
+        <mat-error class="cost-center-mappings--error" *ngIf="form.controls.fyleCostCenter.hasError('forbiddenOption')">
           Please enter a valid value
         </mat-error>
       </mat-form-field>
@@ -37,7 +37,7 @@
           Pick {{ generalSettings.cost_center_field_mapping | titlecase}}
         </strong>
       </div>
-      <mat-form-field appearance="outline">
+      <mat-form-field class="cost-center-mappings--field" appearance="outline">
         <input type="text" formControlName="qboObject" placeholder="Pick {{ generalSettings.cost_center_field_mapping | titlecase}}" matInput [matAutocomplete]="qboEl"
           [errorStateMatcher]="matcher">
         <mat-autocomplete #qboEl="matAutocomplete" [displayWith]="mappingDisplay">
@@ -45,7 +45,7 @@
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error *ngIf="form.controls.qboObject.hasError('forbiddenOption')">
+        <mat-error class="cost-center-mappings--error" *ngIf="form.controls.qboObject.hasError('forbiddenOption')">
           Please enter a valid value
         </mat-error>
       </mat-form-field>

@@ -33,6 +33,7 @@
       &.mat-list-item {
         padding-left: 45px;
         color: $fy-nav-text;
+        opacity: .8;
         font-weight: 500;
         font-size: 18px;
       }
@@ -47,6 +48,7 @@
       &.mat-list-item {
         padding-left: 60px;
         color: $fy-nav-text;
+        opacity: .8;
         font-weight: 500;
         font-size: 18px;
       }
@@ -65,7 +67,7 @@
 .page-header {
   &--name {
     color: $fy-nav-text;
-    padding: 30px;
+    padding: 30px 23px;
     margin: 0;
   }
 }
@@ -130,12 +132,21 @@
 }
 
 .internal-loader {
-  margin-top: 64px;
+  margin-top: 300px;
 }
 
 .simple-search {
   font-size: 12px;
   &--icon {
     color: $fy-search-icon
+  }
+}
+
+.read-more-link {
+  text-decoration: none;
+  &--icon {
+    font-size: 18px;
+    height: auto;
+    margin-left: 4px;
   }
 }

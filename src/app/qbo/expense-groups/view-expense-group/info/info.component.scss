@@ -7,6 +7,10 @@
     color: $fy-info-dark;
   }
 
+  &--sub-header-container {
+    min-height: 48px;
+  }
+
   &--created-by {
     font-size: 14px;
     color: $fy-info;

@@ -9,12 +9,15 @@
   </div>
   <div class="page-info">
     <div fxLayout="row" fxLayoutAlign="start center" class="page-info--description">
-      Create a Schedule to automate the processes of Import and Export. Read more <mat-icon>open_in_new</mat-icon>
+      Create a Schedule to automate the processes of Import and Export. 
+      <a href="" class="read-more-link" fxLayout="row" fxLayoutAlign="start center">Read more<mat-icon class="read-more-link--icon">open_in_new</mat-icon></a>
     </div>
   </div>
   <form class="schedule--form" [formGroup]="form">
     <div fxLayout="column" fxLayoutAlign="start stretch">
-      <mat-slide-toggle color="primary" formControlName="scheduleEnabled">Status</mat-slide-toggle>
+      <mat-slide-toggle color="primary" formControlName="scheduleEnabled">
+        <div class="schedule--toggle-text">Enabled</div>
+      </mat-slide-toggle>
 
       <mat-card *ngIf="form.controls.scheduleEnabled.value" class="mat-elevation-z0 schedule--inner-form">
         <div fxLayout="column" fxLayoutAlign="start stretch">

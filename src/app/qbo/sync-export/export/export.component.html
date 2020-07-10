@@ -4,7 +4,7 @@
 
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start stretch">
   <div class="export-header">
-    Export Expenses from Fyle App
+    Export Expenses from your {{qboCompanyName}}
   </div>
   <div fxLayout="column" fxLayoutAlign="start center">
     <mat-card class="export-card">
@@ -37,14 +37,14 @@
         </div>
 
         <div class="export-card--stats" fxLayout="row" fxLayoutAlign="start center" *ngIf="failedExpenseGroupCount">
-          {{failedExpenseGroupCount}} failed exports
+          {{failedExpenseGroupCount}} line entries failed export
           <mat-icon (click)="openFailedExports()">
             open_in_new
           </mat-icon>
         </div>
 
         <div class="export-card--stats" fxLayout="row" fxLayoutAlign="start center" *ngIf="successfulExpenseGroupCount">
-          {{successfulExpenseGroupCount}} successful exports
+          {{successfulExpenseGroupCount}} line entry exported
           <mat-icon (click)="openSuccessfulExports()">
             open_in_new
           </mat-icon>

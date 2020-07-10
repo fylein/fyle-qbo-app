@@ -19,7 +19,7 @@
           Pick Fyle Category
         </strong>
       </div>
-      <mat-form-field appearance="outline">
+      <mat-form-field class="cateogry-mappings--field" appearance="outline">
         <input required type="text" formControlName="fyleCategory" placeholder="Pick fyle category" matInput
           [matAutocomplete]="fyCat" [errorStateMatcher]="matcher">
         <mat-autocomplete #fyCat="matAutocomplete" [displayWith]="mappingDisplay">
@@ -27,7 +27,7 @@
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error *ngIf="form.controls.fyleCategory.hasError('forbiddenOption')">
+        <mat-error class="cateogry-mappings--error" *ngIf="form.controls.fyleCategory.hasError('forbiddenOption')">
           Please enter a valid value
         </mat-error>
       </mat-form-field>
@@ -37,15 +37,15 @@
           Account
         </strong>
       </div>
-      <mat-form-field appearance="outline">
-        <input type="text" formControlName="qboAccount" placeholder="Pick qbo account" matInput
+      <mat-form-field class="cateogry-mappings--field" appearance="outline">
+        <input type="text" formControlName="qboAccount" placeholder="Pick quickbooks account" matInput
           [matAutocomplete]="qboAc" [errorStateMatcher]="matcher">
         <mat-autocomplete #qboAc="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboAccountOptions" [value]="option">
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error *ngIf="form.controls.qboAccount.hasError('forbiddenOption')">
+        <mat-error class="cateogry-mappings--error" *ngIf="form.controls.qboAccount.hasError('forbiddenOption')">
           Please enter a valid value
         </mat-error>
       </mat-form-field>

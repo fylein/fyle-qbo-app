@@ -48,7 +48,7 @@ export class ScheduleComponent implements OnInit {
       that.isLoading = true;
       that.settingsService.postSettings(that.workspaceId, nextRun, hours, scheduleEnabled).subscribe(response => {
         that.isLoading = false;
-        that.snackBar.open('Scheduling saved!');
+        that.snackBar.open('Scheduling saved');
         that.getSettings();
       });
     }
@@ -69,6 +69,7 @@ export class ScheduleComponent implements OnInit {
       pairwise()
     ).subscribe(([oldValue, newValue]) => {
       if (!newValue && oldValue !== newValue) {
+        that.isLoading = true;
         that.settingsService.postSettings(that.workspaceId, new Date().toISOString(), 0, false).subscribe(response => {
           that.isLoading = false;
           that.snackBar.open('Scheduling turned off');

@@ -95,13 +95,24 @@
       &-icon {
         color: $fy-dashboard-stat-icon;
       }
+
+      &-desc {
+        color: $stats-desc;
+        opacity: .6;
+        margin-top: 8px;
+      }
     }
   }
 
   .schedule {
+    border: solid 1px $fy-info-border;
+    background-color: $fy-info-content;
+    padding: 16px;
+    min-width: 640px;
+    border-radius: 4px;
+
     &--info-icon {
       color: $fy-info;
-      margin-right: 8px;
     }
 
     &--redirect {

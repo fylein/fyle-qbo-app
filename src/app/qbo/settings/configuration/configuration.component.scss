@@ -28,6 +28,10 @@
   }
 
   &--errors {
+    font-size: 14px;
     margin: 0 0 16px;
+    color: #ff6e40;
+    position: relative;
+    top: -12px;
   }
 }

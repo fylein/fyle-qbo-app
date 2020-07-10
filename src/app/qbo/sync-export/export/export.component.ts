@@ -25,8 +25,9 @@ export class ExportComponent implements OnInit {
   generalSettings: any;
   failedExpenseGroupCount = 0;
   successfulExpenseGroupCount = 0;
+  qboCompanyName = '';
 
-  constructor(private route: ActivatedRoute, private taskService: TasksService, private expenseGroupService: ExpenseGroupsService, private journalEntriesService: JournalEntriesService, private billsService: BillsService, private checksService: ChecksService, private snackBar: MatSnackBar, private settingsService: SettingsService) { }
+  constructor(private route: ActivatedRoute, private taskService: TasksService, private billService: BillsService, private expenseGroupService: ExpenseGroupsService, private journalEntriesService: JournalEntriesService, private billsService: BillsService, private checksService: ChecksService, private snackBar: MatSnackBar, private settingsService: SettingsService) { }
 
   exportReimbursibleExpenses(reimbursableExpensesObject) {
     const that = this;
@@ -117,12 +118,26 @@ export class ExportComponent implements OnInit {
     });
   }
 
+
+  getQboPreferences() {
+    const that = this;
+    return that.billService.getOrgDetails(that.workspaceId).toPromise().then((res) => {
+      that.qboCompanyName = res.CompanyName;
+      return res.CompanyName;
+    });
+  }
+
+
   ngOnInit() {
     const that = this;
-    that.isLoading = false;
+
     that.isExporting = false;
     that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
-    that.loadExportableExpenseGroups();
+
+    that.isLoading = true;
+    that.getQboPreferences().then(() => {
+      that.loadExportableExpenseGroups();
+    });
   }
 
 }

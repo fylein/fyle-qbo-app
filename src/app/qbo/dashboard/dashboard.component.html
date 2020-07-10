@@ -4,7 +4,7 @@
 
 <div *ngIf="currentState !== allOnboardingStates.isOnboarded && !isLoading"
   class="onboarding-stepper onboarding-stepper--container" fxLayout="column" fxLayoutAlign="start center">
-  <h1 class="text-center onboarding-stepper--title">Welcome to Fyle App for Quickbooks Integrations</h1>
+  <h1 class="text-center onboarding-stepper--title">Welcome to Fyle App for Quickbooks Online Integrations</h1>
   <div fxLayout="row" fxLayoutAlign="center center" class="onboarding-stepper--logos">
     <img src="../../../assets/images/pngs/fyle-logo.png" alt="fyle">
     <mat-icon>add</mat-icon>
@@ -45,7 +45,7 @@
           <div (click)="connectQBO()" class="onboarding-stepper--navigation"
             *ngIf="currentState === allOnboardingStates.fyleConnected"
             [ngClass]="{'onboarding-stepper--navigation__active': currentState === allOnboardingStates.fyleConnected}">
-            Connect Quickbooks
+            Connect Quickbooks Online
           </div>
         </div>
       </mat-step>
@@ -170,13 +170,15 @@
             You can also create an automated schedule to import and export your expenses.
           </div>
         </div>
-        <div class="schedule--redirect" fxLayout="row" fxLayoutAlign="start center">
-          <div>
-            Go to Automated Import/Export
-          </div>
-          <mat-icon class="schedule--redirect-icon" (click)="openSchedule()">
-            open_in_new
-          </mat-icon>
+        <div class="schedule--redirect">
+          <a class="read-more-link" href="" fxLayout="row" fxLayoutAlign="start center">
+            <div>
+              Go to Automated Import/Export
+            </div>
+            <mat-icon class="schedule--redirect-icon read-more-link--icon" (click)="openSchedule()">
+              open_in_new
+            </mat-icon>
+          </a>
         </div>
       </div>
     </div>
@@ -186,12 +188,21 @@
           <mat-list-item role="listitem">
             <mat-icon class="dashboard--stats-card-icon" mat-list-icon>publish</mat-icon>
             <div mat-line>{{successfulExpenseGroupsCount}}</div>
-            <div mat-line> No. of successful exports</div>
+            <div mat-line>
+              <div class="dashboard--stats-card-desc">
+                No. of successful exports
+              </div>
+
+            </div>
           </mat-list-item>
           <mat-list-item role="listitem">
             <mat-icon class="dashboard--stats-card-icon" mat-list-icon>info</mat-icon>
             <div mat-line>{{failedExpenseGroupsCount}}</div>
-            <div mat-line> No. of failed exports</div>
+            <div mat-line>
+              <div class="dashboard--stats-card-desc">
+                No. of failed exports
+              </div>
+            </div>
           </mat-list-item>
         </mat-list>
       </mat-card>

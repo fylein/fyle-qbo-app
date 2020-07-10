@@ -26,7 +26,7 @@ export class InfoComponent implements OnInit {
   count: number;
   pageNumber = 0;
   pageSize = 5;
-  columnsToDisplay = ['expense_id', 'claimno', 'view'];
+  columnsToDisplay = ['expense_number', 'claimno', 'view'];
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

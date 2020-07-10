@@ -5,6 +5,10 @@
     border-bottom: 1px solid $fy-layout-background;
   }
 
+  &--toggle-text {
+    font-size: 14px;
+  }
+
   &--form {
     color: $fy-nav-text;
     margin: 24px;

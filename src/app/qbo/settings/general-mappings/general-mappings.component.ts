@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MappingsService } from '../../../core/services/mappings.service';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { SettingsService } from 'src/app/core/services/settings.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-general-mappings',
@@ -23,7 +24,7 @@ export class GeneralMappingsComponent implements OnInit {
   bankAccountIsValid = true;
   cccAccountIsValid = true;
 
-  constructor(private route: ActivatedRoute, private mappingsService: MappingsService, private formBuilder: FormBuilder, private router: Router, private settingsService: SettingsService) {
+  constructor(private route: ActivatedRoute, private mappingsService: MappingsService, private formBuilder: FormBuilder, private router: Router, private settingsService: SettingsService, private snackBar: MatSnackBar) {
   }
 
   submit() {
@@ -61,6 +62,8 @@ export class GeneralMappingsComponent implements OnInit {
           that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
         }
       });
+    } else {
+      that.snackBar.open('Please fill up the form with valid values');
     }
   }
 

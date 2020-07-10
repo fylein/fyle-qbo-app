@@ -7,8 +7,17 @@
 
   &--form {
     color: $fy-nav-text;
-    font-size: 12px;
+    font-size: 14px;
   }
+
+  &--field {
+    margin: 12px 0;
+  }
+  
+  &--error {
+    font-size: 14px;
+  }
+
   &--save-btn {
     background: $fy-primary;
     color: $fy-white;

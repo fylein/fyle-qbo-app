@@ -19,7 +19,7 @@
           Pick Fyle Project
         </strong>
       </div>
-      <mat-form-field appearance="outline">
+      <mat-form-field class="projects-mappings--field" appearance="outline">
         <input required type="text" formControlName="fyleProject" placeholder="Pick Fyle Project" matInput
           [matAutocomplete]="fyProj">
         <mat-autocomplete #fyProj="matAutocomplete" [displayWith]="mappingDisplay">
@@ -27,7 +27,7 @@
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error *ngIf="form.controls.fyleProject.hasError('forbiddenOption')">
+        <mat-error class="projects-mappings--error" *ngIf="form.controls.fyleProject.hasError('forbiddenOption')">
           Please enter a valid value
         </mat-error>
       </mat-form-field>
@@ -37,14 +37,14 @@
           Pick {{ generalSettings.project_field_mapping | titlecase}}
         </strong>
       </div>
-      <mat-form-field appearance="outline">
+      <mat-form-field class="projects-mappings--field" appearance="outline">
         <input type="text" formControlName="qboObject" placeholder="Pick {{ generalSettings.project_field_mapping | titlecase}}" matInput [matAutocomplete]="qboEl">
         <mat-autocomplete #qboEl="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboOptions" [value]="option">
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error *ngIf="form.controls.qboObject.hasError('forbiddenOption')">
+        <mat-error class="projects-mappings--error" *ngIf="form.controls.qboObject.hasError('forbiddenOption')">
           Please enter a valid value
         </mat-error>
       </mat-form-field>

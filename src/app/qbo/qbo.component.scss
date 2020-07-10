@@ -62,6 +62,20 @@
   .mat-drawer-content {
     background-color: $fy-white;
   }
+
+  &--menu {
+    &-icon {
+      opacity: .75;
+      &__offset {
+        position: relative;
+        top: 2px;
+      }
+    }
+
+    &-text {
+      opacity: .75;
+    }
+  }
 }
 
 .page-header {

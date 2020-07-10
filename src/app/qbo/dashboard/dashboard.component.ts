@@ -138,11 +138,12 @@ export class DashboardComponent implements OnInit {
   loadDashboardData() {
     const that = this;
     that.isLoading = true;
-    forkJoin([
+    return forkJoin([
       that.loadSuccessfullExpenseGroupsCount(),
       that.loadFailedlExpenseGroupsCount()
-    ]).subscribe(() => {
+    ]).toPromise().then(() => {
       that.isLoading = false;
+      return true;
     });
   }
 
@@ -199,7 +200,7 @@ export class DashboardComponent implements OnInit {
         }).then(() => {
           that.currentState = onboardingStates.isOnboarded;
           localStorage.setItem('onboarded', 'true');
-          that.loadDashboardData();
+          return that.loadDashboardData();
         }).catch(() => {
           // do nothing as this just means some steps are left
         }).finally(() => {

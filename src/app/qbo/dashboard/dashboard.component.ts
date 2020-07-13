@@ -171,6 +171,7 @@ export class DashboardComponent implements OnInit {
 
   openSchedule() {
     const that = this;
+    event.preventDefault();
     window.open(`workspaces/${that.workspaceId}/settings/schedule`, '_blank');
   }
 

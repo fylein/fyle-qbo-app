@@ -97,12 +97,28 @@ export class ExportComponent implements OnInit {
             });
           });
         }
-      } else if (that.generalSettings.corporate_credit_card_expenses_object) {
+      }
+
+      if (that.generalSettings.corporate_credit_card_expenses_object) {
         const filteredIds = that.exportableExpenseGroups.filter(expenseGroup => expenseGroup.fund_source === 'CCC').map(expenseGroup => expenseGroup.id);
         if (filteredIds.length > 0) {
           that.exportCCCExpenses(that.workspaceId)(that.workspaceId, filteredIds).subscribe((res) => {
-            that.loadExportableExpenseGroups();
-            that.isExporting = false;
+            interval(3000).pipe(
+              switchMap(() => from(that.taskService.getTasks(that.workspaceId, 10, 0, 'ALL'))),
+              takeWhile((response) => response.results.filter(task => task.status === 'IN_PROGRESS').length > 0, true)
+            ).subscribe(() => {
+              that.taskService.getAllTasks(that.workspaceId, 'FAILED').subscribe((taskResponse) => {
+                that.failedExpenseGroupCount = taskResponse.count;
+                that.successfulExpenseGroupCount = filteredIds.length - that.failedExpenseGroupCount;
+                that.isExporting = false;
+                that.expenseGroupService.getAllExpenseGroups(that.workspaceId, 'READY').subscribe((res) => {
+                  that.exportableExpenseGroups = res.results;
+                  that.isLoading = false;
+                });
+                that.loadExportableExpenseGroups();
+                that.snackBar.open('Export Complete');
+              });
+            });
           });
         }
       }

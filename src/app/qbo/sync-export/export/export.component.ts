@@ -6,7 +6,7 @@ import { BillsService } from 'src/app/core/services/bills.service';
 import { JournalEntriesService } from '../../../core/services/journal-entries.service';
 import { ChecksService } from '../../../core/services/checks.service';
 import { TasksService } from 'src/app/core/services/tasks.service';
-import { interval, from } from 'rxjs';
+import { interval, from, forkJoin } from 'rxjs';
 import { switchMap, takeWhile } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from 'src/app/core/services/settings.service';
@@ -70,57 +70,55 @@ export class ExportComponent implements OnInit {
     window.open(`workspaces/${that.workspaceId}/expense_groups?state=COMPLETE`, '_blank');
   }
 
+  checkResultsOfExport(filteredIds) {
+    let that = this;
+    interval(3000).pipe(
+      switchMap(() => from(that.taskService.getTasks(that.workspaceId, 10, 0, 'ALL'))),
+      takeWhile((response) => response.results.filter(task => task.status === 'IN_PROGRESS').length > 0, true)
+    ).subscribe(() => {
+      that.taskService.getAllTasks(that.workspaceId, 'FAILED').subscribe((taskResponse) => {
+        that.failedExpenseGroupCount = taskResponse.count;
+        that.successfulExpenseGroupCount = filteredIds.length - that.failedExpenseGroupCount;
+        that.isExporting = false;
+        that.expenseGroupService.getAllExpenseGroups(that.workspaceId, 'READY').subscribe((res) => {
+          that.exportableExpenseGroups = res.results;
+          that.isLoading = false;
+        });
+        that.loadExportableExpenseGroups();
+        that.snackBar.open('Export Complete');
+      });
+    });
+  }
+
   createQBOItems() {
     const that = this;
     that.isExporting = true;
     that.settingsService.getCombinedSettings(that.workspaceId).subscribe((settings) => {
       that.generalSettings = settings;
+      const promises = [];
+      let allFilteredIds = [];
       if (that.generalSettings.reimbursable_expenses_object) {
         const filteredIds = that.exportableExpenseGroups.filter(expenseGroup => expenseGroup.fund_source === 'PERSONAL').map(expenseGroup => expenseGroup.id);
         if (filteredIds.length > 0) {
-          that.exportReimbursibleExpenses(that.generalSettings.reimbursable_expenses_object)(that.workspaceId, filteredIds).subscribe(() => {
-            interval(3000).pipe(
-              switchMap(() => from(that.taskService.getTasks(that.workspaceId, 10, 0, 'ALL'))),
-              takeWhile((response) => response.results.filter(task => task.status === 'IN_PROGRESS').length > 0, true)
-            ).subscribe(() => {
-              that.taskService.getAllTasks(that.workspaceId, 'FAILED').subscribe((taskResponse) => {
-                that.failedExpenseGroupCount = taskResponse.count;
-                that.successfulExpenseGroupCount = filteredIds.length - that.failedExpenseGroupCount;
-                that.isExporting = false;
-                that.expenseGroupService.getAllExpenseGroups(that.workspaceId, 'READY').subscribe((res) => {
-                  that.exportableExpenseGroups = res.results;
-                  that.isLoading = false;
-                });
-                that.loadExportableExpenseGroups();
-                that.snackBar.open('Export Complete');
-              });
-            });
-          });
+          promises.push(that.exportReimbursibleExpenses(that.generalSettings.reimbursable_expenses_object)(that.workspaceId, filteredIds).toPromise());
+          allFilteredIds = allFilteredIds.concat(filteredIds);
         }
       }
 
       if (that.generalSettings.corporate_credit_card_expenses_object) {
         const filteredIds = that.exportableExpenseGroups.filter(expenseGroup => expenseGroup.fund_source === 'CCC').map(expenseGroup => expenseGroup.id);
         if (filteredIds.length > 0) {
-          that.exportCCCExpenses(that.workspaceId)(that.workspaceId, filteredIds).subscribe((res) => {
-            interval(3000).pipe(
-              switchMap(() => from(that.taskService.getTasks(that.workspaceId, 10, 0, 'ALL'))),
-              takeWhile((response) => response.results.filter(task => task.status === 'IN_PROGRESS').length > 0, true)
-            ).subscribe(() => {
-              that.taskService.getAllTasks(that.workspaceId, 'FAILED').subscribe((taskResponse) => {
-                that.failedExpenseGroupCount = taskResponse.count;
-                that.successfulExpenseGroupCount = filteredIds.length - that.failedExpenseGroupCount;
-                that.isExporting = false;
-                that.expenseGroupService.getAllExpenseGroups(that.workspaceId, 'READY').subscribe((res) => {
-                  that.exportableExpenseGroups = res.results;
-                  that.isLoading = false;
-                });
-                that.loadExportableExpenseGroups();
-                that.snackBar.open('Export Complete');
-              });
-            });
-          });
+          promises.push(that.exportCCCExpenses(that.workspaceId)(that.workspaceId, filteredIds).toPromise());
+          allFilteredIds = allFilteredIds.concat(filteredIds);
         }
+      }
+
+      if (promises.length) {
+        forkJoin(
+          promises
+        ).subscribe(() => {
+          that.checkResultsOfExport(allFilteredIds);
+        });
       }
     });
   }

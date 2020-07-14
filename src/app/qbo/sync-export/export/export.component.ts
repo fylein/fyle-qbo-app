@@ -71,22 +71,20 @@ export class ExportComponent implements OnInit {
   }
 
   checkResultsOfExport(filteredIds) {
-    let that = this;
+    const that = this;
     interval(3000).pipe(
       switchMap(() => from(that.taskService.getTasks(that.workspaceId, 10, 0, 'ALL'))),
       takeWhile((response) => response.results.filter(task => task.status === 'IN_PROGRESS').length > 0, true)
-    ).subscribe(() => {
-      that.taskService.getAllTasks(that.workspaceId, 'FAILED').subscribe((taskResponse) => {
-        that.failedExpenseGroupCount = taskResponse.count;
-        that.successfulExpenseGroupCount = filteredIds.length - that.failedExpenseGroupCount;
-        that.isExporting = false;
-        that.expenseGroupService.getAllExpenseGroups(that.workspaceId, 'READY').subscribe((res) => {
-          that.exportableExpenseGroups = res.results;
-          that.isLoading = false;
+    ).subscribe((res) => {
+      if (res.results.filter(task => task.status === 'IN_PROGRESS').length === 0) {
+        that.taskService.getAllTasks(that.workspaceId, 'FAILED').subscribe((taskResponse) => {
+          that.failedExpenseGroupCount = taskResponse.count;
+          that.successfulExpenseGroupCount = filteredIds.length - that.failedExpenseGroupCount;
+          that.isExporting = false;
+          that.loadExportableExpenseGroups();
+          that.snackBar.open('Export Complete');
         });
-        that.loadExportableExpenseGroups();
-        that.snackBar.open('Export Complete');
-      });
+      }
     });
   }
 

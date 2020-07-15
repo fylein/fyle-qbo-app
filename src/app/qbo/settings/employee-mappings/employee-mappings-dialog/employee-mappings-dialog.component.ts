@@ -81,7 +81,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
       }
       that.isLoading = true;
       forkJoin(employeeMapping).subscribe(responses => {
-        that.snackBar.open('Mapping saved successfully!');
+        that.snackBar.open('Mapping saved successfully');
         that.isLoading = false;
         that.dialogRef.close();
       }, err => {
@@ -123,7 +123,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
       that.qboVendors = qboVendors;
     });
 
-    const getGeneralMappings = that.mappingsService.getGeneralMappings(that.workSpaceId).toPromise().then(generalMappings => {
+    const getGeneralMappings = that.mappingsService.getGeneralMappings(that.workSpaceId).toPromise().then((generalMappings) => {
       that.generalMappings = generalMappings;
     });
 

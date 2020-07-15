@@ -10,6 +10,7 @@ import { interval, from, forkJoin } from 'rxjs';
 import { switchMap, takeWhile } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from 'src/app/core/services/settings.service';
+import { CreditCardPurchasesService } from 'src/app/core/services/credit-card-purchases.service';
 
 @Component({
   selector: 'app-export',
@@ -27,9 +28,9 @@ export class ExportComponent implements OnInit {
   successfulExpenseGroupCount = 0;
   qboCompanyName = '';
 
-  constructor(private route: ActivatedRoute, private taskService: TasksService, private billService: BillsService, private expenseGroupService: ExpenseGroupsService, private journalEntriesService: JournalEntriesService, private billsService: BillsService, private checksService: ChecksService, private snackBar: MatSnackBar, private settingsService: SettingsService) { }
+  constructor(private route: ActivatedRoute, private creditCardService: CreditCardPurchasesService, private taskService: TasksService, private billService: BillsService, private expenseGroupService: ExpenseGroupsService, private journalEntriesService: JournalEntriesService, private billsService: BillsService, private checksService: ChecksService, private snackBar: MatSnackBar, private settingsService: SettingsService) { }
 
-  exportReimbursibleExpenses(reimbursableExpensesObject) {
+  exportReimbursableExpenses(reimbursableExpensesObject) {
     const that = this;
     const handlerMap = {
       BILL: (workspaceId, filteredIds) => {
@@ -50,10 +51,10 @@ export class ExportComponent implements OnInit {
     const that = this;
     const handlerMap = {
       'JOURNAL ENTRY': (workspaceId, filteredIds) => {
-        return that.billsService.createBills(workspaceId, filteredIds);
+        return that.journalEntriesService.createJournalEntries(workspaceId, filteredIds);
       },
       'CREDIT CARD PURCHASE': (workspaceId, filteredIds) => {
-        return that.checksService.createChecks(workspaceId, filteredIds);
+        return that.creditCardService.createCreditCardPurchases(workspaceId, filteredIds);
       }
     };
 
@@ -97,15 +98,15 @@ export class ExportComponent implements OnInit {
       let allFilteredIds = [];
       if (that.generalSettings.reimbursable_expenses_object) {
         const filteredIds = that.exportableExpenseGroups.filter(expenseGroup => expenseGroup.fund_source === 'PERSONAL').map(expenseGroup => expenseGroup.id);
-        if (filteredIds.length > 0) {
-          promises.push(that.exportReimbursibleExpenses(that.generalSettings.reimbursable_expenses_object)(that.workspaceId, filteredIds).toPromise());
+        if (filteredIds.length) {
+          promises.push(that.exportReimbursableExpenses(that.generalSettings.reimbursable_expenses_object)(that.workspaceId, filteredIds).toPromise());
           allFilteredIds = allFilteredIds.concat(filteredIds);
         }
       }
 
       if (that.generalSettings.corporate_credit_card_expenses_object) {
         const filteredIds = that.exportableExpenseGroups.filter(expenseGroup => expenseGroup.fund_source === 'CCC').map(expenseGroup => expenseGroup.id);
-        if (filteredIds.length > 0) {
+        if (filteredIds.length) {
           promises.push(that.exportCCCExpenses(that.workspaceId)(that.workspaceId, filteredIds).toPromise());
           allFilteredIds = allFilteredIds.concat(filteredIds);
         }

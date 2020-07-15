@@ -116,7 +116,7 @@ export class ExpenseGroupsComponent implements OnInit {
   }
 
   openInQBO(type, id) {
-    window.open(`${environment.qbo_app_url}/app/${type}?txnId=${id}`, '_blank')
+    window.open(`${environment.qbo_app_url}/app/${type}?txnId=${id}`, '_blank');
   }
 
   openInQboHandler(clickedExpenseGroup: ExpenseGroup) {

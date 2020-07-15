@@ -39,7 +39,7 @@ export class QboComponent implements OnInit {
         this.settingsService.getGeneralSettings(this.workspace.id),
         this.settingsService.getMappingSettings(this.workspace.id)
       ]
-    ).subscribe(responses => {
+    ).subscribe((responses) => {
       this.generalSettings = responses[0];
       this.mappingSettings = responses[1].results;
 

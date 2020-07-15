@@ -9,7 +9,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class ZeroStateComponent implements OnInit {
 
   @Input() image = '../../../assets/images/pngs/expenses.png';
-  @Input() message = 'Looks like you dont have anything here!';
+  @Input() message = 'Looks like you dont have anything here';
   @Input() link: string = null;
   @Output() linkClick = new EventEmitter();
 

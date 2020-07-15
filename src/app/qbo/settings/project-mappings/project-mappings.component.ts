@@ -44,7 +44,7 @@ export class ProjectMappingsComponent implements OnInit {
     });
   }
 
-  goToCongurations() {
+  goToConfigurations() {
     this.router.navigate([`/workspaces/${this.workspaceId}/settings/configurations/`]);
   }
 
@@ -52,7 +52,7 @@ export class ProjectMappingsComponent implements OnInit {
     const that = this;
     that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
     that.isLoading = true;
-    that.settingsService.getCombinedSettings(that.workspaceId).subscribe( settings => {
+    that.settingsService.getCombinedSettings(that.workspaceId).subscribe(settings => {
       that.generalSettings = settings;
       that.isLoading = false;
       that.isConfigValueSet = !!that.generalSettings.project_field_mapping;

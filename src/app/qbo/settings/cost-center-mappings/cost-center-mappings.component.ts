@@ -44,7 +44,7 @@ export class CostCenterMappingsComponent implements OnInit {
     });
   }
 
-  goToCongurations() {
+  goToConfigurations() {
     this.router.navigate([`/workspaces/${this.workspaceId}/settings/configurations/`]);
   }
 

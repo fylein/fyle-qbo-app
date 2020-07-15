@@ -98,10 +98,10 @@ export class DashboardComponent implements OnInit {
   getEmployeeMappings() {
     const that = this;
     return that.mappingsService.getMappings(that.workspaceId, 'EMPLOYEE').toPromise().then((res) => {
-      if (res.results.length > 0) {
+      if (res.results.length) {
         that.currentState = onboardingStates.employeeMappingsDone;
       } else {
-        throw new Error('employee mappings have no entries!');
+        throw new Error('employee mappings have no entries');
       }
       return res;
     });
@@ -110,10 +110,10 @@ export class DashboardComponent implements OnInit {
   getCategoryMappings() {
     const that = this;
     return that.mappingsService.getMappings(this.workspaceId, 'CATEGORY').toPromise().then((res) => {
-      if (res.results.length > 0) {
+      if (res.results.length) {
         that.currentState = onboardingStates.categoryMappingsDone;
       } else {
-        throw new Error('cateogry mappings have no entries!');
+        throw new Error('cateogry mappings have no entries');
       }
       return res;
     });
@@ -169,7 +169,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  openSchedule() {
+  openSchedule(event) {
     const that = this;
     event.preventDefault();
     window.open(`workspaces/${that.workspaceId}/settings/schedule`, '_blank');

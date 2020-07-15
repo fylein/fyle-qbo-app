@@ -63,7 +63,7 @@ export class CategoryMappingsDialogComponent implements OnInit {
         source_value: that.form.controls.fyleCategory.value.value,
         destination_value: that.form.controls.qboAccount.value.value
       }).subscribe(response => {
-        that.snackBar.open('Mapping saved successfully!');
+        that.snackBar.open('Mapping saved successfully');
         that.isLoading = false;
         that.dialogRef.close();
       }, err => {

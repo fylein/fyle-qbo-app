@@ -17,7 +17,7 @@ export class ScheduleComponent implements OnInit {
   isLoading = false;
   minDate: Date = new Date();
   defaultDate: string;
-  hours = [...Array(24).keys()];
+  hours = [...Array(24).keys()].map(day => day + 1);
   constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private route: ActivatedRoute, private snackBar: MatSnackBar) { }
 
   getSettings() {

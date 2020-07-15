@@ -63,7 +63,7 @@ export class ProjectMappingsDialogComponent implements OnInit {
         source_value: that.form.controls.fyleProject.value.value,
         destination_value: that.form.controls.qboObject.value.value
       }).subscribe(response => {
-        that.snackBar.open('Mapping saved successfully!');
+        that.snackBar.open('Mapping saved successfully');
         that.isLoading = false;
         that.dialogRef.close();
       }, err => {

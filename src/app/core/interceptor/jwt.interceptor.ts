@@ -25,31 +25,24 @@ export class JwtInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>> {
-    request = this.addToken(request);
+    const that = this;
+    request = that.addToken(request);
+
 
     return next.handle(request).pipe(
       catchError(error => {
-        if (error instanceof HttpErrorResponse) {
-          switch ((error as HttpErrorResponse).status) {
-            case 403:
-              return this.handle403Error(error);
-            default:
-              return observableThrowError(error);
-          }
-        } else {
-          return observableThrowError(error);
+        if (error instanceof HttpErrorResponse && error.status === 403) {
+          that.logoutUser();
         }
-      }));
-  }
 
-  handle403Error(error) {
-    return this.logoutUser();
+        return observableThrowError(error);
+      })
+    );
   }
 
   logoutUser() {
     this.authService.logout();
     this.router.navigate(['/auth/login']);
-    return observableThrowError('');
   }
 
 }

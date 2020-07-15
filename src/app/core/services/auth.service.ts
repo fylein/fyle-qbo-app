@@ -55,7 +55,7 @@ export class AuthService {
       .post<Token>(
         API_BASE_URL + '/auth/refresh/',
         {
-          refreshToken,
+          refresh_token: refreshToken,
         },
         httpOptions
       )

@@ -10,6 +10,9 @@ import { Token } from '../tokens';
 
 import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/app/core/services/api.service';
+import { StorageService } from './storage.service';
+import { WindowReferenceService } from './window.service';
+
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
@@ -25,7 +28,15 @@ const CALLBACK_URI = environment.callback_uri;
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient, private apiService: ApiService) {}
+  windowReference: Window;
+
+  constructor(
+    private http: HttpClient,
+    private apiService: ApiService,
+    private storageService: StorageService,
+    private windowReferenceService: WindowReferenceService) {
+    this.windowReference = this.windowReferenceService.nativeWindow;
+  }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
@@ -59,19 +70,23 @@ export class AuthService {
         },
         httpOptions
       )
-      .pipe(catchError(this.handleError));
-    }
+      .pipe(
+        catchError(
+          this.handleError
+        )
+      );
+  }
 
   isLoggedIn() {
-    return localStorage.getItem('access_token') != null;
+    return this.storageService.get('access_token') != null;
   }
 
   getUser() {
-    return JSON.parse(localStorage.getItem('user'));
+    return this.storageService.get('user');
   }
 
   getOrgCount() {
-    return parseInt(localStorage.getItem('orgsCount'), 10);
+    return this.storageService.get('orgsCount');
   }
 
   setUserProfile(): Observable<any> {
@@ -87,18 +102,17 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.clear();
+    this.storageService.clear();
   }
 
   redirectToLogin() {
-    window.location.href =
-    FYLE_URL +
-    '/app/developers/#/oauth/authorize?' +
-    'client_id=' +
-    FYLE_CLIENT_ID +
-    '&redirect_uri=' +
-    CALLBACK_URI +
-    '&response_type=code';
+    this.windowReference.location.href = FYLE_URL +
+      '/app/developers/#/oauth/authorize?' +
+      'client_id=' +
+      FYLE_CLIENT_ID +
+      '&redirect_uri=' +
+      CALLBACK_URI +
+      '&response_type=code';
   }
 
   switchWorkspace() {

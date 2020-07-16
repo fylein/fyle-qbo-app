@@ -5,19 +5,23 @@ import { Observable, BehaviorSubject, throwError as observableThrowError } from 
 import { AuthService } from '../services/auth.service';
 import { catchError } from 'rxjs/internal/operators';
 import { Router } from '@angular/router';
+import { StorageService } from '../services/storage.service';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
   isRefreshingToken = false;
   tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private storageService: StorageService) { }
 
   addToken(request: HttpRequest<any>): HttpRequest<any> {
     if (this.authService.isLoggedIn()) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          Authorization: `Bearer ${this.storageService.get('access_token')}`
         }
       });
     }

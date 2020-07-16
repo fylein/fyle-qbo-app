@@ -5,7 +5,8 @@ import { forkJoin, concat } from 'rxjs';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { environment } from 'src/environments/environment';
 import { ExpenseGroupsService } from 'src/app/core/services/expense-groups.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { StorageService } from 'src/app/core/services/storage.service';
+import { WindowReferenceService } from 'src/app/core/services/window.service';
 
 const FYLE_URL = environment.fyle_url;
 const FYLE_CLIENT_ID = environment.fyle_client_id;
@@ -44,15 +45,24 @@ export class DashboardComponent implements OnInit {
 
   successfulExpenseGroupsCount = 0;
   failedExpenseGroupsCount = 0;
+  windowReference: Window;
 
-  constructor(private expenseGroupService: ExpenseGroupsService, private settingsService: SettingsService, private route: ActivatedRoute, private mappingsService: MappingsService, private snackBar: MatSnackBar) { }
+  constructor(
+    private expenseGroupService: ExpenseGroupsService,
+    private settingsService: SettingsService,
+    private route: ActivatedRoute,
+    private mappingsService: MappingsService,
+    private storageService: StorageService,
+    private windowReferenceService: WindowReferenceService) {
+      this.windowReference = this.windowReferenceService.nativeWindow;
+    }
 
   connectFyle() {
-    window.location.href = `${FYLE_URL}/app/developers/#/oauth/authorize?client_id=${FYLE_CLIENT_ID}&redirect_uri=${APP_URL}/workspaces/fyle/callback&response_type=code&state=${this.workspaceId}`;
+    this.windowReference.location.href = `${FYLE_URL}/app/developers/#/oauth/authorize?client_id=${FYLE_CLIENT_ID}&redirect_uri=${APP_URL}/workspaces/fyle/callback&response_type=code&state=${this.workspaceId}`;
   }
 
   connectQBO() {
-    window.location.href = QBO_AUTHORIZE_URI + '?client_id=' + QBO_CLIENT_ID + '&scope=' + QBO_SCOPE + '&response_type=code&redirect_uri=' + APP_URL + '/workspaces/qbo/callback&state=' + this.workspaceId;
+    this.windowReference.location.href = QBO_AUTHORIZE_URI + '?client_id=' + QBO_CLIENT_ID + '&scope=' + QBO_SCOPE + '&response_type=code&redirect_uri=' + APP_URL + '/workspaces/qbo/callback&state=' + this.workspaceId;
   }
 
   checkFyleLoginStatus() {
@@ -172,15 +182,15 @@ export class DashboardComponent implements OnInit {
   openSchedule(event) {
     const that = this;
     event.preventDefault();
-    window.open(`workspaces/${that.workspaceId}/settings/schedule`, '_blank');
+    this.windowReference.open(`workspaces/${that.workspaceId}/settings/schedule`, '_blank');
   }
 
   ngOnInit() {
     const that = this;
     that.workspaceId = +that.route.snapshot.params.workspace_id;
-    const onboarded = localStorage.getItem('onboarded');
+    const onboarded = that.storageService.get('onboarded');
 
-    if (onboarded === 'true') {
+    if (onboarded === true) {
       that.currentState = onboardingStates.isOnboarded;
       that.updateDimensionTables();
       that.loadDashboardData();
@@ -200,7 +210,7 @@ export class DashboardComponent implements OnInit {
           return that.getCategoryMappings();
         }).then(() => {
           that.currentState = onboardingStates.isOnboarded;
-          localStorage.setItem('onboarded', 'true');
+          that.storageService.set('onboarded', true);
           return that.loadDashboardData();
         }).catch(() => {
           // do nothing as this just means some steps are left

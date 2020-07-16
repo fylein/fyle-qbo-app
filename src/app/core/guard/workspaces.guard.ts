@@ -1,18 +1,25 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable, forkJoin } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { BillsService } from '../services/bills.service';
 import { SettingsService } from '../services/settings.service';
 import { AuthService } from '../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { StorageService } from '../services/storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WorkspacesGuard implements CanActivate {
 
-  constructor(private settingsService: SettingsService, private router: Router, private billsService: BillsService, private authService: AuthService, private snackBar: MatSnackBar) { }
+  constructor(
+    private settingsService: SettingsService,
+    private router: Router,
+    private billsService: BillsService,
+    private authService: AuthService,
+    private snackBar: MatSnackBar,
+    private storageService: StorageService) { }
 
   canActivate(next: ActivatedRouteSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const params = next.params;
@@ -37,7 +44,7 @@ export class WorkspacesGuard implements CanActivate {
             });
           }
         }
-        const onboarded = localStorage.getItem('onboarded');
+        const onboarded = that.storageService.get('onboarded');
         if (!onboarded) {
           that.snackBar.open('You cannot access this page yet. Please follow the onboarding steps in the dashboard');
           return;

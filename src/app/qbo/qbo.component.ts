@@ -5,6 +5,8 @@ import { AuthService } from '../core/services/auth.service';
 import { WorkspaceService } from '../core/services/workspace.service';
 import { SettingsService } from '../core/services/settings.service';
 import { BillsService } from '../core/services/bills.service';
+import { StorageService } from '../core/services/storage.service';
+import { WindowReferenceService } from '../core/services/window.service';
 
 @Component({
   selector: 'app-qbo',
@@ -23,50 +25,53 @@ export class QboComponent implements OnInit {
   showSwitchOrg = false;
   qboCompanyName: string;
   navDisabled = true;
+  windowReference: Window;
 
   constructor(
     private workspaceService: WorkspaceService,
     private settingsService: SettingsService,
     private router: Router,
     private authService: AuthService,
-    private billService: BillsService
-  ) {
+    private billService: BillsService,
+    private storageService: StorageService,
+    private windowReferenceService: WindowReferenceService) {
+    this.windowReference = this.windowReferenceService.nativeWindow;
   }
 
   getGeneralSettings() {
+    const that = this;
     forkJoin(
       [
-        this.settingsService.getGeneralSettings(this.workspace.id),
-        this.settingsService.getMappingSettings(this.workspace.id)
+        that.settingsService.getGeneralSettings(that.workspace.id),
+        that.settingsService.getMappingSettings(that.workspace.id)
       ]
     ).subscribe((responses) => {
-      this.generalSettings = responses[0];
-      this.mappingSettings = responses[1].results;
+      that.generalSettings = responses[0];
+      that.mappingSettings = responses[1].results;
 
-      const employeeFieldMapping = this.mappingSettings.filter(
+      const employeeFieldMapping = that.mappingSettings.filter(
         setting => (setting.source_field === 'EMPLOYEE') &&
           (setting.destination_field === 'EMPLOYEE' || setting.destination_field === 'VENDOR')
       )[0];
 
-      const projectFieldMapping = this.mappingSettings.filter(
+      const projectFieldMapping = that.mappingSettings.filter(
         settings => settings.source_field === 'PROJECT'
       )[0];
 
-      const costCenterFieldMapping = this.mappingSettings.filter(
+      const costCenterFieldMapping = that.mappingSettings.filter(
         settings => settings.source_field === 'COST_CENTER'
       )[0];
 
-      this.generalSettings.employee_field_mapping = employeeFieldMapping.destination_field;
+      that.generalSettings.employee_field_mapping = employeeFieldMapping.destination_field;
 
       if (projectFieldMapping) {
-        this.generalSettings.project_field_mapping = projectFieldMapping.destination_field;
+        that.generalSettings.project_field_mapping = projectFieldMapping.destination_field;
       }
 
       if (costCenterFieldMapping) {
-        this.generalSettings.cost_center_field_mapping = costCenterFieldMapping.destination_field;
+        that.generalSettings.cost_center_field_mapping = costCenterFieldMapping.destination_field;
       }
-
-      localStorage.setItem('generalSettings', JSON.stringify(this.generalSettings));
+      that.storageService.set('generalSettings', that.generalSettings);
     });
   }
 
@@ -75,7 +80,7 @@ export class QboComponent implements OnInit {
   }
 
   getSettingsAndNavigate() {
-    const pathName = window.location.pathname;
+    const pathName = this.windowReference.location.pathname;
     this.isLoading = false;
     if (pathName === '/workspaces') {
       this.router.navigateByUrl(`/workspaces/${this.workspace.id}/dashboard`);
@@ -116,7 +121,7 @@ export class QboComponent implements OnInit {
       });
 
       that.router.events.subscribe(() => {
-        const onboarded = localStorage.getItem('onboarded');
+        const onboarded = that.storageService.get('onboarded');
         if (onboarded !== 'true') {
           that.getConfigurations().then(() => {
             that.navDisabled = false;
@@ -137,7 +142,7 @@ export class QboComponent implements OnInit {
 
   ngOnInit() {
     const that = this;
-    const onboarded = localStorage.getItem('onboarded');
+    const onboarded = that.storageService.get('onboarded');
     that.navDisabled = onboarded !== 'true';
     that.orgsCount = that.authService.getOrgCount();
     that.setupWorkspace();

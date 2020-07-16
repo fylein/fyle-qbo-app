@@ -5,6 +5,7 @@ import { MappingsService } from '../../../core/services/mappings.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EmployeeMappingsDialogComponent } from './employee-mappings-dialog/employee-mappings-dialog.component';
 import { SettingsService } from 'src/app/core/services/settings.service';
+import { StorageService } from 'src/app/core/services/storage.service';
 
 @Component({
   selector: 'app-employee-mappings',
@@ -26,7 +27,8 @@ export class EmployeeMappingsComponent implements OnInit {
               private route: ActivatedRoute,
               private mappingsService: MappingsService,
               private router: Router,
-              private settingsService: SettingsService) {
+              private settingsService: SettingsService,
+              private storageService: StorageService) {
   }
 
   open() {
@@ -43,7 +45,7 @@ export class EmployeeMappingsComponent implements OnInit {
       that.mappingsService.getMappings(that.workspaceId, 'EMPLOYEE').subscribe((employees) => {
         that.employeeMappings = employees.results;
         that.isLoading = false;
-        const onboarded = localStorage.getItem('onboarded');
+        const onboarded = that.storageService.get('onboarded');
 
         if (onboarded === 'true') {
           that.createEmployeeMappingsRows();

@@ -1,4 +1,5 @@
 /* tslint:disable */
+// TODO: Use something for serialization / deserialization
 export class GeneralMapping {
   accounts_payable_id: number;
   accounts_payable_name: string;

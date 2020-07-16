@@ -5,6 +5,7 @@ import { MappingsService } from '../../../core/services/mappings.service';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { StorageService } from 'src/app/core/services/storage.service';
 
 @Component({
   selector: 'app-general-mappings',
@@ -24,7 +25,14 @@ export class GeneralMappingsComponent implements OnInit {
   bankAccountIsValid = true;
   cccAccountIsValid = true;
 
-  constructor(private route: ActivatedRoute, private mappingsService: MappingsService, private formBuilder: FormBuilder, private router: Router, private settingsService: SettingsService, private snackBar: MatSnackBar) {
+  constructor(
+    private route: ActivatedRoute,
+    private mappingsService: MappingsService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private settingsService: SettingsService,
+    private snackBar: MatSnackBar,
+    private storageService: StorageService) {
   }
 
   submit() {
@@ -55,7 +63,7 @@ export class GeneralMappingsComponent implements OnInit {
     if (that.accountsPayableIsValid && that.bankAccountIsValid && that.cccAccountIsValid) {
       that.isLoading = true;
       that.mappingsService.postGeneralMappings(that.workspaceId, accountPayableAccount.destination_id, accountPayableAccount.value, bankAccount.destination_id, bankAccount.value, cccAccount.destination_id, cccAccount.value).subscribe(response => {
-        const onboarded = localStorage.getItem('onboarded');
+        const onboarded = that.storageService.get('onboarded');
         if (onboarded === 'true') {
           that.getGeneralMappings();
         } else {

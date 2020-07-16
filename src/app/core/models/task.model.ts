@@ -1,4 +1,5 @@
 /* tslint:disable */
+// TODO: Use something for serialization / deserialization
 import { MappingError } from './mappingError.model';
 
 export class Task {

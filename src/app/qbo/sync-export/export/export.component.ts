@@ -11,6 +11,7 @@ import { switchMap, takeWhile } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { CreditCardPurchasesService } from 'src/app/core/services/credit-card-purchases.service';
+import { WindowReferenceService } from 'src/app/core/services/window.service';
 
 @Component({
   selector: 'app-export',
@@ -27,8 +28,22 @@ export class ExportComponent implements OnInit {
   failedExpenseGroupCount = 0;
   successfulExpenseGroupCount = 0;
   qboCompanyName = '';
+  windowReference: Window;
 
-  constructor(private route: ActivatedRoute, private creditCardService: CreditCardPurchasesService, private taskService: TasksService, private billService: BillsService, private expenseGroupService: ExpenseGroupsService, private journalEntriesService: JournalEntriesService, private billsService: BillsService, private checksService: ChecksService, private snackBar: MatSnackBar, private settingsService: SettingsService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private creditCardService: CreditCardPurchasesService,
+    private taskService: TasksService,
+    private billService: BillsService,
+    private expenseGroupService: ExpenseGroupsService,
+    private journalEntriesService: JournalEntriesService,
+    private billsService: BillsService,
+    private checksService: ChecksService,
+    private snackBar: MatSnackBar,
+    private settingsService: SettingsService,
+    private windowReferenceService: WindowReferenceService) {
+      this.windowReference = this.windowReferenceService.nativeWindow;
+    }
 
   exportReimbursableExpenses(reimbursableExpensesObject) {
     const that = this;
@@ -63,12 +78,12 @@ export class ExportComponent implements OnInit {
 
   openFailedExports() {
     const that = this;
-    window.open(`workspaces/${that.workspaceId}/expense_groups?state=FAILED`, '_blank');
+    this.windowReference.open(`workspaces/${that.workspaceId}/expense_groups?state=FAILED`, '_blank');
   }
 
   openSuccessfulExports() {
     const that = this;
-    window.open(`workspaces/${that.workspaceId}/expense_groups?state=COMPLETE`, '_blank');
+    this.windowReference.open(`workspaces/${that.workspaceId}/expense_groups?state=COMPLETE`, '_blank');
   }
 
   checkResultsOfExport(filteredIds) {

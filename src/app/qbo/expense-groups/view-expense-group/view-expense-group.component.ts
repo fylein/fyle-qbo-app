@@ -9,6 +9,8 @@ import { CreditCardPurchasesService } from '../../../core/services/credit-card-p
 import { environment } from 'src/environments/environment';
 import { BillsService } from 'src/app/core/services/bills.service';
 import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
+import { StorageService } from 'src/app/core/services/storage.service';
+import { WindowReferenceService } from 'src/app/core/services/window.service';
 
 @Component({
   selector: 'app-view-expense-group',
@@ -26,8 +28,17 @@ export class ViewExpenseGroupComponent implements OnInit {
   pageSize: number;
   pageNumber: number;
   status: string;
+  windowReference: Window;
 
-  constructor(private route: ActivatedRoute, private router: Router, private expenseGroupsService: ExpenseGroupsService, private tasksService: TasksService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private expenseGroupsService: ExpenseGroupsService,
+    private tasksService: TasksService,
+    private storageService: StorageService,
+    private windowReferenceService: WindowReferenceService) {
+      this.windowReference = this.windowReferenceService.nativeWindow;
+    }
 
   changeState(state: string) {
     const that = this;
@@ -38,24 +49,24 @@ export class ViewExpenseGroupComponent implements OnInit {
   }
 
   openBillInQBO() {
-    window.open(`${environment.qbo_app_url}/app/bill?txnId=${this.task.detail.Bill.Id}`, '_blank');
+    this.windowReference.open(`${environment.qbo_app_url}/app/bill?txnId=${this.task.detail.Bill.Id}`, '_blank');
   }
 
   openCheckInQBO() {
-    window.open(`${environment.qbo_app_url}/app/check?txnId=${this.task.detail.Purchase.Id}`, '_blank');
+    this.windowReference.open(`${environment.qbo_app_url}/app/check?txnId=${this.task.detail.Purchase.Id}`, '_blank');
   }
 
   openJournalEntryInQBO() {
-    window.open(`${environment.qbo_app_url}/app/journal?txnId=${this.task.detail.JournalEntry.Id}`, '_blank');
+    this.windowReference.open(`${environment.qbo_app_url}/app/journal?txnId=${this.task.detail.JournalEntry.Id}`, '_blank');
   }
 
   openCreditCardPurchaseInQBO() {
-    window.open(`${environment.qbo_app_url}/app/expense?txnId=${this.task.detail.Purchase.Id}`, '_blank');
+    this.windowReference.open(`${environment.qbo_app_url}/app/expense?txnId=${this.task.detail.Purchase.Id}`, '_blank');
   }
 
   openExpenseInFyle(expenseId: string) {
-    const clusterDomain = localStorage.getItem('clusterDomain');
-    window.open(`${clusterDomain}/app/main/#/enterprise/view_expense/${expenseId}`, '_blank');
+    const clusterDomain = this.storageService.get('clusterDomain');
+    this.windowReference.open(`${clusterDomain}/app/main/#/enterprise/view_expense/${expenseId}`, '_blank');
   }
 
   initExpenseGroupDetails() {

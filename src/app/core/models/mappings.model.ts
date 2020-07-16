@@ -1,4 +1,5 @@
 /* tslint:disable */
+// TODO: Use something for serialization / deserialization
 export class Mapping {
   id: number;
   source: {

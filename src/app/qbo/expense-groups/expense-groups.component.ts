@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { environment } from 'src/environments/environment';
+import { WindowReferenceService } from 'src/app/core/services/window.service';
 
 @Component({
   selector: 'app-expense-groups',
@@ -22,8 +23,17 @@ export class ExpenseGroupsComponent implements OnInit {
   pageNumber = 0;
   pageSize = 5;
   columnsToDisplay = ['description', 'employee', 'expensetype'];
+  windowReference: Window;
 
-  constructor(private route: ActivatedRoute, private taskService: TasksService, private expenseGroupService: ExpenseGroupsService, private router: Router, private settingsService: SettingsService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private taskService: TasksService,
+    private expenseGroupService: ExpenseGroupsService,
+    private router: Router,
+    private settingsService: SettingsService,
+    private windowReferenceService: WindowReferenceService) {
+      this.windowReference = this.windowReferenceService.nativeWindow;
+    }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -116,7 +126,7 @@ export class ExpenseGroupsComponent implements OnInit {
   }
 
   openInQBO(type, id) {
-    window.open(`${environment.qbo_app_url}/app/${type}?txnId=${id}`, '_blank');
+    this.windowReference.open(`${environment.qbo_app_url}/app/${type}?txnId=${id}`, '_blank');
   }
 
   openInQboHandler(clickedExpenseGroup: ExpenseGroup) {

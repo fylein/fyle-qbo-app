@@ -28,4 +28,6 @@ export class WorkspaceService {
     const id = this.storageService.get('workspaceId');
     return id ? +id : null;
   }
+
+  // TODO: Add a method with implicit workspace id and replace calls everwhere
 }

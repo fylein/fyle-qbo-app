@@ -89,15 +89,13 @@ export class GeneralMappingsComponent implements OnInit {
         cccAccounts: [that.generalMappings ? that.generalMappings.default_ccc_account_id : '']
       });
     }, error => {
-      if (error.status === 400) {
-        that.generalMappings = {};
-        that.isLoading = false;
-        that.form = that.formBuilder.group({
-          accountPayableAccounts: [that.generalMappings ? that.generalMappings.accounts_payable_id : ''],
-          bankAccounts: [that.generalMappings ? that.generalMappings.bank_account_id : ''],
-          cccAccounts: [that.generalMappings ? that.generalMappings.default_ccc_account_id : '']
-        });
-      }
+      that.generalMappings = {};
+      that.isLoading = false;
+      that.form = that.formBuilder.group({
+        accountPayableAccounts: [that.generalMappings ? that.generalMappings.accounts_payable_id : ''],
+        bankAccounts: [that.generalMappings ? that.generalMappings.bank_account_id : ''],
+        cccAccounts: [that.generalMappings ? that.generalMappings.default_ccc_account_id : '']
+      });
     });
   }
 

@@ -138,25 +138,23 @@ export class ConfigurationComponent implements OnInit {
 
       that.isLoading = false;
     }, error => {
-      if (error.status === 400) {
-        that.generalSettings = {};
-        that.mappingSettings = {};
-        that.isLoading = false;
-        that.generalSettingsForm = that.formBuilder.group({
-          employees: ['', Validators.required],
-          reimburExpense: ['', Validators.required],
-          cccExpense: [null],
-          projects: [null],
-          costCenters: [null],
-        }, {
-          validators: [that.configurationProjectCostCenterValidator]
-        });
+      that.generalSettings = {};
+      that.mappingSettings = {};
+      that.isLoading = false;
+      that.generalSettingsForm = that.formBuilder.group({
+        employees: ['', Validators.required],
+        reimburExpense: ['', Validators.required],
+        cccExpense: [null],
+        projects: [null],
+        costCenters: [null],
+      }, {
+        validators: [that.configurationProjectCostCenterValidator]
+      });
 
-        that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
-          that.expenseOptions = that.getExpenseOptions(employeeMappedTo);
-          that.generalSettingsForm.controls.reimburExpense.reset();
-        });
-      }
+      that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
+        that.expenseOptions = that.getExpenseOptions(employeeMappedTo);
+        that.generalSettingsForm.controls.reimburExpense.reset();
+      });
     });
   }
 

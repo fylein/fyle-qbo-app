@@ -105,17 +105,19 @@ export class CostCenterMappingsDialogComponent implements OnInit {
 
   reset() {
     const that = this;
-
+    // TODO: remove promises and do with rxjs observables
     const getFyleCostCenters = that.mappingsService.getFyleCostCenters().toPromise().then(costCenters => {
       that.fyleCostCenters = costCenters;
     });
 
     let qboPromise;
     if (this.generalSettings.cost_center_field_mapping === 'CUSTOMER') {
+      // TODO: remove promises and do with rxjs observables
       qboPromise = that.mappingsService.getQBOCustomers().toPromise().then(objects => {
         that.qboElements = objects;
       });
     } else if (this.generalSettings.cost_center_field_mapping === 'CLASS') {
+      // TODO: remove promises and do with rxjs observables
       qboPromise = that.mappingsService.getQBOClasses().toPromise().then(objects => {
         that.qboElements = objects;
       });
@@ -126,6 +128,7 @@ export class CostCenterMappingsDialogComponent implements OnInit {
     }
 
     that.isLoading = true;
+    // TODO: remove promises and do with rxjs observables
     forkJoin([
       getFyleCostCenters,
       qboPromise

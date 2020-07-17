@@ -64,7 +64,7 @@ export class DashboardComponent implements OnInit {
   connectQBO() {
     this.windowReference.location.href = QBO_AUTHORIZE_URI + '?client_id=' + QBO_CLIENT_ID + '&scope=' + QBO_SCOPE + '&response_type=code&redirect_uri=' + APP_URL + '/workspaces/qbo/callback&state=' + this.workspaceId;
   }
-
+  // TODO: remove promises and do with rxjs observables
   checkFyleLoginStatus() {
     const that = this;
     return that.settingsService.getFyleCredentials(that.workspaceId).toPromise().then(credentials => {
@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-
+  // TODO: remove promises and do with rxjs observables
   getQboStatus() {
     const that = this;
 
@@ -85,7 +85,7 @@ export class DashboardComponent implements OnInit {
 
   getConfigurations() {
     const that = this;
-
+    // TODO: remove promises and do with rxjs observables
     return forkJoin(
       [
         that.settingsService.getGeneralSettings(that.workspaceId),
@@ -99,6 +99,7 @@ export class DashboardComponent implements OnInit {
 
   getGeneralMappings() {
     const that = this;
+    // TODO: remove promises and do with rxjs observables
     return that.mappingsService.getGeneralMappings().toPromise().then(generalMappings => {
       that.currentState = onboardingStates.generalMappingsDone;
       return generalMappings;
@@ -107,6 +108,7 @@ export class DashboardComponent implements OnInit {
 
   getEmployeeMappings() {
     const that = this;
+    // TODO: remove promises and do with rxjs observables
     return that.mappingsService.getMappings('EMPLOYEE').toPromise().then((res) => {
       if (res.results.length > 0) {
         that.currentState = onboardingStates.employeeMappingsDone;
@@ -119,6 +121,7 @@ export class DashboardComponent implements OnInit {
 
   getCategoryMappings() {
     const that = this;
+    // TODO: remove promises and do with rxjs observables
     return that.mappingsService.getMappings('CATEGORY').toPromise().then((res) => {
       if (res.results.length > 0) {
         that.currentState = onboardingStates.categoryMappingsDone;
@@ -131,6 +134,7 @@ export class DashboardComponent implements OnInit {
 
   loadSuccessfullExpenseGroupsCount() {
     const that = this;
+    // TODO: remove promises and do with rxjs observables
     return that.expenseGroupService.getAllExpenseGroups('COMPLETE').toPromise().then((res) => {
       that.successfulExpenseGroupsCount = res.results.length;
       return res;
@@ -139,6 +143,7 @@ export class DashboardComponent implements OnInit {
 
   loadFailedlExpenseGroupsCount() {
     const that = this;
+    // TODO: remove promises and do with rxjs observables
     return that.expenseGroupService.getAllExpenseGroups('FAILED').toPromise().then((res) => {
       that.failedExpenseGroupsCount = res.results.length;
       return res;
@@ -148,6 +153,7 @@ export class DashboardComponent implements OnInit {
   loadDashboardData() {
     const that = this;
     that.isLoading = true;
+    // TODO: remove promises and do with rxjs observables
     return forkJoin([
       that.loadSuccessfullExpenseGroupsCount(),
       that.loadFailedlExpenseGroupsCount()

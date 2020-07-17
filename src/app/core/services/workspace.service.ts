@@ -12,10 +12,12 @@ export class WorkspaceService {
     private apiService: ApiService,
     private storageService: StorageService) { }
 
+  // TODO: Replace any with proper model
   createWorkspace(): Observable<any> {
     return this.apiService.post('/workspaces/', {});
   }
 
+  // TODO: Replace any with proper model
   getWorkspaces(orgId): Observable<any> {
     return this.apiService.get(`/workspaces/`, {
       org_id: orgId

@@ -33,7 +33,7 @@ export class ApiService {
     }
     return throwError(error);
   }
-
+  // Having any here is ok
   post(endpoint: string, body: {}): Observable<any> {
     return this.http
       .post(
@@ -43,7 +43,7 @@ export class ApiService {
       )
       .pipe(catchError(this.handleError));
   }
-
+  // Having any here is ok
   get(endpoint: string, apiParams: {}): Observable<any> {
     let params = new HttpParams();
     Object.keys(apiParams).forEach(key => {

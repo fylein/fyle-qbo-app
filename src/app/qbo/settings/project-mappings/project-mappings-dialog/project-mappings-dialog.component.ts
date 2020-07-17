@@ -103,20 +103,24 @@ export class ProjectMappingsDialogComponent implements OnInit {
 
   reset() {
     const that = this;
+    // TODO: remove promises and do with rxjs observables
     const getFyleCateogories = that.mappingsService.getFyleProjects().toPromise().then(projects => {
       that.fyleProjects = projects;
     });
 
     let qboPromise;
     if (that.generalSettings.project_field_mapping === 'CUSTOMER') {
+      // TODO: remove promises and do with rxjs observables
       qboPromise = that.mappingsService.getQBOCustomers().toPromise().then(objects => {
         that.qboElements = objects;
       });
     } else if (that.generalSettings.project_field_mapping === 'CLASS') {
+      // TODO: remove promises and do with rxjs observables
       qboPromise = that.mappingsService.getQBOClasses().toPromise().then(objects => {
         that.qboElements = objects;
       });
     } else if (that.generalSettings.project_field_mapping === 'DEPARTMENT') {
+      // TODO: remove promises and do with rxjs observables
       qboPromise = that.mappingsService.getQBODepartments().toPromise().then(objects => {
         that.qboElements = objects;
       });

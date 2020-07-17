@@ -104,11 +104,12 @@ export class CategoryMappingsDialogComponent implements OnInit {
 
   ngOnInit() {
     const that = this;
-
+    // TODO: remove promises and do with rxjs observables
     const getFyleCateogories = that.mappingsService.getFyleCategories().toPromise().then(fyleCategories => {
       that.fyleCategories = fyleCategories;
     });
-
+    
+    // TODO: remove promises and do with rxjs observables
     const getExpenseAccounts = that.mappingsService.getExpenseAccounts().toPromise().then(qboAccounts => {
       that.qboAccounts = qboAccounts;
     });

@@ -292,7 +292,7 @@ export class MappingsService {
       `/workspaces/${workspaceId}/qbo/credit_card_accounts/`, {}
     );
   }
-
+  // TODO: Replace any with proper model
   postGeneralMappings(accountsPayableId: string, accountsPayableName: string, bankAccountId: string, bankAccountName: string, defaultCCCAccountId: string, defaultCCCAccountName: string): Observable<any> {
     this.qboAccounts = null;
     const workspaceId = this.workspaceService.getWorkspaceId();

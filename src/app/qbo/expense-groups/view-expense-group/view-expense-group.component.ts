@@ -71,6 +71,7 @@ export class ViewExpenseGroupComponent implements OnInit {
 
   initExpenseGroupDetails() {
     const that = this;
+    // TODO: remove promises and do with rxjs observables
     return that.expenseGroupsService.getExpensesGroupById(that.expenseGroupId).toPromise().then((expenseGroup) => {
       that.expenseGroup = expenseGroup;
       return expenseGroup;
@@ -79,6 +80,7 @@ export class ViewExpenseGroupComponent implements OnInit {
 
   initTasks() {
     const that = this;
+    // TODO: remove promises and do with rxjs observables
     return that.tasksService.getTasksByExpenseGroupId(that.expenseGroupId).toPromise().then((tasks) => {
       if (tasks.length > 0) {
         that.task = tasks[0];

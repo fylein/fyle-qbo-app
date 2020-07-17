@@ -163,22 +163,23 @@ export class EmployeeMappingsDialogComponent implements OnInit {
 
   reset() {
     const that = this;
+    // TODO: remove promises and do with rxjs observables
     const getFyleEmployees = that.mappingsService.getFyleEmployees().toPromise().then((fyleEmployees) => {
       that.fyleEmployees = fyleEmployees;
     });
-
+    // TODO: remove promises and do with rxjs observables
     const getQBOEmployees = that.mappingsService.getQBOEmployees().toPromise().then((qboEmployees) => {
       that.qboEmployees = qboEmployees;
     });
-
+    // TODO: remove promises and do with rxjs observables
     const getCCCAccounts = that.mappingsService.getCreditCardAccounts().toPromise().then((cccObjects) => {
       that.cccObjects = cccObjects;
     });
-
+    // TODO: remove promises and do with rxjs observables
     const getQboVendors = that.mappingsService.getQBOVendors().toPromise().then((qboVendors) => {
       that.qboVendors = qboVendors;
     });
-
+    // TODO: remove promises and do with rxjs observables
     const getGeneralMappings = that.mappingsService.getGeneralMappings().toPromise().then((generalMappings) => {
       that.generalMappings = generalMappings;
     });

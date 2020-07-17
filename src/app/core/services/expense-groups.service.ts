@@ -38,8 +38,8 @@ export class ExpenseGroupsService {
     return from(this.getAllExpenseGroupsInternal(limit, offset, state, allExpenseGroupsResponse));
   }
 
+  // TODO: remove promises and do with rxjs observables
   private getAllExpenseGroupsInternal(limit: number, offset: number, state: string, allExpenseGroupsResponse: ExpenseGroupResponse): Promise<ExpenseGroupResponse> {
-    const workspaceId = this.workspaceService.getWorkspaceId();
     const that = this;
     return that.getExpenseGroups(limit, offset, state).toPromise().then((expenseGroupRes) => {
       if (!allExpenseGroupsResponse) {

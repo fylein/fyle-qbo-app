@@ -42,6 +42,7 @@ export class InfoComponent implements OnInit {
 
   initExpenseGroupExpenses() {
     const that = this;
+    // TODO: remove promises and do with rxjs observables
     return that.expenseGroupsService.getExpensesByExpenseGroupId(that.expenseGroupId).toPromise().then((expenses) => {
       that.count = expenses.length;
       that.expenses = new MatTableDataSource(expenses);
@@ -50,6 +51,7 @@ export class InfoComponent implements OnInit {
 
   initExpenseGroupDetails() {
     const that = this;
+    // TODO: remove promises and do with rxjs observables
     return that.expenseGroupsService.getExpensesGroupById(that.expenseGroupId).toPromise().then((expenseGroup) => {
       that.expenseGroup = expenseGroup;
     });

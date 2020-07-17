@@ -123,6 +123,7 @@ export class SettingsService {
     cacheBusterObserver: merge(generalSettingsCache, generalSettingsCache)
   })
   getCombinedSettings(workspaceId: number) {
+    // TODO: remove promises and do with rxjs observables
     return from(forkJoin(
       [
         this.getGeneralSettings(workspaceId),

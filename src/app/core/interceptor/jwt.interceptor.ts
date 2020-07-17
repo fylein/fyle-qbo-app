@@ -20,12 +20,13 @@ export class JwtInterceptor implements HttpInterceptor {
     const that = this;
     // this should call auth service to get a new access token with a refresh token
     const refreshToken = that.storageService.get('refresh_token');
+    // TODO: remove promises and do with rxjs observables
     return that.authService.getAccessToken(refreshToken).toPromise().then((token) => {
       that.storageService.set('access_token', token.access_token);
       return token;
     });
   }
-
+  // Having any here is ok, since this is used on all requests
   addToken(request: HttpRequest<any>): HttpRequest<any> {
     if (this.authService.isLoggedIn()) {
       request = request.clone({
@@ -37,6 +38,7 @@ export class JwtInterceptor implements HttpInterceptor {
     return request;
   }
 
+  // Having any here is ok, since this is used on all requests
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const that = this;
     request = that.addToken(request);

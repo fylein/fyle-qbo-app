@@ -36,7 +36,7 @@ export class TasksService {
 
     return from(this.getAllTasksInternal(limit, offset, status, allTasks));
   }
-
+  // TODO: remove promises and do with rxjs observables
   private getAllTasksInternal(limit: number, offset: number, status: string, allTasks: TaskResponse): Promise<TaskResponse> {
     const that = this;
     return that.getTasks(limit, offset, status).toPromise().then((taskResponse) => {

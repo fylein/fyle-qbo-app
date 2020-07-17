@@ -8,7 +8,7 @@ import { StorageService } from 'src/app/core/services/storage.service';
 @Component({
   selector: 'app-category-mappings',
   templateUrl: './category-mappings.component.html',
-  styleUrls: ['./category-mappings.component.scss', '../../qbo.component.scss']
+  styleUrls: ['./category-mappings.component.scss', '../settings.component.scss', '../../qbo.component.scss']
 })
 export class CategoryMappingsComponent implements OnInit {
   isLoading = false;
@@ -34,7 +34,7 @@ export class CategoryMappingsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       const onboarded = that.storageService.get('onboarded');
-      if (onboarded === 'true') {
+      if (onboarded === true) {
         that.getCategoryMappings();
       } else {
         that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
@@ -46,7 +46,7 @@ export class CategoryMappingsComponent implements OnInit {
   getCategoryMappings() {
     const that = this;
     that.isLoading = true;
-    that.mappingsService.getMappings(this.workspaceId, 'CATEGORY').subscribe(categoryMappings => {
+    that.mappingsService.getMappings('CATEGORY').subscribe(categoryMappings => {
       that.categoryMappings = categoryMappings.results;
       that.isLoading = false;
     });

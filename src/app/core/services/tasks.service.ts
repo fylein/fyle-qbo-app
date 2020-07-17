@@ -2,21 +2,29 @@ import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 import { Task } from '../models/task.model';
-import { TaskResponse } from '../models/taskReponse.model';
+import { TaskResponse } from '../models/task-reponse.model';
+import { WorkspaceService } from './workspace.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TasksService {
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private workspaceService: WorkspaceService) {}
 
-  getTasks(workspaceId: number, limit: number, offset: number, status: string): Observable<TaskResponse> {
+  getTasks(limit: number, offset: number, status: string): Observable<TaskResponse> {
+    const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.get(
-      `/workspaces/${workspaceId}/tasks/all/?limit=${limit}&offset=${offset}&status=${status}`, {}
+      `/workspaces/${workspaceId}/tasks/all/`, {
+        limit,
+        offset,
+        status
+      }
     );
   }
 
-  getAllTasks(workspaceId: number, status: string): Observable<TaskResponse> {
+  getAllTasks(status: string): Observable<TaskResponse> {
     const limit = 10;
     const offset = 0;
     const allTasks: TaskResponse = {
@@ -26,12 +34,12 @@ export class TasksService {
       results: []
     };
 
-    return from(this.getAllTasksInternal(workspaceId, limit, offset, status, allTasks));
+    return from(this.getAllTasksInternal(limit, offset, status, allTasks));
   }
 
-  private getAllTasksInternal(workspaceId: number, limit: number, offset: number, status: string, allTasks: TaskResponse): Promise<TaskResponse> {
+  private getAllTasksInternal(limit: number, offset: number, status: string, allTasks: TaskResponse): Promise<TaskResponse> {
     const that = this;
-    return that.getTasks(workspaceId, limit, offset, status).toPromise().then((taskResponse) => {
+    return that.getTasks(limit, offset, status).toPromise().then((taskResponse) => {
       if (allTasks.count === 0 ) {
         allTasks = taskResponse;
       } else {
@@ -39,20 +47,16 @@ export class TasksService {
       }
 
       if (allTasks.results.length < allTasks.count) {
-        return that.getAllTasksInternal(workspaceId, limit, offset + 10, status, allTasks);
+        return that.getAllTasksInternal(limit, offset + 10, status, allTasks);
       } else {
         return allTasks;
       }
     });
   }
 
-  getTaskById(workspaceId: number, id: number): Observable<any> {
-    return this.apiService.get(
-      `/workspaces/${workspaceId}/tasks/?id=${id}`, {}
-    );
-  }
+  getTasksByExpenseGroupId(expenseGroupId: number): Observable<Task[]> {
+    const workspaceId = this.workspaceService.getWorkspaceId();
 
-  getTasksByExpenseGroupId(workspaceId: number, expenseGroupId: number): Observable<Task[]> {
     return this.apiService.get(
       `/workspaces/${workspaceId}/tasks/expense_group/${expenseGroupId}/`, {}
     );

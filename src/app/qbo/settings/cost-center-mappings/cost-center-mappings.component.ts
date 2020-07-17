@@ -8,7 +8,7 @@ import { SettingsService } from 'src/app/core/services/settings.service';
 @Component({
   selector: 'app-cost-center-mappings',
   templateUrl: './cost-center-mappings.component.html',
-  styleUrls: ['./cost-center-mappings.component.scss', '../../qbo.component.scss']
+  styleUrls: ['./cost-center-mappings.component.scss', '../settings.component.scss', '../../qbo.component.scss']
 })
 export class CostCenterMappingsComponent implements OnInit {
   isLoading = false;
@@ -38,7 +38,7 @@ export class CostCenterMappingsComponent implements OnInit {
   getCostCenterMappings() {
     const that = this;
     that.isLoading = true;
-    that.mappingsService.getMappings(this.workspaceId, 'COST_CENTER').subscribe(costCenterMappings => {
+    that.mappingsService.getMappings('COST_CENTER').subscribe(costCenterMappings => {
       that.costCenterMappings = costCenterMappings.results;
       that.isLoading = false;
     });

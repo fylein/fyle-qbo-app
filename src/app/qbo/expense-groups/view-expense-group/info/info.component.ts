@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ExpenseGroupsService } from '../../../../core/services/expense-groups.service';
 import { ActivatedRoute } from '@angular/router';
-import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
+import { ExpenseGroup } from 'src/app/core/models/expense-group.model';
 import { forkJoin } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { Expense } from 'src/app/core/models/expense.model';
@@ -42,7 +42,7 @@ export class InfoComponent implements OnInit {
 
   initExpenseGroupExpenses() {
     const that = this;
-    return that.expenseGroupsService.getExpensesByExpenseGroupId(that.workspaceId, that.expenseGroupId).toPromise().then((expenses) => {
+    return that.expenseGroupsService.getExpensesByExpenseGroupId(that.expenseGroupId).toPromise().then((expenses) => {
       that.count = expenses.length;
       that.expenses = new MatTableDataSource(expenses);
     });
@@ -50,7 +50,7 @@ export class InfoComponent implements OnInit {
 
   initExpenseGroupDetails() {
     const that = this;
-    return that.expenseGroupsService.getExpensesGroupById(that.workspaceId, that.expenseGroupId).toPromise().then((expenseGroup) => {
+    return that.expenseGroupsService.getExpensesGroupById(that.expenseGroupId).toPromise().then((expenseGroup) => {
       that.expenseGroup = expenseGroup;
     });
   }

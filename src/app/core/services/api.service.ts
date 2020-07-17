@@ -45,11 +45,9 @@ export class ApiService {
   }
 
   get(endpoint: string, apiParams: {}): Observable<any> {
-
-    const params = new HttpParams();
-
+    let params = new HttpParams();
     Object.keys(apiParams).forEach(key => {
-      params.append(key, apiParams[key]);
+      params = params.set(key, apiParams[key]);
     });
 
     return this.http.get(

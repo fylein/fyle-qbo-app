@@ -1,22 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
+import { WorkspaceService } from './workspace.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CreditCardPurchasesService {
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private workspaceService: WorkspaceService) {}
 
-  createCreditCardPurchases(workspaceId: number, expenseGroupIds: any[]): Observable<any> {
+  // TODO: Map response to a model
+  createCreditCardPurchases(expenseGroupIds: number[]) {
+    const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.post(
       `/workspaces/${workspaceId}/qbo/credit_card_purchases/trigger/`, {
         expense_group_ids: expenseGroupIds
       }
     );
-  }
-
-  getCreditCardPurchases(workspaceId: number, limit: number, offset: number): Observable<any> {
-    return this.apiService.get(`/workspaces/${workspaceId}/qbo/credit_card_purchases/?limit=${limit}&offset=${offset}`, {});
   }
 }

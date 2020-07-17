@@ -1,10 +1,10 @@
 <h2 mat-dialog-title>
-  <div class="employee-mappings--header" fxLayout="row" fxLayoutAlign="space-between center">
+  <div class="mappings-dialog--header" fxLayout="row" fxLayoutAlign="space-between center">
     <div class="mat-title">
       Create New Mapping
     </div>
     <div>
-      <mat-icon class="employee-mappings--close" aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
+      <mat-icon class="mappings-dialog--close cursor-pointer" aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
     </div>
   </div>
 </h2>
@@ -12,14 +12,14 @@
   <div class="internal-loader" fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
     <app-loader></app-loader>
   </div>
-  <form *ngIf="!isLoading" class="employee-mappings--form" [formGroup]="form">
+  <form *ngIf="!isLoading" class="mappings-dialog--form" [formGroup]="form">
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="mat-body-strong">
-        <strong class="employee-mappings--label">
+        <strong class="mappings-dialog--label">
           Choose Fyle Employee Email
         </strong>
       </div>
-      <mat-form-field class="employee-mappings--form-element" appearance="outline">
+      <mat-form-field class="mappings-dialog--form-element" appearance="outline">
         <input required type="text" formControlName="fyleEmployee" placeholder="Choose Employee" matInput
           [matAutocomplete]="fyEmp">
         <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
@@ -27,55 +27,55 @@
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error class="employee-mappings--error" *ngIf="form.controls.fyleEmployee.hasError('forbiddenOption')">
+        <mat-error class="mappings-dialog--error" *ngIf="form.controls.fyleEmployee.hasError('forbiddenOption')">
           Please enter a valid value
         </mat-error>
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
-        <strong class="employee-mappings--label">
+        <strong class="mappings-dialog--label">
           Choose Vendor
         </strong>
       </div>
-      <mat-form-field class="employee-mappings--form-element" appearance="outline" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
+      <mat-form-field class="mappings-dialog--form-element" appearance="outline" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
         <input type="text" formControlName="qboVendor" placeholder="Choose Vendor" matInput [matAutocomplete]="fyEmp">
         <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboVendorOptions" [value]="option">
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error class="employee-mappings--error" *ngIf="form.controls.qboVendor.hasError('forbiddenOption')">
+        <mat-error class="mappings-dialog--error" *ngIf="form.controls.qboVendor.hasError('forbiddenOption')">
           Please enter a valid value
         </mat-error>
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
-        <strong class="employee-mappings--label">
+        <strong class="mappings-dialog--label">
           Choose Quickbooks Online Employee
         </strong>
       </div>
-      <mat-form-field class="employee-mappings--form-element" appearance="outline" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
+      <mat-form-field class="mappings-dialog--form-element" appearance="outline" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
         <input type="text" formControlName="qboEmployee" placeholder="Choose Employee" matInput [matAutocomplete]="qboEmp">
         <mat-autocomplete #qboEmp="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboEmployeeOptions" [value]="option">
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error class="employee-mappings--error" *ngIf="form.controls.qboEmployee.hasError('forbiddenOption')">
+        <mat-error class="mappings-dialog--error" *ngIf="form.controls.qboEmployee.hasError('forbiddenOption')">
           Please enter a valid value
         </mat-error>
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.corporate_credit_card_expenses_object">
-        <strong class="employee-mappings--label">
+        <strong class="mappings-dialog--label">
           Choose Credit Card Account
         </strong>
       </div>
-      <mat-form-field class="employee-mappings--form-element" appearance="outline" *ngIf="generalSettings.corporate_credit_card_expenses_object">
+      <mat-form-field class="mappings-dialog--form-element" appearance="outline" *ngIf="generalSettings.corporate_credit_card_expenses_object">
         <input type="text" formControlName="creditCardAccount" placeholder="Corporate credit card account" matInput [matAutocomplete]="fyEmp">
         <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of cccOptions" [value]="option">
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error class="employee-mappings--error" *ngIf="form.controls.creditCardAccount.hasError('forbiddenOption')">
+        <mat-error class="mappings-dialog--error" *ngIf="form.controls.creditCardAccount.hasError('forbiddenOption')">
           Please enter a valid value
         </mat-error>
       </mat-form-field>
@@ -83,9 +83,8 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-flat-button mat-dialog-close>Cancel</button>
-  <button [disabled]="form && !form.valid" class="employee-mappings--save-btn" mat-flat-button color="primary"
-    type="button" (click)="submit()">
+  <button type="button" mat-flat-button mat-dialog-close>Cancel</button>
+  <button class="mappings-dialog--save-btn" mat-flat-button color="primary" type="submit" (click)="submit()">
     Save
   </button>
 </mat-dialog-actions>

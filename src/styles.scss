@@ -1,9 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
-@import "~normalize.css";
-@import "~@angular/material/theming";
+@import '~normalize.css';
+@import '~@angular/material/theming';
 @include mat-core();
-@import "./assets/stylesheets/fy-theme.scss";
+@import './assets/stylesheets/fy-theme.scss';
 @import 'variables.scss';
+@import './assets/stylesheets/utility.scss';
+
+$fy-nav-hover: rgba(0, 0, 0, 0.039);
+$fy-autocomplete-border: rgba(211, 211, 211, 0.451);
+$fy-stepper-selected-icon: rgba(0, 0, 0, 0.541);
+$fy-steppper-number: #48555f;
+$fy-menu-text: #333;
 
 html,
 body {
@@ -15,13 +22,13 @@ body {
  
 // some issue is there with mat select options going transparent
 .mat-select-panel {
-  background: $fy-white;
+  background-color: $fy-white;
 }
 
 .mat-option:hover {
-  background: $fy-nav-hover;
+  background-color: $fy-nav-hover;
 }
-
+// This is a fix for select panels becoming transparent under certain cases
 .mat-select-panel:not([class*=mat-elevation-z]) {
   box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
 }

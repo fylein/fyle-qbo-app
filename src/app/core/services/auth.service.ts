@@ -6,12 +6,14 @@ import {
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Token } from '../tokens';
+import { Token } from '../models/tokens';
 
 import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/app/core/services/api.service';
 import { StorageService } from './storage.service';
 import { WindowReferenceService } from './window.service';
+import { UserProfile } from '../models/user-profile.model';
+import { Organization } from '../models/organization.model';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -61,7 +63,7 @@ export class AuthService {
       .pipe(catchError(this.handleError));
   }
 
-  refreshToken(refreshToken: string): Observable<Token> {
+  getAccessToken(refreshToken: string): Observable<Token> {
     return this.http
       .post<Token>(
         API_BASE_URL + '/auth/refresh/',
@@ -89,15 +91,15 @@ export class AuthService {
     return this.storageService.get('orgsCount');
   }
 
-  setUserProfile(): Observable<any> {
+  getUserProfile(): Observable<UserProfile> {
     return this.apiService.get('/user/profile/', {});
   }
 
-  getClusterDomain(): Observable<any> {
+  getClusterDomain(): Observable<string> {
     return this.apiService.get(`/user/domain/`, {});
   }
 
-  getFyleOrgs(): Observable<any> {
+  getFyleOrgs(): Observable<Organization[]> {
     return this.apiService.get(`/user/orgs/`, {});
   }
 

@@ -18,7 +18,7 @@
           </div>
         </div>
         <div>
-          <button [disabled]="isExpensesSyncing" mat-flat-button color="primary" (click)="syncExpenses()">
+          <button type="button" [disabled]="isExpensesSyncing" mat-flat-button color="primary" (click)="syncExpenses()">
             <div *ngIf="!isExpensesSyncing">
               Import
             </div>

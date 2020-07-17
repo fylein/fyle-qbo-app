@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged';
 import { pairwise } from 'rxjs/internal/operators/pairwise';
+import { Settings } from 'src/app/core/models/settings.model';
 
 @Component({
   selector: 'app-schedule',
@@ -18,12 +19,17 @@ export class ScheduleComponent implements OnInit {
   minDate: Date = new Date();
   defaultDate: string;
   hours = [...Array(24).keys()].map(day => day + 1);
-  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private route: ActivatedRoute, private snackBar: MatSnackBar) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private settingsService: SettingsService,
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar) { }
 
   getSettings() {
     const that = this;
     that.isLoading = true;
-    that.settingsService.getSettings(that.workspaceId).subscribe(settings => {
+    that.settingsService.getSettings(that.workspaceId).subscribe((settings: Settings) => {
+      // TODO: Api should return schedule always - check and cleanup
       if (settings && settings.schedule) {
         that.form.setValue({
           datetime: new Date(settings.schedule.start_datetime),
@@ -32,10 +38,8 @@ export class ScheduleComponent implements OnInit {
         });
       }
       that.isLoading = false;
-    }, error => {
-      if (error.status === 400) {
-        that.isLoading = false;
-      }
+    }, (error) => {
+      that.isLoading = false;
     });
   }
 
@@ -51,8 +55,10 @@ export class ScheduleComponent implements OnInit {
         that.snackBar.open('Scheduling saved');
         that.getSettings();
       });
+    } else {
+      that.snackBar.open('Form has invalid fields');
+      that.form.markAllAsTouched();
     }
-
   }
 
   ngOnInit() {

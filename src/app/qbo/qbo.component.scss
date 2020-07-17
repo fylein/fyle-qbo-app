@@ -1,5 +1,11 @@
 @import 'variables.scss';
 
+$fy-alt-row: #f3f5f7;
+$fy-search-icon: rgba(0, 0, 0, 0.2);
+$fy-table-border: #dfe3e8;
+$fy-page-header: #1c2024;
+$fy-page-info-desc: #414562;
+
 .qbo {
   &-sidenav {
     background-color: $fy-layout-background;
@@ -134,12 +140,6 @@
     font-size: 14px;
     font-weight: 500;
     color: $fy-page-header;
-  }
-
-  &--row {
-    &__pointer {
-      cursor: pointer;
-    }
   }
 }
 

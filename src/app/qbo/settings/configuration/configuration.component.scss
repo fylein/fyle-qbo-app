@@ -1,5 +1,7 @@
 @import 'variables.scss';
 
+$text-error: #ff6e40;
+
 ::ng-deep .configurations {
   &--header {
     border-bottom: 1px solid $fy-layout-background;
@@ -30,7 +32,7 @@
   &--errors {
     font-size: 14px;
     margin: 0 0 16px;
-    color: #ff6e40;
+    color: $text-error;
     position: relative;
     top: -12px;
   }

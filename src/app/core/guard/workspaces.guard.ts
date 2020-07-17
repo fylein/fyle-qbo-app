@@ -7,6 +7,7 @@ import { SettingsService } from '../services/settings.service';
 import { AuthService } from '../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StorageService } from '../services/storage.service';
+import { WorkspaceService } from '../services/workspace.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +20,16 @@ export class WorkspacesGuard implements CanActivate {
     private billsService: BillsService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private storageService: StorageService) { }
+    private storageService: StorageService,
+    private workspaceService: WorkspaceService
+    ) { }
 
   canActivate(next: ActivatedRouteSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    const params = next.params;
-    const workspaceId = +(params.workspace_id || next.parent.params.workspace_id);
+    const workspaceId = +this.workspaceService.getWorkspaceId();
+
+    if (!workspaceId) {
+      return this.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`);
+    }
 
     return forkJoin(
       [

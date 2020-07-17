@@ -1,6 +1,6 @@
 /* tslint:disable */
 // TODO: Use something for serialization / deserialization
-import { MappingError } from './mappingError.model';
+import { MappingError } from './mapping-error.model';
 
 export class Task {
   bill: number;

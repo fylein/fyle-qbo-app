@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ExpenseGroupsService } from 'src/app/core/services/expense-groups.service';
 import { ActivatedRoute } from '@angular/router';
-import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
+import { ExpenseGroup } from 'src/app/core/models/expense-group.model';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { Task } from 'src/app/core/models/task.model';
 import { MappingsService } from '../../../core/services/mappings.service';
@@ -28,7 +28,7 @@ export class SyncComponent implements OnInit {
   syncExpenses() {
     const that = this;
     that.isExpensesSyncing = true;
-    that.expenseGroupService.syncExpenseGroups(that.workspaceId).subscribe((res) => {
+    that.expenseGroupService.syncExpenseGroups().subscribe((res) => {
       that.updateLastSyncStatus();
       that.snackBar.open('Importing Complete');
       that.isExpensesSyncing = false;
@@ -42,7 +42,7 @@ export class SyncComponent implements OnInit {
   updateLastSyncStatus() {
     const that = this;
     that.isLoading = true;
-    that.taskService.getTasks(that.workspaceId, 1, 0, 'ALL').subscribe((res) => {
+    that.taskService.getTasks(1, 0, 'ALL').subscribe((res) => {
       if (res.count > 0) {
         that.lastTask = res.results[0];
       }

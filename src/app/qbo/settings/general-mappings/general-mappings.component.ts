@@ -62,9 +62,9 @@ export class GeneralMappingsComponent implements OnInit {
 
     if (that.accountsPayableIsValid && that.bankAccountIsValid && that.cccAccountIsValid) {
       that.isLoading = true;
-      that.mappingsService.postGeneralMappings(that.workspaceId, accountPayableAccount.destination_id, accountPayableAccount.value, bankAccount.destination_id, bankAccount.value, cccAccount.destination_id, cccAccount.value).subscribe(response => {
+      that.mappingsService.postGeneralMappings(accountPayableAccount.destination_id, accountPayableAccount.value, bankAccount.destination_id, bankAccount.value, cccAccount.destination_id, cccAccount.value).subscribe(response => {
         const onboarded = that.storageService.get('onboarded');
-        if (onboarded === 'true') {
+        if (onboarded === true) {
           that.getGeneralMappings();
         } else {
           that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
@@ -72,13 +72,14 @@ export class GeneralMappingsComponent implements OnInit {
       });
     } else {
       that.snackBar.open('Please fill up the form with valid values');
+      that.form.markAllAsTouched();
     }
   }
 
   getGeneralMappings() {
     const that = this;
     that.isLoading = true;
-    that.mappingsService.getGeneralMappings(that.workspaceId).subscribe(generalMappings => {
+    that.mappingsService.getGeneralMappings().subscribe(generalMappings => {
       that.generalMappings = generalMappings;
       that.isLoading = false;
 
@@ -105,9 +106,9 @@ export class GeneralMappingsComponent implements OnInit {
     that.isLoading = true;
     forkJoin(
       [
-        that.mappingsService.getBankAccounts(that.workspaceId),
-        that.mappingsService.getCreditCardAccounts(that.workspaceId),
-        that.mappingsService.getAccountsPayables(that.workspaceId)
+        that.mappingsService.getBankAccounts(),
+        that.mappingsService.getCreditCardAccounts(),
+        that.mappingsService.getAccountsPayables()
       ]
     ).subscribe(responses => {
       that.isLoading = false;

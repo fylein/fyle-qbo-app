@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras, ActivationEnd } from '@angular/router';
 import { ExpenseGroupsService } from '../../core/services/expense-groups.service';
-import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
+import { ExpenseGroup } from 'src/app/core/models/expense-group.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { TasksService } from 'src/app/core/services/tasks.service';
@@ -73,7 +73,7 @@ export class ExpenseGroupsComponent implements OnInit {
   }
 
   getPaginatedExpenseGroups() {
-    return this.expenseGroupService.getExpenseGroups(this.workspaceId, this.pageSize, this.pageNumber * this.pageSize, this.state).subscribe(expenseGroups => {
+    return this.expenseGroupService.getExpenseGroups(this.pageSize, this.pageNumber * this.pageSize, this.state).subscribe(expenseGroups => {
       this.count = expenseGroups.count;
       this.expenseGroups = new MatTableDataSource(expenseGroups.results);
       this.expenseGroups.filterPredicate = this.searchByText;
@@ -136,7 +136,7 @@ export class ExpenseGroupsComponent implements OnInit {
     event.stopPropagation();
     const that = this;
     that.isLoading = true;
-    that.taskService.getTasksByExpenseGroupId(that.workspaceId, clickedExpenseGroup.id).subscribe(tasks => {
+    that.taskService.getTasksByExpenseGroupId(clickedExpenseGroup.id).subscribe(tasks => {
       that.isLoading = false;
       const completeTask = tasks.filter(task => task.status === 'COMPLETE')[0];
 

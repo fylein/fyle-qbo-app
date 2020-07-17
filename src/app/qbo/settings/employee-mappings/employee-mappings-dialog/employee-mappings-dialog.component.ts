@@ -22,12 +22,13 @@ export class MappingErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'app-employee-mappings-dialog',
   templateUrl: './employee-mappings-dialog.component.html',
-  styleUrls: ['./employee-mappings-dialog.component.scss']
+  styleUrls: ['./employee-mappings-dialog.component.scss', '../../settings.component.scss']
 })
 export class EmployeeMappingsDialogComponent implements OnInit {
   isLoading = false;
   form: FormGroup;
   workSpaceId: number;
+  // TODO: replace any with relevant models
   fyleEmployees: any[];
   qboEmployees: any[];
   cccObjects: any[];
@@ -38,6 +39,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
   cccOptions: any[];
   qboVendorOptions: any[];
   generalMappings: any;
+
   matcher = new MappingErrorStateMatcher();
 
   constructor(private formBuilder: FormBuilder,
@@ -61,7 +63,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
 
     if (that.form.valid && (qboVendor || qboEmployee)) {
       const employeeMapping = [
-        that.mappingsService.postMappings(that.workSpaceId, {
+        that.mappingsService.postMappings({
           source_type: 'EMPLOYEE',
           destination_type: that.generalSettings.employee_field_mapping,
           source_value: fyleEmployee.value,
@@ -71,7 +73,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
 
       if (creditCardAccount || that.generalSettings.corporate_credit_card_expenses_object) {
         employeeMapping.push(
-          that.mappingsService.postMappings(that.workSpaceId, {
+          that.mappingsService.postMappings({
             source_type: 'EMPLOYEE',
             destination_type: 'CREDIT_CARD_ACCOUNT',
             source_value: fyleEmployee.value,
@@ -89,6 +91,9 @@ export class EmployeeMappingsDialogComponent implements OnInit {
         that.isLoading = false;
       });
 
+    } else {
+      that.snackBar.open('Form has invalid fields');
+      that.form.markAllAsTouched();
     }
   }
 
@@ -105,25 +110,76 @@ export class EmployeeMappingsDialogComponent implements OnInit {
     };
   }
 
+  setupFyleEmployeeAutocompleteWatcher() {
+    const that = this;
+    that.form.controls.fyleEmployee.valueChanges.pipe(debounceTime(300)).subscribe((newValue) => {
+      if (typeof (newValue) === 'string') {
+        that.employeeOptions = that.fyleEmployees
+          .filter(fyleEmployee => new RegExp(newValue.toLowerCase(), 'g').test(fyleEmployee.value.toLowerCase()));
+      }
+    });
+  }
+
+  setupQboVendorAutocompleteWatcher() {
+    const that = this;
+
+    that.form.controls.qboVendor.valueChanges.pipe(debounceTime(300)).subscribe((newValue) => {
+      if (typeof (newValue) === 'string') {
+        that.qboVendorOptions = that.qboVendors
+          .filter(qboVendor => new RegExp(newValue.toLowerCase(), 'g').test(qboVendor.value.toLowerCase()));
+      }
+    });
+  }
+
+  setupQboEmployeesWatcher() {
+    const that = this;
+
+    that.form.controls.qboEmployee.valueChanges.pipe(debounceTime(300)).subscribe((newValue) => {
+      if (typeof (newValue) === 'string') {
+        that.qboEmployeeOptions = that.qboEmployees
+          .filter(qboEmployee => new RegExp(newValue.toLowerCase(), 'g').test(qboEmployee.value.toLowerCase()));
+      }
+    });
+  }
+
+  setupCCCAutocompleteWatcher() {
+    const that = this;
+
+    that.form.controls.creditCardAccount.valueChanges.pipe(debounceTime(300)).subscribe((newValue) => {
+      if (typeof (newValue) === 'string') {
+        that.cccOptions = that.cccObjects
+          .filter(cccObject => new RegExp(newValue.toLowerCase(), 'g').test(cccObject.value.toLowerCase()));
+      }
+    });
+  }
+
+  setupAutocompleteWatchers() {
+    const that = this;
+    that.setupFyleEmployeeAutocompleteWatcher();
+    that.setupQboVendorAutocompleteWatcher();
+    that.setupQboEmployeesWatcher();
+    that.setupCCCAutocompleteWatcher();
+  }
+
   reset() {
     const that = this;
-    const getFyleEmployees = that.mappingsService.getFyleEmployees(that.workSpaceId).toPromise().then((fyleEmployees) => {
+    const getFyleEmployees = that.mappingsService.getFyleEmployees().toPromise().then((fyleEmployees) => {
       that.fyleEmployees = fyleEmployees;
     });
 
-    const getQBOEmployees = that.mappingsService.getQBOEmployees(that.workSpaceId).toPromise().then((qboEmployees) => {
+    const getQBOEmployees = that.mappingsService.getQBOEmployees().toPromise().then((qboEmployees) => {
       that.qboEmployees = qboEmployees;
     });
 
-    const getCCCAccounts = that.mappingsService.getCreditCardAccounts(that.workSpaceId).toPromise().then((cccObjects) => {
+    const getCCCAccounts = that.mappingsService.getCreditCardAccounts().toPromise().then((cccObjects) => {
       that.cccObjects = cccObjects;
     });
 
-    const getQboVendors = that.mappingsService.getQBOVendors(that.workSpaceId).toPromise().then((qboVendors) => {
+    const getQboVendors = that.mappingsService.getQBOVendors().toPromise().then((qboVendors) => {
       that.qboVendors = qboVendors;
     });
 
-    const getGeneralMappings = that.mappingsService.getGeneralMappings(that.workSpaceId).toPromise().then((generalMappings) => {
+    const getGeneralMappings = that.mappingsService.getGeneralMappings().toPromise().then((generalMappings) => {
       that.generalMappings = generalMappings;
     });
 
@@ -142,34 +198,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
         qboEmployee: ['', that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.forbiddenSelectionValidator(that.qboEmployees) : null],
         creditCardAccount: ['', that.generalSettings.corporate_credit_card_expenses_object ? that.forbiddenSelectionValidator(that.cccObjects) : null]
       });
-
-      that.form.controls.fyleEmployee.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-        if (typeof (newValue) === 'string') {
-          that.employeeOptions = that.fyleEmployees
-            .filter(fyleEmployee => new RegExp(newValue.toLowerCase(), 'g').test(fyleEmployee.value.toLowerCase()));
-        }
-      });
-
-      that.form.controls.qboVendor.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-        if (typeof (newValue) === 'string') {
-          that.qboVendorOptions = that.qboVendors
-            .filter(qboVendor => new RegExp(newValue.toLowerCase(), 'g').test(qboVendor.value.toLowerCase()));
-        }
-      });
-
-      that.form.controls.qboEmployee.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-        if (typeof (newValue) === 'string') {
-          that.qboEmployeeOptions = that.qboEmployees
-            .filter(qboEmployee => new RegExp(newValue.toLowerCase(), 'g').test(qboEmployee.value.toLowerCase()));
-        }
-      });
-
-      that.form.controls.creditCardAccount.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-        if (typeof (newValue) === 'string') {
-          that.cccOptions = that.cccObjects
-            .filter(cccObject => new RegExp(newValue.toLowerCase(), 'g').test(cccObject.value.toLowerCase()));
-        }
-      });
+      that.setupAutocompleteWatchers();
     });
   }
 

@@ -17,7 +17,7 @@ export class MappingErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'app-project-mappings-dialog',
   templateUrl: './project-mappings-dialog.component.html',
-  styleUrls: ['./project-mappings-dialog.component.scss']
+  styleUrls: ['./project-mappings-dialog.component.scss', '../../settings.component.scss']
 })
 export class ProjectMappingsDialogComponent implements OnInit {
   isLoading = false;
@@ -57,7 +57,7 @@ export class ProjectMappingsDialogComponent implements OnInit {
     const that = this;
     if (that.form.valid) {
       that.isLoading = true;
-      that.mappingsService.postMappings(that.data.workspaceId, {
+      that.mappingsService.postMappings({
         source_type: 'PROJECT',
         destination_type: that.generalSettings.project_field_mapping,
         source_value: that.form.controls.fyleProject.value.value,
@@ -70,26 +70,54 @@ export class ProjectMappingsDialogComponent implements OnInit {
         that.snackBar.open('Something went wrong');
         that.isLoading = false;
       });
+    } else {
+      that.snackBar.open('Form has invalid fields');
+      that.form.markAllAsTouched();
     }
+  }
+
+  setupProjectAutocompleteWatcher() {
+    const that = this;
+    that.form.controls.fyleProject.valueChanges.pipe(debounceTime(300)).subscribe((newValue) => {
+      if (typeof (newValue) === 'string') {
+        that.fyleProjectOptions = that.fyleProjects.filter(fyleProject => new RegExp(newValue.toLowerCase(), 'g').test(fyleProject.value.toLowerCase()));
+      }
+    });
+  }
+
+  setupQboAutocompleteWatcher() {
+    const that = this;
+    that.form.controls.qboObject.valueChanges.pipe(debounceTime(300)).subscribe((newValue) => {
+      if (typeof (newValue) === 'string') {
+        that.qboOptions = that.qboElements
+          .filter(qboElement => new RegExp(newValue.toLowerCase(), 'g').test(qboElement.value.toLowerCase()));
+      }
+    });
+  }
+
+  setupAutcompleteWatchers() {
+    const that = this;
+    that.setupProjectAutocompleteWatcher();
+    that.setupQboAutocompleteWatcher();
   }
 
   reset() {
     const that = this;
-    const getFyleCateogories = that.mappingsService.getFyleProjects(that.data.workspaceId).toPromise().then(projects => {
+    const getFyleCateogories = that.mappingsService.getFyleProjects().toPromise().then(projects => {
       that.fyleProjects = projects;
     });
 
     let qboPromise;
     if (that.generalSettings.project_field_mapping === 'CUSTOMER') {
-      qboPromise = that.mappingsService.getQBOCustomers(that.data.workspaceId).toPromise().then(objects => {
+      qboPromise = that.mappingsService.getQBOCustomers().toPromise().then(objects => {
         that.qboElements = objects;
       });
     } else if (that.generalSettings.project_field_mapping === 'CLASS') {
-      qboPromise = that.mappingsService.getQBOClasses(that.data.workspaceId).toPromise().then(objects => {
+      qboPromise = that.mappingsService.getQBOClasses().toPromise().then(objects => {
         that.qboElements = objects;
       });
     } else if (that.generalSettings.project_field_mapping === 'DEPARTMENT') {
-      qboPromise = that.mappingsService.getQBODepartments(that.data.workspaceId).toPromise().then(objects => {
+      qboPromise = that.mappingsService.getQBODepartments().toPromise().then(objects => {
         that.qboElements = objects;
       });
     }
@@ -105,18 +133,7 @@ export class ProjectMappingsDialogComponent implements OnInit {
         qboObject: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.qboElements)])]
       });
 
-      that.form.controls.fyleProject.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-        if (typeof (newValue) === 'string') {
-          that.fyleProjectOptions = that.fyleProjects.filter(fyleProject => new RegExp(newValue.toLowerCase(), 'g').test(fyleProject.value.toLowerCase()));
-        }
-      });
-
-      that.form.controls.qboObject.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-        if (typeof (newValue) === 'string') {
-          that.qboOptions = that.qboElements
-            .filter(qboElement => new RegExp(newValue.toLowerCase(), 'g').test(qboElement.value.toLowerCase()));
-        }
-      });
+      that.setupAutcompleteWatchers();
     });
   }
 

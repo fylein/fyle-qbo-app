@@ -8,7 +8,7 @@ import { JournalEntriesService } from '../../../core/services/journal-entries.se
 import { CreditCardPurchasesService } from '../../../core/services/credit-card-purchases.service';
 import { environment } from 'src/environments/environment';
 import { BillsService } from 'src/app/core/services/bills.service';
-import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
+import { ExpenseGroup } from 'src/app/core/models/expense-group.model';
 import { StorageService } from 'src/app/core/services/storage.service';
 import { WindowReferenceService } from 'src/app/core/services/window.service';
 
@@ -71,7 +71,7 @@ export class ViewExpenseGroupComponent implements OnInit {
 
   initExpenseGroupDetails() {
     const that = this;
-    return that.expenseGroupsService.getExpensesGroupById(that.workspaceId, that.expenseGroupId).toPromise().then((expenseGroup) => {
+    return that.expenseGroupsService.getExpensesGroupById(that.expenseGroupId).toPromise().then((expenseGroup) => {
       that.expenseGroup = expenseGroup;
       return expenseGroup;
     });
@@ -79,8 +79,8 @@ export class ViewExpenseGroupComponent implements OnInit {
 
   initTasks() {
     const that = this;
-    return that.tasksService.getTasksByExpenseGroupId(that.workspaceId, that.expenseGroupId).toPromise().then((tasks) => {
-      if (tasks.length) {
+    return that.tasksService.getTasksByExpenseGroupId(that.expenseGroupId).toPromise().then((tasks) => {
+      if (tasks.length > 0) {
         that.task = tasks[0];
         that.status = that.task.status;
       }

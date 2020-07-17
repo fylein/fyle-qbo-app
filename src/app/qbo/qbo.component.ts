@@ -80,12 +80,15 @@ export class QboComponent implements OnInit {
   }
 
   getSettingsAndNavigate() {
-    const pathName = this.windowReference.location.pathname;
-    this.isLoading = false;
+    const that = this;
+    const pathName = that.windowReference.location.pathname;
+    that.storageService.set('workspaceId', that.workspace.id);
+    that.isLoading = false;
     if (pathName === '/workspaces') {
-      this.router.navigateByUrl(`/workspaces/${this.workspace.id}/dashboard`);
+      that.router.navigateByUrl(`/workspaces/${that.workspace.id}/dashboard`);
     }
-    this.getGeneralSettings();
+    that.getGeneralSettings();
+    that.setupAccessiblePathWatchers();
   }
 
   getConfigurations() {
@@ -99,11 +102,31 @@ export class QboComponent implements OnInit {
     ).toPromise();
   }
 
+  setupAccessiblePathWatchers() {
+    const that = this;
+    that.getConfigurations().then(() => {
+      that.navDisabled = false;
+    }).catch(() => {
+      // do nothing
+    });
+
+    that.router.events.subscribe(() => {
+      const onboarded = that.storageService.get('onboarded');
+      if (onboarded !== true) {
+        that.getConfigurations().then(() => {
+          that.navDisabled = false;
+        }).catch(() => {
+          // do nothing
+        });
+      }
+    });
+  }
+
   setupWorkspace() {
     const that = this;
     that.user = that.authService.getUser();
     that.workspaceService.getWorkspaces(that.user.org_id).subscribe(workspaces => {
-      if (Array.isArray(workspaces) && workspaces.length) {
+      if (Array.isArray(workspaces) && workspaces.length > 0) {
         that.workspace = workspaces[0];
         that.getSettingsAndNavigate();
       } else {
@@ -113,29 +136,12 @@ export class QboComponent implements OnInit {
         });
       }
       that.getQboPreferences();
-
-      that.getConfigurations().then(() => {
-        that.navDisabled = false;
-      }).catch(() => {
-        // do nothing
-      });
-
-      that.router.events.subscribe(() => {
-        const onboarded = that.storageService.get('onboarded');
-        if (onboarded !== 'true') {
-          that.getConfigurations().then(() => {
-            that.navDisabled = false;
-          }).catch(() => {
-            // do nothing
-          });
-        }
-      });
     });
   }
 
   getQboPreferences() {
     const that = this;
-    that.billService.getOrgDetails(that.workspace.id).subscribe((res) => {
+    that.billService.getOrgDetails().subscribe((res) => {
       that.qboCompanyName = res.CompanyName;
     });
   }
@@ -143,7 +149,7 @@ export class QboComponent implements OnInit {
   ngOnInit() {
     const that = this;
     const onboarded = that.storageService.get('onboarded');
-    that.navDisabled = onboarded !== 'true';
+    that.navDisabled = onboarded !== true;
     that.orgsCount = that.authService.getOrgCount();
     that.setupWorkspace();
   }

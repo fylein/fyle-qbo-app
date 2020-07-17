@@ -10,7 +10,7 @@ import { StorageService } from 'src/app/core/services/storage.service';
 @Component({
   selector: 'app-employee-mappings',
   templateUrl: './employee-mappings.component.html',
-  styleUrls: ['./employee-mappings.component.scss', '../../qbo.component.scss']
+  styleUrls: ['./employee-mappings.component.scss',  '../settings.component.scss', '../../qbo.component.scss']
 })
 export class EmployeeMappingsComponent implements OnInit {
 
@@ -42,12 +42,12 @@ export class EmployeeMappingsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       that.isLoading = true;
-      that.mappingsService.getMappings(that.workspaceId, 'EMPLOYEE').subscribe((employees) => {
+      that.mappingsService.getMappings('EMPLOYEE').subscribe((employees) => {
         that.employeeMappings = employees.results;
         that.isLoading = false;
         const onboarded = that.storageService.get('onboarded');
 
-        if (onboarded === 'true') {
+        if (onboarded === true) {
           that.createEmployeeMappingsRows();
         } else {
           that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
@@ -80,7 +80,7 @@ export class EmployeeMappingsComponent implements OnInit {
   reset() {
     const that = this;
     that.isLoading = true;
-    that.mappingsService.getMappings(that.workspaceId, 'EMPLOYEE').subscribe((employees) => {
+    that.mappingsService.getMappings('EMPLOYEE').subscribe((employees) => {
       that.employeeMappings = employees.results;
       that.createEmployeeMappingsRows();
       that.isLoading = false;

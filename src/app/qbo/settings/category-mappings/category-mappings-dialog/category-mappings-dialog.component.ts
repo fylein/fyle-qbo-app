@@ -17,7 +17,7 @@ export class MappingErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'app-category-mappings-dialog',
   templateUrl: './category-mappings-dialog.component.html',
-  styleUrls: ['./category-mappings-dialog.component.scss']
+  styleUrls: ['./category-mappings-dialog.component.scss', '../../settings.component.scss']
 })
 export class CategoryMappingsDialogComponent implements OnInit {
   isLoading = false;
@@ -54,10 +54,9 @@ export class CategoryMappingsDialogComponent implements OnInit {
 
   submit() {
     const that = this;
-
     if (that.form.valid) {
       that.isLoading = true;
-      that.mappingsService.postMappings(that.data.workspaceId, {
+      that.mappingsService.postMappings({
         source_type: 'CATEGORY',
         destination_type: 'ACCOUNT',
         source_value: that.form.controls.fyleCategory.value.value,
@@ -70,17 +69,47 @@ export class CategoryMappingsDialogComponent implements OnInit {
         that.snackBar.open('Something went wrong');
         that.isLoading = false;
       });
+    } else {
+      that.snackBar.open('Form has invalid fields');
+      that.form.markAllAsTouched();
     }
+  }
+
+  setupFyleCateogryWatchers() {
+    const that = this;
+    that.form.controls.fyleCategory.valueChanges.pipe(debounceTime(300)).subscribe((newValue) => {
+      if (typeof(newValue) === 'string') {
+        that.fyleCategoryOptions = that.fyleCategories
+        .filter(fyleCategory => new RegExp(newValue.toLowerCase(), 'g').test(fyleCategory.value.toLowerCase()));
+      }
+    });
+  }
+
+  setupQboAccountWatchers() {
+    const that = this;
+
+    that.form.controls.qboAccount.valueChanges.pipe(debounceTime(300)).subscribe((newValue) => {
+      if (typeof(newValue) === 'string') {
+        that.qboAccountOptions = that.qboAccounts
+        .filter(qboAccount => new RegExp(newValue.toLowerCase(), 'g').test(qboAccount.value.toLowerCase()));
+      }
+    });
+  }
+
+  setupAutocompleteWatchers() {
+    const that = this;
+    that.setupFyleCateogryWatchers();
+    that.setupQboAccountWatchers();
   }
 
   ngOnInit() {
     const that = this;
 
-    const getFyleCateogories = that.mappingsService.getFyleCategories(that.data.workspaceId).toPromise().then(fyleCategories => {
+    const getFyleCateogories = that.mappingsService.getFyleCategories().toPromise().then(fyleCategories => {
       that.fyleCategories = fyleCategories;
     });
 
-    const getExpenseAccounts = that.mappingsService.getExpenseAccounts(that.data.workspaceId).toPromise().then(qboAccounts => {
+    const getExpenseAccounts = that.mappingsService.getExpenseAccounts().toPromise().then(qboAccounts => {
       that.qboAccounts = qboAccounts;
     });
 
@@ -96,21 +125,7 @@ export class CategoryMappingsDialogComponent implements OnInit {
         qboAccount: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.qboAccounts)])]
       });
 
-      that.form.controls.fyleCategory.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-        if (typeof(newValue) === 'string') {
-          that.fyleCategoryOptions = that.fyleCategories
-          .filter(fyleCategory => new RegExp(newValue.toLowerCase(), 'g').test(fyleCategory.value.toLowerCase()));
-        }
-      });
-
-      that.form.controls.qboAccount.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-        if (typeof(newValue) === 'string') {
-          that.qboAccountOptions = that.qboAccounts
-          .filter(qboAccount => new RegExp(newValue.toLowerCase(), 'g').test(qboAccount.value.toLowerCase()));
-        }
-      });
+      that.setupAutocompleteWatchers();
     });
-
   }
-
 }

@@ -107,8 +107,7 @@
           </div>
         </div>
       </div>
-      <button [disabled]="isSaveDisabled || !generalSettingsForm.valid" class="configurations--save-btn" mat-flat-button
-        color="primary" (click)="save()" type="button">
+      <button [disabled]="isSaveDisabled || !generalSettingsForm.valid" class="configurations--save-btn" mat-flat-button color="primary" (click)="save()" type="submit">
         Save
       </button>
     </div>

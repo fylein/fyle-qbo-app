@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ExpenseGroup } from 'src/app/core/models/expenseGroups.model';
+import { ExpenseGroup } from 'src/app/core/models/expense-group.model';
 import { ExpenseGroupsService } from 'src/app/core/services/expense-groups.service';
 import { ActivatedRoute } from '@angular/router';
 import { BillsService } from 'src/app/core/services/bills.service';
@@ -48,14 +48,14 @@ export class ExportComponent implements OnInit {
   exportReimbursableExpenses(reimbursableExpensesObject) {
     const that = this;
     const handlerMap = {
-      BILL: (workspaceId, filteredIds) => {
-        return that.billsService.createBills(workspaceId, filteredIds);
+      BILL: (filteredIds) => {
+        return that.billsService.createBills(filteredIds);
       },
-      CHECK: (workspaceId, filteredIds) => {
-        return that.checksService.createChecks(workspaceId, filteredIds);
+      CHECK: (filteredIds) => {
+        return that.checksService.createChecks(filteredIds);
       },
-      JOURNAL: (workspaceId, filteredIds) => {
-        return that.journalEntriesService.createJournalEntries(workspaceId, filteredIds);
+      JOURNAL: (filteredIds) => {
+        return that.journalEntriesService.createJournalEntries(filteredIds);
       }
     };
 
@@ -65,11 +65,11 @@ export class ExportComponent implements OnInit {
   exportCCCExpenses(corporateCreditCardExpensesObject) {
     const that = this;
     const handlerMap = {
-      'JOURNAL ENTRY': (workspaceId, filteredIds) => {
-        return that.journalEntriesService.createJournalEntries(workspaceId, filteredIds);
+      'JOURNAL ENTRY': (filteredIds) => {
+        return that.journalEntriesService.createJournalEntries(filteredIds);
       },
-      'CREDIT CARD PURCHASE': (workspaceId, filteredIds) => {
-        return that.creditCardService.createCreditCardPurchases(workspaceId, filteredIds);
+      'CREDIT CARD PURCHASE': (filteredIds) => {
+        return that.creditCardService.createCreditCardPurchases(filteredIds);
       }
     };
 
@@ -89,11 +89,11 @@ export class ExportComponent implements OnInit {
   checkResultsOfExport(filteredIds) {
     const that = this;
     interval(3000).pipe(
-      switchMap(() => from(that.taskService.getTasks(that.workspaceId, 10, 0, 'ALL'))),
+      switchMap(() => from(that.taskService.getTasks(10, 0, 'ALL'))),
       takeWhile((response) => response.results.filter(task => task.status === 'IN_PROGRESS').length > 0, true)
     ).subscribe((res) => {
       if (res.results.filter(task => task.status === 'IN_PROGRESS').length === 0) {
-        that.taskService.getAllTasks(that.workspaceId, 'FAILED').subscribe((taskResponse) => {
+        that.taskService.getAllTasks('FAILED').subscribe((taskResponse) => {
           that.failedExpenseGroupCount = taskResponse.count;
           that.successfulExpenseGroupCount = filteredIds.length - that.failedExpenseGroupCount;
           that.isExporting = false;
@@ -113,21 +113,21 @@ export class ExportComponent implements OnInit {
       let allFilteredIds = [];
       if (that.generalSettings.reimbursable_expenses_object) {
         const filteredIds = that.exportableExpenseGroups.filter(expenseGroup => expenseGroup.fund_source === 'PERSONAL').map(expenseGroup => expenseGroup.id);
-        if (filteredIds.length) {
-          promises.push(that.exportReimbursableExpenses(that.generalSettings.reimbursable_expenses_object)(that.workspaceId, filteredIds).toPromise());
+        if (filteredIds.length > 0) {
+          promises.push(that.exportReimbursableExpenses(that.generalSettings.reimbursable_expenses_object)(filteredIds).toPromise());
           allFilteredIds = allFilteredIds.concat(filteredIds);
         }
       }
 
       if (that.generalSettings.corporate_credit_card_expenses_object) {
         const filteredIds = that.exportableExpenseGroups.filter(expenseGroup => expenseGroup.fund_source === 'CCC').map(expenseGroup => expenseGroup.id);
-        if (filteredIds.length) {
-          promises.push(that.exportCCCExpenses(that.workspaceId)(that.workspaceId, filteredIds).toPromise());
+        if (filteredIds.length > 0) {
+          promises.push(that.exportCCCExpenses(that.workspaceId)(filteredIds).toPromise());
           allFilteredIds = allFilteredIds.concat(filteredIds);
         }
       }
 
-      if (promises.length) {
+      if (promises.length > 0) {
         forkJoin(
           promises
         ).subscribe(() => {
@@ -140,7 +140,7 @@ export class ExportComponent implements OnInit {
   loadExportableExpenseGroups() {
     const that = this;
     that.isLoading = true;
-    that.expenseGroupService.getAllExpenseGroups(that.workspaceId, 'READY').subscribe((res) => {
+    that.expenseGroupService.getAllExpenseGroups('READY').subscribe((res) => {
       that.exportableExpenseGroups = res.results;
       that.isLoading = false;
     });
@@ -149,7 +149,7 @@ export class ExportComponent implements OnInit {
 
   getQboPreferences() {
     const that = this;
-    return that.billService.getOrgDetails(that.workspaceId).toPromise().then((res) => {
+    return that.billService.getOrgDetails().toPromise().then((res) => {
       that.qboCompanyName = res.CompanyName;
       return res.CompanyName;
     });

@@ -42,7 +42,7 @@ export class CallbackComponent implements OnInit {
             that.storageService.set('access_token', response.access_token);
             that.storageService.set('refresh_token', response.refresh_token);
             forkJoin([
-              that.authService.setUserProfile(),
+              that.authService.getUserProfile(),
               that.authService.getClusterDomain(),
               that.authService.getFyleOrgs()
             ]).subscribe(responses => {

@@ -21,8 +21,7 @@
             </div>
           </div>
           <div>
-            <button [disabled]="isExporting" *ngIf="exportableExpenseGroups.length > 0" mat-flat-button color="primary"
-              (click)="createQBOItems()">
+            <button type="button" [disabled]="isExporting" *ngIf="exportableExpenseGroups.length > 0" mat-flat-button color="primary" (click)="createQBOItems()">
               <div *ngIf="!isExporting">
                 Export
               </div>
@@ -40,7 +39,7 @@
           <div>
             {{failedExpenseGroupCount}} line <span *ngIf="failedExpenseGroupCount > 1">entries</span><span *ngIf="failedExpenseGroupCount === 1">entry</span> failed export
           </div>
-          <mat-icon class="export-card--icon" (click)="openFailedExports()">
+          <mat-icon class="export-card--icon cursor-pointer" (click)="openFailedExports()">
             open_in_new
           </mat-icon>
         </div>
@@ -49,7 +48,7 @@
           <div>
             {{successfulExpenseGroupCount}} line <span *ngIf="successfulExpenseGroupCount > 1">entries</span><span *ngIf="successfulExpenseGroupCount === 1">entry</span> exported
           </div>
-          <mat-icon class="export-card--icon" (click)="openSuccessfulExports()">
+          <mat-icon class="export-card--icon cursor-pointer" (click)="openSuccessfulExports()">
             open_in_new
           </mat-icon>
         </div>

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpInterceptor, HttpSentEvent, HttpHeaderResponse, HttpProgressEvent, HttpResponse, HttpUserEvent, HttpErrorResponse } from '@angular/common/http';
-import { Observable, BehaviorSubject, throwError as observableThrowError } from 'rxjs';
+import { HttpRequest, HttpHandler, HttpInterceptor, HttpSentEvent, HttpHeaderResponse, HttpProgressEvent, HttpResponse, HttpUserEvent, HttpErrorResponse, HttpEvent } from '@angular/common/http';
+import { Observable, BehaviorSubject, throwError as observableThrowError, from } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
-import { catchError } from 'rxjs/internal/operators';
+import { catchError, mergeMap } from 'rxjs/internal/operators';
 import { Router } from '@angular/router';
 import { StorageService } from '../services/storage.service';
 
@@ -11,11 +11,20 @@ import { StorageService } from '../services/storage.service';
 export class JwtInterceptor implements HttpInterceptor {
   isRefreshingToken = false;
   tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
-
   constructor(
     private authService: AuthService,
     private router: Router,
     private storageService: StorageService) { }
+
+  refreshAccessToken = () => {
+    const that = this;
+    // this should call auth service to get a new access token with a refresh token
+    const refreshToken = that.storageService.get('refresh_token');
+    return that.authService.getAccessToken(refreshToken).toPromise().then((token) => {
+      that.storageService.set('access_token', token.access_token);
+      return token;
+    });
+  }
 
   addToken(request: HttpRequest<any>): HttpRequest<any> {
     if (this.authService.isLoggedIn()) {
@@ -28,17 +37,18 @@ export class JwtInterceptor implements HttpInterceptor {
     return request;
   }
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>> {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const that = this;
     request = that.addToken(request);
 
-
     return next.handle(request).pipe(
-      catchError(error => {
+      catchError((error) => {
         if (error instanceof HttpErrorResponse && error.status === 403) {
-          that.logoutUser();
+          return from(that.refreshAccessToken()).pipe(mergeMap(() => {
+            request = that.addToken(request);
+            return next.handle(request);
+          }));
         }
-
         return observableThrowError(error);
       })
     );

@@ -16,7 +16,7 @@ export class MappingErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'app-cost-center-mappings-dialog',
   templateUrl: './cost-center-mappings-dialog.component.html',
-  styleUrls: ['./cost-center-mappings-dialog.component.scss']
+  styleUrls: ['./cost-center-mappings-dialog.component.scss', '../../settings.component.scss']
 })
 export class CostCenterMappingsDialogComponent implements OnInit {
   isLoading = false;
@@ -43,7 +43,7 @@ export class CostCenterMappingsDialogComponent implements OnInit {
     const that = this;
     if (that.form.valid) {
       that.isLoading = true;
-      that.mappingsService.postMappings(that.data.workspaceId, {
+      that.mappingsService.postMappings({
         source_type: 'COST_CENTER',
         destination_type: that.generalSettings.cost_center_field_mapping,
         source_value: that.form.controls.fyleCostCenter.value.value,
@@ -56,6 +56,9 @@ export class CostCenterMappingsDialogComponent implements OnInit {
         that.snackBar.open('Something went wrong');
         that.isLoading = false;
       });
+    } else {
+      that.snackBar.open('Form has invalid fields');
+      that.form.markAllAsTouched();
     }
   }
 
@@ -72,24 +75,52 @@ export class CostCenterMappingsDialogComponent implements OnInit {
     };
   }
 
+  setupCostCenterWatcher() {
+    const that = this;
+
+    that.form.controls.fyleCostCenter.valueChanges.pipe(debounceTime(300)).subscribe((newValue) => {
+      if (typeof (newValue) === 'string') {
+        that.fyleCostCenterOptions = that.fyleCostCenters
+          .filter(fyleCostCenter => new RegExp(newValue.toLowerCase(), 'g').test(fyleCostCenter.value.toLowerCase()));
+      }
+    });
+  }
+
+  setupQboObjectWatcher() {
+    const that = this;
+
+    that.form.controls.qboObject.valueChanges.pipe(debounceTime(300)).subscribe((newValue) => {
+      if (typeof (newValue) === 'string') {
+        that.qboOptions = that.qboElements
+          .filter(qboElement => new RegExp(newValue.toLowerCase(), 'g').test(qboElement.value.toLowerCase()));
+      }
+    });
+  }
+
+  setupAutcompleteWathcers() {
+    const that = this;
+    that.setupCostCenterWatcher();
+    that.setupQboObjectWatcher();
+  }
+
   reset() {
     const that = this;
 
-    const getFyleCostCenters = that.mappingsService.getFyleCostCenters(that.data.workspaceId).toPromise().then(costCenters => {
+    const getFyleCostCenters = that.mappingsService.getFyleCostCenters().toPromise().then(costCenters => {
       that.fyleCostCenters = costCenters;
     });
 
     let qboPromise;
     if (this.generalSettings.cost_center_field_mapping === 'CUSTOMER') {
-      qboPromise = that.mappingsService.getQBOCustomers(that.data.workspaceId).toPromise().then(objects => {
+      qboPromise = that.mappingsService.getQBOCustomers().toPromise().then(objects => {
         that.qboElements = objects;
       });
     } else if (this.generalSettings.cost_center_field_mapping === 'CLASS') {
-      qboPromise = that.mappingsService.getQBOClasses(that.data.workspaceId).toPromise().then(objects => {
+      qboPromise = that.mappingsService.getQBOClasses().toPromise().then(objects => {
         that.qboElements = objects;
       });
     } else if (this.generalSettings.cost_center_field_mapping === 'DEPARTMENT') {
-      qboPromise = that.mappingsService.getQBODepartments(that.data.workspaceId).toPromise().then(objects => {
+      qboPromise = that.mappingsService.getQBODepartments().toPromise().then(objects => {
         that.qboElements = objects;
       });
     }
@@ -105,19 +136,7 @@ export class CostCenterMappingsDialogComponent implements OnInit {
         qboObject: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.qboElements)])]
       });
 
-      that.form.controls.fyleCostCenter.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-        if (typeof (newValue) === 'string') {
-          that.fyleCostCenterOptions = that.fyleCostCenters
-            .filter(fyleCostCenter => new RegExp(newValue.toLowerCase(), 'g').test(fyleCostCenter.value.toLowerCase()));
-        }
-      });
-
-      that.form.controls.qboObject.valueChanges.pipe(debounceTime(200)).subscribe((newValue) => {
-        if (typeof (newValue) === 'string') {
-          that.qboOptions = that.qboElements
-            .filter(qboElement => new RegExp(newValue.toLowerCase(), 'g').test(qboElement.value.toLowerCase()));
-        }
-      });
+      that.setupAutcompleteWathcers();
     });
   }
 

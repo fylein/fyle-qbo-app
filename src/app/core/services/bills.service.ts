@@ -2,14 +2,19 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 import { Cacheable } from 'ngx-cacheable';
+import { WorkspaceService } from './workspace.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BillsService {
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private workspaceService: WorkspaceService) {}
 
-  createBills(workspaceId: number, expenseGroupIds: any[]): Observable<any> {
+  // TODO: Map response to a model
+  createBills(expenseGroupIds: number[]) {
+    const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.post(
       `/workspaces/${workspaceId}/qbo/bills/trigger/`, {
         expense_group_ids: expenseGroupIds
@@ -17,16 +22,15 @@ export class BillsService {
     );
   }
 
-  getBills(workspaceId: number, limit: number, offset: number): Observable<any> {
-    return this.apiService.get(`/workspaces/${workspaceId}/qbo/bills/?limit=${limit}&offset=${offset}`, {});
-  }
-
+  // TODO: Map response to a model
   @Cacheable()
-  getPreferences(workspaceId: number): Observable<any> {
+  getPreferences(workspaceId: number) {
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/preferences/`, {});
   }
 
-  getOrgDetails(workspaceId: number): Observable<any> {
+  // TODO: Map response to a model
+  getOrgDetails() {
+    const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/company_info/`, {});
   }
 }

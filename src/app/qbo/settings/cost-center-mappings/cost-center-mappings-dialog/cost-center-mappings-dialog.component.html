@@ -1,10 +1,10 @@
 <h2 mat-dialog-title>
-  <div class="cost-center-mappings--header" fxLayout="row" fxLayoutAlign="space-between center">
+  <div class="mappings-dialog--header" fxLayout="row" fxLayoutAlign="space-between center">
     <div class="mat-title">
       Create New Mapping
     </div>
     <div>
-      <mat-icon class="cost-center-mappings--close" aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
+      <mat-icon class="mappings-dialog--close cursor-pointer" aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
     </div>
   </div>
 </h2>
@@ -12,14 +12,14 @@
   <div class="internal-loader" fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
     <app-loader></app-loader>
   </div>
-  <form *ngIf="!isLoading" class="cost-center-mappings--form" [formGroup]="form">
+  <form *ngIf="!isLoading" class="mappings-dialog--form" [formGroup]="form">
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="mat-body-strong">
-        <strong class="cost-center-mappings--label">
+        <strong class="mappings-dialog--label">
           Choose Fyle Cost Center
         </strong>
       </div>
-      <mat-form-field class="cost-center-mappings--field" appearance="outline">
+      <mat-form-field class="mappings-dialog--field" appearance="outline">
         <input required type="text" formControlName="fyleCostCenter" placeholder="Choose Fyle Cost Center" matInput
           [matAutocomplete]="fyProj" [errorStateMatcher]="matcher">
         <mat-autocomplete #fyProj="matAutocomplete" [displayWith]="mappingDisplay">
@@ -27,17 +27,17 @@
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error class="cost-center-mappings--error" *ngIf="form.controls.fyleCostCenter.hasError('forbiddenOption')">
+        <mat-error class="mappings-dialog--error" *ngIf="form.controls.fyleCostCenter.hasError('forbiddenOption')">
           Please enter a valid value
         </mat-error>
       </mat-form-field>
 
       <div class="mat-body-strong">
-        <strong class="cost-center-mappings--label">
+        <strong class="mappings-dialog--label">
           Choose {{ generalSettings.cost_center_field_mapping | titlecase}}
         </strong>
       </div>
-      <mat-form-field class="cost-center-mappings--field" appearance="outline">
+      <mat-form-field class="mappings-dialog--field" appearance="outline">
         <input type="text" formControlName="qboObject" placeholder="Choose {{ generalSettings.cost_center_field_mapping | titlecase}}" matInput [matAutocomplete]="qboEl"
           [errorStateMatcher]="matcher">
         <mat-autocomplete #qboEl="matAutocomplete" [displayWith]="mappingDisplay">
@@ -45,7 +45,7 @@
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error class="cost-center-mappings--error" *ngIf="form.controls.qboObject.hasError('forbiddenOption')">
+        <mat-error class="mappings-dialog--error" *ngIf="form.controls.qboObject.hasError('forbiddenOption')">
           Please enter a valid value
         </mat-error>
       </mat-form-field>
@@ -53,9 +53,8 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-flat-button mat-dialog-close>Cancel</button>
-  <button [disabled]="form && !form.valid" class="cost-center-mappings--save-btn" mat-flat-button color="primary"
-    type="button" (click)="submit()">
+  <button type="button" mat-flat-button mat-dialog-close>Cancel</button>
+  <button class="mappings-dialog--save-btn" mat-flat-button color="primary" type="submit" (click)="submit()">
     Save
   </button>
 </mat-dialog-actions>

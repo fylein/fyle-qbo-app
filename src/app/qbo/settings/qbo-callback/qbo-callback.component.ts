@@ -9,21 +9,22 @@ import { SettingsService } from 'src/app/core/services/settings.service';
 })
 export class QBOCallbackComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private router: Router, private settingsService: SettingsService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private settingsService: SettingsService) { }
 
   ngOnInit() {
     const that = this;
     const workspaceId: number = that.route.snapshot.queryParams.state;
     const code: string = that.route.snapshot.queryParams.code;
     const realmId: string = that.route.snapshot.queryParams.realmId;
-    that.settingsService.connectQBO(workspaceId, code, realmId).subscribe(response => {
-      if (response) {
-        that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`);
-      }
-    },
-      error => {
-        that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`);
-      });
+    // TODO: replace with rxjs implementation
+    that.settingsService.connectQBO(workspaceId, code, realmId).toPromise().then(() => {
+      // nothing to do here but need then block for promise to execute
+    }).finally(() => {
+      that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`);
+    });
   }
 
 }

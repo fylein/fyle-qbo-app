@@ -8,7 +8,7 @@ import { SettingsService } from 'src/app/core/services/settings.service';
 @Component({
   selector: 'app-project-mappings',
   templateUrl: './project-mappings.component.html',
-  styleUrls: ['./project-mappings.component.scss', '../../qbo.component.scss']
+  styleUrls: ['./project-mappings.component.scss', '../settings.component.scss', '../../qbo.component.scss']
 })
 export class ProjectMappingsComponent implements OnInit {
   isLoading = false;
@@ -18,7 +18,12 @@ export class ProjectMappingsComponent implements OnInit {
   isConfigValueSet = false;
   columnsToDisplay = ['projects', 'qbo'];
 
-  constructor(private mappingsService: MappingsService, private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private settingsService: SettingsService) { }
+  constructor(
+    private mappingsService: MappingsService,
+    private router: Router,
+    private route: ActivatedRoute,
+    public dialog: MatDialog,
+    private settingsService: SettingsService) { }
 
   open() {
     const that = this;
@@ -34,11 +39,10 @@ export class ProjectMappingsComponent implements OnInit {
     });
   }
 
-
   getCategoryMappings() {
     const that = this;
     that.isLoading = true;
-    that.mappingsService.getMappings(that.workspaceId, 'PROJECT').subscribe(projectMappings => {
+    that.mappingsService.getMappings('PROJECT').subscribe(projectMappings => {
       that.projectMappings = projectMappings.results;
       that.isLoading = false;
     });

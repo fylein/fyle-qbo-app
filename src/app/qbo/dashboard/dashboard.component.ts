@@ -99,7 +99,7 @@ export class DashboardComponent implements OnInit {
 
   getGeneralMappings() {
     const that = this;
-    return that.mappingsService.getGeneralMappings(that.workspaceId).toPromise().then(generalMappings => {
+    return that.mappingsService.getGeneralMappings().toPromise().then(generalMappings => {
       that.currentState = onboardingStates.generalMappingsDone;
       return generalMappings;
     });
@@ -107,8 +107,8 @@ export class DashboardComponent implements OnInit {
 
   getEmployeeMappings() {
     const that = this;
-    return that.mappingsService.getMappings(that.workspaceId, 'EMPLOYEE').toPromise().then((res) => {
-      if (res.results.length) {
+    return that.mappingsService.getMappings('EMPLOYEE').toPromise().then((res) => {
+      if (res.results.length > 0) {
         that.currentState = onboardingStates.employeeMappingsDone;
       } else {
         throw new Error('employee mappings have no entries');
@@ -119,8 +119,8 @@ export class DashboardComponent implements OnInit {
 
   getCategoryMappings() {
     const that = this;
-    return that.mappingsService.getMappings(this.workspaceId, 'CATEGORY').toPromise().then((res) => {
-      if (res.results.length) {
+    return that.mappingsService.getMappings('CATEGORY').toPromise().then((res) => {
+      if (res.results.length > 0) {
         that.currentState = onboardingStates.categoryMappingsDone;
       } else {
         throw new Error('cateogry mappings have no entries');
@@ -131,7 +131,7 @@ export class DashboardComponent implements OnInit {
 
   loadSuccessfullExpenseGroupsCount() {
     const that = this;
-    return that.expenseGroupService.getAllExpenseGroups(that.workspaceId, 'COMPLETE').toPromise().then((res) => {
+    return that.expenseGroupService.getAllExpenseGroups('COMPLETE').toPromise().then((res) => {
       that.successfulExpenseGroupsCount = res.results.length;
       return res;
     });
@@ -139,7 +139,7 @@ export class DashboardComponent implements OnInit {
 
   loadFailedlExpenseGroupsCount() {
     const that = this;
-    return that.expenseGroupService.getAllExpenseGroups(that.workspaceId, 'FAILED').toPromise().then((res) => {
+    return that.expenseGroupService.getAllExpenseGroups('FAILED').toPromise().then((res) => {
       that.failedExpenseGroupsCount = res.results.length;
       return res;
     });
@@ -161,19 +161,19 @@ export class DashboardComponent implements OnInit {
   updateDimensionTables() {
     const that = this;
     concat(
-      this.mappingsService.postAccountsPayables(that.workspaceId),
-      this.mappingsService.postBankAccounts(that.workspaceId),
-      this.mappingsService.postExpenseAccounts(that.workspaceId),
-      this.mappingsService.postCreditCardAccounts(that.workspaceId),
-      this.mappingsService.postQBOEmployees(that.workspaceId),
-      this.mappingsService.postQBOVendors(that.workspaceId),
-      this.mappingsService.postQBOCustomers(that.workspaceId),
-      this.mappingsService.postQBOClasses(that.workspaceId),
-      this.mappingsService.postQBODepartments(that.workspaceId),
-      this.mappingsService.postFyleEmployees(that.workspaceId),
-      this.mappingsService.postFyleCategories(that.workspaceId),
-      this.mappingsService.postFyleCostCenters(that.workspaceId),
-      this.mappingsService.postFyleProjects(that.workspaceId)
+      this.mappingsService.postAccountsPayables(),
+      this.mappingsService.postBankAccounts(),
+      this.mappingsService.postExpenseAccounts(),
+      this.mappingsService.postCreditCardAccounts(),
+      this.mappingsService.postQBOEmployees(),
+      this.mappingsService.postQBOVendors(),
+      this.mappingsService.postQBOCustomers(),
+      this.mappingsService.postQBOClasses(),
+      this.mappingsService.postQBODepartments(),
+      this.mappingsService.postFyleEmployees(),
+      this.mappingsService.postFyleCategories(),
+      this.mappingsService.postFyleCostCenters(),
+      this.mappingsService.postFyleProjects()
     ).subscribe(() => {
       // that.snackBar.open('All employee data synced from your fyle account');
     });

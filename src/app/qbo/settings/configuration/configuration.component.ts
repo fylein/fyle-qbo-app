@@ -212,6 +212,7 @@ export class ConfigurationComponent implements OnInit {
         that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
       });
     } else {
+      that.snackBar.open('Form has invalid fields');
       that.generalSettingsForm.markAllAsTouched();
     }
   }

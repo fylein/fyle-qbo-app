@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject, merge, forkJoin, from } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 import { Cacheable, CacheBuster, globalCacheBusterNotifier } from 'ngx-cacheable';
+import { FyleCredentials } from '../models/fyle-credentials.model';
+import { QBOCredentials } from '../models/qbo-credentials.model';
+import { Settings } from '../models/settings.model';
 
 const fyleCredentialsCache = new Subject<void>();
 const qboCredentialsCache = new Subject<void>();
@@ -17,21 +20,23 @@ export class SettingsService {
   @Cacheable({
     cacheBusterObserver: fyleCredentialsCache
   })
-  getFyleCredentials(workspaceId: number): Observable<any> {
+  getFyleCredentials(workspaceId: number): Observable<FyleCredentials> {
     return this.apiService.get('/workspaces/' + workspaceId + '/credentials/fyle/', {});
   }
 
+  // TODO: Add model
   @CacheBuster({
     cacheBusterNotifier: fyleCredentialsCache
   })
-  deleteFyleCredentials(workspaceId: number): Observable<any> {
+  deleteFyleCredentials(workspaceId: number) {
     return this.apiService.post('/workspaces/' + workspaceId + '/credentials/fyle/delete/', {});
   }
 
+  // TODO: Add model
   @CacheBuster({
     cacheBusterNotifier: qboCredentialsCache
   })
-  deleteQBOCredentials(workspaceId: number): Observable<any> {
+  deleteQBOCredentials(workspaceId: number) {
     globalCacheBusterNotifier.next();
     return this.apiService.post('/workspaces/' + workspaceId + '/credentials/qbo/delete/', {});
   }
@@ -39,23 +44,25 @@ export class SettingsService {
   @Cacheable({
     cacheBusterObserver: qboCredentialsCache
   })
-  getQBOCredentials(workspaceId: number): Observable<any> {
+  getQBOCredentials(workspaceId: number): Observable<QBOCredentials> {
     return this.apiService.get('/workspaces/' + workspaceId + '/credentials/qbo/', {});
   }
 
+  // TODO: Add model
   @CacheBuster({
     cacheBusterNotifier: fyleCredentialsCache
   })
-  connectFyle(workspaceId: number, authorizationCode: string): Observable<any> {
+  connectFyle(workspaceId: number, authorizationCode: string) {
     return this.apiService.post('/workspaces/' + workspaceId + '/connect_fyle/authorization_code/', {
       code: authorizationCode
     });
   }
 
+  // TODO: Add model
   @CacheBuster({
     cacheBusterNotifier: qboCredentialsCache
   })
-  connectQBO(workspaceId: number, authorizationCode: string, realmId: string): Observable<any> {
+  connectQBO(workspaceId: number, authorizationCode: string, realmId: string) {
     globalCacheBusterNotifier.next();
     return this.apiService.post('/workspaces/' + workspaceId + '/connect_qbo/authorization_code/', {
       code: authorizationCode,
@@ -63,6 +70,7 @@ export class SettingsService {
     });
   }
 
+  // TODO: Add model
   postSettings(workspaceId: number, nextRun: string, hours: number, scheduleEnabled: boolean) {
     return this.apiService.post(`/workspaces/${workspaceId}/settings/`, {
       next_run: nextRun,
@@ -71,10 +79,11 @@ export class SettingsService {
     });
   }
 
-  getSettings(workspaceId: number) {
+  getSettings(workspaceId: number): Observable<Settings> {
     return this.apiService.get(`/workspaces/${workspaceId}/settings/`, {});
   }
 
+  // TODO: Add model
   @Cacheable({
     cacheBusterObserver: mappingsSettingsCache
   })
@@ -82,6 +91,7 @@ export class SettingsService {
     return this.apiService.get(`/workspaces/${workspaceId}/mappings/settings/`, {});
   }
 
+  // TODO: Add model
   @CacheBuster({
     cacheBusterNotifier: generalSettingsCache
   })
@@ -92,6 +102,7 @@ export class SettingsService {
     });
   }
 
+  // TODO: Add model
   @CacheBuster({
     cacheBusterNotifier: mappingsSettingsCache
   })
@@ -99,6 +110,7 @@ export class SettingsService {
     return this.apiService.post(`/workspaces/${workspaceId}/mappings/settings/`, mappingSettings);
   }
 
+  // TODO: Add model
   @Cacheable({
     cacheBusterObserver: generalSettingsCache
   })
@@ -106,6 +118,7 @@ export class SettingsService {
     return this.apiService.get(`/workspaces/${workspaceId}/settings/general/`, {});
   }
 
+  // TODO: Add model
   @Cacheable({
     cacheBusterObserver: merge(generalSettingsCache, generalSettingsCache)
   })

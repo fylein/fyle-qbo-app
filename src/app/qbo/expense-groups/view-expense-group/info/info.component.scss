@@ -1,5 +1,7 @@
 @import 'variables.scss';
 
+$fy-info-dark: #2c304e;
+
 .page-info {
   &--sub-header {
     font-size: 16px;
@@ -13,11 +15,5 @@
 
   &--created-by {
     font-size: 14px;
-  }
-}
-
-.page-table {
-  &--icon {
-    cursor: pointer;
   }
 }

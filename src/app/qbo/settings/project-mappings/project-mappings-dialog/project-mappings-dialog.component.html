@@ -16,11 +16,11 @@
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="mat-body-strong">
         <strong class="mappings-dialog--label">
-          Choose Fyle Project
+          Select a Project from Fyle
         </strong>
       </div>
       <mat-form-field class="mappings-dialog--field" appearance="outline">
-        <input required type="text" formControlName="fyleProject" placeholder="Choose Fyle Project" matInput
+        <input required type="text" formControlName="fyleProject" placeholder="Select Fyle Project" matInput
           [matAutocomplete]="fyProj">
         <mat-autocomplete #fyProj="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of fyleProjectOptions" [value]="option">
@@ -34,11 +34,11 @@
 
       <div class="mat-body-strong">
         <strong class="mappings-dialog--label">
-          Choose {{ generalSettings.project_field_mapping | titlecase}}
+          Map to Corresponding Quickbooks {{ generalSettings.project_field_mapping | titlecase}}
         </strong>
       </div>
       <mat-form-field class="mappings-dialog--field" appearance="outline">
-        <input type="text" formControlName="qboObject" placeholder="Choose {{ generalSettings.project_field_mapping | titlecase}}" matInput [matAutocomplete]="qboEl">
+        <input type="text" formControlName="qboObject" placeholder="Select Quickbooks {{ generalSettings.project_field_mapping | titlecase}}" matInput [matAutocomplete]="qboEl">
         <mat-autocomplete #qboEl="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboOptions" [value]="option">
             {{option.value}}

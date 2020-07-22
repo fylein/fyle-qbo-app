@@ -59,6 +59,8 @@ export class CostCenterMappingsComponent implements OnInit {
       if (that.isConfigValueSet) {
         that.getCostCenterMappings();
       }
+    }, () => {
+      that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
     });
   }
 }

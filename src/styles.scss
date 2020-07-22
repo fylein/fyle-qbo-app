@@ -1,7 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~normalize.css';
 @import '~@angular/material/theming';
-@include mat-core();
 @import './assets/stylesheets/fy-theme.scss';
 @import 'variables.scss';
 @import './assets/stylesheets/utility.scss';
@@ -90,6 +89,10 @@ simple-snack-bar span { // @vikas wanted a center aligned snack-bar :P
     padding: 0 8px 12px 12px;
     max-width: 600px;
   }
+}
+
+.mat-form-field-appearance-outline .mat-form-field-subscript-wrapper {
+  padding: 0 !important;
 }
 
 .qbo {

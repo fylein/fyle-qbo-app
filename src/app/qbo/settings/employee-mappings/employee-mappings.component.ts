@@ -10,7 +10,7 @@ import { StorageService } from 'src/app/core/services/storage.service';
 @Component({
   selector: 'app-employee-mappings',
   templateUrl: './employee-mappings.component.html',
-  styleUrls: ['./employee-mappings.component.scss',  '../settings.component.scss', '../../qbo.component.scss']
+  styleUrls: ['./employee-mappings.component.scss', '../settings.component.scss', '../../qbo.component.scss']
 })
 export class EmployeeMappingsComponent implements OnInit {
 
@@ -24,11 +24,11 @@ export class EmployeeMappingsComponent implements OnInit {
   columnsToDisplay = ['employee_email', 'qbo'];
 
   constructor(public dialog: MatDialog,
-              private route: ActivatedRoute,
-              private mappingsService: MappingsService,
-              private router: Router,
-              private settingsService: SettingsService,
-              private storageService: StorageService) {
+    private route: ActivatedRoute,
+    private mappingsService: MappingsService,
+    private router: Router,
+    private settingsService: SettingsService,
+    private storageService: StorageService) {
   }
 
   open() {
@@ -99,6 +99,8 @@ export class EmployeeMappingsComponent implements OnInit {
       that.generalSettings = settings;
       that.isLoading = false;
       that.reset();
+    }, () => {
+      that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
     });
   }
 }

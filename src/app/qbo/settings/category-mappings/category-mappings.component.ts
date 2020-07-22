@@ -49,6 +49,8 @@ export class CategoryMappingsComponent implements OnInit {
     that.mappingsService.getMappings('CATEGORY').subscribe(categoryMappings => {
       that.categoryMappings = categoryMappings.results;
       that.isLoading = false;
+    }, () => {
+      that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
     });
   }
 

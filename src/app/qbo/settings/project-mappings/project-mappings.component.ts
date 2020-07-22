@@ -63,6 +63,8 @@ export class ProjectMappingsComponent implements OnInit {
       if (that.isConfigValueSet) {
         that.getCategoryMappings();
       }
+    }, () => {
+      that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
     });
   }
 

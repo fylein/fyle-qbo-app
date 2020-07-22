@@ -197,7 +197,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
         fyleEmployee: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleEmployees)])],
         qboVendor: ['', that.generalSettings.employee_field_mapping === 'VENDOR' ? that.forbiddenSelectionValidator(that.qboVendors) : null],
         qboEmployee: ['', that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.forbiddenSelectionValidator(that.qboEmployees) : null],
-        creditCardAccount: ['', that.generalSettings.corporate_credit_card_expenses_object ? that.forbiddenSelectionValidator(that.cccObjects) : null]
+        creditCardAccount: [that.generalMappings.default_ccc_account_name || '', that.generalSettings.corporate_credit_card_expenses_object ? that.forbiddenSelectionValidator(that.cccObjects) : null]
       });
       that.setupAutocompleteWatchers();
     });

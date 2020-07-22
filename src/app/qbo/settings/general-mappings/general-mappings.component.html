@@ -10,9 +10,9 @@
   </div>
   <div class="page-info">
     <div fxLayout="row" fxLayoutAlign="start center" class="page-info--description">
-      Please select Fyle fields to be mapped to Quickbooks Online field. 
-      <a href="" class="read-more-link" fxLayout="row" fxLayoutAlign="start center">Read more<mat-icon class="read-more-link--icon">open_in_new</mat-icon></a>
-
+      Set up the following Quickbooks Online fields.
+      <a href="" class="read-more-link" fxLayout="row" fxLayoutAlign="start center">Read more<mat-icon
+          class="read-more-link--icon">open_in_new</mat-icon></a>
     </div>
   </div>
   <form class="general-mappings--form" [formGroup]="form" (ngSubmit)="submit()">
@@ -22,7 +22,8 @@
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required
         *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
-        <mat-select class="general-mappings--input" placeholder="Select accounts" formControlName="accountPayableAccounts">
+        <mat-select class="general-mappings--input" placeholder="Select accounts payable for expenses imported from Fyle"
+          formControlName="accountPayableAccounts">
           <mat-option *ngFor="let accountPayableAccount of accountPayableAccounts; let i = index"
             [value]="accountPayableAccounts[i].destination_id">
             {{accountPayableAccounts[i].value}}
@@ -34,18 +35,19 @@
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required
         *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
-        <mat-select class="general-mappings--input" placeholder="Select bank account" formControlName="bankAccounts">
+        <mat-select class="general-mappings--input" placeholder="Select bank account for expenses imported from Fyle" formControlName="bankAccounts">
           <mat-option *ngFor="let bankAccount of bankAccounts; let i = index" [value]="bankAccounts[i].destination_id">
             {{bankAccounts[i].value}}
           </mat-option>
         </mat-select>
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.corporate_credit_card_expenses_object">
-        Default Corporate Credit Card Account
+        Default Credit Card Account
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required
         *ngIf="generalSettings.corporate_credit_card_expenses_object">
-        <mat-select class="general-mappings--input" placeholder="Select credit card account" formControlName="cccAccounts">
+        <mat-select class="general-mappings--input" placeholder="Select default credit card account for card expenses imported from Fyl"
+          formControlName="cccAccounts">
           <mat-option *ngFor="let cccAccount of cccAccounts; let i = index" [value]="cccAccounts[i].destination_id">
             {{cccAccounts[i].value}}
           </mat-option>

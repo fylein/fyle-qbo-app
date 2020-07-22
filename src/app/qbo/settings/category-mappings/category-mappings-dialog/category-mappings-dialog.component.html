@@ -16,11 +16,11 @@
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="mat-body-strong">
         <strong class="mappings-dialog--label">
-          Choose Fyle Category
+          Select a Category from Fyle
         </strong>
       </div>
       <mat-form-field class="mappings-dialog--field" appearance="outline">
-        <input required type="text" formControlName="fyleCategory" placeholder="Choose Fyle category" matInput
+        <input required type="text" formControlName="fyleCategory" placeholder="Select Fyle Category" matInput
           [matAutocomplete]="fyCat" [errorStateMatcher]="matcher">
         <mat-autocomplete #fyCat="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of fyleCategoryOptions" [value]="option">
@@ -34,11 +34,11 @@
 
       <div class="mat-body-strong">
         <strong class="mappings-dialog--label">
-          Account
+          Map to Corresponding Quickbooks Account
         </strong>
       </div>
       <mat-form-field class="mappings-dialog--field" appearance="outline">
-        <input type="text" formControlName="qboAccount" placeholder="Choose Quickbooks account" matInput
+        <input type="text" formControlName="qboAccount" placeholder="Select Quickbooks Accoun" matInput
           [matAutocomplete]="qboAc" [errorStateMatcher]="matcher">
         <mat-autocomplete #qboAc="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboAccountOptions" [value]="option">

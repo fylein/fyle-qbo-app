@@ -16,11 +16,11 @@
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="mat-body-strong">
         <strong class="mappings-dialog--label">
-          Choose Fyle Employee Email
+          Select an Employee from Fyle
         </strong>
       </div>
       <mat-form-field class="mappings-dialog--form-element" appearance="outline">
-        <input required type="text" formControlName="fyleEmployee" placeholder="Choose Employee" matInput
+        <input required type="text" formControlName="fyleEmployee" placeholder="Select Fyle Employee" matInput
           [matAutocomplete]="fyEmp">
         <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of employeeOptions" [value]="option">
@@ -33,11 +33,11 @@
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
         <strong class="mappings-dialog--label">
-          Choose Vendor
+          Map to Corresponding Quickbooks Vendor
         </strong>
       </div>
       <mat-form-field class="mappings-dialog--form-element" appearance="outline" *ngIf="generalSettings.employee_field_mapping === 'VENDOR'">
-        <input type="text" formControlName="qboVendor" placeholder="Choose Vendor" matInput [matAutocomplete]="fyEmp">
+        <input type="text" formControlName="qboVendor" placeholder="Select Quickbooks Vendor" matInput [matAutocomplete]="fyEmp">
         <mat-autocomplete #fyEmp="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboVendorOptions" [value]="option">
             {{option.value}}
@@ -49,11 +49,11 @@
       </mat-form-field>
       <div class="mat-body-strong" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
         <strong class="mappings-dialog--label">
-          Choose Quickbooks Online Employee
+          Map to Corresponding Quickbooks Employee
         </strong>
       </div>
       <mat-form-field class="mappings-dialog--form-element" appearance="outline" *ngIf="generalSettings.employee_field_mapping === 'EMPLOYEE'">
-        <input type="text" formControlName="qboEmployee" placeholder="Choose Employee" matInput [matAutocomplete]="qboEmp">
+        <input type="text" formControlName="qboEmployee" placeholder="Select Quickbooks Employee" matInput [matAutocomplete]="qboEmp">
         <mat-autocomplete #qboEmp="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboEmployeeOptions" [value]="option">
             {{option.value}}

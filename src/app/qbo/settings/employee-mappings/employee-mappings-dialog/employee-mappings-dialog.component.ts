@@ -43,11 +43,11 @@ export class EmployeeMappingsDialogComponent implements OnInit {
   matcher = new MappingErrorStateMatcher();
 
   constructor(private formBuilder: FormBuilder,
-              public dialogRef: MatDialogRef<EmployeeMappingsDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              private mappingsService: MappingsService,
-              private snackBar: MatSnackBar,
-              private settingsService: SettingsService) { }
+    public dialogRef: MatDialogRef<EmployeeMappingsDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private mappingsService: MappingsService,
+    private snackBar: MatSnackBar,
+    private settingsService: SettingsService) { }
 
 
   mappingDisplay(mappingObject) {
@@ -98,7 +98,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
   }
 
   forbiddenSelectionValidator(options: any[]): ValidatorFn {
-    return (control: AbstractControl): {[key: string]: any} | null => {
+    return (control: AbstractControl): { [key: string]: any } | null => {
       const forbidden = !options.some((option) => {
         return control.value.id && option.id === control.value.id;
       });
@@ -192,12 +192,13 @@ export class EmployeeMappingsDialogComponent implements OnInit {
       from(getQboVendors),
       from(getGeneralMappings)
     ]).subscribe((res) => {
+      const defaultCCCObj = that.cccObjects.filter(cccObj => cccObj.value === that.generalMappings.default_ccc_account_name)[0];
       that.isLoading = false;
       that.form = that.formBuilder.group({
         fyleEmployee: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleEmployees)])],
         qboVendor: ['', that.generalSettings.employee_field_mapping === 'VENDOR' ? that.forbiddenSelectionValidator(that.qboVendors) : null],
         qboEmployee: ['', that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.forbiddenSelectionValidator(that.qboEmployees) : null],
-        creditCardAccount: [that.generalMappings.default_ccc_account_name || '', that.generalSettings.corporate_credit_card_expenses_object ? that.forbiddenSelectionValidator(that.cccObjects) : null]
+        creditCardAccount: [defaultCCCObj || '', that.generalSettings.corporate_credit_card_expenses_object ? that.forbiddenSelectionValidator(that.cccObjects) : null]
       });
       that.setupAutocompleteWatchers();
     });

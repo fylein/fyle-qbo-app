@@ -118,12 +118,12 @@
 </div>
 
 <div class="dashboard" *ngIf="currentState === allOnboardingStates.isOnboarded && !isLoading">
-  <h1 class="dashboard--header">
+  <div class="mat-h2 dashboard--header">
     Dashboard
-  </h1>
+  </div>
   <div fxLayout="row">
     <div class="dashboard--actions" fxLayout="column" fxLayoutAlign="start center">
-      <mat-card class="dashboard--actions-card mat-elevation-z2">
+      <mat-card class="dashboard--actions-card">
         <div class="dashboard--actions-content" fxLayout="row" fxLayoutAlign="space-between center">
           <div class="dashboard--actions-header">
             <span *ngIf="successfulExpenseGroupsCount > 0">
@@ -145,7 +145,7 @@
         </div>
       </mat-card>
 
-      <mat-card class="dashboard--actions-card mat-elevation-z2">
+      <mat-card class="dashboard--actions-card">
         <div class="dashboard--actions-content" fxLayout="row" fxLayoutAlign="space-between center">
           <div class="dashboard--actions-header">
             Export Expenses to Quickbooks Online

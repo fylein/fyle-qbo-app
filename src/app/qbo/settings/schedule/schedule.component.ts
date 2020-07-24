@@ -19,6 +19,7 @@ export class ScheduleComponent implements OnInit {
   minDate: Date = new Date();
   defaultDate: string;
   hours = [...Array(24).keys()].map(day => day + 1);
+  settings: Settings;
   constructor(
     private formBuilder: FormBuilder,
     private settingsService: SettingsService,
@@ -30,6 +31,7 @@ export class ScheduleComponent implements OnInit {
     that.isLoading = true;
     that.settingsService.getSettings(that.workspaceId).subscribe((settings: Settings) => {
       // TODO: Api should return schedule always - check and cleanup
+      that.settings = settings;
       if (settings && settings.schedule) {
         that.form.setValue({
           datetime: new Date(settings.schedule.start_datetime),
@@ -75,12 +77,14 @@ export class ScheduleComponent implements OnInit {
       pairwise()
     ).subscribe(([oldValue, newValue]) => {
       if (!newValue && oldValue !== newValue) {
-        that.isLoading = true;
-        that.settingsService.postSettings(that.workspaceId, new Date().toISOString(), 0, false).subscribe(response => {
-          that.isLoading = false;
-          that.snackBar.open('Scheduling turned off');
-          that.getSettings();
-        });
+        if (that.settings && that.settings.schedule) {
+          that.isLoading = true;
+          that.settingsService.postSettings(that.workspaceId, new Date().toISOString(), 0, false).subscribe(response => {
+            that.isLoading = false;
+            that.snackBar.open('Scheduling turned off');
+            that.getSettings();
+          });
+        }
       }
     }, err => {
       that.snackBar.open('Something went wrong');

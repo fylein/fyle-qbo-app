@@ -1,0 +1,123 @@
+<mat-sidenav-container class="qbo" autosize fxFlexFill *ngIf="!isLoading">
+  <mat-sidenav class="qbo-sidenav" mode="side" opened>
+    <mat-nav-list>
+      <header matSubheader class="qbo-sidenav--header">
+        <img alt="Fyle" src="../../assets/images/pngs/fyle-logo.png" class="qbo-sidenav--logo" />
+        <mat-icon>add</mat-icon>
+        <img alt="qbo" src="../../../assets/images/pngs/qbo-logo.png" class="qbo-sidenav--logo">
+      </header>
+
+      <a class="mat-h2 qbo-sidenav--nav-item" mat-list-item routerLink="{{workspace.id}}/dashboard"
+        routerLinkActive="active">
+        Dashboard
+      </a>
+
+      <a class="mat-h2 qbo-sidenav--nav-item" [ngClass]="{'qbo-sidenav--nav-item__disabled': navDisabled}" mat-list-item routerLink="{{workspace.id}}/sync_export/sync"
+        routerLinkActive="active">
+        Import & Export
+      </a>
+
+      <a class="mat-h2 qbo-sidenav--nav-item" [ngClass]="{'qbo-sidenav--nav-item__disabled': navDisabled}" mat-list-item routerLink="{{workspace.id}}/expense_groups/"
+        routerLinkActive="active">
+        Expense Groups
+      </a>
+
+      <a class="mat-h3 qbo-sidenav--nav-item" mat-list-item>
+        Settings
+      </a>
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/configurations/"
+        routerLinkActive="active">
+        Configurations
+      </a>
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item routerLink="{{workspace.id}}/settings/general_mappings/"
+        routerLinkActive="active">
+        General Mappings
+      </a>
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item
+        routerLink="{{workspace.id}}/settings/employee_mappings/" routerLinkActive="active">
+        Employee Mappings
+      </a>
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item
+        routerLink="{{workspace.id}}/settings/category_mappings/" routerLinkActive="active">
+        Category Mappings
+      </a>
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item routerLink="{{workspace.id}}/settings/project_mappings/"
+        routerLinkActive="active">
+        Project Mappings
+      </a>
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item
+        routerLink="{{workspace.id}}/settings/cost_center_mappings/" routerLinkActive="active">
+        Cost Center Mappings
+      </a>
+      <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item routerLink="{{workspace.id}}/settings/schedule/"
+        routerLinkActive="active">
+        Automated Import/Export
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar fxLayoutAlign="space-between center">
+      <div class="qbo--title" fxLayout="row" fxLayoutAlign="space-around center">
+        <div class="mat-small">
+          Fyle Org Name:
+          <span class="qbo--title-fyle-org">
+            {{user.org_name}}
+          </span>
+        </div>
+        <div class="mat-small qbo--title-separator" *ngIf="qboCompanyName">
+          |
+        </div>
+        <div class="mat-small" *ngIf="qboCompanyName">
+          Quickbooks Online Company Name:
+          <span class="qbo--title-qbo-org">
+            {{qboCompanyName}}
+          </span>
+        </div>
+      </div>
+
+      <mat-menu class="qbo--menu" #appMenu="matMenu" xPosition="before">
+        <button type="button" mat-menu-item *ngIf="orgsCount > 0" (click)="switchWorkspace()">
+          <div fxLayoutAlign="space-around center">
+            <mat-icon class="qbo--menu-icon">
+              swap_horiz
+            </mat-icon>
+            <strong class="qbo--menu-text">
+              Switch Org
+            </strong>
+          </div>
+        </button>
+        <button type="button" mat-menu-item [routerLink]="['../auth/logout']">
+          <div fxLayoutAlign="space-around center">
+            <mat-icon class="qbo--menu-icon">
+              power_settings_new
+            </mat-icon>
+            <strong class="qbo--menu-text">
+              Sign Out
+            </strong>
+          </div>
+        </button>
+      </mat-menu>
+
+      <div class="qbo--menu" [matMenuTriggerFor]="appMenu">
+        <div fxLayoutAlign="space-around center">
+          <mat-icon class="qbo--menu-icon">
+            account_circle
+          </mat-icon>
+          <strong class="qbo--menu-text">{{user.full_name}}</strong>
+          <mat-icon class="qbo--menu-icon qbo--menu-icon__offset">
+            keyboard_arrow_down
+          </mat-icon>
+        </div>
+      </div>
+
+    </mat-toolbar>
+    <div class="qbo-body">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<div fxLayoutAlign="center center" fxFlexFill *ngIf="isLoading">
+  <app-loader></app-loader>
+</div>

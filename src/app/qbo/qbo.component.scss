@@ -11,6 +11,7 @@ $fy-page-info-desc: #414562;
     background-color: $fy-layout-background;
     border-right: 0;
     min-width: 320px;
+    overflow-x: hidden;
     &--header {
       padding: 32px 0;
     }
@@ -82,6 +83,7 @@ $fy-page-info-desc: #414562;
   }
 
   &--menu {
+    cursor: pointer;
     &-icon {
       opacity: .75;
       &__offset {

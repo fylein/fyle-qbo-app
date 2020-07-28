@@ -38,7 +38,7 @@
         </strong>
       </div>
       <mat-form-field class="mappings-dialog--field" appearance="outline">
-        <input type="text" formControlName="qboAccount" placeholder="Select Quickbooks Accoun" matInput
+        <input type="text" formControlName="qboAccount" placeholder="Select Quickbooks Account" matInput
           [matAutocomplete]="qboAc" [errorStateMatcher]="matcher">
         <mat-autocomplete #qboAc="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboAccountOptions" [value]="option">

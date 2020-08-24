@@ -28,6 +28,11 @@ export class BillsService {
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/preferences/`, {});
   }
 
+  UpdateExpenseGroupingIfDepartmentAdded() {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+    return this.apiService.post(`/workspaces/${workspaceId}/qbo/update_grouping_on_department/`, {})
+  }
+
   // TODO: Map response to a model
   getOrgDetails() {
     const workspaceId = this.workspaceService.getWorkspaceId();

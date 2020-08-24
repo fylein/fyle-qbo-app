@@ -38,6 +38,20 @@ export class ExpenseGroupsService {
     return from(this.getAllExpenseGroupsInternal(limit, offset, state, allExpenseGroupsResponse));
   }
 
+  getExpenseGroupSettings(): Observable<ExpenseGroupResponse> {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+    return this.apiService.get(`workspaces/${workspaceId}/fyle/expense_group_setings/`, {});
+  }
+
+  createExpenseGroupsSettings(expensesGroupedBy: string[], expenseStates: string[], exportDateType: string): Observable<ExpenseGroupResponse> {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+    return this.apiService.post(`workspaces/${workspaceId}/fyle/expense_group_setings/`, {
+      expenses_grouped_by: expensesGroupedBy,
+      expense_states: expenseStates,
+      export_date_type: exportDateType
+    });
+  }
+
   // TODO: remove promises and do with rxjs observables
   private getAllExpenseGroupsInternal(limit: number, offset: number, state: string, allExpenseGroupsResponse: ExpenseGroupResponse): Promise<ExpenseGroupResponse> {
     const that = this;
@@ -67,7 +81,7 @@ export class ExpenseGroupsService {
   }
 
   // TODO: Map response to a model
-  syncExpenseGroups() {
+  syncExpenseGroups(expenseGroupConfiguration: string[], expenseStates: string[], exportDate: string) {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.post(`/workspaces/${workspaceId}/fyle/expense_groups/trigger/`, {});
   }

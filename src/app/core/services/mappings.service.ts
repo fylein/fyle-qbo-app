@@ -17,6 +17,7 @@ export class MappingsService {
   qboVendors: Observable<any[]>;
   qboEmployees: Observable<any[]>;
   fyleProjects: Observable<any[]>;
+  fyleExpenseCustomFields: Observable<any[]>;
   qboCustomers: Observable<any[]>;
   qboDepartments: Observable<any[]>;
   fyleCostCenters: Observable<any[]>;
@@ -24,6 +25,7 @@ export class MappingsService {
   accountPayables: Observable<any[]>;
   bankAccounts: Observable<any[]>;
   creditCardAccounts: Observable<any[]>;
+  expenseFields: Observable<any[]>;
 
   constructor(
     private apiService: ApiService,
@@ -66,6 +68,19 @@ export class MappingsService {
       );
     }
     return this.fyleProjects;
+  }
+
+  postExpenseCustomFields() {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+
+    if (!this.fyleExpenseCustomFields) {
+      this.fyleExpenseCustomFields = this.apiService.post(`/workspaces/${workspaceId}/fyle/expense_custom_fields/`, {}).pipe(
+        map(data => data),
+        publishReplay(1),
+        refCount()
+      );
+    }
+    return this.fyleExpenseCustomFields;
   }
 
   postFyleCostCenters() {
@@ -207,6 +222,12 @@ export class MappingsService {
     return this.qboDepartments;
   }
 
+  getFyleExpenseFields() {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+
+    return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_fields/`, {});
+  }
+
   getFyleEmployees() {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
@@ -225,6 +246,13 @@ export class MappingsService {
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/vendors/`, {});
   }
 
+  getQBOFields() {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+
+    return this.apiService.get(`/workspaces/${workspaceId}/qbo/quickbooks_fields/`, {});
+  }
+
+
   getQBOEmployees() {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
@@ -241,6 +269,14 @@ export class MappingsService {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/fyle/projects/`, {});
+  }
+
+  getFyleExpenseCustomFields(attributeType: string) {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+
+    return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_custom_fields/`, {
+      attribute_type: attributeType
+    });
   }
 
   getQBOClasses() {

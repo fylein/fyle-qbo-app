@@ -22,7 +22,7 @@ export class ExpenseGroupsComponent implements OnInit {
   settings;
   pageNumber = 0;
   pageSize = 5;
-  columnsToDisplay = ['description', 'employee', 'expensetype'];
+  columnsToDisplay = ['employee', 'expensetype'];
   windowReference: Window;
 
   constructor(
@@ -94,9 +94,9 @@ export class ExpenseGroupsComponent implements OnInit {
     that.state = that.route.snapshot.queryParams.state || 'FAILED';
     that.settingsService.getCombinedSettings(that.workspaceId).subscribe((settings) => {
       if (that.state === 'COMPLETE') {
-        that.columnsToDisplay = ['description', 'employee', 'export', 'expensetype', 'openQbo'];
+        that.columnsToDisplay = ['employee', 'export', 'expensetype', 'openQbo'];
       } else {
-        that.columnsToDisplay = ['description', 'employee', 'expensetype'];
+        that.columnsToDisplay = ['employee', 'expensetype'];
       }
 
       that.settings = settings;
@@ -111,9 +111,9 @@ export class ExpenseGroupsComponent implements OnInit {
 
         if (that.pageNumber !== pageNumber || that.pageSize !== pageSize || that.state !== state) {
           if (state === 'COMPLETE') {
-            that.columnsToDisplay = ['description', 'employee', 'export', 'expensetype', 'openQbo'];
+            that.columnsToDisplay = ['employee', 'export', 'expensetype', 'openQbo'];
           } else {
-            that.columnsToDisplay = ['description', 'employee', 'expensetype'];
+            that.columnsToDisplay = ['employee', 'expensetype'];
           }
 
           that.pageNumber = pageNumber;

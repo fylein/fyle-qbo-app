@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ExpenseGroupsService } from 'src/app/core/services/expense-groups.service';
 import { ActivatedRoute } from '@angular/router';
-import { ExpenseGroup } from 'src/app/core/models/expense-group.model';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { Task } from 'src/app/core/models/task.model';
 import { MappingsService } from '../../../core/services/mappings.service';
-import { concat } from 'rxjs/internal/observable/concat';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { ExpenseGroupSettingsDialogComponent } from './expense-group-settings-dialog/expense-group-settings-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-sync',
@@ -16,19 +17,24 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class SyncComponent implements OnInit {
 
   workspaceId: number;
-  // lastSyncedExpenseGroup: ExpenseGroup;
   lastTask: Task;
   isLoading: boolean;
   isExpensesSyncing: boolean;
   isEmployeesSyncing: boolean;
+  importExpensesForm: FormGroup;
   errorOccurred = false;
 
-  constructor(private expenseGroupService: ExpenseGroupsService, private route: ActivatedRoute, private taskService: TasksService, private mappingService: MappingsService, private snackBar: MatSnackBar) { }
+  constructor(private expenseGroupService: ExpenseGroupsService, private route: ActivatedRoute, private taskService: TasksService, private snackBar: MatSnackBar, private formBuilder: FormBuilder, public dialog: MatDialog) { }
 
   syncExpenses() {
     const that = this;
     that.isExpensesSyncing = true;
-    that.expenseGroupService.syncExpenseGroups().subscribe((res) => {
+
+    const expenseGroupConfiguration = that.importExpensesForm.value.expenseGroupConfiguration;
+    const expenseStates = that.importExpensesForm.value.expenseStates;
+    const exportDate = that.importExpensesForm.value.exportDate;
+
+    that.expenseGroupService.syncExpenseGroups(expenseGroupConfiguration, expenseStates, exportDate).subscribe((res) => {
       that.updateLastSyncStatus();
       that.snackBar.open('Importing Complete');
       that.isExpensesSyncing = false;
@@ -36,6 +42,21 @@ export class SyncComponent implements OnInit {
       that.isExpensesSyncing = false;
       that.snackBar.open('Importing Failed');
       that.errorOccurred = true;
+    });
+  }
+
+  open() {
+    const that = this;
+    const dialogRef = that.dialog.open(ExpenseGroupSettingsDialogComponent, {
+      width: '450px',
+      data: {
+        workspaceId: that.workspaceId
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // that.getMappings();
+      console.log('close');
     });
   }
 
@@ -53,6 +74,12 @@ export class SyncComponent implements OnInit {
   ngOnInit() {
     const that = this;
     that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
+
+    that.importExpensesForm = that.formBuilder.group({
+      expenseGroupConfiguration: [''],
+      expenseStates: [''],
+      exportDate: ['']
+    });
 
     that.isExpensesSyncing = false;
     this.updateLastSyncStatus();

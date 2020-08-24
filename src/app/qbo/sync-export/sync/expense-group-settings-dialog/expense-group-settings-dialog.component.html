@@ -1,0 +1,83 @@
+<h2 mat-dialog-title>
+  <div class="dialog--header" fxLayout="row" fxLayoutAlign="space-between center">
+    <div class="mat-title">
+      Create New Mapping
+    </div>
+    <div>
+      <mat-icon class="mappings-dialog--close cursor-pointer" aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
+    </div>
+  </div>
+</h2>
+<mat-dialog-content>
+  <form class="dialog--form" [formGroup]="importExpensesForm">
+    <div fxLayout="column" fxLayoutAlign="start stretch">
+      <div class="dialog--label">
+        Group Expenses reported by an Employee by
+      </div>
+      <mat-form-field floatLabel="always" class="dialog--field" appearance="outline" required>
+        <mat-select placeholder="Choose Expense fields to group Expenses"
+          formControlName="expenseGroupConfiguration" multiple>
+          <mat-option value="claim_number">
+            Expense Report
+          </mat-option>
+          <mat-option value="category">
+            Category
+          </mat-option>
+          <mat-option value="project">
+            Project
+          </mat-option>
+          <mat-option value="cost_center">
+            Cost Center
+          </mat-option>
+          <mat-option value="vendor">
+            Merchant
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="dialog--label">
+        Import Expenses in States:
+      </div>
+      <mat-form-field floatLabel="always" class="dialog--field" appearance="outline" required>
+        <mat-select placeholder="Choose States of Expenses to be fetched" formControlName="expenseStates"
+          multiple>
+          <mat-option value="PAYMENT_PENDING">
+            Payment Pending
+          </mat-option>
+          <mat-option value="PAYMENT_PROCESSING">
+            Payment Processing
+          </mat-option>
+          <mat-option value="PAID">
+            Paid
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="dialog--label">
+        Date when Exporting Expenses to QuickBooks Online.
+      </div>
+      <mat-form-field floatLabel="always" class="dialog--field" appearance="outline">
+        <mat-select placeholder="Choose Date when when Exporting Expenses" formControlName="exportDate">
+          <mat-option value="CURRENT_DATE">
+            Current Date
+          </mat-option>
+          <mat-option value="report_submitted_at">
+            Reported Date
+          </mat-option>
+          <mat-option value="spent_at">
+            Spend Date
+          </mat-option>
+          <mat-option value="approved_at">
+            Approval Date
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button type="button" mat-flat-button mat-dialog-close>Cancel</button>
+  <button class="dialog--save-btn" mat-flat-button color="primary" type="submit" (click)="ngOnInit()">
+    Save
+  </button>
+</mat-dialog-actions>

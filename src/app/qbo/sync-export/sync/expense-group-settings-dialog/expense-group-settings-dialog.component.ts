@@ -25,7 +25,7 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
     const exportDateType = that.importExpensesForm.value.exportDate;
 
     this.expenseGroupsService.createExpenseGroupsSettings(expensesGroupedBy, expenseStates, exportDateType).subscribe(response => {
-      that.getExpenseGroupSettings();
+      that.dialogRef.close();
     });
   }
 
@@ -39,7 +39,7 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
         expenseStates: [ that.expenseGroupSettings.expense_states ],
         exportDate: [ that.expenseGroupSettings.export_date_type]
       });
-      that.dialogRef.close();
+
       that.isLoading = false;
     });
   }

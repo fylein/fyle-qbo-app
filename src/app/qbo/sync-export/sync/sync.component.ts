@@ -55,8 +55,7 @@ export class SyncComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // that.getMappings();
-      console.log('close');
+      that.updateLastSyncStatus();
     });
   }
 

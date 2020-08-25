@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>
   <div class="dialog--header" fxLayout="row" fxLayoutAlign="space-between center">
     <div class="mat-title">
-      Create New Mapping
+      Configure Expense Groups
     </div>
     <div>
       <mat-icon class="mappings-dialog--close cursor-pointer" aria-hidden="false" aria-label="close this dialog" mat-dialog-close>close</mat-icon>
@@ -9,7 +9,10 @@
   </div>
 </h2>
 <mat-dialog-content>
-  <form class="dialog--form" [formGroup]="importExpensesForm">
+  <div fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
+    <app-loader></app-loader>
+  </div>
+  <form *ngIf="!isLoading" class="dialog--form" [formGroup]="importExpensesForm">
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="dialog--label">
         Group Expenses reported by an Employee by
@@ -17,17 +20,14 @@
       <mat-form-field floatLabel="always" class="dialog--field" appearance="outline" required>
         <mat-select placeholder="Choose Expense fields to group Expenses"
           formControlName="expenseGroupConfiguration" multiple>
+          <mat-option value="settlement_id">
+            Payment
+          </mat-option>
           <mat-option value="claim_number">
             Expense Report
           </mat-option>
           <mat-option value="category">
             Category
-          </mat-option>
-          <mat-option value="project">
-            Project
-          </mat-option>
-          <mat-option value="cost_center">
-            Cost Center
           </mat-option>
           <mat-option value="vendor">
             Merchant
@@ -57,11 +57,11 @@
         Date when Exporting Expenses to QuickBooks Online.
       </div>
       <mat-form-field floatLabel="always" class="dialog--field" appearance="outline">
-        <mat-select placeholder="Choose Date when when Exporting Expenses" formControlName="exportDate">
-          <mat-option value="CURRENT_DATE">
+        <mat-select placeholder="Choose Date when Exporting Expenses" formControlName="exportDate">
+          <mat-option value="current_date">
             Current Date
           </mat-option>
-          <mat-option value="report_submitted_at">
+          <mat-option value="rp_created_at">
             Reported Date
           </mat-option>
           <mat-option value="spent_at">
@@ -77,7 +77,7 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button type="button" mat-flat-button mat-dialog-close>Cancel</button>
-  <button class="dialog--save-btn" mat-flat-button color="primary" type="submit" (click)="ngOnInit()">
+  <button class="dialog--save-btn" mat-flat-button color="primary" type="submit" (click)="save()">
     Save
   </button>
 </mat-dialog-actions>

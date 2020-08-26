@@ -10,7 +10,16 @@
           Expenses belonging to {{expenseGroup.description.employee_email}} grouped by -
         </div>
         <div class="page-info--sub-header-items" *ngFor="let key of expenseGroupFields">
-          <div *ngIf="key !== 'report_id' && key !=='employee_email' && key !== 'fund_source' && expenseGroup.description[key]">
+          <div *ngIf="key === 'spent_at'">
+            <strong>Spent on</strong> - {{ expenseGroup.description[key] | date }}
+          </div>
+          <div *ngIf="key === 'approved_at'">
+            <strong>Approved on</strong> - {{ expenseGroup.description[key] | date }}
+          </div>
+          <div *ngIf="key === 'rp_created_at'">
+            <strong>Reported on</strong> - {{ expenseGroup.description[key] | date }}
+          </div>
+          <div *ngIf="key !== 'report_id' && key !=='employee_email' && key !== 'fund_source' && key !== 'current_date' && key !== 'rp_created_at' && key !== 'approved_at' && key !== 'spent_at'  && expenseGroup.description[key]">
             <strong>{{ key.replace('_', ' ') | titlecase }}</strong> - {{ expenseGroup.description[key] }}
           </div>
         </div>

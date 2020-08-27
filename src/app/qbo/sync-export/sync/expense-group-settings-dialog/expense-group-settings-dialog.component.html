@@ -8,11 +8,11 @@
     </div>
   </div>
 </h2>
+<form *ngIf="!isLoading" class="dialog--form" [formGroup]="importExpensesForm">
 <mat-dialog-content>
   <div fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
     <app-loader></app-loader>
   </div>
-  <form *ngIf="!isLoading" class="dialog--form" [formGroup]="importExpensesForm">
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="dialog--label">
         Group Expenses reported by an Employee by
@@ -51,6 +51,9 @@
             Paid
           </mat-option>
         </mat-select>
+        <mat-error class="dialog--error" *ngIf="importExpensesForm.controls.expenseStates.errors?.required">
+          Please select atleast 1 state
+        </mat-error>
       </mat-form-field>
 
       <div class="dialog--label">
@@ -73,11 +76,11 @@
         </mat-select>
       </mat-form-field>
     </div>
-  </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button type="button" mat-flat-button mat-dialog-close>Cancel</button>
-  <button class="dialog--save-btn" mat-flat-button color="primary" type="submit" (click)="save()">
+  <button class="dialog--save-btn" [disabled]='importExpensesForm.controls.expenseStates.errors?.required' mat-flat-button color="primary" type="submit" (click)="save()">
     Save
   </button>
 </mat-dialog-actions>
+</form>

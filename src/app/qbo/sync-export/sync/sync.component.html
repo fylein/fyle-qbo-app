@@ -10,9 +10,20 @@
     <mat-card class="sync-card">
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <div fxFlex="60">
-          <div class="sync-card--header">
-            Import Expenses
-          </div>
+					<div class="sync-card--header">
+						Import Expenses
+					</div>
+					<div fxLayout="column" fxLayoutAlign="space-around start" >
+						<div class="sync-card--text" *ngIf="getDescription().expensesGroupedBy">
+							Expenses Grouped by: {{ getDescription().expensesGroupedBy }}
+						</div>
+						<div class="sync-card--text">
+							Expense States: {{ getDescription().expenseStates | titlecase }}
+						</div>
+						<div class="sync-card--text">
+							Export Date: {{ getDescription().exportDateType}}
+						</div>
+					</div>
           <div class="sync-card--info" *ngIf="lastTask">
             Last imported on {{lastTask.updated_at | date}}
           </div>

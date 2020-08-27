@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ExpenseGroupsService } from 'src/app/core/services/expense-groups.service';
 import { MatDialogRef } from '@angular/material/dialog';
 
@@ -36,7 +36,7 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
       that.expenseGroupSettings = response;
       that.importExpensesForm = that.formBuilder.group({
         expenseGroupConfiguration: [ that.expenseGroupSettings.reimbursable_expense_group_fields ],
-        expenseStates: [ that.expenseGroupSettings.expense_states ],
+        expenseStates: [ that.expenseGroupSettings.expense_states, [ Validators.required ]],
         exportDate: [ that.expenseGroupSettings.export_date_type]
       });
 

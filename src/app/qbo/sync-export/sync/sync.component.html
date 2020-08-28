@@ -20,7 +20,7 @@
 						<div class="sync-card--text">
 							Expense States: {{ getDescription().expenseStates | titlecase }}
 						</div>
-						<div class="sync-card--text">
+						<div class="sync-card--text" *ngIf="getDescription().exportDateType">
 							Export Date: {{ getDescription().exportDateType}}
 						</div>
 					</div>

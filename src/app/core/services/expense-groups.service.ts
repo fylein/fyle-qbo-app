@@ -81,7 +81,7 @@ export class ExpenseGroupsService {
   }
 
   // TODO: Map response to a model
-  syncExpenseGroups(expenseGroupConfiguration: string[], expenseStates: string[], exportDate: string) {
+  syncExpenseGroups() {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.post(`/workspaces/${workspaceId}/fyle/expense_groups/trigger/`, {});
   }

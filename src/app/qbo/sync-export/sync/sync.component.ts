@@ -21,7 +21,6 @@ export class SyncComponent implements OnInit {
   isLoading: boolean;
   isExpensesSyncing: boolean;
   isEmployeesSyncing: boolean;
-  importExpensesForm: FormGroup;
   errorOccurred = false;
   expenseGroupSettings: any;
 
@@ -31,11 +30,7 @@ export class SyncComponent implements OnInit {
     const that = this;
     that.isExpensesSyncing = true;
 
-    const expenseGroupConfiguration = that.importExpensesForm.value.expenseGroupConfiguration;
-    const expenseStates = that.importExpensesForm.value.expenseStates;
-    const exportDate = that.importExpensesForm.value.exportDate;
-
-    that.expenseGroupService.syncExpenseGroups(expenseGroupConfiguration, expenseStates, exportDate).subscribe((res) => {
+    that.expenseGroupService.syncExpenseGroups().subscribe((res) => {
       that.updateLastSyncStatus();
       that.snackBar.open('Importing Complete');
       that.isExpensesSyncing = false;
@@ -68,7 +63,7 @@ export class SyncComponent implements OnInit {
     });
     
     const expensesGroupedBy = expensesGroupedByList.join(', ');
-    const expenseStates = that.expenseGroupSettings.expense_states.join(', ')
+    const expenseStates: string = that.expenseGroupSettings.expense_states.join(', ')
     var exportDateType = null;
 
     if (that.expenseGroupSettings.export_date_type === 'spent_at') {
@@ -78,10 +73,10 @@ export class SyncComponent implements OnInit {
     } else if (that.expenseGroupSettings.export_date_type === 'verified_at') {
       exportDateType = 'Verification Date';
     }
-    
+
     return {
       expensesGroupedBy: expensesGroupedBy,
-      expenseStates: expenseStates,
+      expenseStates: expenseStates.replace(/_/g, ' '),
       exportDateType: exportDateType
     };
   }
@@ -123,13 +118,6 @@ export class SyncComponent implements OnInit {
   ngOnInit() {
     const that = this;
     that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
-
-    that.importExpensesForm = that.formBuilder.group({
-      expenseGroupConfiguration: [''],
-      expenseStates: [''],
-      exportDate: ['']
-    });
-
     that.isExpensesSyncing = false;
     this.updateLastSyncStatus();
   }

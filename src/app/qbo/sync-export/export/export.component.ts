@@ -124,7 +124,7 @@ export class ExportComponent implements OnInit {
         const filteredIds = that.exportableExpenseGroups.filter(expenseGroup => expenseGroup.fund_source === 'CCC').map(expenseGroup => expenseGroup.id);
         if (filteredIds.length > 0) {
           // TODO: remove promises and do with rxjs observables
-          promises.push(that.exportCCCExpenses(that.workspaceId)(filteredIds).toPromise());
+          promises.push(that.exportCCCExpenses(that.generalSettings.corporate_credit_card_expenses_object)(that.workspaceId)(filteredIds).toPromise());
           allFilteredIds = allFilteredIds.concat(filteredIds);
         }
       }

@@ -7,7 +7,7 @@
     <div class="page-info--sub-header-container" fxLayout="row" fxLayoutAlign="start center">
       <div class="page-info--sub-header" fxLayout="column" fxLayoutAlign="space-between start">
         <div>
-          Expenses belonging to {{expenseGroup.description.employee_email}} grouped by -
+          Expenses grouped by -
         </div>
         <div class="page-info--sub-header-items" *ngFor="let key of expenseGroupFields">
           <div *ngIf="key === 'spent_at'">

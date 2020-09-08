@@ -5,8 +5,27 @@
 <div *ngIf="!isLoading">
   <div class="page-info" fxLayoutAlign="space-between center">
     <div class="page-info--sub-header-container" fxLayout="row" fxLayoutAlign="start center">
-      <div class="page-info--sub-header">
-        Expenses grouped By {{expenseGroup && expenseGroup.fyle_group_id}} <span class="page-info--created-by">( belonging to {{expenseGroup.description.employee_email}} )</span> 
+      <div class="page-info--sub-header" fxLayout="column" fxLayoutAlign="space-between start">
+        <div>
+          Expenses belonging to {{expenseGroup.description.employee_email}} grouped by -
+        </div>
+        <div class="page-info--sub-header-items" *ngFor="let key of expenseGroupFields">
+          <div *ngIf="key === 'spent_at'">
+            <strong>Spent on</strong> - {{ expenseGroup.description[key] | date }}
+          </div>
+          <div *ngIf="key === 'approved_at'">
+            <strong>Approved on</strong> - {{ expenseGroup.description[key] | date }}
+          </div>
+          <div *ngIf="key === 'verified_at'">
+            <strong>Verified on</strong> - {{ expenseGroup.description[key] | date }}
+          </div>
+          <div *ngIf="key !== 'report_id' && key !=='employee_email' && key !== 'fund_source' && key !== 'current_date' && key !== 'verified_at' && key !== 'approved_at' && key !== 'spent_at'  && expenseGroup.description[key]">
+            <strong>{{ key.replace('_', ' ') | titlecase }}</strong> - {{ expenseGroup.description[key] }}
+          </div>
+        </div>
+        <div class="page-info--sub-header-items">
+          <strong>Expense Type</strong> - {{ expenseGroup.fund_source === 'CCC'? 'Corporate Credit Card': 'Reimbursable' }}
+        </div>
       </div>
     </div>
     <div fxLayoutAlign="end center">

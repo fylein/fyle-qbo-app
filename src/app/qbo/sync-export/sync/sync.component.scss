@@ -18,12 +18,21 @@ $fy-error: #da1e28;
       font-weight: 500;
     }
 
+    &--text {
+        margin-top: 8px;
+        font-size: 14px;
+    }
+
     &--info {
       font-size: 14px;
       margin-top: 20px;
       color: $fy-title-text;
     }
-
+    
+    &--secondary-button {
+        background-color: $fy-secondary;
+    }
+    
     &--error {
       margin: 12px 0;
       padding: 12px;

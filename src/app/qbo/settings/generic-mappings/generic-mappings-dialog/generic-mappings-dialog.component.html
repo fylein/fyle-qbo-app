@@ -16,35 +16,36 @@
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="mat-body-strong">
         <strong class="mappings-dialog--label">
-          Select a Project from Fyle
+          Select a {{ setting.source_field.replace('_', ' ') | titlecase }} from Fyle
         </strong>
       </div>
       <mat-form-field class="mappings-dialog--field" appearance="outline">
-        <input required type="text" formControlName="fyleProject" placeholder="Select Fyle Project" matInput
-          [matAutocomplete]="fyProj">
+        <input required type="text" formControlName="sourceField" placeholder="Select Fyle {{ setting.source_field.replace('_', ' ') | titlecase }}" matInput
+          [matAutocomplete]="fyProj" [errorStateMatcher]="matcher">
         <mat-autocomplete #fyProj="matAutocomplete" [displayWith]="mappingDisplay">
-          <mat-option *ngFor="let option of fyleProjectOptions" [value]="option">
+          <mat-option *ngFor="let option of fyleAttributeOptions" [value]="option">
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error class="mappings-dialog--error" *ngIf="form.controls.fyleProject.hasError('forbiddenOption')">
+        <mat-error class="mappings-dialog--error" *ngIf="form.controls.sourceField.hasError('forbiddenOption')">
           Please enter a valid value
         </mat-error>
       </mat-form-field>
 
       <div class="mat-body-strong">
         <strong class="mappings-dialog--label">
-          Map to Corresponding Quickbooks {{ generalSettings.project_field_mapping | titlecase}}
+          Map to Corresponding Quickbooks {{ setting.destination_field | titlecase}}
         </strong>
       </div>
       <mat-form-field class="mappings-dialog--field" appearance="outline">
-        <input type="text" formControlName="qboObject" placeholder="Select Quickbooks {{ generalSettings.project_field_mapping | titlecase}}" matInput [matAutocomplete]="qboEl">
+        <input type="text" formControlName="destinationField" placeholder="Select Quickbooks {{ setting.destination_field | titlecase}}" matInput [matAutocomplete]="qboEl"
+          [errorStateMatcher]="matcher">
         <mat-autocomplete #qboEl="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboOptions" [value]="option">
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error class="mappings-dialog--error" *ngIf="form.controls.qboObject.hasError('forbiddenOption')">
+        <mat-error class="mappings-dialog--error" *ngIf="form.controls.destinationField.hasError('forbiddenOption')">
           Please enter a valid value
         </mat-error>
       </mat-form-field>
@@ -53,7 +54,7 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button type="button" mat-flat-button mat-dialog-close>Cancel</button>
-  <button class="mappings-dialog--save-btn" mat-flat-button color="primary" type="button" (click)="submit()">
+  <button class="mappings-dialog--save-btn" mat-flat-button color="primary" type="submit" (click)="submit()">
     Save
   </button>
 </mat-dialog-actions>

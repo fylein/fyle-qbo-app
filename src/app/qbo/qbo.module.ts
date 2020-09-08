@@ -36,16 +36,10 @@ import { ConfigurationComponent } from './settings/configuration/configuration.c
 import { MatSelectModule } from '@angular/material/select';
 import { GeneralMappingsComponent } from './settings/general-mappings/general-mappings.component';
 import { EmployeeMappingsComponent } from './settings/employee-mappings/employee-mappings.component';
-import { CategoryMappingsComponent } from './settings/category-mappings/category-mappings.component';
-import { ProjectMappingsComponent } from './settings/project-mappings/project-mappings.component';
-import { CostCenterMappingsComponent } from './settings/cost-center-mappings/cost-center-mappings.component';
 import { ScheduleComponent } from './settings/schedule/schedule.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { EmployeeMappingsDialogComponent } from './settings/employee-mappings/employee-mappings-dialog/employee-mappings-dialog.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { CategoryMappingsDialogComponent } from './settings/category-mappings/category-mappings-dialog/category-mappings-dialog.component';
-import { ProjectMappingsDialogComponent } from './settings/project-mappings/project-mappings-dialog/project-mappings-dialog.component';
-import { CostCenterMappingsDialogComponent } from './settings/cost-center-mappings/cost-center-mappings-dialog/cost-center-mappings-dialog.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -53,6 +47,13 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
+import { GeneralConfigurationComponent } from './settings/configuration/general-configuration/general-configuration.component';
+import { ExpenseFieldConfigurationComponent } from './settings/configuration/expense-field-configuration/expense-field-configuration.component';
+import { GenericMappingsComponent } from './settings/generic-mappings/generic-mappings.component';
+import { GenericMappingsDialogComponent } from './settings/generic-mappings/generic-mappings-dialog/generic-mappings-dialog.component';
+import { ExpenseGroupSettingsDialogComponent } from './sync-export/sync/expense-group-settings-dialog/expense-group-settings-dialog.component';
+
 @NgModule({
   declarations: [
     QboComponent,
@@ -70,20 +71,18 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ConfigurationComponent,
     GeneralMappingsComponent,
     EmployeeMappingsComponent,
-    CategoryMappingsComponent,
-    ProjectMappingsComponent,
-    CostCenterMappingsComponent,
     ScheduleComponent,
     EmployeeMappingsDialogComponent,
-    CategoryMappingsDialogComponent,
-    ProjectMappingsDialogComponent,
-    CostCenterMappingsDialogComponent
+    GeneralConfigurationComponent,
+    ExpenseFieldConfigurationComponent,
+    GenericMappingsComponent,
+    GenericMappingsDialogComponent,
+    ExpenseGroupSettingsDialogComponent
   ],
   entryComponents: [
     EmployeeMappingsDialogComponent,
-    CategoryMappingsDialogComponent,
-    ProjectMappingsDialogComponent,
-    CostCenterMappingsDialogComponent
+    GenericMappingsDialogComponent,
+    ExpenseGroupSettingsDialogComponent
   ],
   imports: [
     CommonModule,
@@ -92,6 +91,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    RxReactiveFormsModule,
     Ng2FlatpickrModule,
     FlexLayoutModule,
     MatSidenavModule,

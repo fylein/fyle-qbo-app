@@ -5,7 +5,7 @@
   <div class="page-info">
     <div fxLayout="row" fxLayoutAlign="start center" class="page-info--description">
       <div>
-        Please map the following Fyle fields to their Quickbooks equivalent.
+        Please map the following Fyle fields to their Quickbooks equivalent. Added fields cannot be edited or removed after saving.
       </div>
       <a href="https://www.fylehq.com/help/en/articles/4284108-configuring-mappings-for-the-fyle-quickbooks-online-integration"
         target="_blank" rel="noopener noreferrer" class="read-more-link" fxLayout="row"
@@ -28,7 +28,7 @@
           </mat-form-field>
 
           <div fxFlex="5">
-            <mat-icon class="expense-fields--icon">keyboard_arrow_right</mat-icon>
+            <img class="expense-fields--arrow-icon" src="../../../../../assets/images/pngs/arrow-right.png">
           </div>
 
           <mat-form-field floatLabel="always" fxFlex="35" appearance="outline">
@@ -40,7 +40,7 @@
           </mat-form-field>
 
           <div fxFlex="25" *ngIf="i !== 0 && !expenseField.disabled">
-            <mat-icon class="expense-fields--delete-icon" (click)="removeExpenseField(i)">delete_outline</mat-icon>
+            <img class="expense-fields--delete-icon" src="../../../../../assets/images/pngs/delete.png" (click)="removeExpenseField(i)">
           </div>
         </div>
         <div class="expense-fields--errors" md-colors="{color:'warning'}"
@@ -50,8 +50,7 @@
       </div>
     </div>
     <div>
-      <mat-icon class="expense-fields--delete-icon" *ngIf="showAddButton()" (click)="addExpenseField()">add_circle
-      </mat-icon>
+      <img class="expense-fields--add-icon" src="../../../../../assets/images/pngs/add.png" *ngIf="showAddButton()" (click)="addExpenseField()">
     </div>
 
     <button class="expense-fields--save-btn" mat-flat-button color="primary" [disabled]="!expenseFieldsForm.valid"

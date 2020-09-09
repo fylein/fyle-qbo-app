@@ -14,16 +14,28 @@ $text-error: #ff6e40;
     color: $fy-nav-text;
   }
 
-  &--icon {
-    font-size: 40px;
+  &--arrow-icon {
     text-align: center;
+    padding-bottom: 16px;
+    margin-left: 16px;
+    max-width: 20px;
+    max-height: 20px;
+  }
+
+  &--add-icon {
+    text-align: center;
+    cursor: pointer;
+    padding-left: 10px;
     padding-bottom: 25px;
+    max-width: 24px;
+    max-height: 24px;
   }
 
   &--delete-icon {
-    font-size: 30px;
     text-align: center;
     cursor: pointer;
+    max-width: 24px;
+    max-height: 24px;
     padding-left: 10px;
     padding-bottom: 25px;
   }

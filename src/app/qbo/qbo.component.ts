@@ -67,7 +67,7 @@ export class QboComponent implements OnInit {
   }
 
   getTitle(name: string) {
-    return name.replace('_', ' ');
+    return name.replace(/_/g, ' ');
   }
 
   getConfigurations() {

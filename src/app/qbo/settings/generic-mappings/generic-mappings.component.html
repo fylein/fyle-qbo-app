@@ -2,27 +2,27 @@
   <div>
     <div class="page-header mappings--header">
       <div class="page-header--name mat-h2">
-        {{ source_field.replace('_', ' ') | titlecase }} Mappings
+        {{ source_field.replace(/_/g, ' ') | titlecase }} Mappings
       </div>
     </div>
     <div class="page-info">
       <div fxLayout="row" fxLayoutAlign="start center" class="page-info--description">
-        Map {{ source_field.replace('_', ' ').toLowerCase() }} items from Fyle to their counterparts on Quickbooks Online. <a href="https://www.fylehq.com/help/en/articles/4284108-configuring-mappings-for-the-fyle-quickbooks-online-integration" target="_blank" rel="noopener noreferrer" class="read-more-link" fxLayout="row" fxLayoutAlign="start center">Read more<mat-icon class="read-more-link--icon">open_in_new</mat-icon></a>
+        Map {{ source_field.replace(/_/g, ' ').toLowerCase() }} items from Fyle to their counterparts on Quickbooks Online. <a href="https://www.fylehq.com/help/en/articles/4284108-configuring-mappings-for-the-fyle-quickbooks-online-integration" target="_blank" rel="noopener noreferrer" class="read-more-link" fxLayout="row" fxLayoutAlign="start center">Read more<mat-icon class="read-more-link--icon">open_in_new</mat-icon></a>
       </div>
       <button class="page-info--primary-action" mat-flat-button color="primary" type="button" (click)="open()">
-        New {{ source_field.replace('_', ' ') | titlecase }} Mapping
+        New {{ source_field.replace(/_/g, ' ') | titlecase }} Mapping
       </button>
     </div>
 
     <div *ngIf="!mappings.length">
-      <zero-state message="You have no {{ source_field.replace('_', ' ').toLowerCase() }} mappings yet"></zero-state>
+      <zero-state message="You have no {{ source_field.replace(/_/g, ' ').toLowerCase() }} mappings yet"></zero-state>
     </div>
 
     <div *ngIf="mappings.length" [hidden]="isLoading">
       <table mat-table [dataSource]="mappings" class="page-table" matSort matSortActive="created_at"
         matSortDisableClear matSortDirection="desc">
         <ng-container matColumnDef="sourceField">
-          <th mat-header-cell *matHeaderCellDef> {{ source_field.replace('_', ' ') | titlecase }} </th>
+          <th mat-header-cell *matHeaderCellDef> {{ source_field.replace(/_/g, ' ') | titlecase }} </th>
           <td mat-cell *matCellDef="let element">
             {{element.source.value}}
           </td>
@@ -30,7 +30,7 @@
 
         <ng-container matColumnDef="destinationField">
           <th mat-header-cell *matHeaderCellDef>
-            Quickbooks {{ setting.destination_field.replace('_', ' ') | titlecase }}
+            Quickbooks {{ setting.destination_field.replace(/_/g, ' ') | titlecase }}
           </th>
           <td mat-cell *matCellDef="let element">
             {{element.destination.value}}

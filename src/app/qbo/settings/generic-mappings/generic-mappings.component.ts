@@ -37,6 +37,9 @@ export class GenericMappingsComponent implements OnInit {
     });
   }
 
+  getTitle(name: string) {
+    return name.replace(/_/g, ' ');
+  }
 
   getMappings() {
     const that = this;

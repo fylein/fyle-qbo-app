@@ -16,11 +16,11 @@
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="mat-body-strong">
         <strong class="mappings-dialog--label">
-          Select a {{ setting.source_field.replace(/_/g, ' ') | titlecase }} from Fyle
+          Select a {{ getTitle(setting.source_field) | titlecase }} from Fyle
         </strong>
       </div>
       <mat-form-field class="mappings-dialog--field" appearance="outline">
-        <input required type="text" formControlName="sourceField" placeholder="Select Fyle {{ setting.source_field.replace(/_/g, ' ') | titlecase }}" matInput
+        <input required type="text" formControlName="sourceField" placeholder="Select Fyle {{ getTitle(setting.source_field) | titlecase }}" matInput
           [matAutocomplete]="fyProj" [errorStateMatcher]="matcher">
         <mat-autocomplete #fyProj="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of fyleAttributeOptions" [value]="option">

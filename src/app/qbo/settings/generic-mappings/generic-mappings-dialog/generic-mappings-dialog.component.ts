@@ -42,6 +42,10 @@ export class GenericMappingsDialogComponent implements OnInit {
     return mappingObject ? mappingObject.value : '';
   }
 
+  getTitle(name: string) {
+    return name.replace(/_/g, ' ');
+  }
+
   submit() {
     const that = this;
     if (that.form.valid) {

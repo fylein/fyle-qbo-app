@@ -63,7 +63,7 @@ export class SyncComponent implements OnInit {
     });
     
     const expensesGroupedBy = expensesGroupedByList.join(', ');
-    const expenseState: string = that.expenseGroupSettings.expense_states
+    const expenseState: string = that.expenseGroupSettings.expense_state
     var exportDateType = null;
 
     if (that.expenseGroupSettings.export_date_type === 'spent_at') {

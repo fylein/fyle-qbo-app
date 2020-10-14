@@ -71,7 +71,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
         })
       ];
 
-      if (creditCardAccount || that.generalSettings.corporate_credit_card_expenses_object) {
+      if (creditCardAccount || (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL')) {
         employeeMapping.push(
           that.mappingsService.postMappings({
             source_type: 'EMPLOYEE',
@@ -198,7 +198,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
         fyleEmployee: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleEmployees)])],
         qboVendor: ['', that.generalSettings.employee_field_mapping === 'VENDOR' ? that.forbiddenSelectionValidator(that.qboVendors) : null],
         qboEmployee: ['', that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.forbiddenSelectionValidator(that.qboEmployees) : null],
-        creditCardAccount: [defaultCCCObj || '', that.generalSettings.corporate_credit_card_expenses_object ? that.forbiddenSelectionValidator(that.cccObjects) : null]
+        creditCardAccount: [defaultCCCObj || '', (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL') ? that.forbiddenSelectionValidator(that.cccObjects) : null]
       });
       that.setupAutocompleteWatchers();
     });

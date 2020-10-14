@@ -94,7 +94,7 @@ export class ExpenseGroupsComponent implements OnInit {
     that.state = that.route.snapshot.queryParams.state || 'FAILED';
     that.settingsService.getCombinedSettings(that.workspaceId).subscribe((settings) => {
       if (that.state === 'COMPLETE') {
-        that.columnsToDisplay = ['employee', 'export', 'expensetype', 'openQbo'];
+        that.columnsToDisplay = ['export-date', 'employee', 'export', 'expensetype', 'openQbo'];
       } else {
         that.columnsToDisplay = ['employee', 'expensetype'];
       }
@@ -111,7 +111,7 @@ export class ExpenseGroupsComponent implements OnInit {
 
         if (that.pageNumber !== pageNumber || that.pageSize !== pageSize || that.state !== state) {
           if (state === 'COMPLETE') {
-            that.columnsToDisplay = ['employee', 'export', 'expensetype', 'openQbo'];
+            that.columnsToDisplay = ['export-date', 'employee', 'export', 'expensetype', 'openQbo'];
           } else {
             that.columnsToDisplay = ['employee', 'expensetype'];
           }

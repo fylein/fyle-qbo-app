@@ -329,17 +329,8 @@ export class MappingsService {
     );
   }
   // TODO: Replace any with proper model
-  postGeneralMappings(accountsPayableId: string, accountsPayableName: string, bankAccountId: string, bankAccountName: string, defaultCCCAccountId: string, defaultCCCAccountName: string): Observable<any> {
-    this.qboAccounts = null;
+  postGeneralMappings(generalMappings: any) {
     const workspaceId = this.workspaceService.getWorkspaceId();
-    const generalMappings = {
-      accounts_payable_id: accountsPayableId,
-      accounts_payable_name: accountsPayableName,
-      bank_account_id: bankAccountId,
-      bank_account_name: bankAccountName,
-      default_ccc_account_id: defaultCCCAccountId,
-      default_ccc_account_name: defaultCCCAccountName
-    };
     return this.apiService.post(`/workspaces/${workspaceId}/mappings/general/`, generalMappings);
   }
 

@@ -53,6 +53,8 @@ import { ExpenseFieldConfigurationComponent } from './settings/configuration/exp
 import { GenericMappingsComponent } from './settings/generic-mappings/generic-mappings.component';
 import { GenericMappingsDialogComponent } from './settings/generic-mappings/generic-mappings-dialog/generic-mappings-dialog.component';
 import { ExpenseGroupSettingsDialogComponent } from './sync-export/sync/expense-group-settings-dialog/expense-group-settings-dialog.component';
+import { EditEmployeeMappingsDialogComponent } from './settings/employee-mappings/edit-employee-mappings-dialog/edit-employee-mappings-dialog.component';
+import { EditGenericMappingsDialogComponent } from './settings/generic-mappings/edit-generic-mappings-dialog/edit-generic-mappings-dialog.component';
 
 @NgModule({
   declarations: [
@@ -77,12 +79,16 @@ import { ExpenseGroupSettingsDialogComponent } from './sync-export/sync/expense-
     ExpenseFieldConfigurationComponent,
     GenericMappingsComponent,
     GenericMappingsDialogComponent,
-    ExpenseGroupSettingsDialogComponent
+    ExpenseGroupSettingsDialogComponent,
+    EditEmployeeMappingsDialogComponent,
+    EditGenericMappingsDialogComponent
   ],
   entryComponents: [
     EmployeeMappingsDialogComponent,
     GenericMappingsDialogComponent,
-    ExpenseGroupSettingsDialogComponent
+    ExpenseGroupSettingsDialogComponent,
+    EditEmployeeMappingsDialogComponent,
+    EditGenericMappingsDialogComponent
   ],
   imports: [
     CommonModule,

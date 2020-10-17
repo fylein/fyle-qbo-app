@@ -29,6 +29,7 @@ export class GenericMappingsDialogComponent implements OnInit {
   fyleAttributeOptions: any[];
   qboOptions: any[];
   setting: any;
+  editMapping: boolean;
   matcher = new MappingErrorStateMatcher();
 
   constructor(private formBuilder: FormBuilder,
@@ -53,7 +54,7 @@ export class GenericMappingsDialogComponent implements OnInit {
       that.mappingsService.postMappings({
         source_type: that.setting.source_field,
         destination_type: that.setting.destination_field,
-        source_value: that.form.controls.sourceField.value.value,
+        source_value: that.editMapping ? that.form.controls.sourceField.value : that.form.controls.sourceField.value.value,
         destination_value: that.form.controls.destinationField.value.value
       }).subscribe(response => {
         that.snackBar.open('Mapping saved successfully');
@@ -146,9 +147,13 @@ export class GenericMappingsDialogComponent implements OnInit {
     ]).subscribe(() => {
       that.isLoading = false;
       that.form = that.formBuilder.group({
-        sourceField: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleAttributes)])],
+        sourceField: [that.editMapping ? that.data.fyleValue.source.value : Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleAttributes)])],
         destinationField: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.qboElements)])]
       });
+
+      if(that.editMapping) {
+        that.form.controls.sourceField.disable()
+      }
 
       that.setupAutcompleteWathcers();
     });
@@ -159,6 +164,10 @@ export class GenericMappingsDialogComponent implements OnInit {
     that.isLoading = true;
 
     that.setting = that.data.setting;
+    
+    if (that.data.fyleValue) {
+      that.editMapping = true;
+    }
     
     that.isLoading = false;
     that.reset();

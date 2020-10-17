@@ -1,11 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormGroupDirective, NgForm, ValidatorFn, AbstractControl } from '@angular/forms';
-import { Observable } from 'rxjs/internal/Observable';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
-import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged';
-import { filter } from 'rxjs/internal/operators/filter';
-import { map } from 'rxjs/internal/operators/map';
-import { ActivatedRoute } from '@angular/router';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { forkJoin, from } from 'rxjs';
@@ -39,6 +34,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
   cccOptions: any[];
   qboVendorOptions: any[];
   generalMappings: any;
+  editMapping: boolean;
 
   matcher = new MappingErrorStateMatcher();
 
@@ -56,7 +52,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
 
   submit() {
     const that = this;
-    const fyleEmployee = that.form.value.fyleEmployee;
+    const fyleEmployee = that.editMapping ? that.form.controls.fyleEmployee : that.form.value.fyleEmployee;
     const qboVendor = that.generalSettings.employee_field_mapping === 'VENDOR' ? that.form.value.qboVendor : '';
     const qboEmployee = that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.form.value.qboEmployee : '';
     const creditCardAccount = that.form.value.creditCardAccount ? that.form.value.creditCardAccount.value : that.generalMappings.default_ccc_account_name;
@@ -195,11 +191,16 @@ export class EmployeeMappingsDialogComponent implements OnInit {
       const defaultCCCObj = that.cccObjects.filter(cccObj => cccObj.value === that.generalMappings.default_ccc_account_name)[0];
       that.isLoading = false;
       that.form = that.formBuilder.group({
-        fyleEmployee: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleEmployees)])],
+        fyleEmployee: [that.editMapping ? that.data.fyleEmployeeValue : Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleEmployees)])],
         qboVendor: ['', that.generalSettings.employee_field_mapping === 'VENDOR' ? that.forbiddenSelectionValidator(that.qboVendors) : null],
         qboEmployee: ['', that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.forbiddenSelectionValidator(that.qboEmployees) : null],
         creditCardAccount: [defaultCCCObj || '', (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL') ? that.forbiddenSelectionValidator(that.cccObjects) : null]
       });
+
+      if(that.editMapping) {
+        that.form.controls.fyleEmployee.disable()
+      }
+
       that.setupAutocompleteWatchers();
     });
   }
@@ -207,6 +208,11 @@ export class EmployeeMappingsDialogComponent implements OnInit {
   ngOnInit() {
     const that = this;
     that.workSpaceId = that.data.workspaceId;
+
+    if (that.data.fyleEmployeeValue) {
+      that.editMapping = true;
+    }
+    
     that.isLoading = true;
     that.settingsService.getCombinedSettings(that.workSpaceId).subscribe(settings => {
       that.generalSettings = settings;

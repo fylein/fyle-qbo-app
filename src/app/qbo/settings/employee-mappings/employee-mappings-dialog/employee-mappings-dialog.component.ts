@@ -189,11 +189,13 @@ export class EmployeeMappingsDialogComponent implements OnInit {
       from(getGeneralMappings)
     ]).subscribe((res) => {
       const defaultCCCObj = that.cccObjects.filter(cccObj => cccObj.value === that.generalMappings.default_ccc_account_name)[0];
+      const defaultVendor = that.editMapping ? that.qboVendors.filter(vendor => vendor.value === that.data.rowElement.qbo_value)[0] : '';
+      const defaultQBOEmployee = that.editMapping ? that.qboEmployees.filter(employee => employee.value === that.data.rowElement.qbo_value)[0] : '';
       that.isLoading = false;
       that.form = that.formBuilder.group({
-        fyleEmployee: [that.editMapping ? that.data.fyleEmployeeValue : Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleEmployees)])],
-        qboVendor: ['', that.generalSettings.employee_field_mapping === 'VENDOR' ? that.forbiddenSelectionValidator(that.qboVendors) : null],
-        qboEmployee: ['', that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.forbiddenSelectionValidator(that.qboEmployees) : null],
+        fyleEmployee: [that.editMapping ? that.data.rowElement.fyle_value : Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleEmployees)])],
+        qboVendor: [that.generalSettings.employee_field_mapping === 'VENDOR' && that.editMapping ? defaultVendor : that.forbiddenSelectionValidator(that.qboVendors)],
+        qboEmployee: [that.generalSettings.employee_field_mapping === 'EMPLOYEE' && that.editMapping ? defaultQBOEmployee : that.forbiddenSelectionValidator(that.qboEmployees)],
         creditCardAccount: [defaultCCCObj || '', (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL') ? that.forbiddenSelectionValidator(that.cccObjects) : null]
       });
 
@@ -209,7 +211,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
     const that = this;
     that.workSpaceId = that.data.workspaceId;
 
-    if (that.data.fyleEmployeeValue) {
+    if (that.data.rowElement) {
       that.editMapping = true;
     }
     

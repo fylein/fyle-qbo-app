@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm, ValidatorFn, AbstractControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MappingsService } from 'src/app/core/services/mappings.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, from } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from 'src/app/core/services/settings.service';
@@ -83,7 +83,7 @@ export class GenericMappingsDialogComponent implements OnInit {
     };
   }
 
-  setupAttributeWatcher() {
+  setupSourceFieldAutocompleteWatcher() {
     const that = this;
 
     that.form.controls.sourceField.valueChanges.pipe(debounceTime(300)).subscribe((newValue) => {
@@ -94,7 +94,7 @@ export class GenericMappingsDialogComponent implements OnInit {
     });
   }
 
-  setupQboObjectWatcher() {
+  setupDestinationFieldAutocompleteWatcher() {
     const that = this;
 
     that.form.controls.destinationField.valueChanges.pipe(debounceTime(300)).subscribe((newValue) => {
@@ -107,8 +107,8 @@ export class GenericMappingsDialogComponent implements OnInit {
 
   setupAutcompleteWathcers() {
     const that = this;
-    that.setupAttributeWatcher();
-    that.setupQboObjectWatcher();
+    that.setupSourceFieldAutocompleteWatcher();
+    that.setupDestinationFieldAutocompleteWatcher();
   }
 
   reset() {
@@ -142,13 +142,14 @@ export class GenericMappingsDialogComponent implements OnInit {
     that.isLoading = true;
     // TODO: remove promises and do with rxjs observables
     forkJoin([
-      getFyleAttributes,
-      qboPromise
-    ]).subscribe(() => {
+      from(getFyleAttributes),
+      from(qboPromise)
+    ]).subscribe((res) => {
       that.isLoading = false;
+      const defaultQBOEmployee = that.editMapping ? that.qboElements.filter(employee => employee.value === that.data.rowElement.destination.value)[0] : '';
       that.form = that.formBuilder.group({
-        sourceField: [that.editMapping ? that.data.fyleValue.source.value : Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleAttributes)])],
-        destinationField: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.qboElements)])]
+        sourceField: [that.editMapping ? that.data.rowElement.source.value : Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleAttributes)])],
+        destinationField: [that.editMapping ? defaultQBOEmployee : that.forbiddenSelectionValidator(that.qboElements)]
       });
 
       if(that.editMapping) {
@@ -165,7 +166,7 @@ export class GenericMappingsDialogComponent implements OnInit {
 
     that.setting = that.data.setting;
     
-    if (that.data.fyleValue) {
+    if (that.data.rowElement) {
       that.editMapping = true;
     }
     

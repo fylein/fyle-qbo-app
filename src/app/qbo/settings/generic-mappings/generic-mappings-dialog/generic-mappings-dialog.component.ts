@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm, ValidatorFn, AbstractControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MappingsService } from 'src/app/core/services/mappings.service';
-import { forkJoin, from } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from 'src/app/core/services/settings.service';
@@ -142,9 +142,9 @@ export class GenericMappingsDialogComponent implements OnInit {
     that.isLoading = true;
     // TODO: remove promises and do with rxjs observables
     forkJoin([
-      from(getFyleAttributes),
-      from(qboPromise)
-    ]).subscribe((res) => {
+      getFyleAttributes,
+      qboPromise
+    ]).subscribe(() => {
       that.isLoading = false;
       const sourceField = that.editMapping ? that.fyleAttributes.filter(sourceField => sourceField.value === that.data.rowElement.source.value)[0] : '';
       const destinationField = that.editMapping ? that.qboElements.filter(destinationField => destinationField.value === that.data.rowElement.destination.value)[0] : '';

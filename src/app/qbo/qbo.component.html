@@ -13,12 +13,12 @@
       </a>
 
       <a class="mat-h2 qbo-sidenav--nav-item" [ngClass]="{'qbo-sidenav--nav-item__disabled': navDisabled}" mat-list-item routerLink="{{workspace.id}}/sync_export/sync"
-        routerLinkActive="active">
+        routerLinkActive="active" (click)="isOnboardingCompleted()">
         Import & Export
       </a>
 
       <a class="mat-h2 qbo-sidenav--nav-item" [ngClass]="{'qbo-sidenav--nav-item__disabled': navDisabled}" mat-list-item routerLink="{{workspace.id}}/expense_groups/"
-        routerLinkActive="active">
+        routerLinkActive="active" (click)="isOnboardingCompleted()">
         Expense Groups
       </a>
 
@@ -34,11 +34,11 @@
         General Mappings
       </a>
       <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item
-        routerLink="{{workspace.id}}/settings/employee_mappings/" routerLinkActive="active">
+        routerLink="{{workspace.id}}/settings/employee_mappings/" routerLinkActive="active" (click)="isOnboardingCompleted()">
         Employee Mappings
       </a>
       <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item
-        routerLink="{{workspace.id}}/settings/category/mappings/" routerLinkActive="active">
+        routerLink="{{workspace.id}}/settings/category/mappings/" routerLinkActive="active" (click)="isOnboardingCompleted()">
         Category Mappings
       </a>
       <div *ngFor="let setting of mappingSettings">
@@ -48,7 +48,7 @@
        </a>
       </div>
       <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item routerLink="{{workspace.id}}/settings/schedule/"
-        routerLinkActive="active">
+        routerLinkActive="active" (click)="isOnboardingCompleted()">
         Automated Import/Export
       </a>
     </mat-nav-list>

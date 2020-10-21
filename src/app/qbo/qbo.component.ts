@@ -7,6 +7,7 @@ import { SettingsService } from '../core/services/settings.service';
 import { BillsService } from '../core/services/bills.service';
 import { StorageService } from '../core/services/storage.service';
 import { WindowReferenceService } from '../core/services/window.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-qbo',
@@ -34,6 +35,7 @@ export class QboComponent implements OnInit {
     private authService: AuthService,
     private billService: BillsService,
     private storageService: StorageService,
+    private snackBar: MatSnackBar,
     private windowReferenceService: WindowReferenceService) {
     this.windowReference = this.windowReferenceService.nativeWindow;
   }
@@ -123,6 +125,15 @@ export class QboComponent implements OnInit {
     that.billService.getOrgDetails().subscribe((res) => {
       that.qboCompanyName = res.CompanyName;
     });
+  }
+
+  isOnboardingCompleted() {
+    const that = this;
+    const onboarded = that.storageService.get('onboarded');
+    if(!onboarded) {
+      that.router.navigateByUrl(`/workspaces/${that.workspace.id}/dashboard`);
+      that.snackBar.open('You cannot access this page yet. Please follow the onboarding steps in the dashboard');
+    }
   }
 
   ngOnInit() {

@@ -29,6 +29,7 @@ export class GenericMappingsDialogComponent implements OnInit {
   fyleAttributeOptions: any[];
   qboOptions: any[];
   setting: any;
+  editMapping: boolean;
   matcher = new MappingErrorStateMatcher();
 
   constructor(private formBuilder: FormBuilder,
@@ -82,7 +83,7 @@ export class GenericMappingsDialogComponent implements OnInit {
     };
   }
 
-  setupAttributeWatcher() {
+  setupSourceFieldAutocompleteWatcher() {
     const that = this;
 
     that.form.controls.sourceField.valueChanges.pipe(debounceTime(300)).subscribe((newValue) => {
@@ -93,7 +94,7 @@ export class GenericMappingsDialogComponent implements OnInit {
     });
   }
 
-  setupQboObjectWatcher() {
+  setupDestinationFieldAutocompleteWatcher() {
     const that = this;
 
     that.form.controls.destinationField.valueChanges.pipe(debounceTime(300)).subscribe((newValue) => {
@@ -106,8 +107,8 @@ export class GenericMappingsDialogComponent implements OnInit {
 
   setupAutcompleteWathcers() {
     const that = this;
-    that.setupAttributeWatcher();
-    that.setupQboObjectWatcher();
+    that.setupSourceFieldAutocompleteWatcher();
+    that.setupDestinationFieldAutocompleteWatcher();
   }
 
   reset() {
@@ -145,10 +146,16 @@ export class GenericMappingsDialogComponent implements OnInit {
       qboPromise
     ]).subscribe(() => {
       that.isLoading = false;
+      const sourceField = that.editMapping ? that.fyleAttributes.filter(sourceField => sourceField.value === that.data.rowElement.source.value)[0] : '';
+      const destinationField = that.editMapping ? that.qboElements.filter(destinationField => destinationField.value === that.data.rowElement.destination.value)[0] : '';
       that.form = that.formBuilder.group({
-        sourceField: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleAttributes)])],
-        destinationField: ['', Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.qboElements)])]
+        sourceField: [that.editMapping ? sourceField : Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleAttributes)])],
+        destinationField: [that.editMapping ? destinationField : that.forbiddenSelectionValidator(that.qboElements)]
       });
+
+      if(that.editMapping) {
+        that.form.controls.sourceField.disable()
+      }
 
       that.setupAutcompleteWathcers();
     });
@@ -159,6 +166,10 @@ export class GenericMappingsDialogComponent implements OnInit {
     that.isLoading = true;
 
     that.setting = that.data.setting;
+    
+    if (that.data.rowElement) {
+      that.editMapping = true;
+    }
     
     that.isLoading = false;
     that.reset();

@@ -54,7 +54,7 @@ export class GenericMappingsDialogComponent implements OnInit {
       that.mappingsService.postMappings({
         source_type: that.setting.source_field,
         destination_type: that.setting.destination_field,
-        source_value: that.editMapping ? that.form.controls.sourceField.value : that.form.controls.sourceField.value.value,
+        source_value: that.form.controls.sourceField.value.value,
         destination_value: that.form.controls.destinationField.value.value
       }).subscribe(response => {
         that.snackBar.open('Mapping saved successfully');
@@ -146,10 +146,11 @@ export class GenericMappingsDialogComponent implements OnInit {
       from(qboPromise)
     ]).subscribe((res) => {
       that.isLoading = false;
-      const defaultQBOEmployee = that.editMapping ? that.qboElements.filter(employee => employee.value === that.data.rowElement.destination.value)[0] : '';
+      const sourceField = that.editMapping ? that.fyleAttributes.filter(sourceField => sourceField.value === that.data.rowElement.source.value)[0] : '';
+      const destinationField = that.editMapping ? that.qboElements.filter(destinationField => destinationField.value === that.data.rowElement.destination.value)[0] : '';
       that.form = that.formBuilder.group({
-        sourceField: [that.editMapping ? that.data.rowElement.source.value : Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleAttributes)])],
-        destinationField: [that.editMapping ? defaultQBOEmployee : that.forbiddenSelectionValidator(that.qboElements)]
+        sourceField: [that.editMapping ? sourceField : Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleAttributes)])],
+        destinationField: [that.editMapping ? destinationField : that.forbiddenSelectionValidator(that.qboElements)]
       });
 
       if(that.editMapping) {

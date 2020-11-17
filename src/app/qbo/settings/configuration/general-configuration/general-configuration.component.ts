@@ -72,7 +72,8 @@ export class GeneralConfigurationComponent implements OnInit {
       that.generalSettingsForm = that.formBuilder.group({
         reimburExpense: [that.generalSettings ? that.generalSettings.reimbursable_expenses_object : ''],
         cccExpense: [that.generalSettings ? that.generalSettings.corporate_credit_card_expenses_object : ''],
-        employees: [that.employeeFieldMapping ? that.employeeFieldMapping.destination_field : '']
+        employees: [that.employeeFieldMapping ? that.employeeFieldMapping.destination_field : ''],
+        importProjects: [that.generalSettings.import_projects]
       });
 
       if (that.generalSettings.reimbursable_expenses_object) {
@@ -98,10 +99,6 @@ export class GeneralConfigurationComponent implements OnInit {
         that.generalSettingsForm.controls.cccExpense.disable();
       }
 
-      if (that.generalSettings.corporate_credit_card_expenses_object) {
-        that.isSaveDisabled = true;
-      }
-
       that.isLoading = false;
     }, error => {
       that.generalSettings = {};
@@ -110,7 +107,8 @@ export class GeneralConfigurationComponent implements OnInit {
       that.generalSettingsForm = that.formBuilder.group({
         employees: ['', Validators.required],
         reimburExpense: ['', Validators.required],
-        cccExpense: [null]
+        cccExpense: [null],
+        importProjects: [false]
       });
 
       that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
@@ -131,7 +129,8 @@ export class GeneralConfigurationComponent implements OnInit {
       const reimbursableExpensesObject = that.generalSettingsForm.value.reimburExpense || that.generalSettings.reimbursable_expenses_object;
       const cccExpensesObject = that.generalSettingsForm.value.cccExpense || that.generalSettings.corporate_credit_card_expenses_object;
       const employeeMappingsObject = that.generalSettingsForm.value.employees || (that.employeeFieldMapping && that.employeeFieldMapping.destination_field);
-
+      const importProjects = that.generalSettingsForm.value.importProjects;
+      
       if (cccExpensesObject) {
         mappingsSettingsPayload.push({
           source_field: 'EMPLOYEE',
@@ -148,7 +147,7 @@ export class GeneralConfigurationComponent implements OnInit {
       forkJoin(
         [
           that.settingsService.postMappingSettings(that.workspaceId, mappingsSettingsPayload),
-          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject)
+          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importProjects)
         ]
       ).subscribe(responses => {
         that.isLoading = true;

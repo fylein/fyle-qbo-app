@@ -51,8 +51,8 @@ export class GeneralConfigurationComponent implements OnInit {
   showImportProjects() {
     const that = this;
     const projectSetting = that.mappingSettings.filter(setting => setting.source_field === 'PROJECT')[0];
-    console.log(projectSetting);
-    if (projectSetting && projectSetting.destination_field === 'CUSTOMER') {
+
+    if (!projectSetting || projectSetting.destination_field === 'CUSTOMER') {
       return true;
     }
     return false;

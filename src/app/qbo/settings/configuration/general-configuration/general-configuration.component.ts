@@ -83,6 +83,7 @@ export class GeneralConfigurationComponent implements OnInit {
         reimburExpense: [that.generalSettings ? that.generalSettings.reimbursable_expenses_object : ''],
         cccExpense: [that.generalSettings ? that.generalSettings.corporate_credit_card_expenses_object : ''],
         employees: [that.employeeFieldMapping ? that.employeeFieldMapping.destination_field : ''],
+        importCategories: [that.generalSettings.import_categories],
         importProjects: [that.generalSettings.import_projects]
       });
 
@@ -118,6 +119,7 @@ export class GeneralConfigurationComponent implements OnInit {
         employees: ['', Validators.required],
         reimburExpense: ['', Validators.required],
         cccExpense: [null],
+        importCategories: [false],
         importProjects: [false]
       });
 
@@ -139,6 +141,7 @@ export class GeneralConfigurationComponent implements OnInit {
       const reimbursableExpensesObject = that.generalSettingsForm.value.reimburExpense || that.generalSettings.reimbursable_expenses_object;
       const cccExpensesObject = that.generalSettingsForm.value.cccExpense || that.generalSettings.corporate_credit_card_expenses_object;
       const employeeMappingsObject = that.generalSettingsForm.value.employees || (that.employeeFieldMapping && that.employeeFieldMapping.destination_field);
+      const importCategories = that.generalSettingsForm.value.importCategories;
       const importProjects = that.generalSettingsForm.value.importProjects;
       
       if (cccExpensesObject) {
@@ -157,7 +160,7 @@ export class GeneralConfigurationComponent implements OnInit {
       forkJoin(
         [
           that.settingsService.postMappingSettings(that.workspaceId, mappingsSettingsPayload),
-          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importProjects)
+          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importCategories, importProjects)
         ]
       ).subscribe(responses => {
         that.isLoading = true;

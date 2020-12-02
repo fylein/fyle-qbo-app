@@ -194,9 +194,9 @@ export class EmployeeMappingsDialogComponent implements OnInit {
       const defaultCCCObj = that.cccObjects.filter(cccObj => cccObj.value === that.generalMappings.default_ccc_account_name)[0];
       that.isLoading = false;
       that.form = that.formBuilder.group({
-        fyleEmployee: [that.editMapping ? fyleEmployee : Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleEmployees)])],
-        qboVendor: [that.generalSettings.employee_field_mapping === 'VENDOR' && that.editMapping ? qboVendor : that.forbiddenSelectionValidator(that.qboVendors)],
-        qboEmployee: [that.generalSettings.employee_field_mapping === 'EMPLOYEE' && that.editMapping ? qboEmployee : that.forbiddenSelectionValidator(that.qboEmployees)],
+        fyleEmployee: [fyleEmployee, Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleEmployees)])],
+        qboVendor: [qboVendor, that.generalSettings.employee_field_mapping === 'VENDOR' ? that.forbiddenSelectionValidator(that.qboVendors) : ''],
+        qboEmployee: [qboEmployee, that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.forbiddenSelectionValidator(that.qboEmployees) : ''],
         creditCardAccount: [defaultCCCObj || '', (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL') ? that.forbiddenSelectionValidator(that.cccObjects) : null]
       });
 

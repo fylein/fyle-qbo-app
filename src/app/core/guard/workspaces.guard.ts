@@ -50,12 +50,12 @@ export class WorkspacesGuard implements CanActivate {
         }
         const onboarded = that.storageService.get('onboarded');
         if (!onboarded) {
-          that.snackBar.open('You cannot access this page yet. Please follow the onboarding steps in the dashboard');
+          that.snackBar.open('You cannot access this page yet. Please follow the onboarding steps in the dashboard or refresh your page');
           return;
         }
 
         return that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`).then((res) => {
-          that.snackBar.open('You cannot access this page yet. Please follow the onboarding steps in the dashboard');
+          that.snackBar.open('You cannot access this page yet. Please follow the onboarding steps in the dashboard or refresh your page');
           return res;
         });
       })

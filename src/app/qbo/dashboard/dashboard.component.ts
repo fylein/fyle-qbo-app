@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin, concat } from 'rxjs';
+import { forkJoin, onErrorResumeNext } from 'rxjs';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { environment } from 'src/environments/environment';
 import { ExpenseGroupsService } from 'src/app/core/services/expense-groups.service';
@@ -166,7 +166,7 @@ export class DashboardComponent implements OnInit {
   // to be callled in background whenever dashboard is opened for sncing fyle data for org
   updateDimensionTables() {
     const that = this;
-    concat(
+    onErrorResumeNext(
       this.mappingsService.postAccountsPayables(),
       this.mappingsService.postBankAccounts(),
       this.mappingsService.postExpenseAccounts(),
@@ -221,6 +221,7 @@ export class DashboardComponent implements OnInit {
           return that.loadDashboardData();
         }).catch(() => {
           // do nothing as this just means some steps are left
+          that.storageService.set('onboarded', false);
         }).finally(() => {
           that.isLoading = false;
         });

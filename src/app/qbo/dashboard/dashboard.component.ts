@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from 'src/app/core/services/settings.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, onErrorResumeNext } from 'rxjs';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { environment } from 'src/environments/environment';
 import { ExpenseGroupsService } from 'src/app/core/services/expense-groups.service';
 import { StorageService } from 'src/app/core/services/storage.service';
 import { WindowReferenceService } from 'src/app/core/services/window.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 const FYLE_URL = environment.fyle_url;
 const FYLE_CLIENT_ID = environment.fyle_client_id;
@@ -51,6 +52,8 @@ export class DashboardComponent implements OnInit {
     private expenseGroupService: ExpenseGroupsService,
     private settingsService: SettingsService,
     private route: ActivatedRoute,
+    private router: Router,
+    private snackBar: MatSnackBar,
     private mappingsService: MappingsService,
     private storageService: StorageService,
     private windowReferenceService: WindowReferenceService) {
@@ -166,21 +169,22 @@ export class DashboardComponent implements OnInit {
   // to be callled in background whenever dashboard is opened for sncing fyle data for org
   updateDimensionTables() {
     const that = this;
+    that.mappingsService.postFyleEmployees().subscribe(() => {});
+    that.mappingsService.postFyleCategories().subscribe(() => {});
+    that.mappingsService.postFyleCostCenters().subscribe(() => {});
+    that.mappingsService.postFyleProjects().subscribe(() => {});
+    that.mappingsService.postExpenseCustomFields().subscribe(() => {});
+
     onErrorResumeNext(
-      this.mappingsService.postAccountsPayables(),
-      this.mappingsService.postBankAccounts(),
-      this.mappingsService.postExpenseAccounts(),
-      this.mappingsService.postCreditCardAccounts(),
-      this.mappingsService.postQBOEmployees(),
-      this.mappingsService.postQBOVendors(),
-      this.mappingsService.postQBOCustomers(),
-      this.mappingsService.postQBOClasses(),
-      this.mappingsService.postQBODepartments(),
-      this.mappingsService.postFyleEmployees(),
-      this.mappingsService.postFyleCategories(),
-      this.mappingsService.postFyleCostCenters(),
-      this.mappingsService.postFyleProjects(),
-      this.mappingsService.postExpenseCustomFields()
+      that.mappingsService.postAccountsPayables(),
+      that.mappingsService.postBankAccounts(),
+      that.mappingsService.postExpenseAccounts(),
+      that.mappingsService.postCreditCardAccounts(),
+      that.mappingsService.postQBOEmployees(),
+      that.mappingsService.postQBOVendors(),
+      that.mappingsService.postQBOCustomers(),
+      that.mappingsService.postQBOClasses(),
+      that.mappingsService.postQBODepartments()
     ).subscribe(() => {
       // that.snackBar.open('All employee data synced from your fyle account');
     });
@@ -198,9 +202,17 @@ export class DashboardComponent implements OnInit {
     const onboarded = that.storageService.get('onboarded');
 
     if (onboarded === true) {
-      that.currentState = onboardingStates.isOnboarded;
       that.updateDimensionTables();
       that.loadDashboardData();
+      that.getQboStatus().then(() => {
+        that.currentState = onboardingStates.isOnboarded;
+      }).catch(() => {
+        that.storageService.set('onboarded', false);
+        that.snackBar.open('Quickbooks Online token expired, please connect Quickbooks Online account');
+        setTimeout(() => {
+          that.windowReference.location.reload();
+        }, 3000);
+      })
     } else {
       that.isLoading = true;
       that.checkFyleLoginStatus()

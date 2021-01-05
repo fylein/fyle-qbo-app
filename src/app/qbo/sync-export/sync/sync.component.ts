@@ -17,7 +17,7 @@ import { WorkspaceService } from 'src/app/core/services/workspace.service';
 export class SyncComponent implements OnInit {
 
   workspaceId: number;
-  lastTask: any;
+  workspace: any;
   isLoading: boolean;
   isExpensesSyncing: boolean;
   isEmployeesSyncing: boolean;
@@ -107,7 +107,7 @@ export class SyncComponent implements OnInit {
     )
 
     .subscribe((res) => {
-      that.lastTask = res[0];
+      that.workspace = res[0];
       that.expenseGroupSettings = res[1];
       that.isLoading = false;
     });

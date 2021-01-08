@@ -34,7 +34,7 @@ export class ConfigurationComponent implements OnInit {
     }
 
     return false;
-  } 
+  }
 
   ngOnInit() {
     const that = this;

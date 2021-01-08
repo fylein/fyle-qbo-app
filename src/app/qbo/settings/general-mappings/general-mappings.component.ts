@@ -18,7 +18,7 @@ export class GeneralMappingsComponent implements OnInit {
   accountPayableAccounts: any[];
   bankAccounts: any[];
   cccAccounts: any[];
-  qboVendors: any[]
+  qboVendors: any[];
   generalMappings: any;
   generalSettings: any;
   isLoading = true;
@@ -49,8 +49,8 @@ export class GeneralMappingsComponent implements OnInit {
     const bankAccountId = that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.form.value.bankAccounts : '';
     const bankAccount = that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.bankAccounts.filter(filteredBankAccount => filteredBankAccount.destination_id === bankAccountId)[0] : '';
 
-    let cccAccountId = that.generalSettings.corporate_credit_card_expenses_object !== 'BILL' ? that.form.value.cccAccounts : '';
-    let cccAccount = that.generalSettings.corporate_credit_card_expenses_object !== 'BILL' ? that.cccAccounts.filter(filteredCCCAccount => filteredCCCAccount.destination_id === cccAccountId)[0] : '';
+    const cccAccountId = that.generalSettings.corporate_credit_card_expenses_object !== 'BILL' ? that.form.value.cccAccounts : '';
+    const cccAccount = that.generalSettings.corporate_credit_card_expenses_object !== 'BILL' ? that.cccAccounts.filter(filteredCCCAccount => filteredCCCAccount.destination_id === cccAccountId)[0] : '';
 
     const defaultVendorId = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.form.value.qboVendors : '';
     const defaultVendor = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.qboVendors.filter(filteredVendor => filteredVendor.destination_id === defaultVendorId)[0] : '';
@@ -69,10 +69,6 @@ export class GeneralMappingsComponent implements OnInit {
     }
     if (cccAccountId === null) {
       this.cccAccountIsValid = true;
-      cccAccount = {
-        'value' : null,
-        'destination_id': null
-      }
     }
 
     const generalMappings = {
@@ -80,8 +76,8 @@ export class GeneralMappingsComponent implements OnInit {
       accounts_payable_id: accountPayableAccount.destination_id,
       bank_account_name: bankAccount.value,
       bank_account_id: bankAccount.destination_id,
-      default_ccc_account_name: cccAccount.value,
-      default_ccc_account_id: cccAccount.destination_id,
+      default_ccc_account_name: cccAccount ? cccAccount.value : null,
+      default_ccc_account_id: cccAccount ? cccAccount.destination_id : null,
       default_ccc_vendor_name: defaultVendor.value,
       default_ccc_vendor_id: defaultVendor.destination_id
     };

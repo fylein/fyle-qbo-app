@@ -30,7 +30,7 @@ export class BillsService {
 
   UpdateExpenseGroupingIfDepartmentAdded() {
     const workspaceId = this.workspaceService.getWorkspaceId();
-    return this.apiService.post(`/workspaces/${workspaceId}/qbo/update_grouping_on_department/`, {})
+    return this.apiService.post(`/workspaces/${workspaceId}/qbo/update_grouping_on_department/`, {});
   }
 
   // TODO: Map response to a model

@@ -71,7 +71,7 @@ export class ExportComponent implements OnInit {
       'CREDIT CARD PURCHASE': (filteredIds) => {
         return that.creditCardService.createCreditCardPurchases(filteredIds);
       },
-      'BILL': (filteredIds) => {
+      BILL: (filteredIds) => {
         return that.billsService.createBills(filteredIds);
       }
     };

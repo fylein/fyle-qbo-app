@@ -143,7 +143,7 @@ export class GeneralConfigurationComponent implements OnInit {
       const employeeMappingsObject = that.generalSettingsForm.value.employees || (that.employeeFieldMapping && that.employeeFieldMapping.destination_field);
       const importCategories = that.generalSettingsForm.value.importCategories;
       const importProjects = that.generalSettingsForm.value.importProjects;
-      
+
       if (cccExpensesObject) {
         mappingsSettingsPayload.push({
           source_field: 'EMPLOYEE',

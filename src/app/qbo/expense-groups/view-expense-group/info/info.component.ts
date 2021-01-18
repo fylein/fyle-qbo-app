@@ -42,7 +42,7 @@ export class InfoComponent implements OnInit {
   getTitle(name: string) {
     return name.replace(/_/g, ' ');
   }
-  
+
   initExpenseGroupExpenses() {
     const that = this;
     // TODO: remove promises and do with rxjs observables

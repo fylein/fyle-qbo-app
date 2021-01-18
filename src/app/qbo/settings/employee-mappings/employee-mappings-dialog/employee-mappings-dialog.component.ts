@@ -39,11 +39,11 @@ export class EmployeeMappingsDialogComponent implements OnInit {
   matcher = new MappingErrorStateMatcher();
 
   constructor(private formBuilder: FormBuilder,
-    public dialogRef: MatDialogRef<EmployeeMappingsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private mappingsService: MappingsService,
-    private snackBar: MatSnackBar,
-    private settingsService: SettingsService) { }
+              public dialogRef: MatDialogRef<EmployeeMappingsDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private mappingsService: MappingsService,
+              private snackBar: MatSnackBar,
+              private settingsService: SettingsService) { }
 
 
   mappingDisplay(mappingObject) {
@@ -200,8 +200,8 @@ export class EmployeeMappingsDialogComponent implements OnInit {
         creditCardAccount: [defaultCCCObj || '', (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL') ? that.forbiddenSelectionValidator(that.cccObjects) : null]
       });
 
-      if(that.editMapping) {
-        that.form.controls.fyleEmployee.disable()
+      if (that.editMapping) {
+        that.form.controls.fyleEmployee.disable();
       }
 
       that.setupAutocompleteWatchers();
@@ -215,7 +215,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
     if (that.data.rowElement) {
       that.editMapping = true;
     }
-    
+
     that.isLoading = true;
     that.settingsService.getCombinedSettings(that.workSpaceId).subscribe(settings => {
       that.generalSettings = settings;

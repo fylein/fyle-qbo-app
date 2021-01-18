@@ -146,15 +146,15 @@ export class GenericMappingsDialogComponent implements OnInit {
       qboPromise
     ]).subscribe(() => {
       that.isLoading = false;
-      const sourceField = that.editMapping ? that.fyleAttributes.filter(sourceField => sourceField.value === that.data.rowElement.source.value)[0] : '';
-      const destinationField = that.editMapping ? that.qboElements.filter(destinationField => destinationField.value === that.data.rowElement.destination.value)[0] : '';
+      const sourceField = that.editMapping ? that.fyleAttributes.filter(source => source.value === that.data.rowElement.source.value)[0] : '';
+      const destinationField = that.editMapping ? that.qboElements.filter(destination => destination.value === that.data.rowElement.destination.value)[0] : '';
       that.form = that.formBuilder.group({
         sourceField: [sourceField, Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleAttributes)])],
         destinationField: [destinationField, that.forbiddenSelectionValidator(that.qboElements)]
       });
 
-      if(that.editMapping) {
-        that.form.controls.sourceField.disable()
+      if (that.editMapping) {
+        that.form.controls.sourceField.disable();
       }
 
       that.setupAutcompleteWathcers();
@@ -166,11 +166,11 @@ export class GenericMappingsDialogComponent implements OnInit {
     that.isLoading = true;
 
     that.setting = that.data.setting;
-    
+
     if (that.data.rowElement) {
       that.editMapping = true;
     }
-    
+
     that.isLoading = false;
     that.reset();
   }

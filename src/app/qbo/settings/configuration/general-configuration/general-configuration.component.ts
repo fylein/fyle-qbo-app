@@ -82,9 +82,9 @@ export class GeneralConfigurationComponent implements OnInit {
 
       let paymentsSyncOption = '';
       if (that.generalSettings.sync_fyle_to_qbo_payments) {
-        paymentsSyncOption = 'sync_fyle_to_qbo_payments'
+        paymentsSyncOption = 'sync_fyle_to_qbo_payments';
       } else if (that.generalSettings.sync_qbo_to_fyle_payments) {
-        paymentsSyncOption = 'sync_qbo_to_fyle_payments'
+        paymentsSyncOption = 'sync_qbo_to_fyle_payments';
       }
 
       that.generalSettingsForm = that.formBuilder.group({
@@ -135,10 +135,9 @@ export class GeneralConfigurationComponent implements OnInit {
 
 
       that.generalSettingsForm.controls.reimburExpense.valueChanges.subscribe((locationMappedTo) => {
-        if (locationMappedTo == 'BILL') {
+        if (locationMappedTo === 'BILL') {
           this.showPaymentsSyncOption = true;
-        }
-        else {
+        } else {
           this.showPaymentsSyncOption = false;
         }
       });

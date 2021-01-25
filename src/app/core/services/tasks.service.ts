@@ -15,7 +15,7 @@ export class TasksService {
 
   getTasks(limit: number, offset: number, status: string, ids: number[]): Observable<TaskResponse> {
     const workspaceId = this.workspaceService.getWorkspaceId();
-    return this.apiService.get(
+      return this.apiService.get(
       `/workspaces/${workspaceId}/tasks/all/`, {
         limit,
         offset,
@@ -24,8 +24,8 @@ export class TasksService {
       }
     );
   }
-
-  getAllTasks(status: string, ids:number[]): Observable<TaskResponse> {
+  
+  getAllTasks(status: string, ids:number[]=null): Observable<TaskResponse> {
     const limit = 500;
     const offset = 0;
     const allTasks: TaskResponse = {

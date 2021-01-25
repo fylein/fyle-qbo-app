@@ -25,6 +25,7 @@ export class MappingsService {
   accountPayables: Observable<any[]>;
   bankAccounts: Observable<any[]>;
   creditCardAccounts: Observable<any[]>;
+  billPaymentAccounts: Observable<any[]>;
   expenseFields: Observable<any[]>;
 
   constructor(
@@ -196,6 +197,22 @@ export class MappingsService {
     return this.creditCardAccounts;
   }
 
+  postBillPaymentAccounts() {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+
+    if (!this.billPaymentAccounts) {
+      this.billPaymentAccounts = this.apiService.post(
+        `/workspaces/${workspaceId}/qbo/bill_payment_accounts/`, {}
+      ).pipe(
+        map(data => data),
+        publishReplay(1),
+        refCount()
+      );
+    }
+    return this.billPaymentAccounts;
+  }
+
+
   postQBOClasses() {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
@@ -318,6 +335,14 @@ export class MappingsService {
 
     return this.apiService.get(
       `/workspaces/${workspaceId}/qbo/accounts_payables/`, {}
+    );
+  }
+
+  getBillPaymentAccounts() {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+
+    return this.apiService.get(
+      `/workspaces/${workspaceId}/qbo/bill_payment_accounts/`, {}
     );
   }
 

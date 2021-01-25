@@ -64,6 +64,18 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <div class="mat-body-strong" *ngIf="generalSettings.sync_fyle_to_qbo_payments">
+        Payment Account
+      </div>
+      <mat-form-field floatLabel="always" appearance="outline" required
+        *ngIf="generalSettings.sync_fyle_to_qbo_payments">
+        <mat-select class="general-mappings--input" placeholder="Select payment Account"
+          formControlName="billPaymentAccounts">
+          <mat-option *ngFor="let bankAccount of billPaymentAccounts; let i = index" [value]="billPaymentAccounts[i].destination_id">
+            {{billPaymentAccounts[i].value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <button class="configurations--save-btn" mat-flat-button color="primary" (click)="submit()" type="submit">

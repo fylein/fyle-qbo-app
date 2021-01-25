@@ -177,6 +177,7 @@ export class DashboardComponent implements OnInit {
 
     onErrorResumeNext(
       that.mappingsService.postAccountsPayables(),
+      that.mappingsService.postBillPaymentAccounts(),
       that.mappingsService.postBankAccounts(),
       that.mappingsService.postExpenseAccounts(),
       that.mappingsService.postCreditCardAccounts(),

@@ -20,6 +20,7 @@ export class GeneralConfigurationComponent implements OnInit {
   generalSettings: any;
   mappingSettings: any;
   employeeFieldMapping: any;
+  showPaymentsSyncOption: boolean;
 
   constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) { }
 
@@ -79,12 +80,20 @@ export class GeneralConfigurationComponent implements OnInit {
 
       that.expenseOptions = that.getExpenseOptions(that.employeeFieldMapping.destination_field);
 
+      let paymentsSyncOption = '';
+      if (that.generalSettings.sync_fyle_to_qbo_payments) {
+        paymentsSyncOption = 'sync_fyle_to_qbo_payments'
+      } else if (that.generalSettings.sync_qbo_to_fyle_payments) {
+        paymentsSyncOption = 'sync_qbo_to_fyle_payments'
+      }
+
       that.generalSettingsForm = that.formBuilder.group({
         reimburExpense: [that.generalSettings ? that.generalSettings.reimbursable_expenses_object : ''],
         cccExpense: [that.generalSettings ? that.generalSettings.corporate_credit_card_expenses_object : ''],
         employees: [that.employeeFieldMapping ? that.employeeFieldMapping.destination_field : ''],
         importCategories: [that.generalSettings.import_categories],
-        importProjects: [that.generalSettings.import_projects]
+        importProjects: [that.generalSettings.import_projects],
+        paymentsSync: [paymentsSyncOption]
       });
 
       if (that.generalSettings.reimbursable_expenses_object) {
@@ -120,7 +129,18 @@ export class GeneralConfigurationComponent implements OnInit {
         reimburExpense: ['', Validators.required],
         cccExpense: [null],
         importCategories: [false],
-        importProjects: [false]
+        importProjects: [false],
+        paymentsSync: [null]
+      });
+
+
+      that.generalSettingsForm.controls.reimburExpense.valueChanges.subscribe((locationMappedTo) => {
+        if (locationMappedTo == 'BILL') {
+          this.showPaymentsSyncOption = true;
+        }
+        else {
+          this.showPaymentsSyncOption = false;
+        }
       });
 
       that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
@@ -143,6 +163,13 @@ export class GeneralConfigurationComponent implements OnInit {
       const employeeMappingsObject = that.generalSettingsForm.value.employees || (that.employeeFieldMapping && that.employeeFieldMapping.destination_field);
       const importCategories = that.generalSettingsForm.value.importCategories;
       const importProjects = that.generalSettingsForm.value.importProjects;
+      let fyleToQuickbooks = false;
+      let quickbooksToFyle = false;
+
+      if (that.generalSettingsForm.controls.paymentsSync.value) {
+        fyleToQuickbooks = that.generalSettingsForm.value.paymentsSync === 'sync_fyle_to_qbo_payments' ? true : false;
+        quickbooksToFyle = that.generalSettingsForm.value.paymentsSync === 'sync_qbo_to_fyle_payments' ? true : false;
+      }
 
       if (cccExpensesObject) {
         mappingsSettingsPayload.push({
@@ -160,7 +187,7 @@ export class GeneralConfigurationComponent implements OnInit {
       forkJoin(
         [
           that.settingsService.postMappingSettings(that.workspaceId, mappingsSettingsPayload),
-          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importCategories, importProjects)
+          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importCategories, importProjects, fyleToQuickbooks, quickbooksToFyle)
         ]
       ).subscribe(responses => {
         that.isLoading = true;

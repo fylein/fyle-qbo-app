@@ -13,19 +13,19 @@ export class TasksService {
     private apiService: ApiService,
     private workspaceService: WorkspaceService) {}
 
-  getTasks(limit: number, offset: number, status: string, expense_group_ids: number[]): Observable<TaskResponse> {
+  getTasks(limit: number, offset: number, status: string, expenseGroupIds: number[]): Observable<TaskResponse> {
     const workspaceId = this.workspaceService.getWorkspaceId();
-      return this.apiService.get(
+    return this.apiService.get(
       `/workspaces/${workspaceId}/tasks/all/`, {
-        limit,
-        offset,
-        status,
-        expense_group_ids,
-      }
-    );
-  }
-  
-  getAllTasks(status: string, expense_group_ids:number[]=null): Observable<TaskResponse> {
+      limit,
+      offset,
+      status,
+      expenseGroupIds,
+    }
+  );
+}
+
+  getAllTasks(status: string, expenseGroupIds: number[] = null): Observable<TaskResponse> {
     const limit = 500;
     const offset = 0;
     const allTasks: TaskResponse = {
@@ -35,12 +35,12 @@ export class TasksService {
       results: []
     };
 
-    return from(this.getAllTasksInternal(limit, offset, status,expense_group_ids, allTasks));
+    return from(this.getAllTasksInternal(limit, offset, status, expenseGroupIds, allTasks));
   }
   // TODO: remove promises and do with rxjs observables
-  private getAllTasksInternal(limit: number, offset: number, status: string, expense_group_ids: number[], allTasks: TaskResponse): Promise<TaskResponse> {
+  private getAllTasksInternal(limit: number, offset: number, status: string, expenseGroupIds: number[], allTasks: TaskResponse): Promise<TaskResponse> {
     const that = this;
-    return that.getTasks(limit, offset, status,expense_group_ids).toPromise().then((taskResponse) => {
+    return that.getTasks(limit, offset, status, expenseGroupIds).toPromise().then((taskResponse) => {
       if (allTasks.count === 0 ) {
         allTasks = taskResponse;
       } else {
@@ -48,7 +48,7 @@ export class TasksService {
       }
 
       if (allTasks.results.length < allTasks.count) {
-        return that.getAllTasksInternal(limit, offset + 500, status,expense_group_ids, allTasks);
+        return that.getAllTasksInternal(limit, offset + 500, status, expenseGroupIds, allTasks);
       } else {
         return allTasks;
       }

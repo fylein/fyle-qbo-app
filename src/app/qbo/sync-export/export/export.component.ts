@@ -92,7 +92,7 @@ export class ExportComponent implements OnInit {
   checkResultsOfExport(filteredIds: number[]) {
     const that = this;
     interval(3000).pipe(
-      switchMap(() => from(that.taskService.getAllTasks('ALL',filteredIds))),
+      switchMap(() => from(that.taskService.getAllTasks('ALL', filteredIds))),
       takeWhile((response) => response.count > 0, true)
     ).subscribe((res) => {
       if (res.results.filter(task => task.status === 'IN_PROGRESS'  && task.type !== 'FETCHING_EXPENSES' &&  filteredIds.includes(task.expense_group)).length === 0) {

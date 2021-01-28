@@ -134,8 +134,8 @@ export class GeneralConfigurationComponent implements OnInit {
       });
 
 
-      that.generalSettingsForm.controls.reimburExpense.valueChanges.subscribe((locationMappedTo) => {
-        if (locationMappedTo === 'BILL') {
+      that.generalSettingsForm.controls.reimburExpense.valueChanges.subscribe((reimbursableExpenseMappedTo) => {
+        if (reimbursableExpenseMappedTo === 'BILL') {
           this.showPaymentsSyncOption = true;
         } else {
           this.showPaymentsSyncOption = false;

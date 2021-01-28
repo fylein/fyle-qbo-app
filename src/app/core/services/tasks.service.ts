@@ -13,7 +13,7 @@ export class TasksService {
     private apiService: ApiService,
     private workspaceService: WorkspaceService) {}
 
-  getTasks(limit: number, offset: number, status: string, expenseGroupIds: any[]=null): Observable<TaskResponse> {
+  getTasks(limit: number, offset: number, status: string, expenseGroupIds: any[] = null): Observable<TaskResponse> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     const apiParams =  {

@@ -92,7 +92,7 @@ export class ExportComponent implements OnInit {
   checkResultsOfExport(filteredIds: any[]) {
     const that = this;
     interval(3000).pipe(
-      switchMap(() => from(that.taskService.getAllTasks('ALL',filteredIds))),
+      switchMap(() => from(that.taskService.getAllTasks('ALL', filteredIds))),
       takeWhile((response) => response.count > 0, true)
     ).subscribe((res) => {
       if ((res.results).length === 0) {

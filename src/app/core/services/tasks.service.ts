@@ -13,7 +13,7 @@ export class TasksService {
     private apiService: ApiService,
     private workspaceService: WorkspaceService) {}
 
-  getTasks(limit: number, offset: number, status: string, expenseGroupIds: any[] = null): Observable<TaskResponse> {
+  getTasks(limit: number, offset: number, status: string, expenseGroupIds: number[] = null): Observable<TaskResponse> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     const apiParams =  {
@@ -31,7 +31,7 @@ export class TasksService {
   );
 }
 
-  getAllTasks(status: string, expenseGroupIds: any[] = null): Observable<TaskResponse> {
+  getAllTasks(status: string, expenseGroupIds: number[] = null): Observable<TaskResponse> {
     const limit = 500;
     const offset = 0;
     const allTasks: TaskResponse = {
@@ -44,7 +44,7 @@ export class TasksService {
     return from(this.getAllTasksInternal(limit, offset, status, expenseGroupIds, allTasks));
   }
   // TODO: remove promises and do with rxjs observables
-  private getAllTasksInternal(limit: number, offset: number, status: string, expenseGroupIds: any[], allTasks: TaskResponse): Promise<TaskResponse> {
+  private getAllTasksInternal(limit: number, offset: number, status: string, expenseGroupIds: number[], allTasks: TaskResponse): Promise<TaskResponse> {
     const that = this;
     return that.getTasks(limit, offset, status, expenseGroupIds).toPromise().then((taskResponse) => {
       if (allTasks.count === 0 ) {

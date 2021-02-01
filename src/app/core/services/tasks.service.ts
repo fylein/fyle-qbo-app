@@ -15,9 +15,10 @@ export class TasksService {
 
   getTasks(limit: number, status: string, expenseGroupIds: number[], taskType: string[], next: string): Observable<TaskResponse> {
     const workspaceId = this.workspaceService.getWorkspaceId();
-
+    const offset = 0;
     const apiParams = {
       limit,
+      offset,
       status
     };
     if (expenseGroupIds && taskType) {

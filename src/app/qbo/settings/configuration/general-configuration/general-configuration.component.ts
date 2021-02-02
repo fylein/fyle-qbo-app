@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
-import { Validators, ValidatorFn, FormGroup, FormBuilder } from '@angular/forms';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,7 +20,7 @@ export class GeneralConfigurationComponent implements OnInit {
   generalSettings: any;
   mappingSettings: any;
   employeeFieldMapping: any;
-  showPaymentsSyncOption: boolean;
+  showPaymentsField: boolean;
 
   constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) { }
 
@@ -78,6 +78,7 @@ export class GeneralConfigurationComponent implements OnInit {
 
       that.employeeFieldMapping = employeeFieldMapping;
 
+      that.showPaymentsFields(that.generalSettings.reimbursable_expenses_object);
       that.expenseOptions = that.getExpenseOptions(that.employeeFieldMapping.destination_field);
 
       let paymentsSyncOption = '';
@@ -135,11 +136,7 @@ export class GeneralConfigurationComponent implements OnInit {
 
 
       that.generalSettingsForm.controls.reimburExpense.valueChanges.subscribe((reimbursableExpenseMappedTo) => {
-        if (reimbursableExpenseMappedTo === 'BILL') {
-          this.showPaymentsSyncOption = true;
-        } else {
-          this.showPaymentsSyncOption = false;
-        }
+        that.showPaymentsFields(reimbursableExpenseMappedTo);
       });
 
       that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
@@ -198,6 +195,15 @@ export class GeneralConfigurationComponent implements OnInit {
       that.generalSettingsForm.markAllAsTouched();
     }
   }
+
+  showPaymentsFields(reimbursableExpensesObject) {
+      const that = this;
+      if (reimbursableExpensesObject && reimbursableExpensesObject === 'BILL') {
+        that.showPaymentsField = true;
+      } else {
+        that.showPaymentsField = false;
+      }
+    }
 
   ngOnInit() {
     const that = this;

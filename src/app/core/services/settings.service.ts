@@ -72,7 +72,7 @@ export class SettingsService {
 
   // TODO: Add model
   postSettings(workspaceId: number, nextRun: string, hours: number, scheduleEnabled: boolean) {
-    return this.apiService.post(`/workspaces/${workspaceId}/settings/`, {
+    return this.apiService.post(`/workspaces/${workspaceId}/schedule/`, {
       next_run: nextRun,
       hours,
       schedule_enabled: scheduleEnabled
@@ -80,7 +80,7 @@ export class SettingsService {
   }
 
   getSettings(workspaceId: number): Observable<Settings> {
-    return this.apiService.get(`/workspaces/${workspaceId}/settings/`, {});
+    return this.apiService.get(`/workspaces/${workspaceId}/schedule/`, {});
   }
 
   // TODO: Add model

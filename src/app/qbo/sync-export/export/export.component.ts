@@ -91,11 +91,12 @@ export class ExportComponent implements OnInit {
 
   checkResultsOfExport(filteredIds: number[]) {
     const that = this;
+    const taskType = ['CREATING_BILL', 'CREATING_CHECK', 'CREATING_CREDIT_CARD_PURCHASE', 'CREATING_JOURNAL_ENTRY'];
     interval(3000).pipe(
-      switchMap(() => from(that.taskService.getAllTasks('ALL'))),
-      takeWhile((response) => response.results.filter(task => task.status === 'IN_PROGRESS'  && task.type !== 'FETCHING_EXPENSES' &&  filteredIds.includes(task.expense_group)).length > 0, true)
+      switchMap(() => from(that.taskService.getAllTasks('IN_PROGRESS', filteredIds, taskType))),
+      takeWhile((response) => response.count > 0, true)
     ).subscribe((res) => {
-      if (res.results.filter(task => task.status === 'IN_PROGRESS'  && task.type !== 'FETCHING_EXPENSES' &&  filteredIds.includes(task.expense_group)).length === 0) {
+      if ((res.results).length === 0) {
         that.taskService.getAllTasks('FAILED').subscribe((taskResponse) => {
           that.failedExpenseGroupCount = taskResponse.count;
           that.successfulExpenseGroupCount = filteredIds.length - that.failedExpenseGroupCount;

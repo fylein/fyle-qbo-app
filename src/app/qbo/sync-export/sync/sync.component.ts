@@ -43,13 +43,16 @@ export class SyncComponent implements OnInit {
     const that = this;
     const taskType = ['FETCHING_EXPENSES'];
     interval(3000).pipe(
-      switchMap(() => from(that.taskService.getAllTasks('ALL', [], taskType))),
-      takeWhile((response) => response.results.filter(task => task.status === 'IN_PROGRESS'  && task.type === 'FETCHING_EXPENSES').length > 0, true)
+      switchMap(() => from(that.taskService.getAllTasks('IN_PROGRESS', [], taskType))),
+      takeWhile((response) => response.results.length > 0, true)
     ).subscribe((res) => {
-      if (res.results.filter(task => task.status === 'COMPLETE'  && task.type === 'FETCHING_EXPENSES').length === 1) {
-        that.updateLastSyncStatus();
-        that.isExpensesSyncing = false;
-        that.snackBar.open('Import Complete');
+      if (!res.results.length) {
+        that.taskService.getAllTasks('COMPLETE', [], taskType).subscribe((response) => {
+          that.updateLastSyncStatus();
+          that.isExpensesSyncing = false;
+          that.snackBar.open(response.results.length ? 'Import Complete' : 'Import Failed');
+          that.errorOccurred = !response.results.length;
+        })
       }
     });
   }

@@ -52,7 +52,7 @@ export class SyncComponent implements OnInit {
           that.isExpensesSyncing = false;
           that.snackBar.open(response.results.length ? 'Import Complete' : 'Import Failed');
           that.errorOccurred = !response.results.length;
-        })
+        });
       }
     });
   }

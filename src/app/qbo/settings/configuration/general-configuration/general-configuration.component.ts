@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
-import { Validators, ValidatorFn, FormGroup, FormBuilder } from '@angular/forms';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,6 +20,7 @@ export class GeneralConfigurationComponent implements OnInit {
   generalSettings: any;
   mappingSettings: any;
   employeeFieldMapping: any;
+  showPaymentsField: boolean;
 
   constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) { }
 
@@ -77,14 +78,23 @@ export class GeneralConfigurationComponent implements OnInit {
 
       that.employeeFieldMapping = employeeFieldMapping;
 
+      that.showPaymentsFields(that.generalSettings.reimbursable_expenses_object);
       that.expenseOptions = that.getExpenseOptions(that.employeeFieldMapping.destination_field);
+
+      let paymentsSyncOption = '';
+      if (that.generalSettings.sync_fyle_to_qbo_payments) {
+        paymentsSyncOption = 'sync_fyle_to_qbo_payments';
+      } else if (that.generalSettings.sync_qbo_to_fyle_payments) {
+        paymentsSyncOption = 'sync_qbo_to_fyle_payments';
+      }
 
       that.generalSettingsForm = that.formBuilder.group({
         reimburExpense: [that.generalSettings ? that.generalSettings.reimbursable_expenses_object : ''],
         cccExpense: [that.generalSettings ? that.generalSettings.corporate_credit_card_expenses_object : ''],
         employees: [that.employeeFieldMapping ? that.employeeFieldMapping.destination_field : ''],
         importCategories: [that.generalSettings.import_categories],
-        importProjects: [that.generalSettings.import_projects]
+        importProjects: [that.generalSettings.import_projects],
+        paymentsSync: [paymentsSyncOption]
       });
 
       if (that.generalSettings.reimbursable_expenses_object) {
@@ -120,7 +130,13 @@ export class GeneralConfigurationComponent implements OnInit {
         reimburExpense: ['', Validators.required],
         cccExpense: [null],
         importCategories: [false],
-        importProjects: [false]
+        importProjects: [false],
+        paymentsSync: [null]
+      });
+
+
+      that.generalSettingsForm.controls.reimburExpense.valueChanges.subscribe((reimbursableExpenseMappedTo) => {
+        that.showPaymentsFields(reimbursableExpenseMappedTo);
       });
 
       that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
@@ -143,6 +159,13 @@ export class GeneralConfigurationComponent implements OnInit {
       const employeeMappingsObject = that.generalSettingsForm.value.employees || (that.employeeFieldMapping && that.employeeFieldMapping.destination_field);
       const importCategories = that.generalSettingsForm.value.importCategories;
       const importProjects = that.generalSettingsForm.value.importProjects;
+      let fyleToQuickbooks = false;
+      let quickbooksToFyle = false;
+
+      if (that.generalSettingsForm.controls.paymentsSync.value) {
+        fyleToQuickbooks = that.generalSettingsForm.value.paymentsSync === 'sync_fyle_to_qbo_payments' ? true : false;
+        quickbooksToFyle = that.generalSettingsForm.value.paymentsSync === 'sync_qbo_to_fyle_payments' ? true : false;
+      }
 
       if (cccExpensesObject) {
         mappingsSettingsPayload.push({
@@ -160,7 +183,7 @@ export class GeneralConfigurationComponent implements OnInit {
       forkJoin(
         [
           that.settingsService.postMappingSettings(that.workspaceId, mappingsSettingsPayload),
-          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importCategories, importProjects)
+          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importCategories, importProjects, fyleToQuickbooks, quickbooksToFyle)
         ]
       ).subscribe(responses => {
         that.isLoading = true;
@@ -172,6 +195,15 @@ export class GeneralConfigurationComponent implements OnInit {
       that.generalSettingsForm.markAllAsTouched();
     }
   }
+
+  showPaymentsFields(reimbursableExpensesObject) {
+      const that = this;
+      if (reimbursableExpensesObject && reimbursableExpensesObject === 'BILL') {
+        that.showPaymentsField = true;
+      } else {
+        that.showPaymentsField = false;
+      }
+    }
 
   ngOnInit() {
     const that = this;

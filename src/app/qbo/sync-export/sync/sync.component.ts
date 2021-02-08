@@ -6,8 +6,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder } from '@angular/forms';
 import { ExpenseGroupSettingsDialogComponent } from './expense-group-settings-dialog/expense-group-settings-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { forkJoin } from 'rxjs';
+import { forkJoin, from, interval } from 'rxjs';
 import { WorkspaceService } from 'src/app/core/services/workspace.service';
+import { switchMap, takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sync',
@@ -29,15 +30,30 @@ export class SyncComponent implements OnInit {
   syncExpenses() {
     const that = this;
     that.isExpensesSyncing = true;
-
     that.expenseGroupService.syncExpenseGroups().subscribe((res) => {
-      that.updateLastSyncStatus();
-      that.snackBar.open('Import Complete');
-      that.isExpensesSyncing = false;
+      that.checkSyncStatus();
     }, (error) => {
       that.isExpensesSyncing = false;
       that.snackBar.open('Import Failed');
       that.errorOccurred = true;
+    });
+  }
+
+  checkSyncStatus() {
+    const that = this;
+    const taskType = ['FETCHING_EXPENSES'];
+    interval(3000).pipe(
+      switchMap(() => from(that.taskService.getAllTasks('IN_PROGRESS', [], taskType))),
+      takeWhile((response) => response.results.length > 0, true)
+    ).subscribe((res) => {
+      if (!res.results.length) {
+        that.taskService.getAllTasks('COMPLETE', [], taskType).subscribe((response) => {
+          that.updateLastSyncStatus();
+          that.isExpensesSyncing = false;
+          that.snackBar.open(response.results.length ? 'Import Complete' : 'Import Failed');
+          that.errorOccurred = !response.results.length;
+        });
+      }
     });
   }
 

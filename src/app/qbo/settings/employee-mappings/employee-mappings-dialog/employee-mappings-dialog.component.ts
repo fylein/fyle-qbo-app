@@ -56,6 +56,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
     const qboVendor = that.generalSettings.employee_field_mapping === 'VENDOR' ? that.form.value.qboVendor : '';
     const qboEmployee = that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.form.value.qboEmployee : '';
     const creditCardAccount = that.form.value.creditCardAccount ? that.form.value.creditCardAccount.value : that.generalMappings.default_ccc_account_name;
+    const creditCardAccountId = that.form.value.creditCardAccount ? that.form.value.creditCardAccount.destination_id : that.generalMappings.default_ccc_account_id;
 
     if (that.form.valid && (qboVendor || qboEmployee)) {
       const employeeMapping = [
@@ -63,7 +64,8 @@ export class EmployeeMappingsDialogComponent implements OnInit {
           source_type: 'EMPLOYEE',
           destination_type: that.generalSettings.employee_field_mapping,
           source_value: fyleEmployee.value,
-          destination_value: that.generalSettings.employee_field_mapping === 'VENDOR' ? qboVendor.value : qboEmployee.value
+          destination_value: that.generalSettings.employee_field_mapping === 'VENDOR' ? qboVendor.value : qboEmployee.value,
+          destination_id: that.generalSettings.employee_field_mapping === 'VENDOR' ? qboVendor.destination_id : qboEmployee.destination_id
         })
       ];
 
@@ -73,7 +75,8 @@ export class EmployeeMappingsDialogComponent implements OnInit {
             source_type: 'EMPLOYEE',
             destination_type: 'CREDIT_CARD_ACCOUNT',
             source_value: fyleEmployee.value,
-            destination_value: creditCardAccount
+            destination_value: creditCardAccount,
+            destination_id: creditCardAccountId
           })
         );
       }

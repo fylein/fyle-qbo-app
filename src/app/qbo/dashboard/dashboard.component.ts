@@ -175,9 +175,7 @@ export class DashboardComponent implements OnInit {
       that.mappingsService.postFyleCostCenters(),
       that.mappingsService.postFyleProjects(),
       that.mappingsService.postExpenseCustomFields(),
-    ).subscribe(() => {
-
-    });
+    ).subscribe(() => {});
 
     onErrorResumeNext(
       that.mappingsService.postAccountsPayables(),

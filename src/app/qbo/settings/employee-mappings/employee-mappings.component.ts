@@ -66,7 +66,8 @@ export class EmployeeMappingsComponent implements OnInit {
       mappings.push({
         fyle_value: employeeEVMapping.source.value,
         qbo_value: employeeEVMapping.destination.value,
-        ccc_account: that.getCCCAccount(that.employeeMappings, employeeEVMapping)
+        ccc_account: that.getCCCAccount(that.employeeMappings, employeeEVMapping),
+        auto_mapped: employeeEVMapping.source.auto_mapped
       });
     });
     that.employeeMappings = mappings;

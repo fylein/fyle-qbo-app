@@ -94,7 +94,8 @@ export class GeneralConfigurationComponent implements OnInit {
         employees: [that.employeeFieldMapping ? that.employeeFieldMapping.destination_field : ''],
         importCategories: [that.generalSettings.import_categories],
         importProjects: [that.generalSettings.import_projects],
-        paymentsSync: [paymentsSyncOption]
+        paymentsSync: [paymentsSyncOption],
+        autoMapEmployees: [that.generalSettings.auto_map_employees]
       });
 
       if (that.generalSettings.reimbursable_expenses_object) {
@@ -131,7 +132,8 @@ export class GeneralConfigurationComponent implements OnInit {
         cccExpense: [null],
         importCategories: [false],
         importProjects: [false],
-        paymentsSync: [null]
+        paymentsSync: [null],
+        autoMapEmployees: [null]
       });
 
 
@@ -159,6 +161,8 @@ export class GeneralConfigurationComponent implements OnInit {
       const employeeMappingsObject = that.generalSettingsForm.value.employees || (that.employeeFieldMapping && that.employeeFieldMapping.destination_field);
       const importCategories = that.generalSettingsForm.value.importCategories;
       const importProjects = that.generalSettingsForm.value.importProjects;
+      const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
+
       let fyleToQuickbooks = false;
       let quickbooksToFyle = false;
 
@@ -183,11 +187,18 @@ export class GeneralConfigurationComponent implements OnInit {
       forkJoin(
         [
           that.settingsService.postMappingSettings(that.workspaceId, mappingsSettingsPayload),
-          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importCategories, importProjects, fyleToQuickbooks, quickbooksToFyle)
+          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importCategories, importProjects, fyleToQuickbooks, quickbooksToFyle, autoMapEmployees)
         ]
       ).subscribe(responses => {
         that.isLoading = true;
         that.snackBar.open('Configuration saved successfully');
+        
+        if (autoMapEmployees) {
+          setTimeout(() => {
+            that.snackBar.open('Auto mapping of employees may take up to 10 minutes');
+          }, 1500);
+        }
+        
         that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
       });
     } else {

@@ -32,11 +32,11 @@ export class ScheduleComponent implements OnInit {
     that.settingsService.getSettings(that.workspaceId).subscribe((settings: Settings) => {
       // TODO: Api should return schedule always - check and cleanup
       that.settings = settings;
-      if (settings && settings.schedule) {
+      if (settings) {
         that.form.setValue({
-          datetime: new Date(settings.schedule.start_datetime),
-          hours: settings.schedule.interval_hours,
-          scheduleEnabled: settings.schedule.enabled
+          datetime: new Date(settings.start_datetime),
+          hours: settings.interval_hours,
+          scheduleEnabled: settings.enabled
         });
       }
       that.isLoading = false;
@@ -77,7 +77,7 @@ export class ScheduleComponent implements OnInit {
       pairwise()
     ).subscribe(([oldValue, newValue]) => {
       if (!newValue && oldValue !== newValue) {
-        if (that.settings && that.settings.schedule) {
+        if (that.settings) {
           that.isLoading = true;
           that.settingsService.postSettings(that.workspaceId, new Date().toISOString(), 0, false).subscribe(response => {
             that.isLoading = false;

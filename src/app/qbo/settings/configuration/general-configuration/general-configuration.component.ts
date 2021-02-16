@@ -192,13 +192,13 @@ export class GeneralConfigurationComponent implements OnInit {
       ).subscribe(responses => {
         that.isLoading = true;
         that.snackBar.open('Configuration saved successfully');
-        
+
         if (autoMapEmployees) {
           setTimeout(() => {
             that.snackBar.open('Auto mapping of employees may take up to 10 minutes');
           }, 1500);
         }
-        
+
         that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
       });
     } else {

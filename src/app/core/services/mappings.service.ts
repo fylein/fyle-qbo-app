@@ -366,13 +366,13 @@ export class MappingsService {
     );
   }
 
-  getMappings(sourceType, uri = null): Observable<MappingsResponse> {
+  getMappings(sourceType: string, uri:string = null, limit:number = 500): Observable<MappingsResponse> {
     const workspaceId = this.workspaceService.getWorkspaceId();
-    const url = uri ? uri.split('api')[1] : `/workspaces/${workspaceId}/mappings/?limit=500&offset=0&source_type=${sourceType}`;
+    const url = uri ? uri.split('api')[1] : `/workspaces/${workspaceId}/mappings/?limit=${limit}&offset=0&source_type=${sourceType}`;
     return this.apiService.get(url, {});
   }
 
-  getAllMappings(sourceType) {
+  getAllMappings(sourceType: string) {
     const that = this;
     return this.getMappings(sourceType).pipe(expand((res: any) => {
       return res.next ? that.getMappings(sourceType, res.next) : empty();

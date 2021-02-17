@@ -112,8 +112,8 @@ export class DashboardComponent implements OnInit {
   getEmployeeMappings() {
     const that = this;
     // TODO: remove promises and do with rxjs observables
-    return that.mappingsService.getMappings('EMPLOYEE').toPromise().then((res) => {
-      if (res.results.length > 0) {
+    return that.mappingsService.getAllMappings('EMPLOYEE').toPromise().then((res) => {
+      if (res.length > 0) {
         that.currentState = onboardingStates.employeeMappingsDone;
       } else {
         throw new Error('employee mappings have no entries');
@@ -125,8 +125,8 @@ export class DashboardComponent implements OnInit {
   getCategoryMappings() {
     const that = this;
     // TODO: remove promises and do with rxjs observables
-    return that.mappingsService.getMappings('CATEGORY').toPromise().then((res) => {
-      if (res.results.length > 0) {
+    return that.mappingsService.getAllMappings('CATEGORY').toPromise().then((res) => {
+      if (res.length > 0) {
         that.currentState = onboardingStates.categoryMappingsDone;
       } else {
         throw new Error('cateogry mappings have no entries');

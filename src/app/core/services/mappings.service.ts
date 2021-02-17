@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map, publishReplay, refCount } from 'rxjs/operators';
+import { empty, Observable } from 'rxjs';
+import { concatMap, expand, map, publishReplay, reduce, refCount } from 'rxjs/operators';
 import { ApiService } from 'src/app/core/services/api.service';
 import { GeneralMapping } from '../models/general-mapping.model';
 import { MappingsResponse } from '../models/mappings-response.model';
@@ -366,13 +366,21 @@ export class MappingsService {
     );
   }
 
-  getMappings(sourceType): Observable<MappingsResponse> {
+  getMappings(sourceType, uri = null): Observable<MappingsResponse> {
     const workspaceId = this.workspaceService.getWorkspaceId();
-    return this.apiService.get(
-      `/workspaces/${workspaceId}/mappings/`, {
-        source_type: sourceType
-      }
-    );
+    const url = uri ? uri.split('api')[1] : `/workspaces/${workspaceId}/mappings/?limit=500&offset=0&source_type=${sourceType}`;
+    return this.apiService.get(url, {});
+  }
+
+  getAllMappings(sourceType) {
+    const that = this;
+    return this.getMappings(sourceType).pipe(expand((res: any) => {
+      return res.next ? that.getMappings(sourceType, res.next) : empty();
+    }), concatMap((res: any) => res.results),
+      reduce((arr, val) => {
+        arr.push(val);
+        return arr;
+      }, []));
   }
 
   postMappings(mapping: any) {

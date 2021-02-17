@@ -366,7 +366,7 @@ export class MappingsService {
     );
   }
 
-  getMappings(sourceType: string, uri: string = null, limit: number = 500): Observable<MappingsResponse> {
+  getMappings(sourceType: string, limit: number = 500, uri: string = null): Observable<MappingsResponse> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     const url = uri ? uri.split('api')[1] : `/workspaces/${workspaceId}/mappings/?limit=${limit}&offset=0&source_type=${sourceType}`;
     return this.apiService.get(url, {});
@@ -375,7 +375,7 @@ export class MappingsService {
   getAllMappings(sourceType: string) {
     const that = this;
     return this.getMappings(sourceType).pipe(expand((res: any) => {
-      return res.next ? that.getMappings(sourceType, res.next) : empty();
+      return res.next ? that.getMappings(sourceType, 500, res.next) : empty();
     }), concatMap((res: any) => res.results),
       reduce((arr, val) => {
         arr.push(val);

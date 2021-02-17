@@ -112,7 +112,7 @@ export class DashboardComponent implements OnInit {
   getEmployeeMappings() {
     const that = this;
     // TODO: remove promises and do with rxjs observables
-    return that.mappingsService.getMappings('EMPLOYEE', '', 1).subscribe((res) => {
+    return that.mappingsService.getMappings('EMPLOYEE', 1).subscribe((res) => {
       if (res.results.length > 0) {
         that.currentState = onboardingStates.employeeMappingsDone;
       } else {

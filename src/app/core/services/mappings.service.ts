@@ -448,6 +448,11 @@ export class MappingsService {
     );
   }
 
+  triggerAutoMapEmployees() {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+    return this.apiService.post(`/workspaces/${workspaceId}/mappings/auto_map_employees/trigger/`, {});
+  }
+
   getCostCenterMappings() {
     const workspaceId = this.workspaceService.getWorkspaceId();
 

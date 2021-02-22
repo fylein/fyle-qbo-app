@@ -58,9 +58,9 @@ export class GenericMappingsComponent implements OnInit {
               mapping.destination.value = mapping.destination.detail.fully_qualified_name;
             })
           }
-          that.mappings = mappings;
         });
       }
+      that.mappings = mappings;
       that.isLoading = false;
     });
   }

@@ -162,7 +162,7 @@ export class GenericMappingsDialogComponent implements OnInit {
       } else {
         destinationField = that.editMapping ? that.qboElements.filter(destination => destination.value === that.data.rowElement.destination.value)[0] : '';
       }
-      console.log('destinationField',destinationField)
+
       that.form = that.formBuilder.group({
         sourceField: [sourceField, Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleAttributes)])],
         destinationField: [destinationField, that.forbiddenSelectionValidator(that.qboElements)]
@@ -181,7 +181,6 @@ export class GenericMappingsDialogComponent implements OnInit {
     that.isLoading = true;
 
     that.setting = that.data.setting;
-    console.log('that.data.rowElement',that.data.rowElement)
 
     if (that.data.rowElement) {
       that.editMapping = true;

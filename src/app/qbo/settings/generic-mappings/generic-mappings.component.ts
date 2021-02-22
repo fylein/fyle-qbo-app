@@ -56,7 +56,7 @@ export class GenericMappingsComponent implements OnInit {
           if (settings.category_sync_version !== 'v1') {
             mappings.forEach(mapping => {
               mapping.destination.value = mapping.destination.detail.fully_qualified_name;
-            })
+            });
           }
         });
       }

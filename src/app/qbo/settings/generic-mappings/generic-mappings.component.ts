@@ -51,7 +51,16 @@ export class GenericMappingsComponent implements OnInit {
   getMappings() {
     const that = this;
     that.mappingsService.getAllMappings(that.setting.source_field).subscribe(mappings => {
-      that.mappings = mappings;
+      if (that.setting.source_field === 'CATEGORY') {
+        that.settingsService.getGeneralSettings(that.workspaceId).subscribe(settings => {
+          if (settings.category_sync_version !== 'v1') {
+            mappings.forEach(mapping => {
+              mapping.destination.value = mapping.destination.detail.fully_qualified_name;
+            })
+          }
+          that.mappings = mappings;
+        });
+      }
       that.isLoading = false;
     });
   }

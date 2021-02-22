@@ -95,7 +95,7 @@ export class SettingsService {
   @CacheBuster({
     cacheBusterNotifier: generalSettingsCache
   })
-  postGeneralSettings(workspaceId: number, reimbursableExpensesObject: string, corporateCreditCardExpensesObject: string, importCategories: boolean, importProjects: boolean, fyleToQuickBooks: boolean, quickbooksToFyle: boolean, autoMapEmployees: string = null, categorySyncVersion: string) {
+  postGeneralSettings(workspaceId: number, reimbursableExpensesObject: string, corporateCreditCardExpensesObject: string, importCategories: boolean, importProjects: boolean, fyleToQuickBooks: boolean, quickbooksToFyle: boolean, autoMapEmployees: string = null) {
     return this.apiService.post(`/workspaces/${workspaceId}/settings/general/`, {
       reimbursable_expenses_object: reimbursableExpensesObject,
       corporate_credit_card_expenses_object: corporateCreditCardExpensesObject,
@@ -103,8 +103,7 @@ export class SettingsService {
       import_projects: importProjects,
       sync_fyle_to_qbo_payments: fyleToQuickBooks,
       sync_qbo_to_fyle_payments: quickbooksToFyle,
-      auto_map_employees: autoMapEmployees,
-      category_sync_version: categorySyncVersion
+      auto_map_employees: autoMapEmployees
     });
   }
 

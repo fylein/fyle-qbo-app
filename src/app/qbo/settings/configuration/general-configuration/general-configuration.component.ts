@@ -178,11 +178,6 @@ export class GeneralConfigurationComponent implements OnInit {
         });
       }
 
-      let categorySyncVersion = 'v2';
-      if (that.generalSettings) {
-        categorySyncVersion = that.generalSettings.category_sync_version;
-      }
-
       that.isLoading = true;
       mappingsSettingsPayload.push({
         source_field: 'EMPLOYEE',
@@ -192,7 +187,7 @@ export class GeneralConfigurationComponent implements OnInit {
       forkJoin(
         [
           that.settingsService.postMappingSettings(that.workspaceId, mappingsSettingsPayload),
-          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importCategories, importProjects, fyleToQuickbooks, quickbooksToFyle, autoMapEmployees, categorySyncVersion)
+          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importCategories, importProjects, fyleToQuickbooks, quickbooksToFyle, autoMapEmployees)
         ]
       ).subscribe(responses => {
         that.isLoading = true;

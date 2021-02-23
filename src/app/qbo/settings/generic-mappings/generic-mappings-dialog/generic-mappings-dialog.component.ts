@@ -7,7 +7,6 @@ import { debounceTime } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { WorkspaceService } from 'src/app/core/services/workspace.service';
 
 export class MappingErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -32,15 +31,13 @@ export class GenericMappingsDialogComponent implements OnInit {
   setting: any;
   editMapping: boolean;
   matcher = new MappingErrorStateMatcher();
-  generalSettings: any;
 
   constructor(private formBuilder: FormBuilder,
               public dialogRef: MatDialogRef<GenericMappingsDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private mappingsService: MappingsService,
               private settingsService: SettingsService,
-              private snackBar: MatSnackBar,
-              private workspaceService: WorkspaceService) { }
+              private snackBar: MatSnackBar) { }
 
   mappingDisplay(mappingObject) {
     return mappingObject ? mappingObject.value : '';
@@ -139,11 +136,6 @@ export class GenericMappingsDialogComponent implements OnInit {
       });
     } else if (that.setting.destination_field === 'ACCOUNT') {
       qboPromise = that.mappingsService.getExpenseAccounts().toPromise().then(objects => {
-        if (that.generalSettings.category_sync_version !== 'v1') {
-          objects.forEach(element => {
-            element.value = element.detail.fully_qualified_name;
-          });
-        }
         that.qboElements = objects;
       });
     }
@@ -156,12 +148,7 @@ export class GenericMappingsDialogComponent implements OnInit {
     ]).subscribe(() => {
       that.isLoading = false;
       const sourceField = that.editMapping ? that.fyleAttributes.filter(source => source.value === that.data.rowElement.source.value)[0] : '';
-      let destinationField;
-      if (that.generalSettings.category_sync_version !== 'v1') {
-        destinationField = that.editMapping ? that.qboElements.filter(destination => destination.detail.fully_qualified_name === that.data.rowElement.destination.value)[0] : '';
-      } else {
-        destinationField = that.editMapping ? that.qboElements.filter(destination => destination.value === that.data.rowElement.destination.value)[0] : '';
-      }
+      const destinationField = that.editMapping ? that.qboElements.filter(destination => destination.value === that.data.rowElement.destination.value)[0] : '';
 
       that.form = that.formBuilder.group({
         sourceField: [sourceField, Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleAttributes)])],
@@ -186,12 +173,7 @@ export class GenericMappingsDialogComponent implements OnInit {
       that.editMapping = true;
     }
 
-    const workspaceId = that.workspaceService.getWorkspaceId();
-
-    that.settingsService.getGeneralSettings(workspaceId).subscribe(settings => {
-      that.generalSettings = settings;
-      that.reset();
-    });
+    that.reset();
   }
 
 }

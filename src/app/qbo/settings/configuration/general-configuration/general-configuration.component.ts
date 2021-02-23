@@ -21,6 +21,7 @@ export class GeneralConfigurationComponent implements OnInit {
   mappingSettings: any;
   employeeFieldMapping: any;
   showPaymentsField: boolean;
+  showAutoCreate: boolean;
 
   constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) { }
 
@@ -79,6 +80,7 @@ export class GeneralConfigurationComponent implements OnInit {
       that.employeeFieldMapping = employeeFieldMapping;
 
       that.showPaymentsFields(that.generalSettings.reimbursable_expenses_object);
+      that.showAutoCreateOption(that.generalSettings.auto_map_employees);
       that.expenseOptions = that.getExpenseOptions(that.employeeFieldMapping.destination_field);
 
       let paymentsSyncOption = '';
@@ -95,7 +97,8 @@ export class GeneralConfigurationComponent implements OnInit {
         importCategories: [that.generalSettings.import_categories],
         importProjects: [that.generalSettings.import_projects],
         paymentsSync: [paymentsSyncOption],
-        autoMapEmployees: [that.generalSettings.auto_map_employees]
+        autoMapEmployees: [that.generalSettings.auto_map_employees],
+        autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity]
       });
 
       if (that.generalSettings.reimbursable_expenses_object) {
@@ -117,6 +120,10 @@ export class GeneralConfigurationComponent implements OnInit {
       that.generalSettingsForm.controls.employees.disable();
       that.generalSettingsForm.controls.reimburExpense.disable();
 
+      that.generalSettingsForm.controls.autoMapEmployees.valueChanges.subscribe((employeeMappingPreference) => {
+        that.showAutoCreateOption(employeeMappingPreference);
+      });
+
       if (that.generalSettings.corporate_credit_card_expenses_object) {
         that.generalSettingsForm.controls.cccExpense.disable();
       }
@@ -133,12 +140,17 @@ export class GeneralConfigurationComponent implements OnInit {
         importCategories: [false],
         importProjects: [false],
         paymentsSync: [null],
-        autoMapEmployees: [null]
+        autoMapEmployees: [null],
+        autoCreateDestinationEntity: [false]
       });
 
 
       that.generalSettingsForm.controls.reimburExpense.valueChanges.subscribe((reimbursableExpenseMappedTo) => {
         that.showPaymentsFields(reimbursableExpenseMappedTo);
+      });
+
+      that.generalSettingsForm.controls.autoMapEmployees.valueChanges.subscribe((employeeMappingPreference) => {
+        that.showAutoCreateOption(employeeMappingPreference);
       });
 
       that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
@@ -162,7 +174,8 @@ export class GeneralConfigurationComponent implements OnInit {
       const importCategories = that.generalSettingsForm.value.importCategories;
       const importProjects = that.generalSettingsForm.value.importProjects;
       const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
-
+      const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity ? that.generalSettingsForm.value.autoCreateDestinationEntity : null;
+      
       let fyleToQuickbooks = false;
       let quickbooksToFyle = false;
 
@@ -187,7 +200,7 @@ export class GeneralConfigurationComponent implements OnInit {
       forkJoin(
         [
           that.settingsService.postMappingSettings(that.workspaceId, mappingsSettingsPayload),
-          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importCategories, importProjects, fyleToQuickbooks, quickbooksToFyle, autoMapEmployees)
+          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importCategories, importProjects, fyleToQuickbooks, quickbooksToFyle, autoMapEmployees, autoCreateDestinationEntity)
         ]
       ).subscribe(responses => {
         that.isLoading = true;
@@ -213,6 +226,15 @@ export class GeneralConfigurationComponent implements OnInit {
         that.showPaymentsField = true;
       } else {
         that.showPaymentsField = false;
+      }
+    }
+    
+    showAutoCreateOption(autoMapEmployees) {
+      const that = this;
+      if (autoMapEmployees) {
+        that.showAutoCreate = true;
+      } else {
+        that.showAutoCreate = false;
       }
     }
 

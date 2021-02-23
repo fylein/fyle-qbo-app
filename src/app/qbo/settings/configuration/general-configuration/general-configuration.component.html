@@ -93,11 +93,11 @@
             <mat-option>
               None
             </mat-option>
-            <mat-option [value]="'EMAIL'">
-              Match emails on Fyle and Quickbooks online
-            </mat-option>
             <mat-option [value]="'NAME'">
               Match names on Fyle and Quickbooks Online
+            </mat-option>
+            <mat-option [value]="'EMAIL'">
+              Match emails on Fyle and Quickbooks online
             </mat-option>
             <mat-option [value]="'EMPLOYEE_CODE'">
               Match Fyle Employee Code to Quickbooks Online Name
@@ -105,6 +105,10 @@
           </mat-select>
         </mat-form-field>
       </div>
+
+      <mat-slide-toggle color="primary" class="schedule" *ngIf="showAutoCreate" formControlName="autoCreateDestinationEntity">
+        <div class="schedule--toggle-text">Auto Create Vendor / Employee on Quickbooks Online?</div>
+      </mat-slide-toggle>
 
       <mat-slide-toggle color="primary" class="schedule" formControlName="importCategories">
         <div class="schedule--toggle-text">Import Quickbooks Online Expense Accounts into Fyle</div>

@@ -175,7 +175,7 @@ export class GeneralConfigurationComponent implements OnInit {
       const importProjects = that.generalSettingsForm.value.importProjects;
       const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
       const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity ? that.generalSettingsForm.value.autoCreateDestinationEntity : null;
-      
+
       let fyleToQuickbooks = false;
       let quickbooksToFyle = false;
 
@@ -228,7 +228,7 @@ export class GeneralConfigurationComponent implements OnInit {
         that.showPaymentsField = false;
       }
     }
-    
+
     showAutoCreateOption(autoMapEmployees) {
       const that = this;
       if (autoMapEmployees) {

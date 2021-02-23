@@ -96,7 +96,6 @@ export class SettingsService {
     cacheBusterNotifier: generalSettingsCache
   })
   postGeneralSettings(workspaceId: number, reimbursableExpensesObject: string, corporateCreditCardExpensesObject: string, importCategories: boolean, importProjects: boolean, fyleToQuickBooks: boolean, quickbooksToFyle: boolean, autoMapEmployees: string = null, autoCreateDestinationEntity: boolean) {
-    console.log(autoCreateDestinationEntity);
     return this.apiService.post(`/workspaces/${workspaceId}/settings/general/`, {
       reimbursable_expenses_object: reimbursableExpensesObject,
       corporate_credit_card_expenses_object: corporateCreditCardExpensesObject,

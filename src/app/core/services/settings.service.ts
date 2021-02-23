@@ -4,7 +4,7 @@ import { ApiService } from 'src/app/core/services/api.service';
 import { Cacheable, CacheBuster, globalCacheBusterNotifier } from 'ngx-cacheable';
 import { FyleCredentials } from '../models/fyle-credentials.model';
 import { QBOCredentials } from '../models/qbo-credentials.model';
-import { Settings } from '../models/settings.model';
+import { ScheduleSettings } from '../models/schedule-settings.model';
 
 const fyleCredentialsCache = new Subject<void>();
 const qboCredentialsCache = new Subject<void>();
@@ -79,7 +79,7 @@ export class SettingsService {
     });
   }
 
-  getSettings(workspaceId: number): Observable<Settings> {
+  getSettings(workspaceId: number): Observable<ScheduleSettings> {
     return this.apiService.get(`/workspaces/${workspaceId}/schedule/`, {});
   }
 

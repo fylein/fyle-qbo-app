@@ -6,6 +6,7 @@ import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StorageService } from 'src/app/core/services/storage.service';
+import { GeneralMapping } from 'src/app/core/models/general-mapping.model';
 
 @Component({
   selector: 'app-general-mappings',
@@ -80,7 +81,7 @@ export class GeneralMappingsComponent implements OnInit {
       this.cccAccountIsValid = true;
     }
 
-    const generalMappings = {
+    const generalMappings: GeneralMapping = {
       accounts_payable_name: accountPayableAccount.value,
       accounts_payable_id: accountPayableAccount.destination_id,
       bank_account_name: bankAccount.value,

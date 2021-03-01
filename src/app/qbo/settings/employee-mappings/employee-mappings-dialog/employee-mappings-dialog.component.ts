@@ -7,6 +7,11 @@ import { forkJoin, from } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { MappingSource } from 'src/app/core/models/mapping-source.model';
+import { GeneralMapping } from 'src/app/core/models/general-mapping.model';
+import { MappingDestination } from 'src/app/core/models/mapping-destination.model';
+import { GeneralSetting } from 'src/app/core/models/general-setting.model';
+import { MappingModal } from 'src/app/core/models/mapping-modal.model';
 
 export class MappingErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -23,24 +28,23 @@ export class EmployeeMappingsDialogComponent implements OnInit {
   isLoading = false;
   form: FormGroup;
   workSpaceId: number;
-  // TODO: replace any with relevant models
-  fyleEmployees: any[];
-  qboEmployees: any[];
-  cccObjects: any[];
-  qboVendors: any[];
-  generalSettings: any;
-  employeeOptions: any[];
-  qboEmployeeOptions: any[];
-  cccOptions: any[];
-  qboVendorOptions: any[];
-  generalMappings: any;
+  fyleEmployees: MappingSource[];
+  qboEmployees: MappingDestination[];
+  cccObjects: MappingDestination[];
+  qboVendors: MappingDestination[];
+  generalSettings: GeneralSetting;
+  employeeOptions: MappingSource[];
+  qboEmployeeOptions: MappingDestination[];
+  cccOptions: MappingDestination[];
+  qboVendorOptions: MappingDestination[];
+  generalMappings: GeneralMapping;
   editMapping: boolean;
 
   matcher = new MappingErrorStateMatcher();
 
   constructor(private formBuilder: FormBuilder,
               public dialogRef: MatDialogRef<EmployeeMappingsDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,
+              @Inject(MAT_DIALOG_DATA) public data: MappingModal,
               private mappingsService: MappingsService,
               private snackBar: MatSnackBar,
               private settingsService: SettingsService) { }
@@ -96,8 +100,8 @@ export class EmployeeMappingsDialogComponent implements OnInit {
     }
   }
 
-  forbiddenSelectionValidator(options: any[]): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
+  forbiddenSelectionValidator(options: (MappingSource|MappingDestination)[]): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: object } | null => {
       const forbidden = !options.some((option) => {
         return control.value.id && option.id === control.value.id;
       });
@@ -162,35 +166,21 @@ export class EmployeeMappingsDialogComponent implements OnInit {
 
   reset() {
     const that = this;
-    // TODO: remove promises and do with rxjs observables
-    const getFyleEmployees = that.mappingsService.getFyleEmployees().toPromise().then((fyleEmployees) => {
-      that.fyleEmployees = fyleEmployees;
-    });
-    // TODO: remove promises and do with rxjs observables
-    const getQBOEmployees = that.mappingsService.getQBOEmployees().toPromise().then((qboEmployees) => {
-      that.qboEmployees = qboEmployees;
-    });
-    // TODO: remove promises and do with rxjs observables
-    const getCCCAccounts = that.mappingsService.getCreditCardAccounts().toPromise().then((cccObjects) => {
-      that.cccObjects = cccObjects;
-    });
-    // TODO: remove promises and do with rxjs observables
-    const getQboVendors = that.mappingsService.getQBOVendors().toPromise().then((qboVendors) => {
-      that.qboVendors = qboVendors;
-    });
-    // TODO: remove promises and do with rxjs observables
-    const getGeneralMappings = that.mappingsService.getGeneralMappings().toPromise().then((generalMappings) => {
-      that.generalMappings = generalMappings;
-    });
-
     that.isLoading = true;
+
     forkJoin([
-      from(getFyleEmployees),
-      from(getQBOEmployees),
-      from(getCCCAccounts),
-      from(getQboVendors),
-      from(getGeneralMappings)
-    ]).subscribe((res) => {
+      that.mappingsService.getFyleEmployees(),
+      that.mappingsService.getQBOEmployees(),
+      that.mappingsService.getCreditCardAccounts(),
+      that.mappingsService.getQBOVendors(),
+      that.mappingsService.getGeneralMappings()
+    ]).subscribe(response => {
+      that.fyleEmployees = response[0];
+      that.qboEmployees = response[1];
+      that.cccObjects = response[2];
+      that.qboVendors = response[3];
+      that.generalMappings = response[4];
+
       const fyleEmployee = that.editMapping ? that.fyleEmployees.filter(employee => employee.value === that.data.rowElement.fyle_value)[0] : '';
       const qboVendor = that.editMapping ? that.qboVendors.filter(vendor => vendor.value === that.data.rowElement.qbo_value)[0] : '';
       const qboEmployee = that.editMapping ? that.qboEmployees.filter(employee => employee.value === that.data.rowElement.qbo_value)[0] : '';

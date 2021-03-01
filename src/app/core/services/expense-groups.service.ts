@@ -42,7 +42,7 @@ export class ExpenseGroupsService {
     return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_group_settings/`, {});
   }
 
-  createExpenseGroupsSettings(expensesGroupedBy: string[], expenseState: string[], exportDateType: string): Observable<ExpenseGroupResponse> {
+  createExpenseGroupsSettings(expensesGroupedBy: string[], expenseState: string[], exportDateType: string): Observable<ExpenseGroupSetting> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.post(`/workspaces/${workspaceId}/fyle/expense_group_settings/`, {
       expenses_grouped_by: expensesGroupedBy,

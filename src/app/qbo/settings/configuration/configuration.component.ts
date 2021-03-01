@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { forkJoin } from 'rxjs';
 import { SettingsService } from 'src/app/core/services/settings.service';
+import { ExpenseField } from 'src/app/core/models/expense-field.model';
+import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 
 @Component({
   selector: 'app-configuration',
@@ -13,8 +15,8 @@ export class ConfigurationComponent implements OnInit {
   state: string;
   workspaceId: number;
   isParentLoading: boolean;
-  fyleFields: any;
-  generalSettings: any;
+  fyleFields: ExpenseField[];
+  generalSettings: GeneralSetting;
 
   constructor(private route: ActivatedRoute, private router: Router, private mappingsService: MappingsService, private settingsService: SettingsService) { }
 

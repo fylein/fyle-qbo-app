@@ -2,7 +2,7 @@
 // TODO: Use something for serialization / deserialization
 export type GeneralMapping = {
   id?: number;
-  accounts_payable_id: number;
+  accounts_payable_id: string;
   accounts_payable_name: string;
   bank_account_id: string;
   bank_account_name: string;

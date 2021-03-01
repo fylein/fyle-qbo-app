@@ -5,6 +5,9 @@ import { Cacheable, CacheBuster, globalCacheBusterNotifier } from 'ngx-cacheable
 import { FyleCredentials } from '../models/fyle-credentials.model';
 import { QBOCredentials } from '../models/qbo-credentials.model';
 import { ScheduleSettings } from '../models/schedule-settings.model';
+import { MappingSettingResponse } from '../models/mapping-setting-response.model';
+import { GeneralSetting } from '../models/general-setting.model';
+import { MappingSetting } from '../models/mapping-setting.model';
 
 const fyleCredentialsCache = new Subject<void>();
 const qboCredentialsCache = new Subject<void>();
@@ -24,15 +27,6 @@ export class SettingsService {
     return this.apiService.get('/workspaces/' + workspaceId + '/credentials/fyle/', {});
   }
 
-  // TODO: Add model
-  @CacheBuster({
-    cacheBusterNotifier: fyleCredentialsCache
-  })
-  deleteFyleCredentials(workspaceId: number) {
-    return this.apiService.post('/workspaces/' + workspaceId + '/credentials/fyle/delete/', {});
-  }
-
-  // TODO: Add model
   @CacheBuster({
     cacheBusterNotifier: qboCredentialsCache
   })
@@ -48,21 +42,19 @@ export class SettingsService {
     return this.apiService.get('/workspaces/' + workspaceId + '/credentials/qbo/', {});
   }
 
-  // TODO: Add model
   @CacheBuster({
     cacheBusterNotifier: fyleCredentialsCache
   })
-  connectFyle(workspaceId: number, authorizationCode: string) {
+  connectFyle(workspaceId: number, authorizationCode: string): Observable<FyleCredentials> {
     return this.apiService.post('/workspaces/' + workspaceId + '/connect_fyle/authorization_code/', {
       code: authorizationCode
     });
   }
 
-  // TODO: Add model
   @CacheBuster({
     cacheBusterNotifier: qboCredentialsCache
   })
-  connectQBO(workspaceId: number, authorizationCode: string, realmId: string) {
+  connectQBO(workspaceId: number, authorizationCode: string, realmId: string): Observable<QBOCredentials> {
     globalCacheBusterNotifier.next();
     return this.apiService.post('/workspaces/' + workspaceId + '/connect_qbo/authorization_code/', {
       code: authorizationCode,
@@ -70,8 +62,7 @@ export class SettingsService {
     });
   }
 
-  // TODO: Add model
-  postSettings(workspaceId: number, nextRun: string, hours: number, scheduleEnabled: boolean) {
+  postSettings(workspaceId: number, nextRun: string, hours: number, scheduleEnabled: boolean): Observable<ScheduleSettings> {
     return this.apiService.post(`/workspaces/${workspaceId}/schedule/`, {
       next_run: nextRun,
       hours,
@@ -83,19 +74,17 @@ export class SettingsService {
     return this.apiService.get(`/workspaces/${workspaceId}/schedule/`, {});
   }
 
-  // TODO: Add model
   @Cacheable({
     cacheBusterObserver: mappingsSettingsCache
   })
-  getMappingSettings(workspaceId: number) {
+  getMappingSettings(workspaceId: number): Observable<MappingSettingResponse> {
     return this.apiService.get(`/workspaces/${workspaceId}/mappings/settings/`, {});
   }
 
-  // TODO: Add model
   @CacheBuster({
     cacheBusterNotifier: generalSettingsCache
   })
-  postGeneralSettings(workspaceId: number, reimbursableExpensesObject: string, corporateCreditCardExpensesObject: string, importCategories: boolean, importProjects: boolean, fyleToQuickBooks: boolean, quickbooksToFyle: boolean, autoMapEmployees: string = null, autoCreateDestinationEntity: boolean) {
+  postGeneralSettings(workspaceId: number, reimbursableExpensesObject: string, corporateCreditCardExpensesObject: string, importCategories: boolean, importProjects: boolean, fyleToQuickBooks: boolean, quickbooksToFyle: boolean, autoCreateDestinationEntity: boolean, autoMapEmployees: string = null): Observable<GeneralSetting> {
     return this.apiService.post(`/workspaces/${workspaceId}/settings/general/`, {
       reimbursable_expenses_object: reimbursableExpensesObject,
       corporate_credit_card_expenses_object: corporateCreditCardExpensesObject,
@@ -108,27 +97,24 @@ export class SettingsService {
     });
   }
 
-  // TODO: Add model
   @CacheBuster({
     cacheBusterNotifier: mappingsSettingsCache
   })
-  postMappingSettings(workspaceId: number, mappingSettings: any) {
+  postMappingSettings(workspaceId: number, mappingSettings: MappingSetting[]): Observable<MappingSetting[]> {
     return this.apiService.post(`/workspaces/${workspaceId}/mappings/settings/`, mappingSettings);
   }
 
-  // TODO: Add model
   @Cacheable({
     cacheBusterObserver: generalSettingsCache
   })
-  getGeneralSettings(workspaceId: number) {
+  getGeneralSettings(workspaceId: number): Observable<GeneralSetting> {
     return this.apiService.get(`/workspaces/${workspaceId}/settings/general/`, {});
   }
 
-  // TODO: Add model
   @Cacheable({
     cacheBusterObserver: merge(generalSettingsCache, generalSettingsCache)
   })
-  getCombinedSettings(workspaceId: number) {
+  getCombinedSettings(workspaceId: number): Observable<GeneralSetting> {
     // TODO: remove promises and do with rxjs observables
     return from(forkJoin(
       [

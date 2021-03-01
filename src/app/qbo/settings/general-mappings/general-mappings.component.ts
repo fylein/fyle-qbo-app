@@ -109,7 +109,7 @@ export class GeneralMappingsComponent implements OnInit {
       }, error => {
         that.isLoading = false;
         that.snackBar.open('Please fill up the form with valid values');
-        that.form.markAllAsTouched();        
+        that.form.markAllAsTouched();
       });
     } else {
       that.snackBar.open('Please fill up the form with valid values');

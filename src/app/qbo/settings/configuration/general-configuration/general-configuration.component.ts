@@ -178,7 +178,7 @@ export class GeneralConfigurationComponent implements OnInit {
       const importCategories = that.generalSettingsForm.value.importCategories;
       const importProjects = that.generalSettingsForm.value.importProjects;
       const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
-      const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity ? that.generalSettingsForm.value.autoCreateDestinationEntity : null;
+      const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
 
       let fyleToQuickbooks = false;
       let quickbooksToFyle = false;

@@ -6,6 +6,7 @@ import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StorageService } from 'src/app/core/services/storage.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-general-mappings',
@@ -28,6 +29,7 @@ export class GeneralMappingsComponent implements OnInit {
   cccAccountIsValid = true;
   billPaymentAccountIsValid = true;
   vendorIsValid = true;
+  showCCCVendorMappingField: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,8 +60,10 @@ export class GeneralMappingsComponent implements OnInit {
     const billPaymentAccountId = that.generalSettings.sync_fyle_to_qbo_payments ? that.form.value.billPaymentAccounts : '';
     const billPaymentAccount = that.generalSettings.sync_fyle_to_qbo_payments ? that.billPaymentAccounts.filter(filteredAccountsPayableAccount => filteredAccountsPayableAccount.destination_id === billPaymentAccountId)[0] : '';
 
-    const defaultVendorId = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.form.value.qboVendors : '';
-    const defaultVendor = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.qboVendors.filter(filteredVendor => filteredVendor.destination_id === defaultVendorId)[0] : '';
+    const mapMerchantToVendor = that.form.value.mapMerchantToVendor;
+
+    const defaultVendorId = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' || mapMerchantToVendor ? that.form.value.qboVendors : '';
+    const defaultVendor = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' || mapMerchantToVendor ? that.qboVendors.filter(filteredVendor => filteredVendor.destination_id === defaultVendorId)[0] : '';
 
     if (accountPayableAccountId != null) {
       that.accountsPayableIsValid = true;
@@ -68,7 +72,7 @@ export class GeneralMappingsComponent implements OnInit {
       that.bankAccountIsValid = true;
     }
     if (cccAccountId != null) {
-      that.cccAccountIsValid = true;
+      that.cccAccountIsValid = true
     }
     if (billPaymentAccountId != null) {
       that.billPaymentAccountIsValid = true;
@@ -90,7 +94,8 @@ export class GeneralMappingsComponent implements OnInit {
       bill_payment_account_name: billPaymentAccount.value,
       bill_payment_account_id: billPaymentAccount.destination_id,
       default_ccc_vendor_name: defaultVendor.value,
-      default_ccc_vendor_id: defaultVendor.destination_id
+      default_ccc_vendor_id: defaultVendor.destination_id,
+      map_merchant_to_vendor: mapMerchantToVendor
     };
 
     if (that.accountsPayableIsValid && that.bankAccountIsValid && that.cccAccountIsValid && that.vendorIsValid && that.billPaymentAccountIsValid) {
@@ -121,7 +126,14 @@ export class GeneralMappingsComponent implements OnInit {
         bankAccounts: [that.generalMappings ? that.generalMappings.bank_account_id : ''],
         cccAccounts: [that.generalMappings ? that.generalMappings.default_ccc_account_id : ''],
         billPaymentAccounts: [that.generalMappings ? that.generalMappings.bill_payment_account_id : ''],
-        qboVendors: [that.generalMappings ? that.generalMappings.default_ccc_vendor_id : '']
+        qboVendors: [that.generalMappings ? that.generalMappings.default_ccc_vendor_id : ''],
+        mapMerchantToVendor: [that.generalMappings.map_merchant_to_vendor]
+      });
+
+      that.showCCCVendorMappingField = that.generalMappings.map_merchant_to_vendor;
+
+      that.form.controls.mapMerchantToVendor.valueChanges.subscribe((mapMerchantToVendor) => {
+        that.showCCCVendorMapping(mapMerchantToVendor);
       });
     }, error => {
       that.generalMappings = {};
@@ -131,7 +143,12 @@ export class GeneralMappingsComponent implements OnInit {
         bankAccounts: [that.generalMappings ? that.generalMappings.bank_account_id : ''],
         cccAccounts: [that.generalMappings ? that.generalMappings.default_ccc_account_id : ''],
         billPaymentAccounts: [that.generalMappings ? that.generalMappings.bill_payment_account_id : ''],
-        qboVendors: [that.generalMappings ? that.generalMappings.default_ccc_vendor_id : '']
+        qboVendors: [that.generalMappings ? that.generalMappings.default_ccc_vendor_id : ''],
+        mapMerchantToVendor: [that.generalMappings.map_merchant_to_vendor]
+      });
+
+      that.form.controls.mapMerchantToVendor.valueChanges.subscribe((mapMerchantToVendor) => {
+        that.showCCCVendorMapping(mapMerchantToVendor);
       });
     });
   }
@@ -156,6 +173,11 @@ export class GeneralMappingsComponent implements OnInit {
       that.billPaymentAccounts = responses[4];
       that.getGeneralMappings();
     });
+  }
+
+  showCCCVendorMapping(mapMerchantToVendor) {
+    const that = this;
+    that.showCCCVendorMappingField = mapMerchantToVendor;
   }
 
   ngOnInit() {

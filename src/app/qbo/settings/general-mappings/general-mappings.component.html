@@ -52,11 +52,19 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <div class="mat-body-strong" *ngIf="generalSettings.corporate_credit_card_expenses_object === 'BILL'">
+
+      <mat-slide-toggle color="primary" class="toggle" *ngIf="generalSettings.corporate_credit_card_expenses_object === 'CREDIT CARD PURCHASE'" formControlName="mapMerchantToVendor">
+        <div class="schedule--toggle-text">
+          Map Credit Card Expense Merchant to Quickbooks Vendors
+          <mat-icon [inline]="true" class="info-icon" matTooltip="We'll automatically match the merchant name on the credit card transaction to any corresponding vendors in QuickBooks. If no vendors exist, we'll create it against the vendor selected below on the date of transaction" matTooltipPosition="after">info</mat-icon>
+        </div>
+      </mat-slide-toggle>
+      
+      <div class="mat-body-strong" *ngIf="generalSettings.corporate_credit_card_expenses_object === 'BILL' || (generalSettings.corporate_credit_card_expenses_object === 'CREDIT CARD PURCHASE' && showCCCVendorMappingField)">
         Default Credit Card Vendor
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required
-        *ngIf="generalSettings.corporate_credit_card_expenses_object === 'BILL'">
+        *ngIf="generalSettings.corporate_credit_card_expenses_object === 'BILL' || (generalSettings.corporate_credit_card_expenses_object === 'CREDIT CARD PURCHASE' && showCCCVendorMappingField)">
         <mat-select class="general-mappings--input" placeholder="Select default credit card Vendor for card expenses imported from Fyle"
           formControlName="qboVendors">
           <mat-option *ngFor="let cccAccount of qboVendors; let i = index" [value]="qboVendors[i].destination_id">

@@ -8,7 +8,7 @@
   &--form {
     font-size: 14px;
     margin: 24px;
-    max-width: 360px;
+    max-width: 480px;
     color: $fy-nav-text;
   }
 
@@ -20,5 +20,29 @@
 
   &--save-btn {
     max-width: 32px;
+  }
+}
+
+.info-icon {
+  text-align: center;
+  cursor: pointer;
+  padding-left: 5px;
+  padding-bottom: 5px;
+  max-width: 24px;
+  max-height: 24px;
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+.toggle {
+  margin-top: 12px;
+  margin-bottom: 16px;
+  &--header {
+    border-bottom: 1px solid $fy-layout-background;
+    border-top: 1px solid $fy-layout-background;
+  }
+  
+  &--toggle-text {
+    font-size: 14px;
   }
 }

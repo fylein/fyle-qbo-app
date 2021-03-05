@@ -19,10 +19,7 @@ export class QBOCallbackComponent implements OnInit {
     const workspaceId: number = that.route.snapshot.queryParams.state;
     const code: string = that.route.snapshot.queryParams.code;
     const realmId: string = that.route.snapshot.queryParams.realmId;
-    // TODO: replace with rxjs implementation
-    that.settingsService.connectQBO(workspaceId, code, realmId).toPromise().then(() => {
-      // nothing to do here but need then block for promise to execute
-    }).finally(() => {
+    that.settingsService.connectQBO(workspaceId, code, realmId).subscribe(() => {
       that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`);
     });
   }

@@ -6,6 +6,9 @@ import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StorageService } from 'src/app/core/services/storage.service';
+import { GeneralMapping } from 'src/app/core/models/general-mapping.model';
+import { MappingDestination } from 'src/app/core/models/mapping-destination.model';
+import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 
 @Component({
   selector: 'app-general-mappings',
@@ -15,13 +18,13 @@ import { StorageService } from 'src/app/core/services/storage.service';
 export class GeneralMappingsComponent implements OnInit {
   form: FormGroup;
   workspaceId: number;
-  accountPayableAccounts: any[];
-  bankAccounts: any[];
-  cccAccounts: any[];
-  billPaymentAccounts: any[];
-  qboVendors: any[];
-  generalMappings: any;
-  generalSettings: any;
+  accountPayableAccounts: MappingDestination[];
+  bankAccounts: MappingDestination[];
+  cccAccounts: MappingDestination[];
+  billPaymentAccounts: MappingDestination[];
+  qboVendors: MappingDestination[];
+  generalMappings: GeneralMapping;
+  generalSettings: GeneralSetting;
   isLoading = true;
   accountsPayableIsValid = true;
   bankAccountIsValid = true;
@@ -80,28 +83,33 @@ export class GeneralMappingsComponent implements OnInit {
       this.cccAccountIsValid = true;
     }
 
-    const generalMappings = {
-      accounts_payable_name: accountPayableAccount.value,
-      accounts_payable_id: accountPayableAccount.destination_id,
-      bank_account_name: bankAccount.value,
-      bank_account_id: bankAccount.destination_id,
-      default_ccc_account_name: cccAccount ? cccAccount.value : null,
-      default_ccc_account_id: cccAccount ? cccAccount.destination_id : null,
-      bill_payment_account_name: billPaymentAccount.value,
-      bill_payment_account_id: billPaymentAccount.destination_id,
-      default_ccc_vendor_name: defaultVendor.value,
-      default_ccc_vendor_id: defaultVendor.destination_id
-    };
-
     if (that.accountsPayableIsValid && that.bankAccountIsValid && that.cccAccountIsValid && that.vendorIsValid && that.billPaymentAccountIsValid) {
       that.isLoading = true;
-      this.mappingsService.postGeneralMappings(generalMappings).subscribe(response => {
+
+      const generalMappings: GeneralMapping = {
+        accounts_payable_name: accountPayableAccount ? accountPayableAccount.value : null,
+        accounts_payable_id: accountPayableAccount ? accountPayableAccount.destination_id : null,
+        bank_account_name: bankAccount ? bankAccount.value : null,
+        bank_account_id: bankAccount ? bankAccount.destination_id : null,
+        default_ccc_account_name: cccAccount ? cccAccount.value : null,
+        default_ccc_account_id: cccAccount ? cccAccount.destination_id : null,
+        bill_payment_account_name: billPaymentAccount ? billPaymentAccount.value : null,
+        bill_payment_account_id: billPaymentAccount ? billPaymentAccount.destination_id : null,
+        default_ccc_vendor_name: defaultVendor ? defaultVendor.value : null,
+        default_ccc_vendor_id: defaultVendor ? defaultVendor.destination_id : null
+      };
+
+      this.mappingsService.postGeneralMappings(generalMappings).subscribe(() => {
         const onboarded = that.storageService.get('onboarded');
         if (onboarded === true) {
           that.getGeneralMappings();
         } else {
           that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
         }
+      }, error => {
+        that.isLoading = false;
+        that.snackBar.open('Please fill up the form with valid values');
+        that.form.markAllAsTouched();
       });
     } else {
       that.snackBar.open('Please fill up the form with valid values');
@@ -124,14 +132,13 @@ export class GeneralMappingsComponent implements OnInit {
         qboVendors: [that.generalMappings ? that.generalMappings.default_ccc_vendor_id : '']
       });
     }, error => {
-      that.generalMappings = {};
       that.isLoading = false;
       that.form = that.formBuilder.group({
-        accountPayableAccounts: [that.generalMappings ? that.generalMappings.accounts_payable_id : ''],
-        bankAccounts: [that.generalMappings ? that.generalMappings.bank_account_id : ''],
-        cccAccounts: [that.generalMappings ? that.generalMappings.default_ccc_account_id : ''],
-        billPaymentAccounts: [that.generalMappings ? that.generalMappings.bill_payment_account_id : ''],
-        qboVendors: [that.generalMappings ? that.generalMappings.default_ccc_vendor_id : '']
+        accountPayableAccounts: [null],
+        bankAccounts: [null],
+        cccAccounts: [null],
+        billPaymentAccounts: [null],
+        qboVendors: [null]
       });
     });
   }

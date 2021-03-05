@@ -5,12 +5,11 @@ import { forkJoin, Observable } from 'rxjs';
 import { TasksService } from '../../../core/services/tasks.service';
 import { ChecksService } from '../../../core/services/checks.service';
 import { JournalEntriesService } from '../../../core/services/journal-entries.service';
-import { CreditCardPurchasesService } from '../../../core/services/credit-card-purchases.service';
 import { environment } from 'src/environments/environment';
-import { BillsService } from 'src/app/core/services/bills.service';
 import { ExpenseGroup } from 'src/app/core/models/expense-group.model';
 import { StorageService } from 'src/app/core/services/storage.service';
 import { WindowReferenceService } from 'src/app/core/services/window.service';
+import { Task } from 'src/app/core/models/task.model';
 
 @Component({
   selector: 'app-view-expense-group',
@@ -23,7 +22,7 @@ export class ViewExpenseGroupComponent implements OnInit {
   expenses: ExpenseGroup[];
   isLoading = true;
   expenseGroup: ExpenseGroup;
-  task: any;
+  task: Task;
   state: string;
   pageSize: number;
   pageNumber: number;
@@ -69,38 +68,26 @@ export class ViewExpenseGroupComponent implements OnInit {
     this.windowReference.open(`${clusterDomain}/app/main/#/enterprise/view_expense/${expenseId}`, '_blank');
   }
 
-  initExpenseGroupDetails() {
-    const that = this;
-    // TODO: remove promises and do with rxjs observables
-    return that.expenseGroupsService.getExpensesGroupById(that.expenseGroupId).toPromise().then((expenseGroup) => {
-      that.expenseGroup = expenseGroup;
-      return expenseGroup;
-    });
-  }
-
-  initTasks() {
-    const that = this;
-    // TODO: remove promises and do with rxjs observables
-    return that.tasksService.getTasksByExpenseGroupId(that.expenseGroupId).toPromise().then((tasks) => {
-      if (tasks.length > 0) {
-        that.task = tasks[0];
-        that.status = that.task.status;
-      }
-    });
-  }
-
   ngOnInit() {
-    this.workspaceId = +this.route.snapshot.params.workspace_id;
-    this.expenseGroupId = +this.route.snapshot.params.expense_group_id;
-    this.state = this.route.snapshot.firstChild.routeConfig.path.toUpperCase() || 'INFO';
+    const that = this;
+
+    that.workspaceId = +that.route.snapshot.params.workspace_id;
+    that.expenseGroupId = +that.route.snapshot.params.expense_group_id;
+    that.state = that.route.snapshot.firstChild.routeConfig.path.toUpperCase() || 'INFO';
 
     forkJoin(
       [
-        this.initExpenseGroupDetails(),
-        this.initTasks()
+        that.expenseGroupsService.getExpensesGroupById(that.expenseGroupId),
+        that.tasksService.getTasksByExpenseGroupId(that.expenseGroupId)
       ]
     ).subscribe(response => {
-      this.isLoading = false;
+      that.isLoading = false;
+
+      that.expenseGroup = response[0];
+      if (response[1].length > 0) {
+        that.task = response[1][0];
+        that.status = that.task.status;
+      }
     });
   }
 

@@ -5,34 +5,37 @@ import { ApiService } from 'src/app/core/services/api.service';
 import { GeneralMapping } from '../models/general-mapping.model';
 import { MappingsResponse } from '../models/mappings-response.model';
 import { WorkspaceService } from './workspace.service';
+import { ExpenseField } from '../models/expense-field.model';
+import { MappingDestination } from '../models/mapping-destination.model';
+import { MappingSource } from '../models/mapping-source.model';
+import { Mapping } from '../models/mappings.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MappingsService {
-  // TODO: Map models to each of these and the methods below
-  fyleCategories: Observable<any[]>;
-  qboAccounts: Observable<any[]>;
-  fyleEmployees: Observable<any[]>;
-  qboVendors: Observable<any[]>;
-  qboEmployees: Observable<any[]>;
-  fyleProjects: Observable<any[]>;
-  fyleExpenseCustomFields: Observable<any[]>;
-  qboCustomers: Observable<any[]>;
-  qboDepartments: Observable<any[]>;
-  fyleCostCenters: Observable<any[]>;
-  qboClasses: Observable<any[]>;
-  accountPayables: Observable<any[]>;
-  bankAccounts: Observable<any[]>;
-  creditCardAccounts: Observable<any[]>;
-  billPaymentAccounts: Observable<any[]>;
-  expenseFields: Observable<any[]>;
+  fyleCategories: Observable<MappingSource[]>;
+  fyleEmployees: Observable<MappingSource[]>;
+  fyleProjects: Observable<MappingSource[]>;
+  fyleCostCenters: Observable<MappingSource[]>;
+  fyleExpenseCustomFields: Observable<MappingSource[]>;
+  expenseFields: Observable<ExpenseField[]>;
+  qboAccounts: Observable<MappingDestination[]>;
+  qboVendors: Observable<MappingDestination[]>;
+  qboEmployees: Observable<MappingDestination[]>;
+  qboCustomers: Observable<MappingDestination[]>;
+  qboDepartments: Observable<MappingDestination[]>;
+  qboClasses: Observable<MappingDestination[]>;
+  accountPayables: Observable<MappingDestination[]>;
+  bankAccounts: Observable<MappingDestination[]>;
+  creditCardAccounts: Observable<MappingDestination[]>;
+  billPaymentAccounts: Observable<MappingDestination[]>;
 
   constructor(
     private apiService: ApiService,
     private workspaceService: WorkspaceService) { }
 
-  postFyleEmployees() {
+  postFyleEmployees(): Observable<MappingSource[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     if (!this.fyleEmployees) {
@@ -45,7 +48,7 @@ export class MappingsService {
     return this.fyleEmployees;
   }
 
-  postFyleCategories() {
+  postFyleCategories(): Observable<MappingSource[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     if (!this.fyleCategories) {
@@ -58,7 +61,7 @@ export class MappingsService {
     return this.fyleCategories;
   }
 
-  postFyleProjects() {
+  postFyleProjects(): Observable<MappingSource[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     if (!this.fyleProjects) {
@@ -71,7 +74,7 @@ export class MappingsService {
     return this.fyleProjects;
   }
 
-  postExpenseCustomFields() {
+  postExpenseCustomFields(): Observable<MappingSource[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     if (!this.fyleExpenseCustomFields) {
@@ -84,7 +87,7 @@ export class MappingsService {
     return this.fyleExpenseCustomFields;
   }
 
-  postFyleCostCenters() {
+  postFyleCostCenters(): Observable<MappingSource[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     if (!this.fyleCostCenters) {
@@ -97,7 +100,7 @@ export class MappingsService {
     return this.fyleCostCenters;
   }
 
-  postQBOVendors() {
+  postQBOVendors(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     if (!this.qboVendors) {
@@ -110,7 +113,7 @@ export class MappingsService {
     return this.qboVendors;
   }
 
-  postQBOEmployees() {
+  postQBOEmployees(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     if (!this.qboEmployees) {
@@ -124,7 +127,7 @@ export class MappingsService {
   }
 
 
-  postQBOCustomers() {
+  postQBOCustomers(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     if (!this.qboCustomers) {
@@ -137,7 +140,7 @@ export class MappingsService {
     return this.qboCustomers;
   }
 
-  postExpenseAccounts() {
+  postExpenseAccounts(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     if (!this.qboAccounts) {
@@ -152,7 +155,7 @@ export class MappingsService {
     return this.qboAccounts;
   }
 
-  postBankAccounts() {
+  postBankAccounts(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     if (!this.bankAccounts) {
@@ -167,7 +170,7 @@ export class MappingsService {
     return this.bankAccounts;
   }
 
-  postAccountsPayables() {
+  postAccountsPayables(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     if (!this.accountPayables) {
@@ -182,7 +185,7 @@ export class MappingsService {
     return this.accountPayables;
   }
 
-  postCreditCardAccounts() {
+  postCreditCardAccounts(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     if (!this.creditCardAccounts) {
@@ -197,7 +200,7 @@ export class MappingsService {
     return this.creditCardAccounts;
   }
 
-  postBillPaymentAccounts() {
+  postBillPaymentAccounts(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     if (!this.billPaymentAccounts) {
@@ -213,7 +216,7 @@ export class MappingsService {
   }
 
 
-  postQBOClasses() {
+  postQBOClasses(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     if (!this.qboClasses) {
@@ -226,7 +229,7 @@ export class MappingsService {
     return this.qboClasses;
   }
 
-  postQBODepartments() {
+  postQBODepartments(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     if (!this.qboDepartments) {
@@ -239,56 +242,50 @@ export class MappingsService {
     return this.qboDepartments;
   }
 
-  getFyleExpenseFields() {
+  getFyleExpenseFields(): Observable<ExpenseField[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_fields/`, {});
   }
 
-  getFyleEmployees() {
+  getFyleEmployees(): Observable<MappingSource[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/fyle/employees/`, {});
   }
 
-  getFyleCategories() {
+  getFyleCategories(): Observable<MappingSource[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/fyle/categories/`, {});
   }
 
-  getQBOVendors() {
+  getQBOVendors(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/vendors/`, {});
   }
 
-  getQBOFields() {
+  getQBOFields(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/quickbooks_fields/`, {});
   }
 
 
-  getQBOEmployees() {
+  getQBOEmployees(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/employees/`, {});
   }
 
-  getQBOCustomers() {
+  getQBOCustomers(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/customers/`, {});
   }
 
-  getFyleProjects() {
-    const workspaceId = this.workspaceService.getWorkspaceId();
-
-    return this.apiService.get(`/workspaces/${workspaceId}/fyle/projects/`, {});
-  }
-
-  getFyleExpenseCustomFields(attributeType: string) {
+  getFyleExpenseCustomFields(attributeType: string): Observable<MappingSource[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_custom_fields/`, {
@@ -296,25 +293,19 @@ export class MappingsService {
     });
   }
 
-  getQBOClasses() {
+  getQBOClasses(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/classes/`, {});
   }
 
-  getQBODepartments() {
+  getQBODepartments(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/departments/`, {});
   }
 
-  getFyleCostCenters() {
-    const workspaceId = this.workspaceService.getWorkspaceId();
-
-    return this.apiService.get(`/workspaces/${workspaceId}/fyle/cost_centers/`, {});
-  }
-
-  getExpenseAccounts() {
+  getExpenseAccounts(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(
@@ -322,7 +313,7 @@ export class MappingsService {
     );
   }
 
-  getBankAccounts() {
+  getBankAccounts(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(
@@ -330,7 +321,7 @@ export class MappingsService {
     );
   }
 
-  getAccountsPayables() {
+  getAccountsPayables(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(
@@ -338,7 +329,7 @@ export class MappingsService {
     );
   }
 
-  getBillPaymentAccounts() {
+  getBillPaymentAccounts(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(
@@ -346,15 +337,15 @@ export class MappingsService {
     );
   }
 
-  getCreditCardAccounts() {
+  getCreditCardAccounts(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(
       `/workspaces/${workspaceId}/qbo/credit_card_accounts/`, {}
     );
   }
-  // TODO: Replace any with proper model
-  postGeneralMappings(generalMappings: any) {
+
+  postGeneralMappings(generalMappings: GeneralMapping): Observable<GeneralMapping> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.post(`/workspaces/${workspaceId}/mappings/general/`, generalMappings);
   }
@@ -372,114 +363,25 @@ export class MappingsService {
     return this.apiService.get(url, {});
   }
 
-  getAllMappings(sourceType: string) {
+  getAllMappings(sourceType: string): Observable<Mapping[]> {
     const that = this;
-    return this.getMappings(sourceType).pipe(expand((res: any) => {
+    return this.getMappings(sourceType).pipe(expand((res: MappingsResponse) => {
       // tslint:disable-next-line
       return res.next ? that.getMappings(sourceType, 500, res.next) : empty();
-    }), concatMap((res: any) => res.results),
-      reduce((arr, val) => {
+    }), concatMap((res: MappingsResponse) => res.results),
+      reduce((arr: Mapping[], val: Mapping) => {
         arr.push(val);
         return arr;
       }, []));
   }
 
-  postMappings(mapping: any) {
+  postMappings(mapping: Mapping): Observable<Mapping> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.post(`/workspaces/${workspaceId}/mappings/`, mapping);
-  }
-
-  getCategoryMappings() {
-    const workspaceId = this.workspaceService.getWorkspaceId();
-    return this.apiService.get(
-      `/workspaces/${workspaceId}/mappings/categories/`, {}
-    );
-  }
-
-  postCategoryMappings(category: string, subCategory: string, accountName: string, accountId: string) {
-    const workspaceId = this.workspaceService.getWorkspaceId();
-    this.fyleCategories = null;
-    this.qboAccounts = null;
-    return this.apiService.post(
-      `/workspaces/${workspaceId}/mappings/categories/`, {
-      category,
-      sub_category: subCategory,
-      account_name: accountName,
-      account_id: accountId
-    }
-    );
-  }
-
-  getEmployeeMappings() {
-    const workspaceId = this.workspaceService.getWorkspaceId();
-
-    return this.apiService.get(
-      `/workspaces/${workspaceId}/mappings/employees/`, {}
-    );
-  }
-
-  postEmployeeMappings(employeeEmail: string, vendorDisplayName: string, vendorId: string, employeeDisplayName: string, employeeId: string, cccAccountName: string, cccAccountId: string) {
-    const workspaceId = this.workspaceService.getWorkspaceId();
-    this.fyleEmployees = null;
-    this.qboVendors = null;
-    this.qboEmployees = null;
-    return this.apiService.post(
-      `/workspaces/${workspaceId}/mappings/employees/`, {
-      employee_email: employeeEmail,
-      vendor_display_name: vendorDisplayName,
-      vendor_id: vendorId,
-      employee_display_name: employeeDisplayName,
-      employee_id: employeeId,
-      ccc_account_name: cccAccountName,
-      ccc_account_id: cccAccountId
-    }
-    );
-  }
-
-  getProjectMappings() {
-    const workspaceId = this.workspaceService.getWorkspaceId();
-
-    return this.apiService.get(
-      `/workspaces/${workspaceId}/mappings/projects/`, {}
-    );
-  }
-
-  postProjectMappings(project: string, customerDisplayName: string, customerId: string) {
-    const workspaceId = this.workspaceService.getWorkspaceId();
-    this.fyleProjects = null;
-    this.qboCustomers = null;
-    return this.apiService.post(
-      `/workspaces/${workspaceId}/mappings/projects/`, {
-      project,
-      customer_display_name: customerDisplayName,
-      customer_id: customerId
-    }
-    );
   }
 
   triggerAutoMapEmployees() {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.post(`/workspaces/${workspaceId}/mappings/auto_map_employees/trigger/`, {});
-  }
-
-  getCostCenterMappings() {
-    const workspaceId = this.workspaceService.getWorkspaceId();
-
-    return this.apiService.get(
-      `/workspaces/${workspaceId}/mappings/cost_centers/`, {}
-    );
-  }
-
-  postCostCenterMappings(project: string, className: string, classId: string) {
-    const workspaceId = this.workspaceService.getWorkspaceId();
-    this.fyleCostCenters = null;
-    this.qboClasses = null;
-    return this.apiService.post(
-      `/workspaces/${workspaceId}/mappings/cost_centers/`, {
-      cost_center: project,
-      class_name: className,
-      class_id: classId
-    }
-    );
   }
 }

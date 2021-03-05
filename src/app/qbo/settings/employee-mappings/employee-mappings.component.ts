@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MappingsService } from '../../../core/services/mappings.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -7,6 +7,9 @@ import { EmployeeMappingsDialogComponent } from './employee-mappings-dialog/empl
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { StorageService } from 'src/app/core/services/storage.service';
 import { MatSnackBar } from '@angular/material';
+import { Mapping } from 'src/app/core/models/mappings.model';
+import { GeneralSetting } from 'src/app/core/models/general-setting.model';
+import { MappingRow } from 'src/app/core/models/mapping-row.model';
 
 @Component({
   selector: 'app-employee-mappings',
@@ -17,12 +20,11 @@ export class EmployeeMappingsComponent implements OnInit {
 
   closeResult: string;
   form: FormGroup;
-  employeeMappings: any[];
+  employeeMappings: Mapping[];
   workspaceId: number;
   isLoading = true;
-  generalSettings: any;
-  filteredAccounts: any[];
-  rowElement: any;
+  generalSettings: GeneralSetting;
+  rowElement: Mapping;
   columnsToDisplay = ['employee_email', 'qbo'];
 
   constructor(public dialog: MatDialog,
@@ -33,7 +35,7 @@ export class EmployeeMappingsComponent implements OnInit {
               private settingsService: SettingsService,
               private storageService: StorageService) { }
 
-  open(selectedItem: any = null) {
+  open(selectedItem: MappingRow = null) {
     const that = this;
     const dialogRef = that.dialog.open(EmployeeMappingsDialogComponent, {
       width: '450px',
@@ -80,7 +82,7 @@ export class EmployeeMappingsComponent implements OnInit {
       mappings.push({
         fyle_value: employeeEVMapping.source.value,
         qbo_value: employeeEVMapping.destination.value,
-        ccc_account: that.getCCCAccount(that.employeeMappings, employeeEVMapping),
+        ccc_value: that.getCCCAccount(that.employeeMappings, employeeEVMapping),
         auto_mapped: employeeEVMapping.source.auto_mapped
       });
     });

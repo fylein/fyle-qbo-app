@@ -4,6 +4,8 @@ import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GeneralSetting } from 'src/app/core/models/general-setting.model';
+import { MappingSetting } from 'src/app/core/models/mapping-setting.model';
 
 @Component({
   selector: 'app-general-configuration',
@@ -17,9 +19,9 @@ export class GeneralConfigurationComponent implements OnInit {
   generalSettingsForm: FormGroup;
   expenseOptions: { label: string, value: string }[];
   workspaceId: number;
-  generalSettings: any;
-  mappingSettings: any;
-  employeeFieldMapping: any;
+  generalSettings: GeneralSetting;
+  mappingSettings: MappingSetting[];
+  employeeFieldMapping: MappingSetting;
   showPaymentsField: boolean;
   showAutoCreate: boolean;
 
@@ -52,7 +54,11 @@ export class GeneralConfigurationComponent implements OnInit {
 
   showImportProjects() {
     const that = this;
-    const projectSetting = that.mappingSettings.filter(setting => setting.source_field === 'PROJECT')[0];
+    let projectSetting;
+
+    if (that.mappingSettings) {
+      projectSetting = that.mappingSettings.filter(setting => setting.source_field === 'PROJECT')[0];
+    }
 
     if (!projectSetting || projectSetting.destination_field === 'CUSTOMER') {
       return true;
@@ -130,8 +136,6 @@ export class GeneralConfigurationComponent implements OnInit {
 
       that.isLoading = false;
     }, error => {
-      that.generalSettings = {};
-      that.mappingSettings = [];
       that.isLoading = false;
       that.generalSettingsForm = that.formBuilder.group({
         employees: ['', Validators.required],
@@ -168,8 +172,8 @@ export class GeneralConfigurationComponent implements OnInit {
         destination_field: 'ACCOUNT'
       }];
 
-      const reimbursableExpensesObject = that.generalSettingsForm.value.reimburExpense || that.generalSettings.reimbursable_expenses_object;
-      const cccExpensesObject = that.generalSettingsForm.value.cccExpense || that.generalSettings.corporate_credit_card_expenses_object;
+      const reimbursableExpensesObject = that.generalSettingsForm.value.reimburExpense || (that.generalSettings ? that.generalSettings.reimbursable_expenses_object : null);
+      const cccExpensesObject = that.generalSettingsForm.value.cccExpense || (that.generalSettings ? that.generalSettings.corporate_credit_card_expenses_object : null);
       const employeeMappingsObject = that.generalSettingsForm.value.employees || (that.employeeFieldMapping && that.employeeFieldMapping.destination_field);
       const importCategories = that.generalSettingsForm.value.importCategories;
       const importProjects = that.generalSettingsForm.value.importProjects;
@@ -200,7 +204,7 @@ export class GeneralConfigurationComponent implements OnInit {
       forkJoin(
         [
           that.settingsService.postMappingSettings(that.workspaceId, mappingsSettingsPayload),
-          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importCategories, importProjects, fyleToQuickbooks, quickbooksToFyle, autoMapEmployees, autoCreateDestinationEntity)
+          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importCategories, importProjects, fyleToQuickbooks, quickbooksToFyle, autoCreateDestinationEntity, autoMapEmployees)
         ]
       ).subscribe(responses => {
         that.isLoading = true;

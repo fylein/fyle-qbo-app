@@ -235,7 +235,7 @@ export class GeneralConfigurationComponent implements OnInit {
 
     showAutoCreateOption(autoMapEmployees) {
       const that = this;
-      if (autoMapEmployees) {
+      if (autoMapEmployees && autoMapEmployees !== 'EMPLOYEE_CODE') {
         that.showAutoCreate = true;
       } else {
         that.showAutoCreate = false;

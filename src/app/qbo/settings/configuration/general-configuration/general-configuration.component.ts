@@ -86,7 +86,6 @@ export class GeneralConfigurationComponent implements OnInit {
       that.employeeFieldMapping = employeeFieldMapping;
 
       that.showPaymentsFields(that.generalSettings.reimbursable_expenses_object);
-      that.showAutoCreateOption(that.generalSettings.auto_map_employees);
       that.expenseOptions = that.getExpenseOptions(that.employeeFieldMapping.destination_field);
 
       let paymentsSyncOption = '';
@@ -125,6 +124,8 @@ export class GeneralConfigurationComponent implements OnInit {
 
       that.generalSettingsForm.controls.employees.disable();
       that.generalSettingsForm.controls.reimburExpense.disable();
+
+      that.showAutoCreateOption(that.generalSettings.auto_map_employees);
 
       that.generalSettingsForm.controls.autoMapEmployees.valueChanges.subscribe((employeeMappingPreference) => {
         that.showAutoCreateOption(employeeMappingPreference);
@@ -239,6 +240,7 @@ export class GeneralConfigurationComponent implements OnInit {
         that.showAutoCreate = true;
       } else {
         that.showAutoCreate = false;
+        that.generalSettingsForm.controls.autoCreateDestinationEntity.setValue(false);
       }
     }
 

@@ -125,12 +125,10 @@ export class GeneralConfigurationComponent implements OnInit {
       that.generalSettingsForm.controls.employees.disable();
       that.generalSettingsForm.controls.reimburExpense.disable();
 
-      if (employeeFieldMapping.destination_field !== 'EMPLOYEE') {
-        that.showAutoCreateOption(that.generalSettings.auto_map_employees);
-      }
+      that.showAutoCreateOption(that.generalSettings.auto_map_employees, that.employeeFieldMapping.destination_field);
 
       that.generalSettingsForm.controls.autoMapEmployees.valueChanges.subscribe((employeeMappingPreference) => {
-        that.showAutoCreateOption(employeeMappingPreference);
+        that.showAutoCreateOption(employeeMappingPreference, that.employeeFieldMapping.destination_field);
       });
 
       if (that.generalSettings.corporate_credit_card_expenses_object) {
@@ -157,12 +155,12 @@ export class GeneralConfigurationComponent implements OnInit {
       });
 
       that.generalSettingsForm.controls.autoMapEmployees.valueChanges.subscribe((employeeMappingPreference) => {
-        that.showAutoCreateOption(employeeMappingPreference);
+        that.showAutoCreateOption(employeeMappingPreference, that.generalSettingsForm.value.employees);
       });
 
       that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
+        that.showAutoCreateOption(that.generalSettingsForm.value.autoMapEmployees, employeeMappedTo);
         that.expenseOptions = that.getExpenseOptions(employeeMappedTo);
-        that.showAutoCreateOption(null);
         that.generalSettingsForm.controls.reimburExpense.reset();
       });
     });
@@ -237,24 +235,13 @@ export class GeneralConfigurationComponent implements OnInit {
       }
     }
 
-    disableAutoCreate() {
-      this.showAutoCreate = false;
-      this.generalSettingsForm.controls.autoCreateDestinationEntity.setValue(false);
-    }
-
-    showAutoCreateOption(autoMapEmployees) {
+    showAutoCreateOption(autoMapEmployees, employeeMappingPreference) {
       const that = this;
-      if (that.employeeFieldMapping && that.employeeFieldMapping.destination_field === 'EMPLOYEE') {
-        that.disableAutoCreate();
-      }
-      if (that.generalSettingsForm.value.employees && that.generalSettingsForm.value.employees === 'EMPLOYEE') {
-        that.disableAutoCreate();
-      }
-
-      if (autoMapEmployees && autoMapEmployees !== 'EMPLOYEE_CODE') {
+      if (autoMapEmployees && autoMapEmployees !== 'EMPLOYEE_CODE' && employeeMappingPreference === 'VENDOR') {
         that.showAutoCreate = true;
       } else {
-        that.disableAutoCreate();
+        that.showAutoCreate = false;
+        that.generalSettingsForm.controls.autoCreateDestinationEntity.setValue(false);
       }
     }
 

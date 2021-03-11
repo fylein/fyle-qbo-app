@@ -52,6 +52,7 @@ import { GeneralConfigurationComponent } from './settings/configuration/general-
 import { ExpenseFieldConfigurationComponent } from './settings/configuration/expense-field-configuration/expense-field-configuration.component';
 import { GenericMappingsComponent } from './settings/generic-mappings/generic-mappings.component';
 import { GenericMappingsDialogComponent } from './settings/generic-mappings/generic-mappings-dialog/generic-mappings-dialog.component';
+import { PaginatorComponent } from './settings/paginator/paginator.component';
 import { ExpenseGroupSettingsDialogComponent } from './sync-export/sync/expense-group-settings-dialog/expense-group-settings-dialog.component';
 import { MatTooltipModule } from '@angular/material';
 
@@ -78,7 +79,8 @@ import { MatTooltipModule } from '@angular/material';
     ExpenseFieldConfigurationComponent,
     GenericMappingsComponent,
     GenericMappingsDialogComponent,
-    ExpenseGroupSettingsDialogComponent
+    ExpenseGroupSettingsDialogComponent,
+    PaginatorComponent
   ],
   entryComponents: [
     EmployeeMappingsDialogComponent,

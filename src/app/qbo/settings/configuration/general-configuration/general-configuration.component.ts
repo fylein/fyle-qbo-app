@@ -244,16 +244,16 @@ export class GeneralConfigurationComponent implements OnInit {
 
     showAutoCreateOption(autoMapEmployees) {
       const that = this;
-      if (autoMapEmployees && autoMapEmployees !== 'EMPLOYEE_CODE') {
-        that.showAutoCreate = true;
-      } else {
-        that.disableAutoCreate();
-      }
-
       if (that.employeeFieldMapping && that.employeeFieldMapping.destination_field === 'EMPLOYEE') {
         that.disableAutoCreate();
       }
       if (that.generalSettingsForm.value.employees && that.generalSettingsForm.value.employees === 'EMPLOYEE') {
+        that.disableAutoCreate();
+      }
+
+      if (autoMapEmployees && autoMapEmployees !== 'EMPLOYEE_CODE') {
+        that.showAutoCreate = true;
+      } else {
         that.disableAutoCreate();
       }
     }

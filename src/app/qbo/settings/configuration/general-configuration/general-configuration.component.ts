@@ -160,6 +160,7 @@ export class GeneralConfigurationComponent implements OnInit {
 
       that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
         that.expenseOptions = that.getExpenseOptions(employeeMappedTo);
+        that.showAutoCreateOption(null);
         that.generalSettingsForm.controls.reimburExpense.reset();
       });
     });

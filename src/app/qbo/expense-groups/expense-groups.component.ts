@@ -187,10 +187,10 @@ export class ExpenseGroupsComponent implements OnInit, OnDestroy {
     this.expenseGroups.filterPredicate = this.searchByText;
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     if (this.routerEventSubscription) {
       this.routerEventSubscription.unsubscribe();
     }
   }
-  
+
 }

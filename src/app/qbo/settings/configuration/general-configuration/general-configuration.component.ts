@@ -125,9 +125,7 @@ export class GeneralConfigurationComponent implements OnInit {
       that.generalSettingsForm.controls.employees.disable();
       that.generalSettingsForm.controls.reimburExpense.disable();
 
-      if (employeeFieldMapping.destination_field !== 'EMPLOYEE') {
-        that.showAutoCreateOption(that.generalSettings.auto_map_employees);
-      }
+      that.showAutoCreateOption(that.generalSettings.auto_map_employees);
 
       that.generalSettingsForm.controls.autoMapEmployees.valueChanges.subscribe((employeeMappingPreference) => {
         that.showAutoCreateOption(employeeMappingPreference);
@@ -162,7 +160,6 @@ export class GeneralConfigurationComponent implements OnInit {
 
       that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
         that.expenseOptions = that.getExpenseOptions(employeeMappedTo);
-        that.showAutoCreateOption(null);
         that.generalSettingsForm.controls.reimburExpense.reset();
       });
     });

@@ -162,6 +162,7 @@ export class GeneralConfigurationComponent implements OnInit {
 
       that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
         that.expenseOptions = that.getExpenseOptions(employeeMappedTo);
+        that.showAutoCreateOption(null);
         that.generalSettingsForm.controls.reimburExpense.reset();
       });
     });
@@ -236,24 +237,13 @@ export class GeneralConfigurationComponent implements OnInit {
       }
     }
 
-    disableAutoCreate() {
-      this.showAutoCreate = false;
-      this.generalSettingsForm.controls.autoCreateDestinationEntity.setValue(false);
-    }
-
     showAutoCreateOption(autoMapEmployees) {
       const that = this;
       if (autoMapEmployees && autoMapEmployees !== 'EMPLOYEE_CODE') {
         that.showAutoCreate = true;
       } else {
-        that.disableAutoCreate();
-      }
-
-      if (that.employeeFieldMapping && that.employeeFieldMapping.destination_field === 'EMPLOYEE') {
-        that.disableAutoCreate();
-      }
-      if (that.generalSettingsForm.value.employees && that.generalSettingsForm.value.employees === 'EMPLOYEE') {
-        that.disableAutoCreate();
+        that.showAutoCreate = false;
+        that.generalSettingsForm.controls.autoCreateDestinationEntity.setValue(false);
       }
     }
 

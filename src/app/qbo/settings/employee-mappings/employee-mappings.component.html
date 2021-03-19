@@ -14,10 +14,7 @@
     <button class="secondary-button" mat-flat-button color="secondary" type="button" *ngIf="generalSettings.auto_map_employees" (click)="triggerAutoMapEmployees()">
       Refresh Employee Mappings
     </button>
-  </div>
-
-  <div class="page-info" *ngIf="!isLoading && count" fxLayoutAlign="end center">
-    <mat-form-field class="simple-search" appearance="outline">
+    <mat-form-field class="simple-search" appearance="outline" *ngIf="count">
       <mat-label>Search</mat-label>
       <input matInput (keyup)="applyFilter($event)">
       <span matPrefix>
@@ -30,7 +27,7 @@
     <zero-state message="You have no employee mappings yet"></zero-state>
   </div>
 
-  <div *ngIf="count" [hidden]="isLoading">
+  <div *ngIf="count" [hidden]="isLoading || !employeeMappingRows.filteredData.length">
     <table mat-table [dataSource]="employeeMappingRows" class="page-table" matSort matSortActive="created_at"
       matSortDisableClear matSortDirection="desc">
       <ng-container matColumnDef="employee_email">
@@ -63,8 +60,9 @@
       <tr mat-row *matRowDef="let row; columns: columnsToDisplay;" (click)="open(row)"></tr>
     </table>
   </div>
+  <zero-state *ngIf="!employeeMappingRows.filteredData.length && count" message="Looks like your search term doesn't match any of Employee"></zero-state>
 </div>
-<app-paginator *ngIf="count" [coloumnArray]="columnsToDisplay" (getMappings)="reset($event)" [count]="count" [isLoading]="isLoading"></app-paginator>
+<app-paginator *ngIf="count" [hidden]="!employeeMappingRows.filteredData.length" [is3D]="columnsToDisplay.includes('ccc')" (getMappings)="reset($event)" [count]="count" [isLoading]="isLoading"></app-paginator>
 
 <div class="internal-loader" fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
   <app-loader></app-loader>

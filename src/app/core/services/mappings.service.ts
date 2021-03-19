@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { empty, Observable } from 'rxjs';
+import { empty, Observable, Subject } from 'rxjs';
 import { concatMap, expand, map, publishReplay, reduce, refCount } from 'rxjs/operators';
 import { ApiService } from 'src/app/core/services/api.service';
 import { GeneralMapping } from '../models/general-mapping.model';
@@ -9,6 +9,9 @@ import { ExpenseField } from '../models/expense-field.model';
 import { MappingDestination } from '../models/mapping-destination.model';
 import { MappingSource } from '../models/mapping-source.model';
 import { Mapping } from '../models/mappings.model';
+import { Cacheable, CacheBuster } from 'ngx-cacheable';
+
+const generalMappingsCache = new Subject<void>();
 
 @Injectable({
   providedIn: 'root',
@@ -345,11 +348,17 @@ export class MappingsService {
     );
   }
 
+  @CacheBuster({
+    cacheBusterNotifier: generalMappingsCache
+  })
   postGeneralMappings(generalMappings: GeneralMapping): Observable<GeneralMapping> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.post(`/workspaces/${workspaceId}/mappings/general/`, generalMappings);
   }
 
+  @Cacheable({
+    cacheBusterObserver: generalMappingsCache
+  })
   getGeneralMappings(): Observable<GeneralMapping> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.get(

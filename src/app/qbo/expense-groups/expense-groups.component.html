@@ -89,4 +89,4 @@
   <mat-paginator [length]="count" [pageSizeOptions]="[10, 50, 100, 200]" [pageSize]="pageSize" [pageIndex]="pageNumber"
     (page)="onPageChange($event)" showFirstLastButtons></mat-paginator>
 </div>
-<zero-state *ngIf="!expenseGroups.filteredData.length && count" message="Looks like your search term does not match any expense groups"></zero-state>
+<zero-state *ngIf="!expenseGroups.filteredData.length && count && !isLoading" message="Looks like your search term does not match any Expense groups"></zero-state>

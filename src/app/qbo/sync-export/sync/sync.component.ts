@@ -44,12 +44,13 @@ export class SyncComponent implements OnInit {
   checkSyncStatus() {
     const that = this;
     const taskType = ['FETCHING_EXPENSES'];
+    const taskStatus = ['IN_PROGRESS', 'ENQUEUED'];
     interval(3000).pipe(
-      switchMap(() => from(that.taskService.getAllTasks('IN_PROGRESS', [], taskType))),
+      switchMap(() => from(that.taskService.getAllTasks(taskStatus, [], taskType))),
       takeWhile((response) => response.results.length > 0, true)
     ).subscribe((res) => {
       if (!res.results.length) {
-        that.taskService.getAllTasks('COMPLETE', [], taskType).subscribe((response) => {
+        that.taskService.getAllTasks(['COMPLETE'], [], taskType).subscribe((response) => {
           that.updateLastSyncStatus();
           that.isExpensesSyncing = false;
           that.snackBar.open(response.results.length ? 'Import Complete' : 'Import Failed');

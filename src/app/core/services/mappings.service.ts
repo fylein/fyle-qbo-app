@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { empty, Observable } from 'rxjs';
+import { empty, Observable, Subject } from 'rxjs';
 import { concatMap, expand, map, publishReplay, reduce, refCount } from 'rxjs/operators';
 import { ApiService } from 'src/app/core/services/api.service';
 import { GeneralMapping } from '../models/general-mapping.model';
@@ -9,6 +9,9 @@ import { ExpenseField } from '../models/expense-field.model';
 import { MappingDestination } from '../models/mapping-destination.model';
 import { MappingSource } from '../models/mapping-source.model';
 import { Mapping } from '../models/mappings.model';
+import { Cacheable, CacheBuster } from 'ngx-cacheable';
+
+const generalMappingsCache = new Subject<void>();
 
 @Injectable({
   providedIn: 'root',
@@ -345,11 +348,17 @@ export class MappingsService {
     );
   }
 
+  @CacheBuster({
+    cacheBusterNotifier: generalMappingsCache
+  })
   postGeneralMappings(generalMappings: GeneralMapping): Observable<GeneralMapping> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.post(`/workspaces/${workspaceId}/mappings/general/`, generalMappings);
   }
 
+  @Cacheable({
+    cacheBusterObserver: generalMappingsCache
+  })
   getGeneralMappings(): Observable<GeneralMapping> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.get(
@@ -357,9 +366,9 @@ export class MappingsService {
     );
   }
 
-  getMappings(sourceType: string, limit: number = 500, uri: string = null): Observable<MappingsResponse> {
+  getMappings(sourceType: string, uri: string = null, limit: number = 500, offset: number = 0, tableDimension: number = 2): Observable<MappingsResponse> {
     const workspaceId = this.workspaceService.getWorkspaceId();
-    const url = uri ? uri.split('/api')[1] : `/workspaces/${workspaceId}/mappings/?limit=${limit}&offset=0&source_type=${sourceType}`;
+    const url = uri ? uri.split('/api')[1] : `/workspaces/${workspaceId}/mappings/?limit=${limit}&offset=${offset}&source_type=${sourceType}&table_dimension=${tableDimension}`;
     return this.apiService.get(url, {});
   }
 
@@ -367,7 +376,7 @@ export class MappingsService {
     const that = this;
     return this.getMappings(sourceType).pipe(expand((res: MappingsResponse) => {
       // tslint:disable-next-line
-      return res.next ? that.getMappings(sourceType, 500, res.next) : empty();
+      return res.next ? that.getMappings(sourceType, res.next) : empty();
     }), concatMap((res: MappingsResponse) => res.results),
       reduce((arr: Mapping[], val: Mapping) => {
         arr.push(val);

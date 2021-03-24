@@ -16,8 +16,6 @@ export class ScheduleComponent implements OnInit {
   form: FormGroup;
   workspaceId: number;
   isLoading = false;
-  minDate: Date = new Date();
-  defaultDate: string;
   hours = [...Array(24).keys()].map(day => day + 1);
   settings: ScheduleSettings;
   constructor(
@@ -33,7 +31,6 @@ export class ScheduleComponent implements OnInit {
       that.settings = settings;
 
       that.form.setValue({
-        datetime: new Date(settings.start_datetime),
         hours: settings.interval_hours,
         scheduleEnabled: settings.enabled
       });
@@ -46,11 +43,10 @@ export class ScheduleComponent implements OnInit {
   submit() {
     const that = this;
     if (that.form.valid) {
-      const nextRun = new Date(that.form.value.datetime).toISOString();
       const hours = that.form.value.hours;
       const scheduleEnabled = that.form.value.scheduleEnabled;
       that.isLoading = true;
-      that.settingsService.postSettings(that.workspaceId, nextRun, hours, scheduleEnabled).subscribe(response => {
+      that.settingsService.postSettings(that.workspaceId, hours, scheduleEnabled).subscribe(response => {
         that.isLoading = false;
         that.snackBar.open('Scheduling saved');
         that.getSettings();
@@ -65,7 +61,6 @@ export class ScheduleComponent implements OnInit {
     const that = this;
     that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
     that.form = that.formBuilder.group({
-      datetime: [new Date(), Validators.required],
       hours: ['', Validators.required],
       scheduleEnabled: [false]
     });
@@ -77,7 +72,7 @@ export class ScheduleComponent implements OnInit {
       if (!newValue && oldValue !== newValue) {
         if (that.settings) {
           that.isLoading = true;
-          that.settingsService.postSettings(that.workspaceId, new Date().toISOString(), 0, false).subscribe(response => {
+          that.settingsService.postSettings(that.workspaceId, 0, false).subscribe(response => {
             that.isLoading = false;
             that.snackBar.open('Scheduling turned off');
             that.getSettings();

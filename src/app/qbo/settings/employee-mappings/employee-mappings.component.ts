@@ -25,6 +25,7 @@ export class EmployeeMappingsComponent implements OnInit {
   workspaceId: number;
   isLoading = true;
   generalSettings: GeneralSetting;
+  pageNumber = 0;
   count: number;
   rowElement: Mapping;
   columnsToDisplay = ['employee_email', 'qbo'];
@@ -53,6 +54,7 @@ export class EmployeeMappingsComponent implements OnInit {
       const pageSize = (that.storageService.get('mappings.pageSize') || 50) * (that.columnsToDisplay.includes('ccc') ? 2 : 1);
       that.mappingsService.getMappings('EMPLOYEE', null, pageSize, 0, tableDimension).subscribe((employees) => {
         that.count = that.columnsToDisplay.includes('ccc') ? employees.count / 2 : employees.count;
+        that.pageNumber = 0;
         that.employeeMappings = employees.results;
         that.isLoading = false;
         const onboarded = that.storageService.get('onboarded');
@@ -113,6 +115,7 @@ export class EmployeeMappingsComponent implements OnInit {
     that.mappingsService.getMappings('EMPLOYEE', null, data.pageSize, data.pageNumber * data.pageSize, data.tableDimension).subscribe((employees) => {
       that.employeeMappings = employees.results;
       that.count = that.columnsToDisplay.includes('ccc') ? employees.count / 2 : employees.count;
+      that.pageNumber = data.pageNumber;
       that.createEmployeeMappingsRows();
       that.isLoading = false;
     });

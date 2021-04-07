@@ -199,7 +199,11 @@ export class ExportComponent implements OnInit {
     that.isExporting = false;
     that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
 
-    that.reset();
+    that.isLoading = true;
+    that.billService.getOrgDetails().subscribe((res) => {
+      that.qboCompanyName = res.CompanyName;
+      that.reset();
+    });
   }
 
 }

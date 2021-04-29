@@ -9,7 +9,7 @@ export type Workspace = {
   qbo_realm_id: string;
   last_synced_at?: Date;
   source_synced_at?: Date;
-  destination_synced_at
+  destination_synced_at?: Date;
   created_at?: Date;
   updated_at?: Date;
 };

@@ -180,13 +180,13 @@ export class DashboardComponent implements OnInit {
     that.mappingsService.refreshFyleDimensions().subscribe(() => {});
     that.mappingsService.refreshQuickbooksDimensions().subscribe(() => {});
 
-    that.snackBar.open('Refreshing Fyle and Quickbooks Data')
+    that.snackBar.open('Refreshing Fyle and Quickbooks Data');
   }
 
   // to be callled in background whenever dashboard is opened for sncing fyle data for org
   updateDimensionTables() {
     const that = this;
-    
+
     that.mappingsService.syncFyleDimensions().subscribe(() => {});
     that.mappingsService.syncQuickbooksDimensions().subscribe(() => {});
 

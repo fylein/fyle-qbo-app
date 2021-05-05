@@ -174,31 +174,22 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  syncDimension() {
+    const that = this;
+
+    that.mappingsService.refreshFyleDimensions().subscribe(() => {});
+    that.mappingsService.refreshQuickbooksDimensions().subscribe(() => {});
+
+    that.snackBar.open('Refreshing Fyle and Quickbooks Data');
+  }
+
   // to be callled in background whenever dashboard is opened for sncing fyle data for org
   updateDimensionTables() {
     const that = this;
-    onErrorResumeNext(
-      that.mappingsService.postFyleEmployees(),
-      that.mappingsService.postFyleCategories(),
-      that.mappingsService.postFyleCostCenters(),
-      that.mappingsService.postFyleProjects(),
-      that.mappingsService.postExpenseCustomFields(),
-    ).subscribe(() => {});
 
-    onErrorResumeNext(
-      that.mappingsService.postAccountsPayables(),
-      that.mappingsService.postBillPaymentAccounts(),
-      that.mappingsService.postBankAccounts(),
-      that.mappingsService.postExpenseAccounts(),
-      that.mappingsService.postCreditCardAccounts(),
-      that.mappingsService.postQBOEmployees(),
-      that.mappingsService.postQBOVendors(),
-      that.mappingsService.postQBOCustomers(),
-      that.mappingsService.postQBOClasses(),
-      that.mappingsService.postQBODepartments()
-    ).subscribe(() => {
-      // that.snackBar.open('All employee data synced from your fyle account');
-    });
+    that.mappingsService.syncFyleDimensions().subscribe(() => {});
+    that.mappingsService.syncQuickbooksDimensions().subscribe(() => {});
+
   }
 
   openSchedule(event) {

@@ -22,12 +22,14 @@ export class GeneralMappingsComponent implements OnInit {
   bankAccounts: MappingDestination[];
   cccAccounts: MappingDestination[];
   billPaymentAccounts: MappingDestination[];
+  qboExpenseAccounts: MappingDestination[];
   qboVendors: MappingDestination[];
   generalMappings: GeneralMapping;
   generalSettings: GeneralSetting;
   isLoading = true;
   accountsPayableIsValid = true;
   bankAccountIsValid = true;
+  qboExpenseAccountIsValid = true;
   cccAccountIsValid = true;
   billPaymentAccountIsValid = true;
   vendorIsValid = true;
@@ -46,14 +48,18 @@ export class GeneralMappingsComponent implements OnInit {
     const that = this;
     that.accountsPayableIsValid = false;
     that.bankAccountIsValid = false;
+    that.qboExpenseAccountIsValid = false;
     that.cccAccountIsValid = false;
     that.billPaymentAccountIsValid = false;
 
-    const accountPayableAccountId = (that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') ? that.form.value.accountPayableAccounts : '';
-    const accountPayableAccount = (that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') ? that.accountPayableAccounts.filter(filteredAccountsPayableAccount => filteredAccountsPayableAccount.destination_id === accountPayableAccountId)[0] : '';
+    const accountPayableAccountId = (that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') && (that.generalSettings.reimbursable_expenses_object !== 'EXPENSE') ? that.form.value.accountPayableAccounts : '';
+    const accountPayableAccount = (that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') && (that.generalSettings.reimbursable_expenses_object !== 'EXPENSE') ? that.accountPayableAccounts.filter(filteredAccountsPayableAccount => filteredAccountsPayableAccount.destination_id === accountPayableAccountId)[0] : '';
 
-    const bankAccountId = that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.form.value.bankAccounts : '';
-    const bankAccount = that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.bankAccounts.filter(filteredBankAccount => filteredBankAccount.destination_id === bankAccountId)[0] : '';
+    const bankAccountId = that.generalSettings.employee_field_mapping === 'EMPLOYEE' && that.generalSettings.reimbursable_expenses_object !== 'EXPENSE' ? that.form.value.bankAccounts : '';
+    const bankAccount = that.generalSettings.employee_field_mapping === 'EMPLOYEE' && that.generalSettings.reimbursable_expenses_object !== 'EXPENSE' ? that.bankAccounts.filter(filteredBankAccount => filteredBankAccount.destination_id === bankAccountId)[0] : '';
+
+    const qboExpenseAccountId = that.generalSettings.reimbursable_expenses_object === 'EXPENSE' ? that.form.value.qboExpenseAccounts : '';
+    const qboExpenseAccount = that.generalSettings.reimbursable_expenses_object === 'EXPENSE' ? that.qboExpenseAccounts.filter(filteredAccount => filteredAccount.destination_id === qboExpenseAccountId)[0] : '';
 
     const cccAccountId = that.generalSettings.corporate_credit_card_expenses_object !== 'BILL' ? that.form.value.cccAccounts : '';
     const cccAccount = that.generalSettings.corporate_credit_card_expenses_object !== 'BILL' ? that.cccAccounts.filter(filteredCCCAccount => filteredCCCAccount.destination_id === cccAccountId)[0] : '';
@@ -69,6 +75,9 @@ export class GeneralMappingsComponent implements OnInit {
     }
     if (bankAccountId != null) {
       that.bankAccountIsValid = true;
+    }
+    if (qboExpenseAccountId != null) {
+      that.qboExpenseAccountIsValid = true;
     }
     if (cccAccountId != null) {
       that.cccAccountIsValid = true;
@@ -91,6 +100,8 @@ export class GeneralMappingsComponent implements OnInit {
         accounts_payable_id: accountPayableAccount ? accountPayableAccount.destination_id : null,
         bank_account_name: bankAccount ? bankAccount.value : null,
         bank_account_id: bankAccount ? bankAccount.destination_id : null,
+        qbo_expense_account_name: qboExpenseAccount ? qboExpenseAccount.value : null,
+        qbo_expense_account_id: qboExpenseAccount ? qboExpenseAccount.destination_id : null,
         default_ccc_account_name: cccAccount ? cccAccount.value : null,
         default_ccc_account_id: cccAccount ? cccAccount.destination_id : null,
         bill_payment_account_name: billPaymentAccount ? billPaymentAccount.value : null,
@@ -127,6 +138,7 @@ export class GeneralMappingsComponent implements OnInit {
       that.form = that.formBuilder.group({
         accountPayableAccounts: [that.generalMappings ? that.generalMappings.accounts_payable_id : ''],
         bankAccounts: [that.generalMappings ? that.generalMappings.bank_account_id : ''],
+        qboExpenseAccounts: [that.generalMappings ? that.generalMappings.qbo_expense_account_id : ''],
         cccAccounts: [that.generalMappings ? that.generalMappings.default_ccc_account_id : ''],
         billPaymentAccounts: [that.generalMappings ? that.generalMappings.bill_payment_account_id : ''],
         qboVendors: [that.generalMappings ? that.generalMappings.default_ccc_vendor_id : '']
@@ -136,6 +148,7 @@ export class GeneralMappingsComponent implements OnInit {
       that.form = that.formBuilder.group({
         accountPayableAccounts: [null],
         bankAccounts: [null],
+        qboExpenseAccounts : [null],
         cccAccounts: [null],
         billPaymentAccounts: [null],
         qboVendors: [null]
@@ -161,6 +174,7 @@ export class GeneralMappingsComponent implements OnInit {
       that.accountPayableAccounts = responses[2];
       that.qboVendors = responses[3];
       that.billPaymentAccounts = responses[4];
+      that.qboExpenseAccounts = responses[0];
       that.getGeneralMappings();
     });
   }

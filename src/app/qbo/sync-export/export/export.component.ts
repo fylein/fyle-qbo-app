@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BillsService } from 'src/app/core/services/bills.service';
 import { JournalEntriesService } from '../../../core/services/journal-entries.service';
 import { ChecksService } from '../../../core/services/checks.service';
+import { QBOExpensesService } from '../../../core/services/qbo-expenses.service';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { interval, from, forkJoin } from 'rxjs';
 import { switchMap, takeWhile } from 'rxjs/operators';
@@ -43,6 +44,7 @@ export class ExportComponent implements OnInit {
     private journalEntriesService: JournalEntriesService,
     private billsService: BillsService,
     private checksService: ChecksService,
+    private qboExpensesService: QBOExpensesService,
     private snackBar: MatSnackBar,
     private settingsService: SettingsService,
     private windowReferenceService: WindowReferenceService) {
@@ -54,6 +56,9 @@ export class ExportComponent implements OnInit {
     const handlerMap = {
       BILL: (filteredIds) => {
         return that.billsService.createBills(filteredIds);
+      },
+      EXPENSE: (filteredIds) => {
+        return that.qboExpensesService.createQBOExpenses(filteredIds);
       },
       CHECK: (filteredIds) => {
         return that.checksService.createChecks(filteredIds);
@@ -95,7 +100,7 @@ export class ExportComponent implements OnInit {
 
   checkResultsOfExport(filteredIds: number[]) {
     const that = this;
-    const taskType = ['CREATING_BILL', 'CREATING_CHECK', 'CREATING_CREDIT_CARD_PURCHASE', 'CREATING_JOURNAL_ENTRY'];
+    const taskType = ['CREATING_BILL', 'CREATING_QBO_EXPENSE', 'CREATING_CHECK', 'CREATING_CREDIT_CARD_PURCHASE', 'CREATING_JOURNAL_ENTRY'];
     const taskStatus = ['IN_PROGRESS', 'ENQUEUED'];
     interval(3000).pipe(
       switchMap(() => from(that.taskService.getAllTasks(taskStatus, filteredIds, taskType))),

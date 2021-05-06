@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 import { MappingSetting } from 'src/app/core/models/mapping-setting.model';
+import { QboComponent } from 'src/app/qbo/qbo.component';
 
 @Component({
   selector: 'app-general-configuration',
@@ -25,7 +26,7 @@ export class GeneralConfigurationComponent implements OnInit {
   showPaymentsField: boolean;
   showAutoCreate: boolean;
 
-  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) { }
+  constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) { }
 
   getExpenseOptions(employeeMappedTo) {
     return {
@@ -197,6 +198,13 @@ export class GeneralConfigurationComponent implements OnInit {
         });
       }
 
+      if (importProjects) {
+        mappingsSettingsPayload.push({
+          source_field: 'PROJECT',
+          destination_field: 'CUSTOMER'
+        });
+      }
+
       that.isLoading = true;
       mappingsSettingsPayload.push({
         source_field: 'EMPLOYEE',
@@ -208,16 +216,10 @@ export class GeneralConfigurationComponent implements OnInit {
           that.settingsService.postMappingSettings(that.workspaceId, mappingsSettingsPayload),
           that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importCategories, importProjects, fyleToQuickbooks, quickbooksToFyle, autoCreateDestinationEntity, autoMapEmployees)
         ]
-      ).subscribe(responses => {
+      ).subscribe(() => {
         that.isLoading = true;
         that.snackBar.open('Configuration saved successfully');
-
-        if (autoMapEmployees) {
-          setTimeout(() => {
-            that.snackBar.open('Auto mapping of employees may take up to 10 minutes');
-          }, 1500);
-        }
-
+        that.qbo.getGeneralSettings();
         that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
       });
     } else {

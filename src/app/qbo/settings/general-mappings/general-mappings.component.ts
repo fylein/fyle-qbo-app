@@ -174,7 +174,7 @@ export class GeneralMappingsComponent implements OnInit {
       that.accountPayableAccounts = responses[2];
       that.qboVendors = responses[3];
       that.billPaymentAccounts = responses[4];
-      that.qboExpenseAccounts = responses[0];
+      that.qboExpenseAccounts = [ ...responses[0], ...responses[1]];
       that.getGeneralMappings();
     });
   }

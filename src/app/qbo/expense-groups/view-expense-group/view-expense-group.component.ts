@@ -51,6 +51,10 @@ export class ViewExpenseGroupComponent implements OnInit {
     this.windowReference.open(`${environment.qbo_app_url}/app/bill?txnId=${this.task.detail.Bill.Id}`, '_blank');
   }
 
+  openExpenseInQBO() {
+    this.windowReference.open(`${environment.qbo_app_url}/app/expense?txnId=${this.task.detail.Purchase.Id}`, '_blank');
+  }
+
   openCheckInQBO() {
     this.windowReference.open(`${environment.qbo_app_url}/app/check?txnId=${this.task.detail.Purchase.Id}`, '_blank');
   }

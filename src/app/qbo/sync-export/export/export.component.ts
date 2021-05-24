@@ -100,7 +100,7 @@ export class ExportComponent implements OnInit {
 
   checkResultsOfExport(filteredIds: number[]) {
     const that = this;
-    const taskType = ['CREATING_BILL', 'CREATING_QBO_EXPENSE', 'CREATING_CHECK', 'CREATING_CREDIT_CARD_PURCHASE', 'CREATING_JOURNAL_ENTRY'];
+    const taskType = ['CREATING_BILL', 'CREATING_EXPENSE', 'CREATING_CHECK', 'CREATING_CREDIT_CARD_PURCHASE', 'CREATING_JOURNAL_ENTRY'];
     const taskStatus = ['IN_PROGRESS', 'ENQUEUED'];
     interval(3000).pipe(
       switchMap(() => from(that.taskService.getAllTasks(taskStatus, filteredIds, taskType))),

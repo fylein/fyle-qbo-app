@@ -160,7 +160,7 @@ export class ExpenseGroupsComponent implements OnInit, OnDestroy {
             type: 'check',
             getId: (task) => task.detail.Purchase.Id
           },
-          CREATING_QBO_EXPENSE: {
+          CREATING_EXPENSE: {
             type: 'expense',
             getId: (task) => task.detail.Purchase.Id
           },

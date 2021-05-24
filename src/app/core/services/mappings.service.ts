@@ -33,10 +33,52 @@ export class MappingsService {
   bankAccounts: Observable<MappingDestination[]>;
   creditCardAccounts: Observable<MappingDestination[]>;
   billPaymentAccounts: Observable<MappingDestination[]>;
+  destinationWorkspace: Observable<{}>;
+  sourceWorkspace: Observable<{}>;
 
   constructor(
     private apiService: ApiService,
     private workspaceService: WorkspaceService) { }
+
+
+  syncQuickbooksDimensions() {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+
+    if (!this.destinationWorkspace) {
+      this.destinationWorkspace = this.apiService.post(`/workspaces/${workspaceId}/qbo/sync_dimensions/`, {}).pipe(
+        map(data => data),
+        publishReplay(1),
+        refCount()
+      );
+    }
+    return this.destinationWorkspace;
+  }
+
+  syncFyleDimensions() {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+
+    if (!this.sourceWorkspace) {
+      this.sourceWorkspace = this.apiService.post(`/workspaces/${workspaceId}/fyle/sync_dimensions/`, {}).pipe(
+        map(data => data),
+        publishReplay(1),
+        refCount()
+      );
+    }
+    return this.sourceWorkspace;
+  }
+
+  refreshQuickbooksDimensions() {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+
+    return this.apiService.post(`/workspaces/${workspaceId}/qbo/refresh_dimensions/`, {});
+  }
+
+  refreshFyleDimensions() {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+
+    return this.apiService.post(`/workspaces/${workspaceId}/fyle/refresh_dimensions/`, {});
+  }
+
 
   postFyleEmployees(): Observable<MappingSource[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();

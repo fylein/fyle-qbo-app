@@ -36,6 +36,10 @@ export class GeneralConfigurationComponent implements OnInit {
           value: 'CHECK'
         },
         {
+          label: 'Expense',
+          value: 'EXPENSE'
+        },
+        {
           label: 'Journal Entry',
           value: 'JOURNAL ENTRY'
         }
@@ -44,6 +48,10 @@ export class GeneralConfigurationComponent implements OnInit {
         {
           label: 'Bill',
           value: 'BILL'
+        },
+        {
+          label: 'Expense',
+          value: 'EXPENSE'
         },
         {
           label: 'Journal Entry',
@@ -119,6 +127,10 @@ export class GeneralConfigurationComponent implements OnInit {
         {
           label: 'Check',
           value: 'CHECK'
+        },
+        {
+          label: 'Expense',
+          value: 'EXPENSE'
         }
         ];
       }

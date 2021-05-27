@@ -6,6 +6,8 @@ export type GeneralMapping = {
   accounts_payable_name: string;
   bank_account_id: string;
   bank_account_name: string;
+  qbo_expense_account_id: string;
+  qbo_expense_account_name: string;
   default_ccc_account_id: string;
   default_ccc_account_name: string;
   default_ccc_vendor_id: string;

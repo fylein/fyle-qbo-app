@@ -225,7 +225,7 @@ export class GeneralConfigurationComponent implements OnInit {
       if (importProjects) {
         mappingsSettingsPayload.push({
           source_field: 'PROJECT',
-          destination_field: 'PROJECT',
+          destination_field: 'CUSTOMER',
           import_to_fyle: true
         });
       }

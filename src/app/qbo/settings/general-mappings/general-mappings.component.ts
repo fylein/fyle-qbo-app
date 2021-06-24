@@ -52,8 +52,8 @@ export class GeneralMappingsComponent implements OnInit {
     that.cccAccountIsValid = false;
     that.billPaymentAccountIsValid = false;
 
-    const accountPayableAccountId = (that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') && (that.generalSettings.reimbursable_expenses_object !== 'EXPENSE') ? that.form.value.accountPayableAccounts : '';
-    const accountPayableAccount = (that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') && (that.generalSettings.reimbursable_expenses_object !== 'EXPENSE') ? that.accountPayableAccounts.filter(filteredAccountsPayableAccount => filteredAccountsPayableAccount.destination_id === accountPayableAccountId)[0] : '';
+    const accountPayableAccountId = that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.form.value.accountPayableAccounts : '';
+    const accountPayableAccount = that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.accountPayableAccounts.filter(filteredAccountsPayableAccount => filteredAccountsPayableAccount.destination_id === accountPayableAccountId)[0] : '';
 
     const bankAccountId = that.generalSettings.employee_field_mapping === 'EMPLOYEE' && that.generalSettings.reimbursable_expenses_object !== 'EXPENSE' ? that.form.value.bankAccounts : '';
     const bankAccount = that.generalSettings.employee_field_mapping === 'EMPLOYEE' && that.generalSettings.reimbursable_expenses_object !== 'EXPENSE' ? that.bankAccounts.filter(filteredBankAccount => filteredBankAccount.destination_id === bankAccountId)[0] : '';

@@ -27,6 +27,8 @@ export class ViewExpenseGroupComponent implements OnInit {
   pageSize: number;
   pageNumber: number;
   status: string;
+  showMappingErrors = false;
+  showQuickbooksErrors = false;
   windowReference: Window;
 
   constructor(
@@ -90,6 +92,8 @@ export class ViewExpenseGroupComponent implements OnInit {
       that.expenseGroup = response[0];
       if (response[1].length > 0) {
         that.task = response[1][0];
+        that.showMappingErrors = that.task.detail ? true : false;
+        that.showQuickbooksErrors = that.task.quickbooks_errors ? true : false;
         that.status = that.task.status;
       }
     });

@@ -1,6 +1,6 @@
 /* tslint:disable */
 // TODO: Use something for serialization / deserialization
-import {QuickbookError} from './quickbooks-error.model';
+import {QuickbooksError} from './quickbooks-error.model';
 
 export type Task = {
   bill: number;
@@ -9,7 +9,7 @@ export type Task = {
   credit_card_purchase: number;
   // having any here is okay, didn't differentiate qbo errors and fyle errors
   detail: any;
-  quickbooks_errors: QuickbookError[];
+  quickbooks_errors: QuickbooksError[];
   expense_group: number;
   id: number;
   journal_entry: number;

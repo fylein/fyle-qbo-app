@@ -84,14 +84,14 @@ export class ViewExpenseGroupComponent implements OnInit {
     forkJoin(
       [
         that.expenseGroupsService.getExpensesGroupById(that.expenseGroupId),
-        that.tasksService.getTasksByExpenseGroupId(that.expenseGroupId)
+        that.tasksService.getTaskByExpenseGroupId(that.expenseGroupId)
       ]
     ).subscribe(response => {
       that.isLoading = false;
 
       that.expenseGroup = response[0];
-      if (response[1].length > 0) {
-        that.task = response[1][0];
+      if (response[1]) {
+        that.task = response[1];
         that.showMappingErrors = that.task.detail ? true : false;
         that.showQuickbooksErrors = that.task.quickbooks_errors ? true : false;
         that.status = that.task.status;

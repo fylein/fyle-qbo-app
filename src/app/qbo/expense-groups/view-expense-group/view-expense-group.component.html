@@ -13,13 +13,13 @@
       </div>
     </div>
     <nav *ngIf="status === 'FAILED'" mat-tab-nav-bar>
-      <a mat-tab-link (click)="changeState('INFO')" [active]="state==='INFO'">
+      <a mat-tab-link (click)="changeState('INFO')" [active]="state === 'INFO'">
         Info
       </a>
-      <a mat-tab-link *ngIf="showMappingErrors" (click)="changeState('MAPPING_ERRORS')" [active]="state==='MAPPING_ERRORS'">
+      <a mat-tab-link *ngIf="showMappingErrors" (click)="changeState('MAPPING_ERRORS')" [active]="state === 'MAPPING_ERRORS'">
         Mapping Errors
       </a>
-      <a mat-tab-link *ngIf="showQuickbooksErrors" (click)="changeState('QUICKBOOKS_ERRORS')" [active]="state==='QUICKBOOKS_ERRORS'">
+      <a mat-tab-link *ngIf="showQuickbooksErrors" (click)="changeState('QUICKBOOKS_ERRORS')" [active]="state === 'QUICKBOOKS_ERRORS'">
         Quickbooks Errors
       </a>
     </nav>

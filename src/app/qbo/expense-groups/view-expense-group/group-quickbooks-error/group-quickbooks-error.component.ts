@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { TasksService } from 'src/app/core/services/tasks.service';
@@ -18,7 +17,7 @@ export class GroupQuickbooksErrorComponent implements OnInit {
   workspaceId: number;
   count: number;
 
-  quickbooksError: MatTableDataSource <any> = new MatTableDataSource([]);
+  quickbooksError: MatTableDataSource <QuickbooksError> = new MatTableDataSource([]);
   columnsToDisplay = ['shortDescription', 'longDescription', 'type'];
 
   constructor(private taskService: TasksService, private route: ActivatedRoute) { }
@@ -28,9 +27,9 @@ export class GroupQuickbooksErrorComponent implements OnInit {
     that.workspaceId = +that.route.snapshot.parent.params.workspace_id;
     that.expenseGroupId = +that.route.snapshot.parent.params.expense_group_id;
     that.isLoading = true;
-    that.taskService.getTasksByExpenseGroupId(that.expenseGroupId).subscribe((res: Task[]) => {
-      that.quickbooksError = new MatTableDataSource(res[0].quickbooks_errors);
-      that.count = res[0].quickbooks_errors && res[0].quickbooks_errors.length;
+    that.taskService.getTaskByExpenseGroupId(that.expenseGroupId).subscribe((res: Task) => {
+      that.quickbooksError = new MatTableDataSource(res.quickbooks_errors);
+      that.count = res.quickbooks_errors && res.quickbooks_errors.length;
       that.isLoading = false;
     });
   }

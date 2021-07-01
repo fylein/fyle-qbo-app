@@ -2,10 +2,6 @@
   <app-loader></app-loader>
 </div>
 
-<div *ngIf="!count && !isLoading">
-  <zero-state message="This expense group has no Quickbooks Online errors"></zero-state>
-</div>
-
 <div *ngIf="count">
   <div [hidden]="isLoading">
     <table class="page-table" mat-table [dataSource]="quickbooksError" matSort matSortActive="created_at"

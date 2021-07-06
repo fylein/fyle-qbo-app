@@ -147,10 +147,10 @@ export class ExpenseGroupsComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     const that = this;
     that.isLoading = true;
-    that.taskService.getTaskByExpenseGroupId(clickedExpenseGroup.id).subscribe((task: Task) => {
+    that.taskService.getTaskByExpenseGroupId(clickedExpenseGroup.id).subscribe((completedTask: Task) => {
       that.isLoading = false;
 
-      if (task.status === 'COMPLETE') {
+      if (completedTask.status === 'COMPLETE') {
         const typeMap = {
           CREATING_BILL: {
             type: 'bill',

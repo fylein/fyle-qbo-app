@@ -92,6 +92,15 @@ export class GeneralConfigurationComponent implements OnInit {
           (setting.destination_field === 'EMPLOYEE' || setting.destination_field === 'VENDOR')
       )[0];
 
+      const projectFieldMapping = that.mappingSettings.filter(
+        setting => (setting.source_field === 'PROJECT' && setting.destination_field === 'PROJECT')
+      );
+
+      let importProjects = false;
+      if (projectFieldMapping.length) {
+        importProjects = projectFieldMapping[0].import_to_fyle;
+      }
+
       that.employeeFieldMapping = employeeFieldMapping;
 
       that.showPaymentsFields(that.generalSettings.reimbursable_expenses_object);
@@ -109,7 +118,7 @@ export class GeneralConfigurationComponent implements OnInit {
         cccExpense: [that.generalSettings ? that.generalSettings.corporate_credit_card_expenses_object : ''],
         employees: [that.employeeFieldMapping ? that.employeeFieldMapping.destination_field : ''],
         importCategories: [that.generalSettings.import_categories],
-        importProjects: [that.generalSettings.import_projects],
+        importProjects: [importProjects],
         paymentsSync: [paymentsSyncOption],
         autoMapEmployees: [that.generalSettings.auto_map_employees],
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity]
@@ -162,7 +171,7 @@ export class GeneralConfigurationComponent implements OnInit {
       }
 
       that.isLoading = false;
-    }, error => {
+    }, () => {
       that.isLoading = false;
       that.generalSettingsForm = that.formBuilder.group({
         employees: ['', Validators.required],
@@ -228,6 +237,18 @@ export class GeneralConfigurationComponent implements OnInit {
           destination_field: 'CUSTOMER',
           import_to_fyle: true
         });
+      } else {
+        const projectFieldMapping = that.mappingSettings.filter(
+          setting => (setting.source_field === 'PROJECT' && setting.destination_field === 'PROJECT')
+        );
+
+        if (projectFieldMapping.length) {
+          mappingsSettingsPayload.push({
+            source_field: 'PROJECT',
+            destination_field: 'PROJECT',
+            import_to_fyle: false
+          });
+        }
       }
 
       that.isLoading = true;

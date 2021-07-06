@@ -4,16 +4,15 @@
 
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start stretch">
   <div class="page-info">
-    <div fxLayout="row" fxLayoutAlign="start center" class="page-info--description">
-      <div fxFlex="75">
+    <div class="page-info--description">
         Please map the following Fyle fields to their Quickbooks equivalent. You can either select from the pre existing
+        <br>
         fields or can add new custom field.
-      </div>
-      <a fxFlex="25"
-        href="https://www.fylehq.com/help/en/articles/4284108-configuring-mappings-for-the-fyle-quickbooks-online-integration"
-        target="_blank" rel="noopener noreferrer" class="read-more-link" fxLayout="row"
-        fxLayoutAlign="start center">Read
-        more<mat-icon class="read-more-link--icon">open_in_new</mat-icon></a>
+        <a href="https://www.fylehq.com/help/en/articles/4284108-configuring-mappings-for-the-fyle-quickbooks-online-integration"
+        target="_blank" rel="noopener noreferrer" class="read-more-link">
+        Read more
+        <mat-icon class="read-more-link--icon read-more">open_in_new</mat-icon>
+        </a>
     </div>
   </div>
 
@@ -56,14 +55,14 @@
           </div>
           <mat-form-field floatLabel="always" appearance="outline" fxFlex="38" required>
             <mat-select placeholder="Choose Fyle Expense field" formControlName="source_field">
-              <mat-option *ngFor="let fyleExpenseField of fyleFormFieldList"
+              <mat-option *ngFor="let fyleExpenseField of fyleExpenseFields"
                 [(value)]="fyleExpenseField.attribute_type">
                 {{ fyleExpenseField.display_name | titlecase }}
               </mat-option>
-              <mat-option (click)="showCustomField()" [value]="'custom'">
+              <mat-option (click)="showCustomField(expenseField)" [value]="expenseField.source_field">
                 <div class="expense-fields--custom-option">
                   <img class="expense-fields--add-custom-icon" src="assets/images/pngs/add.png"
-                    (click)="showCustomField()">
+                  (click)="showCustomField(expenseField)">
                   <div class="expense-fields--custom-option-text">{{customFieldName}}</div>
                 </div>
               </mat-option>
@@ -72,7 +71,7 @@
 
           <div fxFlex="5" *ngIf="i !== 0 && expenseField.controls.destination_field.status !== 'DISABLED'">
             <img class="expense-fields--delete-icon" src="assets/images/pngs/delete.png"
-              (click)="removeExpenseField(i)">
+            (click)="removeExpenseField(i, expenseField.controls.source_field.value)">
           </div>
           <div fxFlex="5" *ngIf="!(i !== 0 && expenseField.controls.destination_field.status !== 'DISABLED')">
           </div>

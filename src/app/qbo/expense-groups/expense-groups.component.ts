@@ -174,7 +174,7 @@ export class ExpenseGroupsComponent implements OnInit, OnDestroy {
           }
         };
 
-        that.openInQBO(typeMap[task.type].type, typeMap[task.type].getId(task));
+        that.openInQBO(typeMap[completedTask.type].type, typeMap[completedTask.type].getId(completedTask));
       }
     });
   }

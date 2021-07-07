@@ -77,7 +77,7 @@ export class GeneralConfigurationComponent implements OnInit {
 
   getAllSettings() {
     const that = this;
-    that.isLoading = true;
+
     forkJoin(
       [
         that.settingsService.getGeneralSettings(that.workspaceId),
@@ -91,6 +91,15 @@ export class GeneralConfigurationComponent implements OnInit {
         setting => (setting.source_field === 'EMPLOYEE') &&
           (setting.destination_field === 'EMPLOYEE' || setting.destination_field === 'VENDOR')
       )[0];
+
+      const projectFieldMapping = that.mappingSettings.filter(
+        setting => (setting.source_field === 'PROJECT' && setting.destination_field === 'PROJECT')
+      );
+
+      let importProjects = false;
+      if (projectFieldMapping.length) {
+        importProjects = projectFieldMapping[0].import_to_fyle;
+      }
 
       that.employeeFieldMapping = employeeFieldMapping;
 
@@ -109,11 +118,24 @@ export class GeneralConfigurationComponent implements OnInit {
         cccExpense: [that.generalSettings ? that.generalSettings.corporate_credit_card_expenses_object : ''],
         employees: [that.employeeFieldMapping ? that.employeeFieldMapping.destination_field : ''],
         importCategories: [that.generalSettings.import_categories],
-        importProjects: [that.generalSettings.import_projects],
+        importProjects: [importProjects],
         paymentsSync: [paymentsSyncOption],
         autoMapEmployees: [that.generalSettings.auto_map_employees],
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity]
       });
+
+      const fyleProjectMapping = that.mappingSettings.filter(
+        setting => setting.source_field === 'PROJECT' && setting.destination_field !== 'PROJECT'
+      );
+
+      const qboProjectMapping = that.mappingSettings.filter(
+        setting => setting.destination_field === 'PROJECT' && setting.source_field !== 'PROJECT'
+      );
+
+      // disable project sync toggle if either of Fyle / QBO Projects are already mapped to different fields
+      if (fyleProjectMapping.length || qboProjectMapping.length) {
+        that.generalSettingsForm.controls.importProjects.disable();
+      }
 
       if (that.generalSettings.reimbursable_expenses_object) {
         that.expenseOptions = [{
@@ -149,7 +171,7 @@ export class GeneralConfigurationComponent implements OnInit {
       }
 
       that.isLoading = false;
-    }, error => {
+    }, () => {
       that.isLoading = false;
       that.generalSettingsForm = that.formBuilder.group({
         employees: ['', Validators.required],
@@ -161,7 +183,6 @@ export class GeneralConfigurationComponent implements OnInit {
         autoMapEmployees: [null],
         autoCreateDestinationEntity: [false]
       });
-
 
       that.generalSettingsForm.controls.reimburExpense.valueChanges.subscribe((reimbursableExpenseMappedTo) => {
         that.showPaymentsFields(reimbursableExpenseMappedTo);
@@ -182,7 +203,7 @@ export class GeneralConfigurationComponent implements OnInit {
   save() {
     const that = this;
     if (that.generalSettingsForm.valid) {
-      const mappingsSettingsPayload = [{
+      const mappingsSettingsPayload: MappingSetting[] = [{
         source_field: 'CATEGORY',
         destination_field: 'ACCOUNT'
       }];
@@ -191,7 +212,7 @@ export class GeneralConfigurationComponent implements OnInit {
       const cccExpensesObject = that.generalSettingsForm.value.cccExpense || (that.generalSettings ? that.generalSettings.corporate_credit_card_expenses_object : null);
       const employeeMappingsObject = that.generalSettingsForm.value.employees || (that.employeeFieldMapping && that.employeeFieldMapping.destination_field);
       const importCategories = that.generalSettingsForm.value.importCategories;
-      const importProjects = that.generalSettingsForm.value.importProjects;
+      const importProjects = that.generalSettingsForm.value.importProjects ? that.generalSettingsForm.value.importProjects : false;
       const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
       const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
 
@@ -213,8 +234,21 @@ export class GeneralConfigurationComponent implements OnInit {
       if (importProjects) {
         mappingsSettingsPayload.push({
           source_field: 'PROJECT',
-          destination_field: 'CUSTOMER'
+          destination_field: 'CUSTOMER',
+          import_to_fyle: true
         });
+      } else {
+        const projectFieldMapping = that.mappingSettings.filter(
+          setting => (setting.source_field === 'PROJECT' && setting.destination_field === 'PROJECT')
+        );
+
+        if (projectFieldMapping.length) {
+          mappingsSettingsPayload.push({
+            source_field: 'PROJECT',
+            destination_field: 'PROJECT',
+            import_to_fyle: false
+          });
+        }
       }
 
       that.isLoading = true;
@@ -263,6 +297,8 @@ export class GeneralConfigurationComponent implements OnInit {
     const that = this;
     that.isSaveDisabled = false;
     that.workspaceId = that.route.snapshot.parent.parent.params.workspace_id;
+    that.isLoading = true;
+
     that.getAllSettings();
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras, ActivationEnd } from '@angular/router';
 import { ExpenseGroupsService } from '../../core/services/expense-groups.service';
 import { ExpenseGroup } from 'src/app/core/models/expense-group.model';
+import { Task } from 'src/app/core/models/task.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { TasksService } from 'src/app/core/services/tasks.service';
@@ -146,35 +147,34 @@ export class ExpenseGroupsComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     const that = this;
     that.isLoading = true;
-    that.taskService.getTasksByExpenseGroupId(clickedExpenseGroup.id).subscribe(tasks => {
+    that.taskService.getTaskByExpenseGroupId(clickedExpenseGroup.id).subscribe((completedTask: Task) => {
       that.isLoading = false;
-      const completeTask = tasks.filter(task => task.status === 'COMPLETE')[0];
 
-      if (completeTask) {
+      if (completedTask.status === 'COMPLETE') {
         const typeMap = {
           CREATING_BILL: {
             type: 'bill',
-            getId: (task) => task.detail.Bill.Id
+            getId: (task: Task) => task.detail.Bill.Id
           },
           CREATING_CHECK: {
             type: 'check',
-            getId: (task) => task.detail.Purchase.Id
+            getId: (task: Task) => task.detail.Purchase.Id
           },
           CREATING_EXPENSE: {
             type: 'expense',
-            getId: (task) => task.detail.Purchase.Id
+            getId: (task: Task) => task.detail.Purchase.Id
           },
           CREATING_JOURNAL_ENTRY: {
             type: 'journal',
-            getId: (task) => task.detail.JournalEntry.Id
+            getId: (task: Task) => task.detail.JournalEntry.Id
           },
           CREATING_CREDIT_CARD_PURCHASE: {
             type: 'expense',
-            getId: (task) => task.detail.Purchase.Id
+            getId: (task: Task) => task.detail.Purchase.Id
           }
         };
 
-        that.openInQBO(typeMap[completeTask.type].type, typeMap[completeTask.type].getId(completeTask));
+        that.openInQBO(typeMap[completedTask.type].type, typeMap[completedTask.type].getId(completedTask));
       }
     });
   }

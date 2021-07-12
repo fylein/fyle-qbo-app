@@ -21,6 +21,7 @@ import { ScheduleComponent } from './settings/schedule/schedule.component';
 import { GeneralConfigurationComponent } from './settings/configuration/general-configuration/general-configuration.component';
 import { ExpenseFieldConfigurationComponent } from './settings/configuration/expense-field-configuration/expense-field-configuration.component';
 import { GenericMappingsComponent } from './settings/generic-mappings/generic-mappings.component';
+import { GroupQuickbooksErrorComponent } from './expense-groups/view-expense-group/group-quickbooks-error/group-quickbooks-error.component';
 
 const routes: Routes = [{
   path: '',
@@ -63,6 +64,10 @@ const routes: Routes = [{
         {
           path: 'mapping_errors',
           component: GroupMappingErrorComponent
+        },
+        {
+          path: 'quickbooks_errors',
+          component: GroupQuickbooksErrorComponent
         },
         {
           path: '**',

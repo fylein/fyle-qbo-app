@@ -3,21 +3,22 @@ import { MatTableDataSource } from '@angular/material/table';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { ActivatedRoute } from '@angular/router';
 import { Task } from 'src/app/core/models/task.model';
-import { MappingError } from 'src/app/core/models/mapping-error.model';
+import { QuickbooksError } from 'src/app/core/models/quickbooks-error.model';
 
 @Component({
-  selector: 'app-group-mapping-error',
-  templateUrl: './group-mapping-error.component.html',
-  styleUrls: ['./group-mapping-error.component.scss', '../../../qbo.component.scss']
+  selector: 'app-group-quickbooks-error',
+  templateUrl: './group-quickbooks-error.component.html',
+  styleUrls: ['./group-quickbooks-error.component.scss']
 })
-export class GroupMappingErrorComponent implements OnInit {
+export class GroupQuickbooksErrorComponent implements OnInit {
 
   isLoading = false;
   expenseGroupId: number;
   workspaceId: number;
+  count: number;
 
-  mappingErrors: MatTableDataSource<MappingError> = new MatTableDataSource([]);
-  columnsToDisplay = ['category', 'message', 'type'];
+  quickbooksError: MatTableDataSource <QuickbooksError> = new MatTableDataSource([]);
+  columnsToDisplay = ['shortDescription', 'longDescription', 'type'];
 
   constructor(private taskService: TasksService, private route: ActivatedRoute) { }
 
@@ -27,7 +28,8 @@ export class GroupMappingErrorComponent implements OnInit {
     that.expenseGroupId = +that.route.snapshot.parent.params.expense_group_id;
     that.isLoading = true;
     that.taskService.getTaskByExpenseGroupId(that.expenseGroupId).subscribe((res: Task) => {
-      that.mappingErrors = new MatTableDataSource(res.detail);
+      that.quickbooksError = new MatTableDataSource(res.quickbooks_errors);
+      that.count = res.quickbooks_errors && res.quickbooks_errors.length;
       that.isLoading = false;
     });
   }

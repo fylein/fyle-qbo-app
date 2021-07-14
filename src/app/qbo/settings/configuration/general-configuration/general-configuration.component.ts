@@ -93,7 +93,7 @@ export class GeneralConfigurationComponent implements OnInit {
       )[0];
 
       const projectFieldMapping = that.mappingSettings.filter(
-        setting => (setting.source_field === 'PROJECT' && setting.destination_field === 'PROJECT')
+        setting => (setting.source_field === 'PROJECT' && setting.destination_field === 'CUSTOMER')
       );
 
       let importProjects = false;
@@ -125,11 +125,11 @@ export class GeneralConfigurationComponent implements OnInit {
       });
 
       const fyleProjectMapping = that.mappingSettings.filter(
-        setting => setting.source_field === 'PROJECT' && setting.destination_field !== 'PROJECT'
+        setting => setting.source_field === 'PROJECT' && setting.destination_field !== 'CUSTOMER'
       );
 
       const qboProjectMapping = that.mappingSettings.filter(
-        setting => setting.destination_field === 'PROJECT' && setting.source_field !== 'PROJECT'
+        setting => setting.destination_field === 'CUSTOMER' && setting.source_field !== 'PROJECT'
       );
 
       // disable project sync toggle if either of Fyle / QBO Projects are already mapped to different fields
@@ -172,6 +172,7 @@ export class GeneralConfigurationComponent implements OnInit {
 
       that.isLoading = false;
     }, () => {
+      that.mappingSettings = [];
       that.isLoading = false;
       that.generalSettingsForm = that.formBuilder.group({
         employees: ['', Validators.required],
@@ -239,13 +240,13 @@ export class GeneralConfigurationComponent implements OnInit {
         });
       } else {
         const projectFieldMapping = that.mappingSettings.filter(
-          setting => (setting.source_field === 'PROJECT' && setting.destination_field === 'PROJECT')
+          setting => (setting.source_field === 'PROJECT' && setting.destination_field === 'CUSTOMER')
         );
 
         if (projectFieldMapping.length) {
           mappingsSettingsPayload.push({
             source_field: 'PROJECT',
-            destination_field: 'PROJECT',
+            destination_field: 'CUSTOMER',
             import_to_fyle: false
           });
         }

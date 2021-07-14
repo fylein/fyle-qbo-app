@@ -129,7 +129,7 @@ export class GeneralConfigurationComponent implements OnInit {
       );
 
       const qboProjectMapping = that.mappingSettings.filter(
-        setting => setting.destination_field === 'PROJECT' && setting.source_field !== 'CUSTOMER'
+        setting => setting.destination_field === 'CUSTOMER' && setting.source_field !== 'PROJECT'
       );
 
       // disable project sync toggle if either of Fyle / QBO Projects are already mapped to different fields

@@ -1,6 +1,6 @@
 /* tslint:disable */
 export type GeneralSetting = {
-  id: number;
+  id?: number;
   reimbursable_expenses_object: string;
   corporate_credit_card_expenses_object: string;
   import_projects?: boolean;
@@ -12,7 +12,8 @@ export type GeneralSetting = {
   employee_field_mapping?: string;
   project_field_mapping?: string;
   cost_center_field_mapping?: string;
-  created_at: Date;
-  updated_at: Date;
-  workspace: number;
+  je_single_credit_line: boolean;
+  created_at?: Date;
+  updated_at?: Date;
+  workspace?: number;
 };

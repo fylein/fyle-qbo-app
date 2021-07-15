@@ -33,6 +33,7 @@ export class BillsService {
     return this.apiService.post(`/workspaces/${workspaceId}/qbo/update_grouping_on_department/`, {});
   }
 
+  @Cacheable()
   getOrgDetails(): Observable<QBOComapnyInfo> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/company_info/`, {});

@@ -25,6 +25,7 @@ export class GeneralConfigurationComponent implements OnInit {
   employeeFieldMapping: MappingSetting;
   showPaymentsField: boolean;
   showAutoCreate: boolean;
+  showJeSingleCreditLine: boolean;
 
   constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) { }
 
@@ -104,6 +105,7 @@ export class GeneralConfigurationComponent implements OnInit {
       that.employeeFieldMapping = employeeFieldMapping;
 
       that.showPaymentsFields(that.generalSettings.reimbursable_expenses_object);
+      that.showJELineSettings(that.generalSettings.reimbursable_expenses_object, that.generalSettings.corporate_credit_card_expenses_object);
       that.expenseOptions = that.getExpenseOptions(that.employeeFieldMapping.destination_field);
 
       let paymentsSyncOption = '';
@@ -121,7 +123,8 @@ export class GeneralConfigurationComponent implements OnInit {
         importProjects: [importProjects],
         paymentsSync: [paymentsSyncOption],
         autoMapEmployees: [that.generalSettings.auto_map_employees],
-        autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity]
+        autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
+        jeSingleCreditLine: [that.generalSettings.je_single_credit_line]
       });
 
       const fyleProjectMapping = that.mappingSettings.filter(
@@ -168,6 +171,10 @@ export class GeneralConfigurationComponent implements OnInit {
 
       if (that.generalSettings.corporate_credit_card_expenses_object) {
         that.generalSettingsForm.controls.cccExpense.disable();
+      } else {
+        that.generalSettingsForm.controls.cccExpense.valueChanges.subscribe((cccExpenseMappedTo) => {
+          that.showJELineSettings(null, cccExpenseMappedTo);
+        });
       }
 
       that.isLoading = false;
@@ -182,11 +189,17 @@ export class GeneralConfigurationComponent implements OnInit {
         importProjects: [false],
         paymentsSync: [null],
         autoMapEmployees: [null],
-        autoCreateDestinationEntity: [false]
+        autoCreateDestinationEntity: [false],
+        jeSingleCreditLine: [false]
       });
 
       that.generalSettingsForm.controls.reimburExpense.valueChanges.subscribe((reimbursableExpenseMappedTo) => {
         that.showPaymentsFields(reimbursableExpenseMappedTo);
+        that.showJELineSettings(reimbursableExpenseMappedTo);
+      });
+
+      that.generalSettingsForm.controls.cccExpense.valueChanges.subscribe((cccExpenseMappedTo) => {
+        that.showJELineSettings(null, cccExpenseMappedTo);
       });
 
       that.generalSettingsForm.controls.autoMapEmployees.valueChanges.subscribe((employeeMappingPreference) => {
@@ -216,6 +229,7 @@ export class GeneralConfigurationComponent implements OnInit {
       const importProjects = that.generalSettingsForm.value.importProjects ? that.generalSettingsForm.value.importProjects : false;
       const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
       const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
+      const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
 
       let fyleToQuickbooks = false;
       let quickbooksToFyle = false;
@@ -258,10 +272,22 @@ export class GeneralConfigurationComponent implements OnInit {
         destination_field: employeeMappingsObject
       });
 
+      const generalSettingsPayload: GeneralSetting = {
+        reimbursable_expenses_object: reimbursableExpensesObject,
+        corporate_credit_card_expenses_object: cccExpensesObject,
+        import_categories: importCategories,
+        import_projects: importProjects,
+        sync_fyle_to_qbo_payments: fyleToQuickbooks,
+        sync_qbo_to_fyle_payments: quickbooksToFyle,
+        auto_map_employees: autoMapEmployees,
+        auto_create_destination_entity: autoCreateDestinationEntity,
+        je_single_credit_line: jeSingleCreditLine
+      };
+
       forkJoin(
         [
           that.settingsService.postMappingSettings(that.workspaceId, mappingsSettingsPayload),
-          that.settingsService.postGeneralSettings(that.workspaceId, reimbursableExpensesObject, cccExpensesObject, importCategories, importProjects, fyleToQuickbooks, quickbooksToFyle, autoCreateDestinationEntity, autoMapEmployees)
+          that.settingsService.postGeneralSettings(that.workspaceId, generalSettingsPayload)
         ]
       ).subscribe(() => {
         that.isLoading = true;
@@ -276,23 +302,32 @@ export class GeneralConfigurationComponent implements OnInit {
   }
 
   showPaymentsFields(reimbursableExpensesObject) {
-      const that = this;
-      if (reimbursableExpensesObject && reimbursableExpensesObject === 'BILL') {
-        that.showPaymentsField = true;
-      } else {
-        that.showPaymentsField = false;
-      }
+    const that = this;
+    if (reimbursableExpensesObject && reimbursableExpensesObject === 'BILL') {
+      that.showPaymentsField = true;
+    } else {
+      that.showPaymentsField = false;
     }
+  }
 
-    showAutoCreateOption(autoMapEmployees, employeeMappingPreference) {
-      const that = this;
-      if (autoMapEmployees && autoMapEmployees !== 'EMPLOYEE_CODE' && employeeMappingPreference === 'VENDOR') {
-        that.showAutoCreate = true;
-      } else {
-        that.showAutoCreate = false;
-        that.generalSettingsForm.controls.autoCreateDestinationEntity.setValue(false);
-      }
+  showJELineSettings(reimburseExpense: string = null, cccExpense: string = null) {
+    const that = this;
+    if ((reimburseExpense && reimburseExpense === 'JOURNAL ENTRY') || (cccExpense && cccExpense === 'JOURNAL ENTRY')) {
+      that.showJeSingleCreditLine = true;
+    } else {
+      that.showJeSingleCreditLine = false;
     }
+  }
+
+  showAutoCreateOption(autoMapEmployees, employeeMappingPreference) {
+    const that = this;
+    if (autoMapEmployees && autoMapEmployees !== 'EMPLOYEE_CODE' && employeeMappingPreference === 'VENDOR') {
+      that.showAutoCreate = true;
+    } else {
+      that.showAutoCreate = false;
+      that.generalSettingsForm.controls.autoCreateDestinationEntity.setValue(false);
+    }
+  }
 
   ngOnInit() {
     const that = this;

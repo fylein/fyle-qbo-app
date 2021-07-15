@@ -173,7 +173,7 @@ export class GeneralConfigurationComponent implements OnInit {
         that.generalSettingsForm.controls.cccExpense.disable();
       } else {
         that.generalSettingsForm.controls.cccExpense.valueChanges.subscribe((cccExpenseMappedTo) => {
-          that.showJELineSettings(null, cccExpenseMappedTo);
+          that.showJELineSettings(that.generalSettingsForm.value.reimburExpense, cccExpenseMappedTo);
         });
       }
 
@@ -195,11 +195,11 @@ export class GeneralConfigurationComponent implements OnInit {
 
       that.generalSettingsForm.controls.reimburExpense.valueChanges.subscribe((reimbursableExpenseMappedTo) => {
         that.showPaymentsFields(reimbursableExpenseMappedTo);
-        that.showJELineSettings(reimbursableExpenseMappedTo);
+        that.showJELineSettings(reimbursableExpenseMappedTo, that.generalSettingsForm.value.cccExpense);
       });
 
       that.generalSettingsForm.controls.cccExpense.valueChanges.subscribe((cccExpenseMappedTo) => {
-        that.showJELineSettings(null, cccExpenseMappedTo);
+        that.showJELineSettings(that.generalSettingsForm.value.reimburExpense, cccExpenseMappedTo);
       });
 
       that.generalSettingsForm.controls.autoMapEmployees.valueChanges.subscribe((employeeMappingPreference) => {
@@ -310,7 +310,7 @@ export class GeneralConfigurationComponent implements OnInit {
     }
   }
 
-  showJELineSettings(reimburseExpense: string = null, cccExpense: string = null) {
+  showJELineSettings(reimburseExpense: string, cccExpense: string) {
     const that = this;
     if ((reimburseExpense && reimburseExpense === 'JOURNAL ENTRY') || (cccExpense && cccExpense === 'JOURNAL ENTRY')) {
       that.showJeSingleCreditLine = true;

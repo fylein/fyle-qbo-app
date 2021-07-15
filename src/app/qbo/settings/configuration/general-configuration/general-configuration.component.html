@@ -62,6 +62,10 @@
         </mat-select>
       </mat-form-field>
 
+      <mat-slide-toggle *ngIf="showJeSingleCreditLine" color="primary" class="schedule" formControlName="jeSingleCreditLine">
+        <div class="schedule--toggle-text">Create a single itemized offset credit entry for Journal</div>
+      </mat-slide-toggle>
+
       <div class="configurations--label" *ngIf="showPaymentsField">
         Auto Sync Payments
         <mat-icon [inline]="true" class="info-icon" matTooltip="Sync payments between Fyle and Quickbooks" matTooltipPosition="after">info</mat-icon>
@@ -125,10 +129,6 @@
               info
           </mat-icon>
         </div>
-      </mat-slide-toggle>
-
-      <mat-slide-toggle *ngIf="showJeSingleCreditLine" color="primary" class="schedule" formControlName="jeSingleCreditLine">
-        <div class="schedule--toggle-text">Merge all offset(credit) entries into a single line</div>
       </mat-slide-toggle>
 
       <button [disabled]="isSaveDisabled || !generalSettingsForm.valid" class="configurations--save-btn" mat-flat-button

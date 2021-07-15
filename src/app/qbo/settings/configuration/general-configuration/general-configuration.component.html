@@ -128,7 +128,7 @@
       </mat-slide-toggle>
 
       <mat-slide-toggle *ngIf="showJeSingleCreditLine" color="primary" class="schedule" formControlName="jeSingleCreditLine">
-        <div class="schedule--toggle-text">Group Credit lines to a single line for Journal Entries</div>
+        <div class="schedule--toggle-text">Merge all offset(credit) entries into a single line</div>
       </mat-slide-toggle>
 
       <button [disabled]="isSaveDisabled || !generalSettingsForm.valid" class="configurations--save-btn" mat-flat-button

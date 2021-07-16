@@ -10,6 +10,7 @@ import { ExpenseField } from 'src/app/core/models/expense-field.model';
 import { MatSnackBar } from '@angular/material';
 import { MappingSettingResponse } from 'src/app/core/models/mapping-setting-response.model';
 import { QboComponent } from 'src/app/qbo/qbo.component';
+import { BillsService } from 'src/app/core/services/bills.service';
 
 @Component({
   selector: 'app-expense-field-configuration',
@@ -33,7 +34,7 @@ export class ExpenseFieldConfigurationComponent implements OnInit {
   isSystemField: boolean;
   showAddButton: boolean;
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private settingsService: SettingsService, private snackBar: MatSnackBar, private qbo: QboComponent, private mappingsService: MappingsService, private windowReferenceService: WindowReferenceService) {
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private settingsService: SettingsService, private billsService: BillsService, private snackBar: MatSnackBar, private qbo: QboComponent, private mappingsService: MappingsService, private windowReferenceService: WindowReferenceService) {
     this.windowReference = this.windowReferenceService.nativeWindow;
    }
 
@@ -100,6 +101,7 @@ export class ExpenseFieldConfigurationComponent implements OnInit {
         } else {
           that.isLoading = false;
         }
+        that.billsService.UpdateExpenseGroupingIfDepartmentAdded().subscribe(() => {});
       }, () => that.snackBar.open('Something went wrong while saving expense fields mapping'));
     } else {
       that.snackBar.open('Please fill all mandatory fields');

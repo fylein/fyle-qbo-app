@@ -55,6 +55,7 @@ import { GenericMappingsDialogComponent } from './settings/generic-mappings/gene
 import { PaginatorComponent } from './settings/paginator/paginator.component';
 import { ExpenseGroupSettingsDialogComponent } from './sync-export/sync/expense-group-settings-dialog/expense-group-settings-dialog.component';
 import { MatTooltipModule } from '@angular/material';
+import { GroupQuickbooksErrorComponent } from './expense-groups/view-expense-group/group-quickbooks-error/group-quickbooks-error.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { MatTooltipModule } from '@angular/material';
     GenericMappingsComponent,
     GenericMappingsDialogComponent,
     ExpenseGroupSettingsDialogComponent,
-    PaginatorComponent
+    PaginatorComponent,
+    GroupQuickbooksErrorComponent
   ],
   entryComponents: [
     EmployeeMappingsDialogComponent,

@@ -16,7 +16,6 @@ import { QboComponent } from 'src/app/qbo/qbo.component';
 export class GeneralConfigurationComponent implements OnInit {
 
   isLoading: boolean;
-  isSaveDisabled: boolean;
   generalSettingsForm: FormGroup;
   expenseOptions: { label: string, value: string }[];
   workspaceId: number;
@@ -216,89 +215,85 @@ export class GeneralConfigurationComponent implements OnInit {
 
   save() {
     const that = this;
-    if (that.generalSettingsForm.valid) {
-      const mappingsSettingsPayload: MappingSetting[] = [{
-        source_field: 'CATEGORY',
-        destination_field: 'ACCOUNT'
-      }];
 
-      const reimbursableExpensesObject = that.generalSettingsForm.value.reimburExpense || (that.generalSettings ? that.generalSettings.reimbursable_expenses_object : null);
-      const cccExpensesObject = that.generalSettingsForm.value.cccExpense || (that.generalSettings ? that.generalSettings.corporate_credit_card_expenses_object : null);
-      const employeeMappingsObject = that.generalSettingsForm.value.employees || (that.employeeFieldMapping && that.employeeFieldMapping.destination_field);
-      const importCategories = that.generalSettingsForm.value.importCategories;
-      const importProjects = that.generalSettingsForm.value.importProjects ? that.generalSettingsForm.value.importProjects : false;
-      const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
-      const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
-      const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
+    const mappingsSettingsPayload: MappingSetting[] = [{
+      source_field: 'CATEGORY',
+      destination_field: 'ACCOUNT'
+    }];
 
-      let fyleToQuickbooks = false;
-      let quickbooksToFyle = false;
+    const reimbursableExpensesObject = that.generalSettingsForm.value.reimburExpense || (that.generalSettings ? that.generalSettings.reimbursable_expenses_object : null);
+    const cccExpensesObject = that.generalSettingsForm.value.cccExpense || (that.generalSettings ? that.generalSettings.corporate_credit_card_expenses_object : null);
+    const employeeMappingsObject = that.generalSettingsForm.value.employees || (that.employeeFieldMapping && that.employeeFieldMapping.destination_field);
+    const importCategories = that.generalSettingsForm.value.importCategories;
+    const importProjects = that.generalSettingsForm.value.importProjects ? that.generalSettingsForm.value.importProjects : false;
+    const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
+    const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
+    const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
 
-      if (that.generalSettingsForm.controls.paymentsSync.value) {
-        fyleToQuickbooks = that.generalSettingsForm.value.paymentsSync === 'sync_fyle_to_qbo_payments' ? true : false;
-        quickbooksToFyle = that.generalSettingsForm.value.paymentsSync === 'sync_qbo_to_fyle_payments' ? true : false;
-      }
+    let fyleToQuickbooks = false;
+    let quickbooksToFyle = false;
 
-      if (cccExpensesObject) {
-        mappingsSettingsPayload.push({
-          source_field: 'EMPLOYEE',
-          destination_field: 'CREDIT_CARD_ACCOUNT'
-        });
-      }
+    if (that.generalSettingsForm.controls.paymentsSync.value) {
+      fyleToQuickbooks = that.generalSettingsForm.value.paymentsSync === 'sync_fyle_to_qbo_payments' ? true : false;
+      quickbooksToFyle = that.generalSettingsForm.value.paymentsSync === 'sync_qbo_to_fyle_payments' ? true : false;
+    }
 
-      if (importProjects) {
+    if (cccExpensesObject) {
+      mappingsSettingsPayload.push({
+        source_field: 'EMPLOYEE',
+        destination_field: 'CREDIT_CARD_ACCOUNT'
+      });
+    }
+
+    if (importProjects) {
+      mappingsSettingsPayload.push({
+        source_field: 'PROJECT',
+        destination_field: 'CUSTOMER',
+        import_to_fyle: true
+      });
+    } else {
+      const projectFieldMapping = that.mappingSettings.filter(
+        setting => (setting.source_field === 'PROJECT' && setting.destination_field === 'CUSTOMER')
+      );
+
+      if (projectFieldMapping.length) {
         mappingsSettingsPayload.push({
           source_field: 'PROJECT',
           destination_field: 'CUSTOMER',
-          import_to_fyle: true
+          import_to_fyle: false
         });
-      } else {
-        const projectFieldMapping = that.mappingSettings.filter(
-          setting => (setting.source_field === 'PROJECT' && setting.destination_field === 'CUSTOMER')
-        );
-
-        if (projectFieldMapping.length) {
-          mappingsSettingsPayload.push({
-            source_field: 'PROJECT',
-            destination_field: 'CUSTOMER',
-            import_to_fyle: false
-          });
-        }
       }
-
-      that.isLoading = true;
-      mappingsSettingsPayload.push({
-        source_field: 'EMPLOYEE',
-        destination_field: employeeMappingsObject
-      });
-
-      const generalSettingsPayload: GeneralSetting = {
-        reimbursable_expenses_object: reimbursableExpensesObject,
-        corporate_credit_card_expenses_object: cccExpensesObject,
-        import_categories: importCategories,
-        import_projects: importProjects,
-        sync_fyle_to_qbo_payments: fyleToQuickbooks,
-        sync_qbo_to_fyle_payments: quickbooksToFyle,
-        auto_map_employees: autoMapEmployees,
-        auto_create_destination_entity: autoCreateDestinationEntity,
-        je_single_credit_line: jeSingleCreditLine
-      };
-
-      forkJoin(
-        [
-          that.settingsService.postMappingSettings(that.workspaceId, mappingsSettingsPayload),
-          that.settingsService.postGeneralSettings(that.workspaceId, generalSettingsPayload)
-        ]
-      ).subscribe(() => {
-        that.isLoading = true;
-        that.snackBar.open('Configuration saved successfully');
-        that.qbo.getGeneralSettings();
-        that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
-      });
-    } else {
-      that.snackBar.open('Form has invalid fields');
-      that.generalSettingsForm.markAllAsTouched();
     }
+
+    that.isLoading = true;
+    mappingsSettingsPayload.push({
+      source_field: 'EMPLOYEE',
+      destination_field: employeeMappingsObject
+    });
+
+    const generalSettingsPayload: GeneralSetting = {
+      reimbursable_expenses_object: reimbursableExpensesObject,
+      corporate_credit_card_expenses_object: cccExpensesObject,
+      import_categories: importCategories,
+      import_projects: importProjects,
+      sync_fyle_to_qbo_payments: fyleToQuickbooks,
+      sync_qbo_to_fyle_payments: quickbooksToFyle,
+      auto_map_employees: autoMapEmployees,
+      auto_create_destination_entity: autoCreateDestinationEntity,
+      je_single_credit_line: jeSingleCreditLine
+    };
+
+    forkJoin(
+      [
+        that.settingsService.postMappingSettings(that.workspaceId, mappingsSettingsPayload),
+        that.settingsService.postGeneralSettings(that.workspaceId, generalSettingsPayload)
+      ]
+    ).subscribe(() => {
+      that.isLoading = true;
+      that.snackBar.open('Configuration saved successfully');
+      that.qbo.getGeneralSettings();
+      that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
+    });
   }
 
   showPaymentsFields(reimbursableExpensesObject) {
@@ -331,7 +326,6 @@ export class GeneralConfigurationComponent implements OnInit {
 
   ngOnInit() {
     const that = this;
-    that.isSaveDisabled = false;
     that.workspaceId = that.route.snapshot.parent.parent.params.workspace_id;
     that.isLoading = true;
 

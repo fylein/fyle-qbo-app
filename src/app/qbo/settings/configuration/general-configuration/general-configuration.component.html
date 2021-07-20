@@ -17,6 +17,7 @@
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="configurations--label">
         Map Employees from Fyle to
+        <mandatory-field></mandatory-field>
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required>
         <mat-select placeholder="Choose Quickbooks equivalent of Employees" formControlName="employees">
@@ -28,9 +29,11 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <mandatory-error-message listName="option" *ngIf="generalSettingsForm.controls.employees.touched && !generalSettingsForm.controls.employees.valid"></mandatory-error-message>
 
       <div class="configurations--label">
         Map reimbursable Expenses from Fyle to
+        <mandatory-field></mandatory-field>
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required>
         <mat-select placeholder="Choose Quickbooks equivalent of Reimbursable Expenses"
@@ -40,6 +43,8 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <mandatory-error-message listName="export type" *ngIf="generalSettingsForm.controls.reimburExpense.touched && !generalSettingsForm.controls.reimburExpense.valid"></mandatory-error-message>
+
 
       <div class="configurations--label">
         Map Corporate Credit Card Expenses from Fyle to
@@ -131,7 +136,7 @@
         </div>
       </mat-slide-toggle>
 
-      <button [disabled]="isSaveDisabled || !generalSettingsForm.valid" class="configurations--save-btn" mat-flat-button
+      <button [disabled]="!generalSettingsForm.valid" class="configurations--save-btn" mat-flat-button
         color="primary" (click)="save()" type="submit">
         Save
       </button>

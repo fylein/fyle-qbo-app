@@ -9,7 +9,6 @@ import { Component, OnInit, Input } from '@angular/core';
 export class MandatoryErrorMessageComponent implements OnInit {
 
   @Input() listName: string;
-  @Input() inputName: string;
   @Input() customErrorMessage: string;
   constructor() { }
 

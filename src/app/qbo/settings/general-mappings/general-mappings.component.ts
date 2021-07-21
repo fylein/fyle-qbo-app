@@ -76,7 +76,7 @@ export class GeneralMappingsComponent implements OnInit {
 
     this.mappingsService.postGeneralMappings(generalMappings).subscribe(() => {
       const onboarded = that.storageService.get('onboarded');
-      if (onboarded === true) {
+      if (onboarded) {
         that.getGeneralMappings();
       } else {
         that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
@@ -95,11 +95,11 @@ export class GeneralMappingsComponent implements OnInit {
       that.form.controls.accountPayableAccounts.setValidators(Validators.required);
     }
 
-    if (that.generalSettings.employee_field_mapping === 'EMPLOYEE' || this.generalSettings.reimbursable_expenses_object !== 'EXPENSE') {
+    if (that.generalSettings.employee_field_mapping === 'EMPLOYEE' && this.generalSettings.reimbursable_expenses_object !== 'EXPENSE') {
       that.form.controls.bankAccounts.setValidators(Validators.required);
     }
 
-    if (that.generalSettings.corporate_credit_card_expenses_object || that.generalSettings.corporate_credit_card_expenses_object !== 'BILL') {
+    if (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL') {
       that.form.controls.cccAccounts.setValidators(Validators.required);
     }
 

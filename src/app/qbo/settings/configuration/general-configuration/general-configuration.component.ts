@@ -233,6 +233,14 @@ export class GeneralConfigurationComponent implements OnInit {
         quickbooksToFyle = that.generalSettingsForm.value.paymentsSync === 'sync_qbo_to_fyle_payments' ? true : false;
       }
 
+      // TODO: remove this off once we move employee mappings to a separate table
+      if (cccExpensesObject) {
+        mappingsSettingsPayload.push({
+          source_field: 'EMPLOYEE',
+          destination_field: 'CREDIT_CARD_ACCOUNT'
+        });
+      }
+
       if (importProjects) {
         mappingsSettingsPayload.push({
           source_field: 'PROJECT',

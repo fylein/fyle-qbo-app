@@ -10,6 +10,8 @@ import { MappingDestination } from '../models/mapping-destination.model';
 import { MappingSource } from '../models/mapping-source.model';
 import { Mapping } from '../models/mappings.model';
 import { Cacheable, CacheBuster } from 'ngx-cacheable';
+import { EmployeeMapping } from '../models/employee-mapping.model';
+import { EmployeeMappingsResponse } from '../models/employee-mappings-response.model';
 
 const generalMappingsCache = new Subject<void>();
 
@@ -414,6 +416,12 @@ export class MappingsService {
     return this.apiService.get(url, {});
   }
 
+  getEmployeeMappings(uri: string = null, limit: number = 500, offset: number = 0): Observable<EmployeeMappingsResponse> {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+    const url = uri ? uri.split('/api')[1] : `/workspaces/${workspaceId}/mappings/employee/?limit=${limit}&offset=${offset}`;
+    return this.apiService.get(url, {});
+  }
+
   getAllMappings(sourceType: string): Observable<Mapping[]> {
     const that = this;
     return this.getMappings(sourceType).pipe(expand((res: MappingsResponse) => {
@@ -429,6 +437,11 @@ export class MappingsService {
   postMappings(mapping: Mapping): Observable<Mapping> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.post(`/workspaces/${workspaceId}/mappings/`, mapping);
+  }
+
+  postEmployeeMappings(employeeMapping: EmployeeMapping): Observable<EmployeeMapping> {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+    return this.apiService.post(`/workspaces/${workspaceId}/mappings/employee/`, employeeMapping);
   }
 
   triggerAutoMapEmployees() {

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, FormControl, FormGroupDirective, Ng
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { forkJoin, from } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -12,6 +12,7 @@ import { GeneralMapping } from 'src/app/core/models/general-mapping.model';
 import { MappingDestination } from 'src/app/core/models/mapping-destination.model';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 import { MappingModal } from 'src/app/core/models/mapping-modal.model';
+import { EmployeeMapping } from 'src/app/core/models/employee-mapping.model';
 
 export class MappingErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -57,43 +58,44 @@ export class EmployeeMappingsDialogComponent implements OnInit {
   submit() {
     const that = this;
     const fyleEmployee = that.form.controls.fyleEmployee.value;
-    const qboVendor = that.generalSettings.employee_field_mapping === 'VENDOR' ? that.form.value.qboVendor : '';
-    const qboEmployee = that.generalSettings.employee_field_mapping === 'EMPLOYEE' ? that.form.value.qboEmployee : '';
-    const creditCardAccount = that.form.value.creditCardAccount ? that.form.value.creditCardAccount.value : that.generalMappings.default_ccc_account_name;
-    const creditCardAccountId = that.form.value.creditCardAccount ? that.form.value.creditCardAccount.destination_id : that.generalMappings.default_ccc_account_id;
+    const qboVendor = that.form.getRawValue().qboVendor;
+    const qboEmployee = that.form.getRawValue().qboEmployee;
 
     if (that.form.valid && (qboVendor || qboEmployee)) {
-      const employeeMapping = [
-        that.mappingsService.postMappings({
-          source_type: 'EMPLOYEE',
-          destination_type: that.generalSettings.employee_field_mapping,
-          source_value: fyleEmployee.value,
-          destination_value: that.generalSettings.employee_field_mapping === 'VENDOR' ? qboVendor.value : qboEmployee.value,
-          destination_id: that.generalSettings.employee_field_mapping === 'VENDOR' ? qboVendor.destination_id : qboEmployee.destination_id
-        })
-      ];
+      const employeeMapping: EmployeeMapping = {
+        source_employee: {
+          id: fyleEmployee.id
+        },
+        workspace: that.workSpaceId
+      };
 
-      if (creditCardAccount || (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL')) {
-        employeeMapping.push(
-          that.mappingsService.postMappings({
-            source_type: 'EMPLOYEE',
-            destination_type: 'CREDIT_CARD_ACCOUNT',
-            source_value: fyleEmployee.value,
-            destination_value: creditCardAccount,
-            destination_id: creditCardAccountId
-          })
-        );
+      if (qboVendor) {
+        employeeMapping.destination_vendor = {
+          id: qboVendor.id
+        };
       }
+
+      if (qboEmployee) {
+        employeeMapping.destination_employee = {
+          id: qboEmployee.id
+        };
+      }
+
+      if (that.form.getRawValue().creditCardAccount) {
+        employeeMapping.destination_card_account = {
+          id: that.form.getRawValue().creditCardAccount.id
+        };
+      }
+
       that.isLoading = true;
-      forkJoin(employeeMapping).subscribe(responses => {
-        that.snackBar.open('Mapping saved successfully');
+      that.mappingsService.postEmployeeMappings(employeeMapping).subscribe(() => {
+        that.snackBar.open('Employee Mapping saved successfully');
         that.isLoading = false;
         that.dialogRef.close();
-      }, err => {
+      }, () => {
         that.snackBar.open('Something went wrong');
         that.isLoading = false;
       });
-
     } else {
       that.snackBar.open('Form has invalid fields');
       that.form.markAllAsTouched();
@@ -103,7 +105,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
   forbiddenSelectionValidator(options: (MappingSource|MappingDestination)[]): ValidatorFn {
     return (control: AbstractControl): { [key: string]: object } | null => {
       const forbidden = !options.some((option) => {
-        return control.value.id && option.id === control.value.id;
+        return control.value && control.value.id && option && option.id === control.value.id;
       });
       return forbidden ? {
         forbiddenOption: {
@@ -181,10 +183,10 @@ export class EmployeeMappingsDialogComponent implements OnInit {
       that.qboVendors = response[3];
       that.generalMappings = response[4];
 
-      const fyleEmployee = that.editMapping ? that.fyleEmployees.filter(employee => employee.value === that.data.rowElement.fyle_value)[0] : '';
-      const qboVendor = that.editMapping ? that.qboVendors.filter(vendor => vendor.value === that.data.rowElement.qbo_value)[0] : '';
-      const qboEmployee = that.editMapping ? that.qboEmployees.filter(employee => employee.value === that.data.rowElement.qbo_value)[0] : '';
-      const defaultCCCObj = that.editMapping ? that.cccObjects.filter(cccObj => cccObj.value === that.data.rowElement.ccc_value)[0] : that.cccObjects.filter(cccObj => cccObj.value === that.generalMappings.default_ccc_account_name)[0];
+      const fyleEmployee = that.editMapping ? that.fyleEmployees.filter(employee => employee.value === that.data.employeeMappingRow.source_employee.value)[0] : '';
+      const qboVendor = that.editMapping ? that.qboVendors.filter(vendor => that.data.employeeMappingRow.destination_vendor && vendor.value === that.data.employeeMappingRow.destination_vendor.value)[0] : '';
+      const qboEmployee = that.editMapping ? that.qboEmployees.filter(employee => that.data.employeeMappingRow.destination_employee && employee.value === that.data.employeeMappingRow.destination_employee.value)[0] : '';
+      const defaultCCCObj = that.editMapping ? that.cccObjects.filter(cccObj => that.data.employeeMappingRow.destination_card_account && cccObj.value === that.data.employeeMappingRow.destination_card_account.value)[0] : that.cccObjects.filter(cccObj => cccObj.value === that.generalMappings.default_ccc_account_name)[0];
       that.isLoading = false;
       that.form = that.formBuilder.group({
         fyleEmployee: [fyleEmployee, Validators.compose([Validators.required, that.forbiddenSelectionValidator(that.fyleEmployees)])],
@@ -205,7 +207,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
     const that = this;
     that.workSpaceId = that.data.workspaceId;
 
-    if (that.data.rowElement) {
+    if (that.data.employeeMappingRow) {
       that.editMapping = true;
     }
 

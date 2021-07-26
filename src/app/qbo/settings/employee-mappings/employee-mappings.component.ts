@@ -59,7 +59,7 @@ export class EmployeeMappingsComponent implements OnInit {
         that.isLoading = false;
         const onboarded = that.storageService.get('onboarded');
 
-        if (onboarded === true) {
+        if (onboarded) {
           that.createEmployeeMappingsRows();
         } else {
           that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MappingsService } from '../../../core/services/mappings.service';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
@@ -27,12 +27,6 @@ export class GeneralMappingsComponent implements OnInit {
   generalMappings: GeneralMapping;
   generalSettings: GeneralSetting;
   isLoading = true;
-  accountsPayableIsValid = true;
-  bankAccountIsValid = true;
-  qboExpenseAccountIsValid = true;
-  cccAccountIsValid = true;
-  billPaymentAccountIsValid = true;
-  vendorIsValid = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,11 +40,6 @@ export class GeneralMappingsComponent implements OnInit {
 
   submit() {
     const that = this;
-    that.accountsPayableIsValid = false;
-    that.bankAccountIsValid = false;
-    that.qboExpenseAccountIsValid = false;
-    that.cccAccountIsValid = false;
-    that.billPaymentAccountIsValid = false;
 
     const accountPayableAccountId = that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.form.value.accountPayableAccounts : '';
     const accountPayableAccount = that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.accountPayableAccounts.filter(filteredAccountsPayableAccount => filteredAccountsPayableAccount.destination_id === accountPayableAccountId)[0] : '';
@@ -70,62 +59,73 @@ export class GeneralMappingsComponent implements OnInit {
     const defaultVendorId = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.form.value.qboVendors : '';
     const defaultVendor = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.qboVendors.filter(filteredVendor => filteredVendor.destination_id === defaultVendorId)[0] : '';
 
-    if (accountPayableAccountId != null) {
-      that.accountsPayableIsValid = true;
-    }
-    if (bankAccountId != null) {
-      that.bankAccountIsValid = true;
-    }
-    if (qboExpenseAccountId != null) {
-      that.qboExpenseAccountIsValid = true;
-    }
-    if (cccAccountId != null) {
-      that.cccAccountIsValid = true;
-    }
-    if (billPaymentAccountId != null) {
-      that.billPaymentAccountIsValid = true;
-    }
-    if (defaultVendorId != null) {
-      that.vendorIsValid = true;
-    }
-    if (cccAccountId === null) {
-      this.cccAccountIsValid = true;
-    }
+    const generalMappings: GeneralMapping = {
+      accounts_payable_name: accountPayableAccount ? accountPayableAccount.value : null,
+      accounts_payable_id: accountPayableAccount ? accountPayableAccount.destination_id : null,
+      bank_account_name: bankAccount ? bankAccount.value : null,
+      bank_account_id: bankAccount ? bankAccount.destination_id : null,
+      qbo_expense_account_name: qboExpenseAccount ? qboExpenseAccount.value : null,
+      qbo_expense_account_id: qboExpenseAccount ? qboExpenseAccount.destination_id : null,
+      default_ccc_account_name: cccAccount ? cccAccount.value : null,
+      default_ccc_account_id: cccAccount ? cccAccount.destination_id : null,
+      bill_payment_account_name: billPaymentAccount ? billPaymentAccount.value : null,
+      bill_payment_account_id: billPaymentAccount ? billPaymentAccount.destination_id : null,
+      default_ccc_vendor_name: defaultVendor ? defaultVendor.value : null,
+      default_ccc_vendor_id: defaultVendor ? defaultVendor.destination_id : null
+    };
 
-    if (that.accountsPayableIsValid && that.bankAccountIsValid && that.cccAccountIsValid && that.vendorIsValid && that.billPaymentAccountIsValid) {
-      that.isLoading = true;
-
-      const generalMappings: GeneralMapping = {
-        accounts_payable_name: accountPayableAccount ? accountPayableAccount.value : null,
-        accounts_payable_id: accountPayableAccount ? accountPayableAccount.destination_id : null,
-        bank_account_name: bankAccount ? bankAccount.value : null,
-        bank_account_id: bankAccount ? bankAccount.destination_id : null,
-        qbo_expense_account_name: qboExpenseAccount ? qboExpenseAccount.value : null,
-        qbo_expense_account_id: qboExpenseAccount ? qboExpenseAccount.destination_id : null,
-        default_ccc_account_name: cccAccount ? cccAccount.value : null,
-        default_ccc_account_id: cccAccount ? cccAccount.destination_id : null,
-        bill_payment_account_name: billPaymentAccount ? billPaymentAccount.value : null,
-        bill_payment_account_id: billPaymentAccount ? billPaymentAccount.destination_id : null,
-        default_ccc_vendor_name: defaultVendor ? defaultVendor.value : null,
-        default_ccc_vendor_id: defaultVendor ? defaultVendor.destination_id : null
-      };
-
-      this.mappingsService.postGeneralMappings(generalMappings).subscribe(() => {
-        const onboarded = that.storageService.get('onboarded');
-        if (onboarded === true) {
-          that.getGeneralMappings();
-        } else {
-          that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
-        }
-      }, error => {
-        that.isLoading = false;
-        that.snackBar.open('Please fill up the form with valid values');
-        that.form.markAllAsTouched();
-      });
-    } else {
+    this.mappingsService.postGeneralMappings(generalMappings).subscribe(() => {
+      const onboarded = that.storageService.get('onboarded');
+      if (onboarded) {
+        that.getGeneralMappings();
+      } else {
+        that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
+      }
+    }, () => {
+      that.isLoading = false;
       that.snackBar.open('Please fill up the form with valid values');
       that.form.markAllAsTouched();
+    });
+  }
+
+  setMandatoryField() {
+    const that = this;
+
+    if (that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') {
+      that.form.controls.accountPayableAccounts.setValidators(Validators.required);
     }
+
+    if (that.generalSettings.employee_field_mapping === 'EMPLOYEE' && this.generalSettings.reimbursable_expenses_object !== 'EXPENSE') {
+      that.form.controls.bankAccounts.setValidators(Validators.required);
+    }
+
+    if (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL') {
+      that.form.controls.cccAccounts.setValidators(Validators.required);
+    }
+
+    if (that.generalSettings.corporate_credit_card_expenses_object === 'BILL') {
+      that.form.controls.qboVendors.setValidators(Validators.required);
+    }
+
+    if (that.generalSettings.reimbursable_expenses_object === 'EXPENSE') {
+      that.form.controls.qboExpenseAccounts.setValidators(Validators.required);
+    }
+
+    if (that.generalSettings.sync_fyle_to_qbo_payments) {
+      that.form.controls.billPaymentAccounts.setValidators(Validators.required);
+    }
+  }
+
+  isFieldMandatory(controlName: string) {
+    const abstractControl = this.form.controls[controlName];
+    if (abstractControl.validator) {
+      const validator = abstractControl.validator({} as AbstractControl);
+      if (validator && validator.required) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   getGeneralMappings() {
@@ -143,7 +143,10 @@ export class GeneralMappingsComponent implements OnInit {
         billPaymentAccounts: [that.generalMappings ? that.generalMappings.bill_payment_account_id : ''],
         qboVendors: [that.generalMappings ? that.generalMappings.default_ccc_vendor_id : '']
       });
-    }, error => {
+
+      that.setMandatoryField();
+
+    }, () => {
       that.isLoading = false;
       that.form = that.formBuilder.group({
         accountPayableAccounts: [null],
@@ -153,6 +156,9 @@ export class GeneralMappingsComponent implements OnInit {
         billPaymentAccounts: [null],
         qboVendors: [null]
       });
+
+      that.setMandatoryField();
+
     });
   }
 

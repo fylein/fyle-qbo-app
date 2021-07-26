@@ -115,11 +115,6 @@ export class SettingsService {
       const generalSettings = responses[0];
       const mappingSettings = responses[1].results;
 
-      const employeeFieldMapping = mappingSettings.filter(
-        setting => (setting.source_field === 'EMPLOYEE') &&
-        (setting.destination_field === 'EMPLOYEE' || setting.destination_field === 'VENDOR')
-      )[0];
-
       const projectFieldMapping = mappingSettings.filter(
         settings => settings.source_field === 'PROJECT'
       )[0];
@@ -127,8 +122,6 @@ export class SettingsService {
       const costCenterFieldMapping = mappingSettings.filter(
         settings => settings.source_field === 'COST_CENTER'
       )[0];
-
-      generalSettings.employee_field_mapping = employeeFieldMapping.destination_field;
 
       if (projectFieldMapping) {
         generalSettings.project_field_mapping = projectFieldMapping.destination_field;

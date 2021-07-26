@@ -91,7 +91,7 @@ export class GeneralMappingsComponent implements OnInit {
   setMandatoryField() {
     const that = this;
 
-    if (that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') {
+    if ((that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') && that.generalSettings.reimbursable_expenses_object !== 'EXPENSE') {
       that.form.controls.accountPayableAccounts.setValidators(Validators.required);
     }
 

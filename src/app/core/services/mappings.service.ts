@@ -313,7 +313,7 @@ export class MappingsService {
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/vendors/`, {});
   }
 
-  getQBOFields(): Observable<MappingDestination[]> {
+  getQBOFields(): Observable<ExpenseField[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/quickbooks_fields/`, {});

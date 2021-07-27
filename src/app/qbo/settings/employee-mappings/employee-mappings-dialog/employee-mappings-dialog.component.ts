@@ -66,26 +66,17 @@ export class EmployeeMappingsDialogComponent implements OnInit {
         source_employee: {
           id: fyleEmployee.id
         },
+        destination_vendor: {
+          id: qboVendor ? qboVendor.id : null
+        },
+        destination_employee: {
+          id: qboEmployee ? qboEmployee.id : null
+        },
+        destination_card_account: {
+          id: that.form.getRawValue().creditCardAccount ? that.form.getRawValue().creditCardAccount.id : null
+        },
         workspace: that.workSpaceId
       };
-
-      if (qboVendor) {
-        employeeMapping.destination_vendor = {
-          id: qboVendor.id
-        };
-      }
-
-      if (qboEmployee) {
-        employeeMapping.destination_employee = {
-          id: qboEmployee.id
-        };
-      }
-
-      if (that.form.getRawValue().creditCardAccount) {
-        employeeMapping.destination_card_account = {
-          id: that.form.getRawValue().creditCardAccount.id
-        };
-      }
 
       that.isLoading = true;
       that.mappingsService.postEmployeeMappings(employeeMapping).subscribe(() => {

@@ -60,8 +60,9 @@ export class EmployeeMappingsDialogComponent implements OnInit {
     const fyleEmployee = that.form.controls.fyleEmployee.value;
     const qboVendor = that.form.getRawValue().qboVendor;
     const qboEmployee = that.form.getRawValue().qboEmployee;
+    const creditCardAccount = that.form.getRawValue().creditCardAccount;
 
-    if (that.form.valid) {
+    if (that.form.valid && (qboVendor || qboEmployee || creditCardAccount)) {
       const employeeMapping: EmployeeMapping = {
         source_employee: {
           id: fyleEmployee.id
@@ -73,7 +74,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
           id: qboEmployee ? qboEmployee.id : null
         },
         destination_card_account: {
-          id: that.form.getRawValue().creditCardAccount ? that.form.getRawValue().creditCardAccount.id : null
+          id: creditCardAccount ? creditCardAccount.id : null
         },
         workspace: that.workSpaceId
       };

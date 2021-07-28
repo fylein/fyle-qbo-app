@@ -61,7 +61,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
     const qboVendor = that.form.getRawValue().qboVendor;
     const qboEmployee = that.form.getRawValue().qboEmployee;
 
-    if (that.form.valid && (qboVendor || qboEmployee)) {
+    if (that.form.valid) {
       const employeeMapping: EmployeeMapping = {
         source_employee: {
           id: fyleEmployee.id
@@ -95,14 +95,18 @@ export class EmployeeMappingsDialogComponent implements OnInit {
 
   forbiddenSelectionValidator(options: (MappingSource|MappingDestination)[]): ValidatorFn {
     return (control: AbstractControl): { [key: string]: object } | null => {
-      const forbidden = !options.some((option) => {
-        return control.value && control.value.id && option && option.id === control.value.id;
-      });
-      return forbidden ? {
-        forbiddenOption: {
-          value: control.value
-        }
-      } : null;
+      if (control.value) {
+        const forbidden = !options.some((option) => {
+          return control.value && control.value.id && option && option.id === control.value.id;
+        });
+        return forbidden ? {
+          forbiddenOption: {
+            value: control.value
+          }
+        } : null;
+      }
+
+      return null;
     };
   }
 

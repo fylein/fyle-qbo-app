@@ -119,7 +119,7 @@ export class DashboardComponent implements OnInit {
       that.currentState = onboardingStates.employeeMappingsDone;
       return;
     } else {
-      return that.mappingsService.getMappings('EMPLOYEE', null, 1).toPromise().then((res) => {
+      return that.mappingsService.getEmployeeMappings(null, 1, 0).toPromise().then((res) => {
         if (res.results.length > 0) {
           that.currentState = onboardingStates.employeeMappingsDone;
         } else {

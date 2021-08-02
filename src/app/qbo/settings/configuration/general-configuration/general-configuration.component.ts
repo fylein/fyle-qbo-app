@@ -74,6 +74,46 @@ export class GeneralConfigurationComponent implements OnInit {
     return false;
   }
 
+  setupFieldWatchers() {
+    const that = this;
+
+    that.generalSettingsForm.controls.cccExpense.valueChanges.subscribe((cccExpenseMappedTo) => {
+      that.showJELineSettings(that.generalSettingsForm.value.reimburExpense, cccExpenseMappedTo);
+      if (that.generalSettings && that.generalSettings.je_single_credit_line && !that.showJeSingleCreditLine) {
+        that.generalSettingsForm.controls.jeSingleCreditLine.setValue(false);
+      }
+    });
+
+    that.generalSettingsForm.controls.reimburExpense.valueChanges.subscribe((reimbursableExpenseMappedTo) => {
+      that.showPaymentsFields(reimbursableExpenseMappedTo);
+
+      if (that.generalSettings && that.generalSettings.sync_fyle_to_qbo_payments && !that.showPaymentsField) {
+        that.generalSettingsForm.controls.paymentsSync.setValue(false);
+      }
+
+      that.showJELineSettings(reimbursableExpenseMappedTo, that.generalSettingsForm.value.cccExpense);
+      if (that.generalSettings && that.generalSettings.je_single_credit_line && !that.showJeSingleCreditLine) {
+        that.generalSettingsForm.controls.jeSingleCreditLine.setValue(false);
+      }
+    });
+
+    that.generalSettingsForm.controls.autoMapEmployees.valueChanges.subscribe((employeeMappingPreference) => {
+      that.showAutoCreateOption(employeeMappingPreference, that.generalSettingsForm.value.employees);
+    });
+
+    that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
+      that.showAutoCreateOption(that.generalSettingsForm.value.autoMapEmployees, employeeMappedTo);
+      that.expenseOptions = that.getExpenseOptions(employeeMappedTo);
+      that.generalSettingsForm.controls.reimburExpense.reset();
+      if (that.generalSettings) {
+        that.generalSettingsForm.controls.reimburExpense.markAsTouched();
+      }
+      if (that.generalSettings && that.generalSettings.auto_create_destination_entity && !that.showAutoCreate) {
+        that.generalSettingsForm.controls.autoCreateDestinationEntity.setValue(false);
+      }
+    });
+  }
+
   getAllSettings() {
     const that = this;
 
@@ -109,9 +149,9 @@ export class GeneralConfigurationComponent implements OnInit {
       }
 
       that.generalSettingsForm = that.formBuilder.group({
-        reimburExpense: [that.generalSettings ? that.generalSettings.reimbursable_expenses_object : ''],
+        reimburExpense: [that.generalSettings ? that.generalSettings.reimbursable_expenses_object : '', Validators.required],
         cccExpense: [that.generalSettings ? that.generalSettings.corporate_credit_card_expenses_object : ''],
-        employees: [employeeFieldMapping ? employeeFieldMapping : ''],
+        employees: [employeeFieldMapping ? employeeFieldMapping : '', Validators.required],
         importCategories: [that.generalSettings.import_categories],
         importProjects: [importProjects],
         paymentsSync: [paymentsSyncOption],
@@ -133,42 +173,9 @@ export class GeneralConfigurationComponent implements OnInit {
         that.generalSettingsForm.controls.importProjects.disable();
       }
 
-      if (that.generalSettings.reimbursable_expenses_object) {
-        that.expenseOptions = [{
-          label: 'Bill',
-          value: 'BILL'
-        },
-        {
-          label: 'Journal Entry',
-          value: 'JOURNAL ENTRY'
-        },
-        {
-          label: 'Check',
-          value: 'CHECK'
-        },
-        {
-          label: 'Expense',
-          value: 'EXPENSE'
-        }
-        ];
-      }
-
-      that.generalSettingsForm.controls.employees.disable();
-      that.generalSettingsForm.controls.reimburExpense.disable();
-
       that.showAutoCreateOption(that.generalSettings.auto_map_employees, employeeFieldMapping);
 
-      that.generalSettingsForm.controls.autoMapEmployees.valueChanges.subscribe((employeeMappingPreference) => {
-        that.showAutoCreateOption(employeeMappingPreference, employeeFieldMapping);
-      });
-
-      if (that.generalSettings.corporate_credit_card_expenses_object) {
-        that.generalSettingsForm.controls.cccExpense.disable();
-      } else {
-        that.generalSettingsForm.controls.cccExpense.valueChanges.subscribe((cccExpenseMappedTo) => {
-          that.showJELineSettings(that.generalSettingsForm.value.reimburExpense, cccExpenseMappedTo);
-        });
-      }
+      that.setupFieldWatchers();
 
       that.isLoading = false;
     }, () => {
@@ -186,24 +193,7 @@ export class GeneralConfigurationComponent implements OnInit {
         jeSingleCreditLine: [false]
       });
 
-      that.generalSettingsForm.controls.reimburExpense.valueChanges.subscribe((reimbursableExpenseMappedTo) => {
-        that.showPaymentsFields(reimbursableExpenseMappedTo);
-        that.showJELineSettings(reimbursableExpenseMappedTo, that.generalSettingsForm.value.cccExpense);
-      });
-
-      that.generalSettingsForm.controls.cccExpense.valueChanges.subscribe((cccExpenseMappedTo) => {
-        that.showJELineSettings(that.generalSettingsForm.value.reimburExpense, cccExpenseMappedTo);
-      });
-
-      that.generalSettingsForm.controls.autoMapEmployees.valueChanges.subscribe((employeeMappingPreference) => {
-        that.showAutoCreateOption(employeeMappingPreference, that.generalSettingsForm.value.employees);
-      });
-
-      that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
-        that.showAutoCreateOption(that.generalSettingsForm.value.autoMapEmployees, employeeMappedTo);
-        that.expenseOptions = that.getExpenseOptions(employeeMappedTo);
-        that.generalSettingsForm.controls.reimburExpense.reset();
-      });
+      that.setupFieldWatchers();
     });
   }
 
@@ -215,9 +205,9 @@ export class GeneralConfigurationComponent implements OnInit {
       destination_field: 'ACCOUNT'
     }];
 
-    const reimbursableExpensesObject = that.generalSettingsForm.getRawValue().reimburExpense;
-    const cccExpensesObject = that.generalSettingsForm.getRawValue().cccExpense;
-    const employeeMappingsObject = that.generalSettingsForm.getRawValue().employees;
+    const reimbursableExpensesObject = that.generalSettingsForm.value.reimburExpense;
+    const cccExpensesObject = that.generalSettingsForm.value.cccExpense ? that.generalSettingsForm.value.cccExpense : null;
+    const employeeMappingsObject = that.generalSettingsForm.value.employees;
     const importCategories = that.generalSettingsForm.value.importCategories;
     const importProjects = that.generalSettingsForm.value.importProjects ? that.generalSettingsForm.value.importProjects : false;
     const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;

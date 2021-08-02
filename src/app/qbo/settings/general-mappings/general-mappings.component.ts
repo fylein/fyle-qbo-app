@@ -114,6 +114,10 @@ export class GeneralMappingsComponent implements OnInit {
     if (that.generalSettings.sync_fyle_to_qbo_payments) {
       that.form.controls.billPaymentAccounts.setValidators(Validators.required);
     }
+
+    if (that.generalMappings) {
+      that.form.markAllAsTouched();
+    }
   }
 
   isFieldMandatory(controlName: string) {

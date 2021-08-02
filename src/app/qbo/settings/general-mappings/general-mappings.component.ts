@@ -81,6 +81,7 @@ export class GeneralMappingsComponent implements OnInit {
       } else {
         that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
       }
+      that.snackBar.open('General Mappings saved successfully');
     }, () => {
       that.isLoading = false;
       that.snackBar.open('Please fill up the form with valid values');

@@ -145,38 +145,26 @@ export class ExpenseGroupsComponent implements OnInit, OnDestroy {
     event.preventDefault();
     // tslint:disable-next-line: deprecation
     event.stopPropagation();
-    const that = this;
-    that.isLoading = true;
-    that.taskService.getTaskByExpenseGroupId(clickedExpenseGroup.id).subscribe((completedTask: Task) => {
-      that.isLoading = false;
 
-      if (completedTask.status === 'COMPLETE') {
-        const typeMap = {
-          CREATING_BILL: {
-            type: 'bill',
-            getId: (task: Task) => task.detail.Bill.Id
-          },
-          CREATING_CHECK: {
-            type: 'check',
-            getId: (task: Task) => task.detail.Purchase.Id
-          },
-          CREATING_EXPENSE: {
-            type: 'expense',
-            getId: (task: Task) => task.detail.Purchase.Id
-          },
-          CREATING_JOURNAL_ENTRY: {
-            type: 'journal',
-            getId: (task: Task) => task.detail.JournalEntry.Id
-          },
-          CREATING_CREDIT_CARD_PURCHASE: {
-            type: 'expense',
-            getId: (task: Task) => task.detail.Purchase.Id
-          }
-        };
+    let exportType = null;
+    let exportId = null;
 
-        that.openInQBO(typeMap[completedTask.type].type, typeMap[completedTask.type].getId(completedTask));
+    if ('Bill' in clickedExpenseGroup.response_logs && clickedExpenseGroup.response_logs.Bill) {
+      exportType = 'bill';
+      exportId = clickedExpenseGroup.response_logs.Bill.Id;
+    } else if ('JournalEntry' in clickedExpenseGroup.response_logs && clickedExpenseGroup.response_logs.JournalEntry) {
+      exportType = 'journal';
+      exportId = clickedExpenseGroup.response_logs.JournalEntry.Id;
+    } else if ('Purchase' in clickedExpenseGroup.response_logs && clickedExpenseGroup.response_logs.Purchase) {
+      exportId = clickedExpenseGroup.response_logs.Purchase.Id;
+      if (clickedExpenseGroup.response_logs.Purchase.PaymentType === 'Check') {
+        exportType = 'check';
+      } else {
+        exportType = 'expense';
       }
-    });
+    }
+
+    this.openInQBO(exportType, exportId);
   }
 
   searchByText(data: ExpenseGroup, filterText: string) {

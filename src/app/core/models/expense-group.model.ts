@@ -7,7 +7,7 @@ export type ExpenseGroup = {
   fyle_group_id: string;
   fund_source: string;
   description: ExpenseGroupDescription;
-  // having any here is okay, different qbo exports as different structures
+  // having any here is okay, different qbo exports has different structures
   response_logs: any;
   created_at: Date;
   updated_at: Date;

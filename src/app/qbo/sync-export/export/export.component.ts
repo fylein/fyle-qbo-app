@@ -31,6 +31,7 @@ export class ExportComponent implements OnInit {
   exportableExpenseGroups: ExpenseGroup[];
   generalSettings: GeneralSetting;
   failedExpenseGroupCount = 0;
+  exportedCount = 0;
   successfulExpenseGroupCount = 0;
   qboCompanyName = '';
   windowReference: Window;
@@ -107,6 +108,7 @@ export class ExportComponent implements OnInit {
       takeWhile((response) => response.count > 0, true)
     ).subscribe((res) => {
       if ((res.results).length === 0) {
+        that.exportedCount = res.results.filter(task => (task.status !== 'IN_PROGRESS' && task.status !== 'ENQUEUED') && (task.type !== 'FETCHING_EXPENSES' && task.type !== 'CREATING_BILL_PAYMENT') && filteredIds.includes(task.expense_group)).length;
         that.taskService.getAllTasks(['FAILED']).subscribe((taskResponse) => {
           that.failedExpenseGroupCount = taskResponse.count;
           that.successfulExpenseGroupCount = filteredIds.length - that.failedExpenseGroupCount;

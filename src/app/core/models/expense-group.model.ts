@@ -9,6 +9,7 @@ export type ExpenseGroup = {
   description: ExpenseGroupDescription;
   // having any here is okay, different qbo exports has different structures
   response_logs: any;
+  export_type: string;
   created_at: Date;
   updated_at: Date;
   workspace: number;

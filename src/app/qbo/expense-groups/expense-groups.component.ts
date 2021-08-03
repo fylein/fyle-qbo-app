@@ -78,11 +78,19 @@ export class ExpenseGroupsComponent implements OnInit, OnDestroy {
   }
 
   getPaginatedExpenseGroups() {
-    return this.expenseGroupService.getExpenseGroups(this.pageSize, this.pageNumber * this.pageSize, this.state).subscribe(expenseGroups => {
-      this.count = expenseGroups.count;
-      this.expenseGroups = new MatTableDataSource(expenseGroups.results);
-      this.expenseGroups.filterPredicate = this.searchByText;
-      this.isLoading = false;
+    const that = this;
+
+    return that.expenseGroupService.getExpenseGroups(that.pageSize, that.pageNumber * that.pageSize, that.state).subscribe(expenseGroups => {
+      that.count = expenseGroups.count;
+      expenseGroups.results.forEach((expenseGroup: ExpenseGroup) => {
+        if (expenseGroup.response_logs) {
+          const [_, __, exportType] = that.generateExportTypeAndId(expenseGroup);
+          expenseGroup.export_type = exportType;
+        }
+      });
+      that.expenseGroups = new MatTableDataSource(expenseGroups.results);
+      that.expenseGroups.filterPredicate = that.searchByText;
+      that.isLoading = false;
       return expenseGroups;
     });
   }
@@ -140,31 +148,46 @@ export class ExpenseGroupsComponent implements OnInit, OnDestroy {
     this.windowReference.open(`${environment.qbo_app_url}/app/${type}?txnId=${id}`, '_blank');
   }
 
+  generateExportTypeAndId(expenseGroup: ExpenseGroup) {
+    let exportRedirection = null;
+    let exportType = null;
+    let exportId = null;
+
+    if ('Bill' in expenseGroup.response_logs && expenseGroup.response_logs.Bill) {
+      exportRedirection = 'bill';
+      exportType = exportRedirection;
+      exportId = expenseGroup.response_logs.Bill.Id;
+    } else if ('JournalEntry' in expenseGroup.response_logs && expenseGroup.response_logs.JournalEntry) {
+      exportRedirection = 'journal';
+      exportType = 'Journal Entry';
+      exportId = expenseGroup.response_logs.JournalEntry.Id;
+    } else if ('Purchase' in expenseGroup.response_logs && expenseGroup.response_logs.Purchase) {
+      exportId = expenseGroup.response_logs.Purchase.Id;
+      if (expenseGroup.response_logs.Purchase.PaymentType === 'Check') {
+        exportRedirection = 'check';
+        exportType = exportRedirection;
+      } else {
+        exportRedirection = 'expense';
+        exportType = exportRedirection;
+        if (expenseGroup.response_logs.Purchase.PaymentType === 'CreditCard') {
+          exportType = 'Credit Card Purchase';
+        }
+      }
+    }
+
+    return [exportRedirection, exportId, exportType];
+  }
+
   openInQboHandler(clickedExpenseGroup: ExpenseGroup) {
     // tslint:disable-next-line: deprecation
     event.preventDefault();
     // tslint:disable-next-line: deprecation
     event.stopPropagation();
 
-    let exportType = null;
-    let exportId = null;
+    const that = this;
 
-    if ('Bill' in clickedExpenseGroup.response_logs && clickedExpenseGroup.response_logs.Bill) {
-      exportType = 'bill';
-      exportId = clickedExpenseGroup.response_logs.Bill.Id;
-    } else if ('JournalEntry' in clickedExpenseGroup.response_logs && clickedExpenseGroup.response_logs.JournalEntry) {
-      exportType = 'journal';
-      exportId = clickedExpenseGroup.response_logs.JournalEntry.Id;
-    } else if ('Purchase' in clickedExpenseGroup.response_logs && clickedExpenseGroup.response_logs.Purchase) {
-      exportId = clickedExpenseGroup.response_logs.Purchase.Id;
-      if (clickedExpenseGroup.response_logs.Purchase.PaymentType === 'Check') {
-        exportType = 'check';
-      } else {
-        exportType = 'expense';
-      }
-    }
-
-    this.openInQBO(exportType, exportId);
+    const [exportType, exportId, _] = that.generateExportTypeAndId(clickedExpenseGroup);
+    that.openInQBO(exportType, exportId);
   }
 
   searchByText(data: ExpenseGroup, filterText: string) {

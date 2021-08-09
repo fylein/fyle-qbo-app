@@ -102,14 +102,13 @@ export class ExportComponent implements OnInit {
   checkResultsOfExport(filteredIds: number[]) {
     const that = this;
     const taskType = ['CREATING_BILL', 'CREATING_EXPENSE', 'CREATING_CHECK', 'CREATING_CREDIT_CARD_PURCHASE', 'CREATING_JOURNAL_ENTRY'];
-    const taskStatus = ['IN_PROGRESS', 'ENQUEUED'];
     interval(3000).pipe(
-      switchMap(() => from(that.taskService.getAllTasks(taskStatus, filteredIds, taskType))),
-      takeWhile((response) => response.count > 0, true)
+      switchMap(() => from(that.taskService.getAllTasks([], filteredIds, taskType))),
+      takeWhile((response) => response.results.filter(task => (task.status === 'IN_PROGRESS' || task.status === 'ENQUEUED') && filteredIds.includes(task.expense_group)).length > 0, true)
     ).subscribe((res) => {
-      if ((res.results).length === 0) {
-        that.exportedCount = res.results.filter(task => (task.status !== 'IN_PROGRESS' && task.status !== 'ENQUEUED') && (task.type !== 'FETCHING_EXPENSES' && task.type !== 'CREATING_BILL_PAYMENT') && filteredIds.includes(task.expense_group)).length;
-        that.taskService.getAllTasks(['FAILED']).subscribe((taskResponse) => {
+      that.exportedCount = res.results.filter(task => (task.status !== 'IN_PROGRESS' && task.status !== 'ENQUEUED') && (task.type !== 'FETCHING_EXPENSES' && task.type !== 'CREATING_BILL_PAYMENT') && filteredIds.includes(task.expense_group)).length;
+      if (res.results.filter(task => (task.status === 'IN_PROGRESS' || task.status === 'ENQUEUED') && filteredIds.includes(task.expense_group)).length === 0) {
+        that.taskService.getAllTasks(['FAILED', 'FATAL']).subscribe((taskResponse) => {
           that.failedExpenseGroupCount = taskResponse.count;
           that.successfulExpenseGroupCount = filteredIds.length - that.failedExpenseGroupCount;
           that.isExporting = false;

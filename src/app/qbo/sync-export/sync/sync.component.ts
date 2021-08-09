@@ -52,8 +52,8 @@ export class SyncComponent implements OnInit {
     ).subscribe((res) => {
       if (!res.results.length) {
         that.taskService.getAllTasks(['COMPLETE'], [], taskType).subscribe((response) => {
-          that.updateLastSyncStatus().subscribe((response) => {
-            if (response[0].last_synced_at !== lastSyncedAt) {
+          that.updateLastSyncStatus().subscribe((result) => {
+            if (result[0].last_synced_at !== lastSyncedAt) {
               that.snackBar.open('Import Complete');
             } else {
               const expenseState = that.expenseGroupSettings.expense_state.toLowerCase().replace('_', ' ');

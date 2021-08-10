@@ -7,6 +7,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 import { MappingSetting } from 'src/app/core/models/mapping-setting.model';
 import { QboComponent } from 'src/app/qbo/qbo.component';
+import { MatDialog } from '@angular/material/dialog';
+import { GeneralConfigurationDialogComponent } from './general-configuration-dialog/general-configuration-dialog.component';
+import { UpdatedConfiguration } from 'src/app/core/models/updated-configuration';
 
 @Component({
   selector: 'app-general-configuration',
@@ -25,7 +28,7 @@ export class GeneralConfigurationComponent implements OnInit {
   showAutoCreate: boolean;
   showJeSingleCreditLine: boolean;
 
-  constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) { }
+  constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
   getExpenseOptions(employeeMappedTo) {
     return {
@@ -197,6 +200,69 @@ export class GeneralConfigurationComponent implements OnInit {
     });
   }
 
+  openDialog(updatedConfigurations: UpdatedConfiguration, generalSettingsPayload: GeneralSetting, mappingSettingsPayload: MappingSetting[]) {
+    const that = this;
+    const dialogRef = that.dialog.open(GeneralConfigurationDialogComponent, {
+      width: '750px',
+      data: updatedConfigurations
+    });
+
+    dialogRef.afterClosed().subscribe(accepted => {
+      if (accepted) {
+        that.isLoading = true;
+        that.postConfigurationsAndMappingSettings(generalSettingsPayload, mappingSettingsPayload, true);
+      }
+    });
+  }
+
+  constructUpdatedConfigurationsPayload(generalSettingsPayload: GeneralSetting): UpdatedConfiguration {
+    const that = this;
+    const updatedConfiguration: UpdatedConfiguration = {};
+
+    if (that.generalSettings.employee_field_mapping !== generalSettingsPayload.employee_field_mapping) {
+      updatedConfiguration.employee = {
+        oldValue: that.generalSettings.employee_field_mapping,
+        newValue: generalSettingsPayload.employee_field_mapping
+      };
+    }
+
+    if (that.generalSettings.reimbursable_expenses_object !== generalSettingsPayload.reimbursable_expenses_object) {
+      updatedConfiguration.reimburseExpense = {
+        oldValue: that.generalSettings.reimbursable_expenses_object,
+        newValue: generalSettingsPayload.reimbursable_expenses_object
+      };
+    }
+
+    if (that.generalSettings.corporate_credit_card_expenses_object !== generalSettingsPayload.corporate_credit_card_expenses_object) {
+      updatedConfiguration.cccExpense = {
+        oldValue: that.generalSettings.corporate_credit_card_expenses_object,
+        newValue: generalSettingsPayload.corporate_credit_card_expenses_object
+      };
+    }
+
+    return updatedConfiguration;
+  }
+
+  postConfigurationsAndMappingSettings(generalSettingsPayload: GeneralSetting, mappingSettingsPayload: MappingSetting[], redirectToGeneralMappings: boolean = false) {
+    const that = this;
+
+    that.isLoading = true;
+    forkJoin(
+      [
+        that.settingsService.postMappingSettings(that.workspaceId, mappingSettingsPayload),
+        that.settingsService.postGeneralSettings(that.workspaceId, generalSettingsPayload)
+      ]
+    ).subscribe(() => {
+      that.snackBar.open('Configuration saved successfully');
+      that.qbo.getGeneralSettings();
+      if (redirectToGeneralMappings) {
+        that.router.navigateByUrl(`workspaces/${that.workspaceId}/settings/general_mappings`);
+      } else {
+        that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
+      }
+    });
+  }
+
   save() {
     const that = this;
 
@@ -242,8 +308,6 @@ export class GeneralConfigurationComponent implements OnInit {
       }
     }
 
-    that.isLoading = true;
-
     const generalSettingsPayload: GeneralSetting = {
       employee_field_mapping: employeeMappingsObject,
       reimbursable_expenses_object: reimbursableExpensesObject,
@@ -257,17 +321,13 @@ export class GeneralConfigurationComponent implements OnInit {
       je_single_credit_line: jeSingleCreditLine
     };
 
-    forkJoin(
-      [
-        that.settingsService.postMappingSettings(that.workspaceId, mappingsSettingsPayload),
-        that.settingsService.postGeneralSettings(that.workspaceId, generalSettingsPayload)
-      ]
-    ).subscribe(() => {
-      that.isLoading = true;
-      that.snackBar.open('Configuration saved successfully');
-      that.qbo.getGeneralSettings();
-      that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
-    });
+    // Open dialog conditionally
+    if (that.generalSettings.employee_field_mapping !== employeeMappingsObject || that.generalSettings.reimbursable_expenses_object !== reimbursableExpensesObject || that.generalSettings.corporate_credit_card_expenses_object !== cccExpensesObject) {
+      const updatedConfigurations = that.constructUpdatedConfigurationsPayload(generalSettingsPayload);
+      that.openDialog(updatedConfigurations, generalSettingsPayload, mappingsSettingsPayload);
+    } else {
+      that.postConfigurationsAndMappingSettings(generalSettingsPayload, mappingsSettingsPayload);
+    }
   }
 
   showPaymentsFields(reimbursableExpensesObject) {

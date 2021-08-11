@@ -322,7 +322,7 @@ export class GeneralConfigurationComponent implements OnInit {
     };
 
     // Open dialog conditionally
-    if (that.generalSettings.employee_field_mapping !== employeeMappingsObject || that.generalSettings.reimbursable_expenses_object !== reimbursableExpensesObject || that.generalSettings.corporate_credit_card_expenses_object !== cccExpensesObject) {
+    if (that.generalSettings && (that.generalSettings.employee_field_mapping !== employeeMappingsObject || that.generalSettings.reimbursable_expenses_object !== reimbursableExpensesObject || that.generalSettings.corporate_credit_card_expenses_object !== cccExpensesObject)) {
       const updatedConfigurations = that.constructUpdatedConfigurationsPayload(generalSettingsPayload);
       that.openDialog(updatedConfigurations, generalSettingsPayload, mappingsSettingsPayload);
     } else {

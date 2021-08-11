@@ -9,21 +9,27 @@ import { UpdatedConfiguration } from 'src/app/core/models/updated-configuration'
 })
 export class GeneralConfigurationDialogComponent implements OnInit {
   updatedConfiguration: UpdatedConfiguration;
+  customStyle: Object = {};
 
   constructor(public dialogRef: MatDialogRef<GeneralConfigurationDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: UpdatedConfiguration) { }
 
-  getLabel(setting: string): string {
-    return setting.replace(/_/g, ' ');
-  }
-
   submit() {
     this.dialogRef.close(true);
+  }
+
+  updateStyle() {
+    const that = this;
+
+    if (that.updatedConfiguration.cccExpense.oldValue !== 'CREDIT CARD PURCHASE') {
+      that.customStyle = {'margin-right': '10%'};
+    }
   }
 
   ngOnInit() {
     const that = this;
 
     that.updatedConfiguration = that.data;
+    that.updateStyle();
   }
 
 }

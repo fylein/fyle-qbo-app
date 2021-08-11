@@ -9,7 +9,7 @@ import { UpdatedConfiguration } from 'src/app/core/models/updated-configuration'
 })
 export class GeneralConfigurationDialogComponent implements OnInit {
   updatedConfiguration: UpdatedConfiguration;
-  customStyle: Object = {};
+  customStyle: object = {};
 
   constructor(public dialogRef: MatDialogRef<GeneralConfigurationDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: UpdatedConfiguration) { }
 

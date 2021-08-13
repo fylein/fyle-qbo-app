@@ -9,5 +9,7 @@ export const environment = {
   qbo_client_id: 'QBO CLIENT_ID',
   qbo_scope: 'QBO SCOPE',
   qbo_authorize_uri: 'QBO CONNETION URI',
-  qbo_app_url: 'QBO app url'
+  qbo_app_url: 'QBO app url',
+  hotjar_whitelist_url : 'HOTJAR WHITELIST URL',
+  hotjar_id : 'HOTJAR ID',
 }

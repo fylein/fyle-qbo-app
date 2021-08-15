@@ -30,6 +30,7 @@ export class MappingsService {
   qboEmployees: Observable<MappingDestination[]>;
   qboCustomers: Observable<MappingDestination[]>;
   qboDepartments: Observable<MappingDestination[]>;
+  qboTaxcodes: Observable<MappingDestination[]>;
   qboClasses: Observable<MappingDestination[]>;
   accountPayables: Observable<MappingDestination[]>;
   bankAccounts: Observable<MappingDestination[]>;
@@ -324,6 +325,12 @@ export class MappingsService {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/employees/`, {});
+  }
+
+  getQBOTaxcodes(): Observable<MappingDestination[]> {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+
+    return this.apiService.get(`/workspaces/${workspaceId}/qbo/taxcodes/`, {});
   }
 
   getQBOCustomers(): Observable<MappingDestination[]> {

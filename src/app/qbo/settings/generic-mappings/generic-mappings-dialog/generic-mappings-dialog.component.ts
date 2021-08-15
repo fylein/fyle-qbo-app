@@ -128,6 +128,8 @@ export class GenericMappingsDialogComponent implements OnInit {
       qboPromise = that.mappingsService.getQBODepartments();
     } else if (that.setting.destination_field === 'ACCOUNT') {
       qboPromise = that.mappingsService.getExpenseAccounts();
+    } else if (that.setting.destination_field === 'TAX') {
+      qboPromise = that.mappingsService.getQBOTaxcodes();
     }
 
     that.isLoading = true;

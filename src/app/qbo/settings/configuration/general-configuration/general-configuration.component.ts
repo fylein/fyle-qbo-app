@@ -114,6 +114,7 @@ export class GeneralConfigurationComponent implements OnInit {
         employees: [employeeFieldMapping ? employeeFieldMapping : ''],
         importCategories: [that.generalSettings.import_categories],
         importProjects: [importProjects],
+        importTaxcodes: [that.generalSettings.import_taxcodes],
         paymentsSync: [paymentsSyncOption],
         autoMapEmployees: [that.generalSettings.auto_map_employees],
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
@@ -132,6 +133,7 @@ export class GeneralConfigurationComponent implements OnInit {
       if (fyleProjectMapping.length || qboProjectMapping.length) {
         that.generalSettingsForm.controls.importProjects.disable();
       }
+
 
       if (that.generalSettings.reimbursable_expenses_object) {
         that.expenseOptions = [{
@@ -180,6 +182,7 @@ export class GeneralConfigurationComponent implements OnInit {
         cccExpense: [null],
         importCategories: [false],
         importProjects: [false],
+        importTaxcodes: [false],
         paymentsSync: [null],
         autoMapEmployees: [null],
         autoCreateDestinationEntity: [false],
@@ -220,6 +223,7 @@ export class GeneralConfigurationComponent implements OnInit {
     const employeeMappingsObject = that.generalSettingsForm.getRawValue().employees;
     const importCategories = that.generalSettingsForm.value.importCategories;
     const importProjects = that.generalSettingsForm.value.importProjects ? that.generalSettingsForm.value.importProjects : false;
+    const importTaxcodes = that.generalSettingsForm.value.importTaxcodes;
     const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
     const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
     const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
@@ -230,6 +234,13 @@ export class GeneralConfigurationComponent implements OnInit {
     if (that.generalSettingsForm.controls.paymentsSync.value) {
       fyleToQuickbooks = that.generalSettingsForm.value.paymentsSync === 'sync_fyle_to_qbo_payments' ? true : false;
       quickbooksToFyle = that.generalSettingsForm.value.paymentsSync === 'sync_qbo_to_fyle_payments' ? true : false;
+    }
+
+    if (importTaxcodes) {
+      mappingsSettingsPayload.push({
+        source_field: 'TAX',
+        destination_field:'TAX'
+      })
     }
 
     if (importProjects) {
@@ -260,6 +271,7 @@ export class GeneralConfigurationComponent implements OnInit {
       corporate_credit_card_expenses_object: cccExpensesObject,
       import_categories: importCategories,
       import_projects: importProjects,
+      import_taxcodes: importTaxcodes,
       sync_fyle_to_qbo_payments: fyleToQuickbooks,
       sync_qbo_to_fyle_payments: quickbooksToFyle,
       auto_map_employees: autoMapEmployees,

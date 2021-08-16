@@ -9,6 +9,5 @@ export const environment = {
   qbo_scope: '{{QBO_SCOPE}}',
   qbo_authorize_uri: '{{QBO_AUTHORIZE_URI}}',
   qbo_app_url: '{{QBO_APP_URL}}',
-  hotjar_whitelist_url : '{{HOTJAR_WHITELIST_URL}}',
   hotjar_id : '{{HOTJAR_ID}}',
 };

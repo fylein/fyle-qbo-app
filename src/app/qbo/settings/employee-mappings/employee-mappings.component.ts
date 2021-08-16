@@ -79,6 +79,7 @@ export class EmployeeMappingsComponent implements OnInit {
 
   createEmployeeMappingsRows() {
     const that = this;
+    that.employeeMappings = that.employeeMappings.filter((employeeMapping: EmployeeMapping) => employeeMapping.source_employee && (employeeMapping.destination_employee || employeeMapping.destination_vendor || employeeMapping.destination_card_account));
 
     that.employeeMappingRows = new MatTableDataSource(that.employeeMappings);
     that.employeeMappingRows.filterPredicate = that.searchByText;

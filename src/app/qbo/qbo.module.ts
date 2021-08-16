@@ -46,7 +46,6 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { GeneralConfigurationComponent } from './settings/configuration/general-configuration/general-configuration.component';
 import { ExpenseFieldConfigurationComponent } from './settings/configuration/expense-field-configuration/expense-field-configuration.component';
@@ -56,6 +55,7 @@ import { PaginatorComponent } from './settings/paginator/paginator.component';
 import { ExpenseGroupSettingsDialogComponent } from './sync-export/sync/expense-group-settings-dialog/expense-group-settings-dialog.component';
 import { MatTooltipModule } from '@angular/material';
 import { GroupQuickbooksErrorComponent } from './expense-groups/view-expense-group/group-quickbooks-error/group-quickbooks-error.component';
+import { GeneralConfigurationDialogComponent } from './settings/configuration/general-configuration/general-configuration-dialog/general-configuration-dialog.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +76,7 @@ import { GroupQuickbooksErrorComponent } from './expense-groups/view-expense-gro
     EmployeeMappingsComponent,
     ScheduleComponent,
     EmployeeMappingsDialogComponent,
+    GeneralConfigurationDialogComponent,
     GeneralConfigurationComponent,
     ExpenseFieldConfigurationComponent,
     GenericMappingsComponent,
@@ -86,6 +87,7 @@ import { GroupQuickbooksErrorComponent } from './expense-groups/view-expense-gro
   ],
   entryComponents: [
     EmployeeMappingsDialogComponent,
+    GeneralConfigurationDialogComponent,
     GenericMappingsDialogComponent,
     ExpenseGroupSettingsDialogComponent
   ],

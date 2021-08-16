@@ -34,7 +34,7 @@
         <th mat-header-cell *matHeaderCellDef> Employee Email </th>
         <td mat-cell *matCellDef="let element">
           {{element.source_employee.value}}
-          <mat-icon class="auto-map" [inline]="true" matTooltip="Employee auto mapped by integration" matTooltipPosition="after" *ngIf="element.source_employee.auto_mapped">bolt</mat-icon>
+          <mat-icon class="auto-map" [inline]="true" matTooltip="Employee auto mapped by integration" matTooltipPosition="after" *ngIf="element.source_employee.auto_mapped && (generalSettings?.employee_field_mapping == 'VENDOR' ? element.destination_vendor : element.destination_employee)">bolt</mat-icon>
         </td>
       </ng-container>
 

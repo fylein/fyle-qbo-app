@@ -82,8 +82,10 @@ export class EmployeeMappingsComponent implements OnInit {
     that.employeeMappings = that.employeeMappings.filter((employeeMapping: EmployeeMapping) => {
       if (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL') {
         return employeeMapping.destination_employee || employeeMapping.destination_vendor || employeeMapping.destination_card_account;
+      } else if (that.generalSettings.reimbursable_expenses_object === 'EXPENSE REPORT') {
+        return employeeMapping.destination_employee;
       } else {
-        return employeeMapping.destination_employee || employeeMapping.destination_vendor;
+        return employeeMapping.destination_vendor;
       }
     });
 

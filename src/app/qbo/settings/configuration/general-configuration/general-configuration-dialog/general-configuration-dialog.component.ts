@@ -20,7 +20,7 @@ export class GeneralConfigurationDialogComponent implements OnInit {
   updateStyle() {
     const that = this;
 
-    if (that.updatedConfiguration.cccExpense.oldValue !== 'CREDIT CARD PURCHASE') {
+    if (that.updatedConfiguration.cccExpense && that.updatedConfiguration.cccExpense.oldValue !== 'CREDIT CARD PURCHASE') {
       that.customStyle = {'margin-right': '10%'};
     }
   }

@@ -7,6 +7,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 import { MappingSetting } from 'src/app/core/models/mapping-setting.model';
 import { QboComponent } from 'src/app/qbo/qbo.component';
+import { MatDialog } from '@angular/material/dialog';
+import { GeneralConfigurationDialogComponent } from './general-configuration-dialog/general-configuration-dialog.component';
+import { UpdatedConfiguration } from 'src/app/core/models/updated-configuration';
 
 @Component({
   selector: 'app-general-configuration',
@@ -25,7 +28,7 @@ export class GeneralConfigurationComponent implements OnInit {
   showAutoCreate: boolean;
   showJeSingleCreditLine: boolean;
 
-  constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) { }
+  constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
   getExpenseOptions(employeeMappedTo) {
     return {
@@ -74,6 +77,46 @@ export class GeneralConfigurationComponent implements OnInit {
     return false;
   }
 
+  setupFieldWatchers() {
+    const that = this;
+
+    that.generalSettingsForm.controls.cccExpense.valueChanges.subscribe((cccExpenseMappedTo) => {
+      that.showJELineSettings(that.generalSettingsForm.value.reimburExpense, cccExpenseMappedTo);
+      if (that.generalSettings && that.generalSettings.je_single_credit_line && !that.showJeSingleCreditLine) {
+        that.generalSettingsForm.controls.jeSingleCreditLine.setValue(false);
+      }
+    });
+
+    that.generalSettingsForm.controls.reimburExpense.valueChanges.subscribe((reimbursableExpenseMappedTo) => {
+      that.showPaymentsFields(reimbursableExpenseMappedTo);
+
+      if (that.generalSettings && that.generalSettings.sync_fyle_to_qbo_payments && !that.showPaymentsField) {
+        that.generalSettingsForm.controls.paymentsSync.setValue(false);
+      }
+
+      that.showJELineSettings(reimbursableExpenseMappedTo, that.generalSettingsForm.value.cccExpense);
+      if (that.generalSettings && that.generalSettings.je_single_credit_line && !that.showJeSingleCreditLine) {
+        that.generalSettingsForm.controls.jeSingleCreditLine.setValue(false);
+      }
+    });
+
+    that.generalSettingsForm.controls.autoMapEmployees.valueChanges.subscribe((employeeMappingPreference) => {
+      that.showAutoCreateOption(employeeMappingPreference, that.generalSettingsForm.value.employees);
+    });
+
+    that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
+      that.showAutoCreateOption(that.generalSettingsForm.value.autoMapEmployees, employeeMappedTo);
+      that.expenseOptions = that.getExpenseOptions(employeeMappedTo);
+      that.generalSettingsForm.controls.reimburExpense.reset();
+      if (that.generalSettings) {
+        that.generalSettingsForm.controls.reimburExpense.markAsTouched();
+      }
+      if (that.generalSettings && that.generalSettings.auto_create_destination_entity && !that.showAutoCreate) {
+        that.generalSettingsForm.controls.autoCreateDestinationEntity.setValue(false);
+      }
+    });
+  }
+
   getAllSettings() {
     const that = this;
 
@@ -109,9 +152,9 @@ export class GeneralConfigurationComponent implements OnInit {
       }
 
       that.generalSettingsForm = that.formBuilder.group({
-        reimburExpense: [that.generalSettings ? that.generalSettings.reimbursable_expenses_object : ''],
+        reimburExpense: [that.generalSettings ? that.generalSettings.reimbursable_expenses_object : '', Validators.required],
         cccExpense: [that.generalSettings ? that.generalSettings.corporate_credit_card_expenses_object : ''],
-        employees: [employeeFieldMapping ? employeeFieldMapping : ''],
+        employees: [employeeFieldMapping ? employeeFieldMapping : '', Validators.required],
         importCategories: [that.generalSettings.import_categories],
         importProjects: [importProjects],
         paymentsSync: [paymentsSyncOption],
@@ -133,42 +176,9 @@ export class GeneralConfigurationComponent implements OnInit {
         that.generalSettingsForm.controls.importProjects.disable();
       }
 
-      if (that.generalSettings.reimbursable_expenses_object) {
-        that.expenseOptions = [{
-          label: 'Bill',
-          value: 'BILL'
-        },
-        {
-          label: 'Journal Entry',
-          value: 'JOURNAL ENTRY'
-        },
-        {
-          label: 'Check',
-          value: 'CHECK'
-        },
-        {
-          label: 'Expense',
-          value: 'EXPENSE'
-        }
-        ];
-      }
-
-      that.generalSettingsForm.controls.employees.disable();
-      that.generalSettingsForm.controls.reimburExpense.disable();
-
       that.showAutoCreateOption(that.generalSettings.auto_map_employees, employeeFieldMapping);
 
-      that.generalSettingsForm.controls.autoMapEmployees.valueChanges.subscribe((employeeMappingPreference) => {
-        that.showAutoCreateOption(employeeMappingPreference, employeeFieldMapping);
-      });
-
-      if (that.generalSettings.corporate_credit_card_expenses_object) {
-        that.generalSettingsForm.controls.cccExpense.disable();
-      } else {
-        that.generalSettingsForm.controls.cccExpense.valueChanges.subscribe((cccExpenseMappedTo) => {
-          that.showJELineSettings(that.generalSettingsForm.value.reimburExpense, cccExpenseMappedTo);
-        });
-      }
+      that.setupFieldWatchers();
 
       that.isLoading = false;
     }, () => {
@@ -186,24 +196,70 @@ export class GeneralConfigurationComponent implements OnInit {
         jeSingleCreditLine: [false]
       });
 
-      that.generalSettingsForm.controls.reimburExpense.valueChanges.subscribe((reimbursableExpenseMappedTo) => {
-        that.showPaymentsFields(reimbursableExpenseMappedTo);
-        that.showJELineSettings(reimbursableExpenseMappedTo, that.generalSettingsForm.value.cccExpense);
-      });
+      that.setupFieldWatchers();
+    });
+  }
 
-      that.generalSettingsForm.controls.cccExpense.valueChanges.subscribe((cccExpenseMappedTo) => {
-        that.showJELineSettings(that.generalSettingsForm.value.reimburExpense, cccExpenseMappedTo);
-      });
+  openDialog(updatedConfigurations: UpdatedConfiguration, generalSettingsPayload: GeneralSetting, mappingSettingsPayload: MappingSetting[]) {
+    const that = this;
+    const dialogRef = that.dialog.open(GeneralConfigurationDialogComponent, {
+      width: '750px',
+      data: updatedConfigurations
+    });
 
-      that.generalSettingsForm.controls.autoMapEmployees.valueChanges.subscribe((employeeMappingPreference) => {
-        that.showAutoCreateOption(employeeMappingPreference, that.generalSettingsForm.value.employees);
-      });
+    dialogRef.afterClosed().subscribe(accepted => {
+      if (accepted) {
+        that.isLoading = true;
+        that.postConfigurationsAndMappingSettings(generalSettingsPayload, mappingSettingsPayload, true);
+      }
+    });
+  }
 
-      that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
-        that.showAutoCreateOption(that.generalSettingsForm.value.autoMapEmployees, employeeMappedTo);
-        that.expenseOptions = that.getExpenseOptions(employeeMappedTo);
-        that.generalSettingsForm.controls.reimburExpense.reset();
-      });
+  constructUpdatedConfigurationsPayload(generalSettingsPayload: GeneralSetting): UpdatedConfiguration {
+    const that = this;
+    const updatedConfiguration: UpdatedConfiguration = {};
+
+    if (that.generalSettings.employee_field_mapping !== generalSettingsPayload.employee_field_mapping) {
+      updatedConfiguration.employee = {
+        oldValue: that.generalSettings.employee_field_mapping,
+        newValue: generalSettingsPayload.employee_field_mapping
+      };
+    }
+
+    if (that.generalSettings.reimbursable_expenses_object !== generalSettingsPayload.reimbursable_expenses_object) {
+      updatedConfiguration.reimburseExpense = {
+        oldValue: that.generalSettings.reimbursable_expenses_object,
+        newValue: generalSettingsPayload.reimbursable_expenses_object
+      };
+    }
+
+    if (that.generalSettings.corporate_credit_card_expenses_object !== generalSettingsPayload.corporate_credit_card_expenses_object) {
+      updatedConfiguration.cccExpense = {
+        oldValue: that.generalSettings.corporate_credit_card_expenses_object,
+        newValue: generalSettingsPayload.corporate_credit_card_expenses_object
+      };
+    }
+
+    return updatedConfiguration;
+  }
+
+  postConfigurationsAndMappingSettings(generalSettingsPayload: GeneralSetting, mappingSettingsPayload: MappingSetting[], redirectToGeneralMappings: boolean = false) {
+    const that = this;
+
+    that.isLoading = true;
+    forkJoin(
+      [
+        that.settingsService.postMappingSettings(that.workspaceId, mappingSettingsPayload),
+        that.settingsService.postGeneralSettings(that.workspaceId, generalSettingsPayload)
+      ]
+    ).subscribe(() => {
+      that.snackBar.open('Configuration saved successfully');
+      that.qbo.getGeneralSettings();
+      if (redirectToGeneralMappings) {
+        that.router.navigateByUrl(`workspaces/${that.workspaceId}/settings/general_mappings`);
+      } else {
+        that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
+      }
     });
   }
 
@@ -215,9 +271,9 @@ export class GeneralConfigurationComponent implements OnInit {
       destination_field: 'ACCOUNT'
     }];
 
-    const reimbursableExpensesObject = that.generalSettingsForm.getRawValue().reimburExpense;
-    const cccExpensesObject = that.generalSettingsForm.getRawValue().cccExpense;
-    const employeeMappingsObject = that.generalSettingsForm.getRawValue().employees;
+    const reimbursableExpensesObject = that.generalSettingsForm.value.reimburExpense;
+    const cccExpensesObject = that.generalSettingsForm.value.cccExpense ? that.generalSettingsForm.value.cccExpense : null;
+    const employeeMappingsObject = that.generalSettingsForm.value.employees;
     const importCategories = that.generalSettingsForm.value.importCategories;
     const importProjects = that.generalSettingsForm.value.importProjects ? that.generalSettingsForm.value.importProjects : false;
     const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
@@ -252,8 +308,6 @@ export class GeneralConfigurationComponent implements OnInit {
       }
     }
 
-    that.isLoading = true;
-
     const generalSettingsPayload: GeneralSetting = {
       employee_field_mapping: employeeMappingsObject,
       reimbursable_expenses_object: reimbursableExpensesObject,
@@ -267,17 +321,13 @@ export class GeneralConfigurationComponent implements OnInit {
       je_single_credit_line: jeSingleCreditLine
     };
 
-    forkJoin(
-      [
-        that.settingsService.postMappingSettings(that.workspaceId, mappingsSettingsPayload),
-        that.settingsService.postGeneralSettings(that.workspaceId, generalSettingsPayload)
-      ]
-    ).subscribe(() => {
-      that.isLoading = true;
-      that.snackBar.open('Configuration saved successfully');
-      that.qbo.getGeneralSettings();
-      that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
-    });
+    // Open dialog conditionally
+    if (that.generalSettings && (that.generalSettings.employee_field_mapping !== employeeMappingsObject || that.generalSettings.reimbursable_expenses_object !== reimbursableExpensesObject || that.generalSettings.corporate_credit_card_expenses_object !== cccExpensesObject)) {
+      const updatedConfigurations = that.constructUpdatedConfigurationsPayload(generalSettingsPayload);
+      that.openDialog(updatedConfigurations, generalSettingsPayload, mappingsSettingsPayload);
+    } else {
+      that.postConfigurationsAndMappingSettings(generalSettingsPayload, mappingsSettingsPayload);
+    }
   }
 
   showPaymentsFields(reimbursableExpensesObject) {

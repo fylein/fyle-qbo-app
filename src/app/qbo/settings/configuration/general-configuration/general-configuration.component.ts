@@ -294,8 +294,8 @@ export class GeneralConfigurationComponent implements OnInit {
     if (importTaxcodes) {
       mappingsSettingsPayload.push({
         source_field: 'TAX',
-        destination_field:'TAX'
-      })
+        destination_field: 'TAX'
+      });
     }
 
     if (importProjects) {

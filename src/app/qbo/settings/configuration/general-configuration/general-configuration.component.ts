@@ -177,30 +177,6 @@ export class GeneralConfigurationComponent implements OnInit {
         that.generalSettingsForm.controls.importProjects.disable();
       }
 
-
-      if (that.generalSettings.reimbursable_expenses_object) {
-        that.expenseOptions = [{
-          label: 'Bill',
-          value: 'BILL'
-        },
-        {
-          label: 'Journal Entry',
-          value: 'JOURNAL ENTRY'
-        },
-        {
-          label: 'Check',
-          value: 'CHECK'
-        },
-        {
-          label: 'Expense',
-          value: 'EXPENSE'
-        }
-        ];
-      }
-
-      that.generalSettingsForm.controls.employees.disable();
-      that.generalSettingsForm.controls.reimburExpense.disable();
-
       that.showAutoCreateOption(that.generalSettings.auto_map_employees, employeeFieldMapping);
 
       that.setupFieldWatchers();

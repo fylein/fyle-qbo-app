@@ -90,6 +90,7 @@ export class EmployeeMappingsComponent implements OnInit {
     });
 
     that.employeeMappingRows = new MatTableDataSource(that.employeeMappings);
+    that.count = that.employeeMappings.length;
     that.employeeMappingRows.filterPredicate = that.searchByText;
   }
 
@@ -99,7 +100,6 @@ export class EmployeeMappingsComponent implements OnInit {
 
     that.mappingsService.getEmployeeMappings(null, data.pageSize, data.pageNumber * data.pageSize).subscribe((employeeMappingResponse: EmployeeMappingsResponse) => {
       that.employeeMappings = employeeMappingResponse.results;
-      that.count = employeeMappingResponse.count;
       that.pageNumber = data.pageNumber;
       that.createEmployeeMappingsRows();
       that.isLoading = false;

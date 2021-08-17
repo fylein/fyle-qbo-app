@@ -78,11 +78,19 @@ export class ExpenseGroupsComponent implements OnInit, OnDestroy {
   }
 
   getPaginatedExpenseGroups() {
-    return this.expenseGroupService.getExpenseGroups(this.pageSize, this.pageNumber * this.pageSize, this.state).subscribe(expenseGroups => {
-      this.count = expenseGroups.count;
-      this.expenseGroups = new MatTableDataSource(expenseGroups.results);
-      this.expenseGroups.filterPredicate = this.searchByText;
-      this.isLoading = false;
+    const that = this;
+
+    return that.expenseGroupService.getExpenseGroups(that.pageSize, that.pageNumber * that.pageSize, that.state).subscribe(expenseGroups => {
+      that.count = expenseGroups.count;
+      expenseGroups.results.forEach((expenseGroup: ExpenseGroup) => {
+        if (expenseGroup.response_logs) {
+          const [_, __, exportType] = that.generateExportTypeAndId(expenseGroup);
+          expenseGroup.export_type = exportType;
+        }
+      });
+      that.expenseGroups = new MatTableDataSource(expenseGroups.results);
+      that.expenseGroups.filterPredicate = that.searchByText;
+      that.isLoading = false;
       return expenseGroups;
     });
   }
@@ -140,43 +148,47 @@ export class ExpenseGroupsComponent implements OnInit, OnDestroy {
     this.windowReference.open(`${environment.qbo_app_url}/app/${type}?txnId=${id}`, '_blank');
   }
 
+  generateExportTypeAndId(expenseGroup: ExpenseGroup) {
+    let exportRedirection = null;
+    let exportType = null;
+    let exportId = null;
+
+    if ('Bill' in expenseGroup.response_logs && expenseGroup.response_logs.Bill) {
+      exportRedirection = 'bill';
+      exportType = exportRedirection;
+      exportId = expenseGroup.response_logs.Bill.Id;
+    } else if ('JournalEntry' in expenseGroup.response_logs && expenseGroup.response_logs.JournalEntry) {
+      exportRedirection = 'journal';
+      exportType = 'Journal Entry';
+      exportId = expenseGroup.response_logs.JournalEntry.Id;
+    } else if ('Purchase' in expenseGroup.response_logs && expenseGroup.response_logs.Purchase) {
+      exportId = expenseGroup.response_logs.Purchase.Id;
+      if (expenseGroup.response_logs.Purchase.PaymentType === 'Check') {
+        exportRedirection = 'check';
+        exportType = exportRedirection;
+      } else {
+        exportRedirection = 'expense';
+        if (expenseGroup.fund_source === 'CCC' && expenseGroup.response_logs.Purchase.PaymentType === 'CreditCard') {
+          exportType = 'Credit Card Purchase';
+        } else {
+          exportType = 'expense';
+        }
+      }
+    }
+
+    return [exportRedirection, exportId, exportType];
+  }
+
   openInQboHandler(clickedExpenseGroup: ExpenseGroup) {
     // tslint:disable-next-line: deprecation
     event.preventDefault();
     // tslint:disable-next-line: deprecation
     event.stopPropagation();
+
     const that = this;
-    that.isLoading = true;
-    that.taskService.getTaskByExpenseGroupId(clickedExpenseGroup.id).subscribe((completedTask: Task) => {
-      that.isLoading = false;
 
-      if (completedTask.status === 'COMPLETE') {
-        const typeMap = {
-          CREATING_BILL: {
-            type: 'bill',
-            getId: (task: Task) => task.detail.Bill.Id
-          },
-          CREATING_CHECK: {
-            type: 'check',
-            getId: (task: Task) => task.detail.Purchase.Id
-          },
-          CREATING_EXPENSE: {
-            type: 'expense',
-            getId: (task: Task) => task.detail.Purchase.Id
-          },
-          CREATING_JOURNAL_ENTRY: {
-            type: 'journal',
-            getId: (task: Task) => task.detail.JournalEntry.Id
-          },
-          CREATING_CREDIT_CARD_PURCHASE: {
-            type: 'expense',
-            getId: (task: Task) => task.detail.Purchase.Id
-          }
-        };
-
-        that.openInQBO(typeMap[completedTask.type].type, typeMap[completedTask.type].getId(completedTask));
-      }
-    });
+    const [exportType, exportId, _] = that.generateExportTypeAndId(clickedExpenseGroup);
+    that.openInQBO(exportType, exportId);
   }
 
   searchByText(data: ExpenseGroup, filterText: string) {

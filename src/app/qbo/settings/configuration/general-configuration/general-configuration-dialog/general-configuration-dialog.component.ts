@@ -14,7 +14,12 @@ export class GeneralConfigurationDialogComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<GeneralConfigurationDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: UpdatedConfiguration) { }
 
   submit() {
-    this.dialogRef.close(true);
+    const that = this;
+
+    that.dialogRef.close({
+      redirectToEmployeeMappings: that.updatedConfiguration.employee && that.updatedConfiguration.employee.oldValue !== that.updatedConfiguration.employee.newValue ? true : false,
+      accpetedChanges: true
+    });
   }
 
   updateStyle() {

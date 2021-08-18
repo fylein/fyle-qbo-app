@@ -75,13 +75,21 @@ export class GeneralMappingsComponent implements OnInit {
     };
 
     this.mappingsService.postGeneralMappings(generalMappings).subscribe(() => {
-      const onboarded = that.storageService.get('onboarded');
-      if (onboarded) {
-        that.getGeneralMappings();
-      } else {
-        that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
-      }
       that.snackBar.open('General Mappings saved successfully');
+      setTimeout(() => {
+        that.route.queryParams.subscribe(params => {
+          if (params.redirect_to_employee_mappings) {
+            // Content to be decided
+            that.snackBar.open('Please add missing employee mappings');
+            return that.router.navigateByUrl(`workspaces/${that.workspaceId}/settings/employee_mappings`);
+          }
+
+          const onboarded = that.storageService.get('onboarded');
+          if (!onboarded) {
+            that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
+          }
+        });
+      }, 2000);
     }, () => {
       that.isLoading = false;
       that.snackBar.open('Please fill up the form with valid values');
@@ -156,7 +164,7 @@ export class GeneralMappingsComponent implements OnInit {
       that.form = that.formBuilder.group({
         accountPayableAccounts: [null],
         bankAccounts: [null],
-        qboExpenseAccounts : [null],
+        qboExpenseAccounts: [null],
         cccAccounts: [null],
         billPaymentAccounts: [null],
         qboVendors: [null]
@@ -185,7 +193,7 @@ export class GeneralMappingsComponent implements OnInit {
       that.accountPayableAccounts = responses[2];
       that.qboVendors = responses[3];
       that.billPaymentAccounts = responses[4];
-      that.qboExpenseAccounts = [ ...responses[0], ...responses[1]];
+      that.qboExpenseAccounts = [...responses[0], ...responses[1]];
       that.getGeneralMappings();
     });
   }

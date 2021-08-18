@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras, ActivationEnd } from '@angular/router';
 import { ExpenseGroupsService } from '../../core/services/expense-groups.service';
 import { ExpenseGroup } from 'src/app/core/models/expense-group.model';
-import { Task } from 'src/app/core/models/task.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { TasksService } from 'src/app/core/services/tasks.service';

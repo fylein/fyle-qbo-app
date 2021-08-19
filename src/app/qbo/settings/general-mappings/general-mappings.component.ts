@@ -38,6 +38,27 @@ export class GeneralMappingsComponent implements OnInit {
     private storageService: StorageService) {
   }
 
+  redirectHanlder() {
+    const that = this;
+
+    that.route.queryParams.subscribe(params => {
+      if (params.redirect_to_employee_mappings) {
+        setTimeout(() => {
+          const destination = that.generalSettings.employee_field_mapping.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
+          that.snackBar.open(`To ensure successful export, map Fyle Employees to ${destination}s in QBO`, '', {
+            duration: 5000
+          });
+          return that.router.navigateByUrl(`workspaces/${that.workspaceId}/settings/employee_mappings`);
+        }, 1000);
+      } else {
+        const onboarded = that.storageService.get('onboarded');
+        if (!onboarded) {
+          that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
+        }
+      }
+    });
+  }
+
   submit() {
     const that = this;
 
@@ -76,20 +97,7 @@ export class GeneralMappingsComponent implements OnInit {
 
     this.mappingsService.postGeneralMappings(generalMappings).subscribe(() => {
       that.snackBar.open('General Mappings saved successfully');
-      setTimeout(() => {
-        that.route.queryParams.subscribe(params => {
-          if (params.redirect_to_employee_mappings) {
-            // Content to be decided
-            that.snackBar.open('Please add missing employee mappings');
-            return that.router.navigateByUrl(`workspaces/${that.workspaceId}/settings/employee_mappings`);
-          }
-
-          const onboarded = that.storageService.get('onboarded');
-          if (!onboarded) {
-            that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
-          }
-        });
-      }, 2000);
+      that.redirectHanlder();
     }, () => {
       that.isLoading = false;
       that.snackBar.open('Please fill up the form with valid values');

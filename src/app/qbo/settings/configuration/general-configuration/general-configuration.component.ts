@@ -217,7 +217,9 @@ export class GeneralConfigurationComponent implements OnInit {
 
   constructUpdatedConfigurationsPayload(generalSettingsPayload: GeneralSetting): UpdatedConfiguration {
     const that = this;
-    const updatedConfiguration: UpdatedConfiguration = {};
+    const updatedConfiguration: UpdatedConfiguration = {
+      autoCreateVendor: generalSettingsPayload.auto_create_destination_entity
+    };
 
     if (that.generalSettings.employee_field_mapping !== generalSettingsPayload.employee_field_mapping) {
       updatedConfiguration.employee = {
@@ -258,7 +260,11 @@ export class GeneralConfigurationComponent implements OnInit {
       if (redirectToGeneralMappings) {
         if (redirectToEmployeeMappings) {
           // add redirect_to_employee_mappings query param
-          that.router.navigate([`workspaces/${that.workspaceId}/settings/general_mappings`], { queryParams: { redirect_to_employee_mappings: redirectToEmployeeMappings } });
+          that.router.navigate([`workspaces/${that.workspaceId}/settings/general_mappings`], {
+            queryParams: {
+              redirect_to_employee_mappings: redirectToEmployeeMappings
+            }
+          });
         } else {
           that.router.navigateByUrl(`workspaces/${that.workspaceId}/settings/general_mappings`);
         }

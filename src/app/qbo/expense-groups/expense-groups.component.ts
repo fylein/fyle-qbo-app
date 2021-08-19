@@ -168,9 +168,9 @@ export class ExpenseGroupsComponent implements OnInit, OnDestroy {
         exportType = exportRedirection;
       } else {
         exportRedirection = 'expense';
-        if (expenseGroup.fund_source === 'CCC' && expenseGroup.response_logs.Purchase.PaymentType === 'CreditCard' && expenseGroup.response_logs.Purchase.Credit === false) {
+        if (expenseGroup.fund_source === 'CCC' && expenseGroup.response_logs.Purchase.PaymentType === 'CreditCard' && !expenseGroup.response_logs.Purchase.Credit) {
           exportType = 'Credit Card Purchase';
-        } else if (expenseGroup.fund_source === 'CCC' && expenseGroup.response_logs.Purchase.PaymentType === 'CreditCard' && expenseGroup.response_logs.Purchase.Credit === true) {
+        } else if (expenseGroup.fund_source === 'CCC' && expenseGroup.response_logs.Purchase.PaymentType === 'CreditCard' && expenseGroup.response_logs.Purchase.Credit) {
           exportType = 'Credit Card Credit';
           exportRedirection = 'creditcardcredit';
         } else {

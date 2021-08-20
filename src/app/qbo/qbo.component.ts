@@ -13,6 +13,8 @@ import { Workspace } from '../core/models/workspace.model';
 import { GeneralSetting } from '../core/models/general-setting.model';
 import { MappingSetting } from '../core/models/mapping-setting.model';
 import { MappingSettingResponse } from '../core/models/mapping-setting-response.model';
+import { MappingsService } from '../core/services/mappings.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-qbo',
@@ -29,6 +31,7 @@ export class QboComponent implements OnInit {
   generalSettings: GeneralSetting;
   mappingSettings: MappingSetting[];
   showSwitchOrg: boolean;
+  showRefreshIcon: boolean;
   qboCompanyName: string;
   navDisabled = true;
   windowReference: Window;
@@ -38,6 +41,8 @@ export class QboComponent implements OnInit {
     private settingsService: SettingsService,
     private router: Router,
     private authService: AuthService,
+    private snackBar: MatSnackBar,
+    private mappingsService: MappingsService,
     private billService: BillsService,
     private storageService: StorageService,
     private windowReferenceService: WindowReferenceService,
@@ -158,9 +163,20 @@ export class QboComponent implements OnInit {
     });
   }
 
+  hideRefreshIconVisibility() {
+    this.showRefreshIcon = false;
+  }
+
+  syncDimension() {
+    const that = this;
+    that.mappingsService.refreshDimension();
+    that.snackBar.open('Refreshing Fyle and Quickbooks Data');
+  }
+
   ngOnInit() {
     const that = this;
     const onboarded = that.storageService.get('onboarded');
+    that.showRefreshIcon = !onboarded;
     that.navDisabled = onboarded !== true;
     that.orgsCount = that.authService.getOrgCount();
     that.setupWorkspace();

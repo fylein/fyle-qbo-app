@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from 'src/app/core/services/settings.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, onErrorResumeNext } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { environment } from 'src/environments/environment';
 import { ExpenseGroupsService } from 'src/app/core/services/expense-groups.service';
@@ -10,6 +10,7 @@ import { WindowReferenceService } from 'src/app/core/services/window.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 import { TrackingService } from 'src/app/core/services/tracking.service';
+import { QboComponent } from '../qbo.component';
 
 const FYLE_URL = environment.fyle_url;
 const FYLE_CLIENT_ID = environment.fyle_client_id;
@@ -55,7 +56,7 @@ export class DashboardComponent implements OnInit {
     private expenseGroupService: ExpenseGroupsService,
     private settingsService: SettingsService,
     private route: ActivatedRoute,
-    private router: Router,
+    private qbo: QboComponent,
     private snackBar: MatSnackBar,
     private mappingsService: MappingsService,
     private storageService: StorageService,
@@ -197,9 +198,7 @@ export class DashboardComponent implements OnInit {
   syncDimension() {
     const that = this;
 
-    that.mappingsService.refreshFyleDimensions().subscribe(() => {});
-    that.mappingsService.refreshQuickbooksDimensions().subscribe(() => {});
-
+    that.mappingsService.refreshDimension();
     that.snackBar.open('Refreshing Fyle and Quickbooks Data');
   }
 
@@ -252,6 +251,7 @@ export class DashboardComponent implements OnInit {
         }).then(() => {
           that.currentState = onboardingStates.isOnboarded;
           that.storageService.set('onboarded', true);
+          that.qbo.hideRefreshIconVisibility();
           return that.loadDashboardData();
         }).catch(() => {
           // do nothing as this just means some steps are left

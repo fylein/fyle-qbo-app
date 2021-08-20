@@ -69,18 +69,12 @@ export class MappingsService {
     return this.sourceWorkspace;
   }
 
-  refreshQuickbooksDimensions() {
+  refreshDimension() {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
-    return this.apiService.post(`/workspaces/${workspaceId}/qbo/refresh_dimensions/`, {});
+    this.apiService.post(`/workspaces/${workspaceId}/qbo/refresh_dimensions/`, {}).subscribe();
+    this.apiService.post(`/workspaces/${workspaceId}/fyle/refresh_dimensions/`, {}).subscribe();
   }
-
-  refreshFyleDimensions() {
-    const workspaceId = this.workspaceService.getWorkspaceId();
-
-    return this.apiService.post(`/workspaces/${workspaceId}/fyle/refresh_dimensions/`, {});
-  }
-
 
   postFyleEmployees(): Observable<MappingSource[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();

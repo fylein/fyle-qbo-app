@@ -6,6 +6,7 @@ import { WorkspaceService } from '../core/services/workspace.service';
 import { SettingsService } from '../core/services/settings.service';
 import { BillsService } from '../core/services/bills.service';
 import { StorageService } from '../core/services/storage.service';
+import { TrackingService } from '../core/services/tracking.service';
 import { WindowReferenceService } from '../core/services/window.service';
 import { UserProfile } from '../core/models/user-profile.model';
 import { Workspace } from '../core/models/workspace.model';
@@ -39,7 +40,8 @@ export class QboComponent implements OnInit {
     private authService: AuthService,
     private billService: BillsService,
     private storageService: StorageService,
-    private windowReferenceService: WindowReferenceService) {
+    private windowReferenceService: WindowReferenceService,
+    private trackingService: TrackingService) {
     this.windowReference = this.windowReferenceService.nativeWindow;
   }
 
@@ -72,6 +74,7 @@ export class QboComponent implements OnInit {
 
   switchWorkspace() {
     this.authService.switchWorkspace();
+    this.trackingService.onSwitchWorkspace({});
   }
 
   getSettingsAndNavigate() {
@@ -123,6 +126,7 @@ export class QboComponent implements OnInit {
   setupWorkspace() {
     const that = this;
     that.user = that.authService.getUser();
+    that.setIdentityOfUser(that.user.employee_email);
     that.workspaceService.getWorkspaces(that.user.org_id).subscribe(workspaces => {
       if (Array.isArray(workspaces) && workspaces.length > 0) {
         that.workspace = workspaces[0];
@@ -135,6 +139,16 @@ export class QboComponent implements OnInit {
       }
       that.getQboPreferences();
     });
+  }
+
+  setIdentityOfUser(email){
+    const that = this;
+    that.trackingService.onSignin(email,{})
+  }
+
+  signOutEvent(){
+    const that = this;
+    that.trackingService.onSignOut({})
   }
 
   getQboPreferences() {

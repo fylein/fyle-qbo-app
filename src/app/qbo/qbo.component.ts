@@ -146,14 +146,14 @@ export class QboComponent implements OnInit {
     });
   }
 
-  setIdentityOfUser(email){
+  setIdentityOfUser(email) {
     const that = this;
-    that.trackingService.onSignin(email,{})
+    that.trackingService.onSignin(email, {});
   }
 
-  signOutEvent(){
+  signOutEvent() {
     const that = this;
-    that.trackingService.onSignOut({})
+    that.trackingService.onSignOut({});
   }
 
   getQboPreferences() {

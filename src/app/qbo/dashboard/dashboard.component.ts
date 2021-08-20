@@ -61,7 +61,7 @@ export class DashboardComponent implements OnInit {
     private mappingsService: MappingsService,
     private storageService: StorageService,
     private windowReferenceService: WindowReferenceService,
-    private trackingService:TrackingService) {
+    private trackingService: TrackingService) {
       this.windowReference = this.windowReferenceService.nativeWindow;
     }
 
@@ -71,22 +71,22 @@ export class DashboardComponent implements OnInit {
 
   connectQBO() {
     this.windowReference.location.href = QBO_AUTHORIZE_URI + '?client_id=' + QBO_CLIENT_ID + '&scope=' + QBO_SCOPE + '&response_type=code&redirect_uri=' + APP_URL + '/workspaces/qbo/callback&state=' + this.workspaceId;
-    this.trackingService.connectQBO({});  
+    this.trackingService.connectQBO({});
   }
 
-  mapFyleFieldsToQBOFieldsEvent(){
+  mapFyleFieldsToQBOFieldsEvent() {
     this.trackingService.mapFyleFieldsToQBOFields({});
   }
 
-  mapBankAccountsEvent(){
+  mapBankAccountsEvent() {
     this.trackingService.mapBankAccounts({});
   }
 
-  mapEmployeesEvent(){
+  mapEmployeesEvent() {
     this.trackingService.mapEmployees({});
   }
 
-  mapCategoriesEvent(){
+  mapCategoriesEvent() {
     this.trackingService.mapCategories({});
   }
 

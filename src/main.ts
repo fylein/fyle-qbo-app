@@ -7,10 +7,10 @@ import * as Sentry from '@sentry/angular';
 import { Integrations } from '@sentry/tracing';
 
 Sentry.init({
-  dsn: "https://2c8ecc063c1b45ca89bc77e58a30e098@o966029.ingest.sentry.io/5916901",
+  dsn: 'https://2c8ecc063c1b45ca89bc77e58a30e098@o966029.ingest.sentry.io/5916901',
   integrations: [
     new Integrations.BrowserTracing({
-      tracingOrigins: ["localhost", "https://yourserver.io/api"],
+      tracingOrigins: ['localhost', 'https://yourserver.io/api'],
       routingInstrumentation: Sentry.routingInstrumentation,
     }),
   ],

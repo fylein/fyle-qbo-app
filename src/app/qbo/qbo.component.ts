@@ -131,10 +131,10 @@ export class QboComponent implements OnInit {
   setupWorkspace() {
     const that = this;
     that.user = that.authService.getUser();
-    that.setIdentityOfUser(that.user.employee_email);
     that.workspaceService.getWorkspaces(that.user.org_id).subscribe(workspaces => {
       if (Array.isArray(workspaces) && workspaces.length > 0) {
         that.workspace = workspaces[0];
+        that.setUserIdentity(that.user.employee_email, {workspaceId : workspaces[0].id});
         that.getSettingsAndNavigate();
       } else {
         that.workspaceService.createWorkspace().subscribe(workspace => {
@@ -146,12 +146,12 @@ export class QboComponent implements OnInit {
     });
   }
 
-  setIdentityOfUser(email) {
+  setUserIdentity(email, properties) {
     const that = this;
-    that.trackingService.onSignin(email, {});
+    that.trackingService.onSignIn(email, properties);
   }
 
-  signOutEvent() {
+  onSignOut() {
     const that = this;
     that.trackingService.onSignOut({});
   }

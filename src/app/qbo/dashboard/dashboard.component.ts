@@ -74,19 +74,19 @@ export class DashboardComponent implements OnInit {
     this.trackingService.connectQBO({});
   }
 
-  mapFyleFieldsToQBOFieldsEvent() {
+  onMapFyleFieldsToQBOFields() {
     this.trackingService.mapFyleFieldsToQBOFields({});
   }
 
-  mapBankAccountsEvent() {
+  onMapBankAccounts() {
     this.trackingService.mapBankAccounts({});
   }
 
-  mapEmployeesEvent() {
+  onMapEmployees() {
     this.trackingService.mapEmployees({});
   }
 
-  mapCategoriesEvent() {
+  onMapCategories() {
     this.trackingService.mapCategories({});
   }
 

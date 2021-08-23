@@ -65,7 +65,7 @@
           <div routerLink="../settings/configurations/general/" class="onboarding-stepper--navigation cursor-pointer"
             *ngIf="currentState === allOnboardingStates.qboConnected"
             [ngClass]="{'onboarding-stepper--navigation__active': currentState === allOnboardingStates.qboConnected}"
-            (click)="mapFyleFieldsToQBOFieldsEvent()">
+            (click)="onMapFyleFieldsToQBOFields()">
             Go to Configurations
           </div>
         </div>
@@ -86,7 +86,7 @@
           <div routerLink="../settings/general_mappings/" class="onboarding-stepper--navigation cursor-pointer"
             *ngIf="currentState === allOnboardingStates.configurationsDone"
             [ngClass]="{'onboarding-stepper--navigation__active': currentState === allOnboardingStates.configurationsDone}"
-            (click)="mapBankAccountsEvent()">
+            (click)="onMapBankAccounts()">
             Go to General Mappings
           </div>
         </div>
@@ -100,7 +100,7 @@
           <div routerLink="../settings/employee_mappings/" class="onboarding-stepper--navigation cursor-pointer"
             *ngIf="currentState === allOnboardingStates.generalMappingsDone"
             [ngClass]="{'onboarding-stepper--navigation__active': currentState === allOnboardingStates.generalMappingsDone}"
-            (click)="mapEmployeesEvent()">
+            (click)="onMapEmployees()">
             Go to Employee Mappings
           </div>
         </div>
@@ -112,7 +112,7 @@
           <div routerLink="../settings/category/mappings/" class="onboarding-stepper--navigation cursor-pointer"
             *ngIf="currentState === allOnboardingStates.employeeMappingsDone"
             [ngClass]="{'onboarding-stepper--navigation__active': currentState === allOnboardingStates.employeeMappingsDone}"
-            (click)="mapCategoriesEvent()">
+            (click)="onMapCategories()">
             Go to Category Mappings
           </div>
         </div>

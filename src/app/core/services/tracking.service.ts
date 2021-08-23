@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { json } from '@rxweb/reactive-form-validators';
 import { AuthService } from './auth.service';
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class TrackingService {
   identityEmail = null;
 
@@ -25,8 +26,7 @@ export class TrackingService {
     }
   }
 
-  // SignIn Event
-  onSignin(email, properties) {
+  onSignIn(email: string, properties) {
     if (this.tracking) {
       this.tracking.identify(email, {
       });

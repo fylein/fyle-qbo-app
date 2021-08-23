@@ -9,6 +9,7 @@ import { StorageService } from 'src/app/core/services/storage.service';
 import { WindowReferenceService } from 'src/app/core/services/window.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
+import { TrackingService } from 'src/app/core/services/tracking.service';
 import { QboComponent } from '../qbo.component';
 
 const FYLE_URL = environment.fyle_url;
@@ -59,7 +60,8 @@ export class DashboardComponent implements OnInit {
     private snackBar: MatSnackBar,
     private mappingsService: MappingsService,
     private storageService: StorageService,
-    private windowReferenceService: WindowReferenceService) {
+    private windowReferenceService: WindowReferenceService,
+    private trackingService: TrackingService) {
       this.windowReference = this.windowReferenceService.nativeWindow;
     }
 
@@ -69,7 +71,25 @@ export class DashboardComponent implements OnInit {
 
   connectQBO() {
     this.windowReference.location.href = QBO_AUTHORIZE_URI + '?client_id=' + QBO_CLIENT_ID + '&scope=' + QBO_SCOPE + '&response_type=code&redirect_uri=' + APP_URL + '/workspaces/qbo/callback&state=' + this.workspaceId;
+    this.trackingService.connectQBO();
   }
+
+  onMapFyleFieldsToQBOFields() {
+    this.trackingService.mapFyleFieldsToQBOFields();
+  }
+
+  onMapBankAccounts() {
+    this.trackingService.mapBankAccounts();
+  }
+
+  onMapEmployees() {
+    this.trackingService.mapEmployees();
+  }
+
+  onMapCategories() {
+    this.trackingService.mapCategories();
+  }
+
   // TODO: remove promises and do with rxjs observables
   checkFyleLoginStatus() {
     const that = this;

@@ -35,31 +35,31 @@ export class TrackingService {
     this.eventTrack('Sign In', properties);
   }
 
-  connectQBO(properties) {
+  connectQBO(properties= {}) {
     this.eventTrack('Connect Quickbooks Online', properties);
   }
 
-  mapFyleFieldsToQBOFields(properties) {
+  mapFyleFieldsToQBOFields(properties= {}) {
     this.eventTrack('Map Fyle Fields To QBO Fields', properties);
   }
 
-  mapBankAccounts(properties) {
+  mapBankAccounts(properties= {}) {
     this.eventTrack('Map Bank Accounts', properties);
   }
 
-  mapEmployees(properties) {
+  mapEmployees(properties= {}) {
     this.eventTrack('Map Employees', properties);
   }
 
-  mapCategories(properties) {
+  mapCategories(properties= {}) {
     this.eventTrack('Map Categories', properties);
   }
 
-  onSignOut(properties) {
+  onSignOut(properties= {}) {
     this.eventTrack('Sign Out', properties);
   }
 
-  onSwitchWorkspace(properties) {
+  onSwitchWorkspace(properties= {}) {
     this.eventTrack('Switching Workspace', properties);
   }
 }

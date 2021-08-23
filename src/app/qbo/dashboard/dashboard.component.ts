@@ -71,23 +71,23 @@ export class DashboardComponent implements OnInit {
 
   connectQBO() {
     this.windowReference.location.href = QBO_AUTHORIZE_URI + '?client_id=' + QBO_CLIENT_ID + '&scope=' + QBO_SCOPE + '&response_type=code&redirect_uri=' + APP_URL + '/workspaces/qbo/callback&state=' + this.workspaceId;
-    this.trackingService.connectQBO({});
+    this.trackingService.connectQBO();
   }
 
   onMapFyleFieldsToQBOFields() {
-    this.trackingService.mapFyleFieldsToQBOFields({});
+    this.trackingService.mapFyleFieldsToQBOFields();
   }
 
   onMapBankAccounts() {
-    this.trackingService.mapBankAccounts({});
+    this.trackingService.mapBankAccounts();
   }
 
   onMapEmployees() {
-    this.trackingService.mapEmployees({});
+    this.trackingService.mapEmployees();
   }
 
   onMapCategories() {
-    this.trackingService.mapCategories({});
+    this.trackingService.mapCategories();
   }
 
   // TODO: remove promises and do with rxjs observables

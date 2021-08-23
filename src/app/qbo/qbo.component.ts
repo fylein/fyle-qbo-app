@@ -79,7 +79,7 @@ export class QboComponent implements OnInit {
 
   switchWorkspace() {
     this.authService.switchWorkspace();
-    this.trackingService.onSwitchWorkspace({});
+    this.trackingService.onSwitchWorkspace();
   }
 
   getSettingsAndNavigate() {
@@ -146,14 +146,14 @@ export class QboComponent implements OnInit {
     });
   }
 
-  setUserIdentity(email, properties) {
+  setUserIdentity(email: string, properties) {
     const that = this;
     that.trackingService.onSignIn(email, properties);
   }
 
   onSignOut() {
     const that = this;
-    that.trackingService.onSignOut({});
+    that.trackingService.onSignOut();
   }
 
   getQboPreferences() {

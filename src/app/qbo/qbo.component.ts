@@ -6,6 +6,7 @@ import { WorkspaceService } from '../core/services/workspace.service';
 import { SettingsService } from '../core/services/settings.service';
 import { BillsService } from '../core/services/bills.service';
 import { StorageService } from '../core/services/storage.service';
+import { TrackingService } from '../core/services/tracking.service';
 import { WindowReferenceService } from '../core/services/window.service';
 import { UserProfile } from '../core/models/user-profile.model';
 import { Workspace } from '../core/models/workspace.model';
@@ -44,7 +45,8 @@ export class QboComponent implements OnInit {
     private mappingsService: MappingsService,
     private billService: BillsService,
     private storageService: StorageService,
-    private windowReferenceService: WindowReferenceService) {
+    private windowReferenceService: WindowReferenceService,
+    private trackingService: TrackingService) {
     this.windowReference = this.windowReferenceService.nativeWindow;
   }
 
@@ -77,6 +79,7 @@ export class QboComponent implements OnInit {
 
   switchWorkspace() {
     this.authService.switchWorkspace();
+    this.trackingService.onSwitchWorkspace();
   }
 
   getSettingsAndNavigate() {
@@ -131,6 +134,7 @@ export class QboComponent implements OnInit {
     that.workspaceService.getWorkspaces(that.user.org_id).subscribe(workspaces => {
       if (Array.isArray(workspaces) && workspaces.length > 0) {
         that.workspace = workspaces[0];
+        that.setUserIdentity(that.user.employee_email, {workspaceId : workspaces[0].id});
         that.getSettingsAndNavigate();
       } else {
         that.workspaceService.createWorkspace().subscribe(workspace => {
@@ -140,6 +144,16 @@ export class QboComponent implements OnInit {
       }
       that.getQboPreferences();
     });
+  }
+
+  setUserIdentity(email: string, properties) {
+    const that = this;
+    that.trackingService.onSignIn(email, properties);
+  }
+
+  onSignOut() {
+    const that = this;
+    that.trackingService.onSignOut();
   }
 
   getQboPreferences() {

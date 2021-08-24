@@ -37,7 +37,7 @@ import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/mater
         horizontalPosition: 'end',
         verticalPosition: 'top'
       }
-    }
+    },
   ],
   bootstrap: [AppComponent],
 })

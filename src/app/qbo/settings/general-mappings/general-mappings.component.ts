@@ -46,7 +46,7 @@ export class GeneralMappingsComponent implements OnInit {
         setTimeout(() => {
           const destination = that.generalSettings.employee_field_mapping.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
           that.snackBar.open(`To ensure successful export, map Fyle Employees to ${destination}s in QBO`, '', {
-            duration: 5000
+            duration: 7000
           });
           return that.router.navigateByUrl(`workspaces/${that.workspaceId}/settings/employee_mappings`);
         }, 1000);

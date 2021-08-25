@@ -14,14 +14,20 @@
 						Import Expenses
 					</div>
 					<div fxLayout="column" fxLayoutAlign="space-around start" >
-						<div class="sync-card--text" *ngIf="getDescription().expensesGroupedBy">
-							Expenses Grouped by: {{ getDescription().expensesGroupedBy }}
+						<div class="sync-card--text" *ngIf="getDescription().reimbursableExpensesGroupedBy">
+							Reimbursable Expenses Grouped by: {{ getDescription().reimbursableExpensesGroupedBy }}
+						</div>
+            <div class="sync-card--text" *ngIf="getDescription().cccExpensesGroupedBy">
+              Credit Card Expenses Grouped by: {{ getDescription().cccExpensesGroupedBy }}
 						</div>
 						<div class="sync-card--text">
 							Expense State: {{ getDescription().expenseState | titlecase }}
 						</div>
-						<div class="sync-card--text" *ngIf="getDescription().exportDateType">
-							Export Date: {{ getDescription().exportDateType}}
+						<div class="sync-card--text" *ngIf="getDescription().reimbursableExportDateType">
+							Reimbursable Expenses Export Date: {{ getDescription().reimbursableExportDateType}}
+						</div>
+            <div class="sync-card--text" *ngIf="getDescription().cccExportDateType">
+							Credit Card Expenses Export Date: {{ getDescription().cccExportDateType}}
 						</div>
 					</div>
           <div class="sync-card--info" *ngIf="workspace.last_synced_at">

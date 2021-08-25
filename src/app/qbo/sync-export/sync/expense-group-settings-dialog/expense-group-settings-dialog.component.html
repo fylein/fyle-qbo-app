@@ -15,19 +15,91 @@
   </div>
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="dialog--label">
-        Group Expenses reported by an Employee by
+        Group Expenses reported by an Employee by:
+          <div class="dialog--group-label-left">
+            Reimbursable Expenses
+          </div>
+          <div class="dialog--group-label-right">
+            Credit Card Expenses
+          </div>
       </div>
-      <mat-form-field floatLabel="always" class="dialog--field" appearance="outline" required>
-        <mat-select placeholder="Choose Expense fields to group Expenses"
-          formControlName="expenseGroupConfiguration">
-          <mat-option value="claim_number">
-            Expense Report
-          </mat-option>
-          <mat-option value="settlement_id">
-            Payment
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+
+      <div>
+        <mat-form-field floatLabel="always" class="dialog--group-field-left" appearance="outline" required>
+          <mat-select placeholder="Choose Expense fields to group Expenses"
+            formControlName="reimbursibleExpenseGroupConfiguration">
+            <mat-option value="claim_number">
+              Expense Report
+            </mat-option>
+            <mat-option value="settlement_id">
+              Payment
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field floatLabel="always" class="dialog--group-field-right" appearance="outline" required>
+          <mat-select placeholder="Choose Expense fields to group Expenses"
+            formControlName="cccExpenseGroupConfiguration">
+            <mat-option value="claim_number">
+              Expense Report
+            </mat-option>
+            <mat-option value="settlement_id">
+              Payment
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="dialog--label">
+        Date when Exporting Expenses to QuickBooks Online.
+        <div class="dialog--group-label-left">
+          Reimbursable Expenses
+        </div>
+        <div class="dialog--group-label-right">
+          Credit Card Expenses 
+        </div>
+      </div>
+      <div>
+        <mat-form-field floatLabel="always" class="dialog--group-field-left" appearance="outline">
+          <mat-select placeholder="Choose Date when Exporting Expenses" formControlName="reimbursableExportDate">
+            <mat-option value="current_date">
+              Current Date
+            </mat-option>
+            <mat-option value="verified_at">
+              Verification Date
+            </mat-option>
+            <mat-option value="spent_at">
+              Spend Date
+            </mat-option>
+            <mat-option value="approved_at">
+              Approval Date
+            </mat-option>
+            <mat-option value="last_spent_at">
+              Last Spend Date
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field floatLabel="always" class="dialog--group-field-right" appearance="outline">
+          <mat-select placeholder="Choose Date when Exporting Expenses" formControlName="cccExportDate">
+            <mat-option value="current_date">
+              Current Date
+            </mat-option>
+            <mat-option value="verified_at">
+              Verification Date
+            </mat-option>
+            <mat-option value="spent_at">
+              Spend Date
+            </mat-option>
+            <mat-option value="approved_at">
+              Approval Date
+            </mat-option>
+            <mat-option value="last_spent_at">
+              Last Spend Date
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
       <div class="dialog--label">
         Import Expenses in State:
@@ -46,28 +118,6 @@
         </mat-error>
       </mat-form-field>
 
-      <div class="dialog--label">
-        Date when Exporting Expenses to QuickBooks Online.
-      </div>
-      <mat-form-field floatLabel="always" class="dialog--field" appearance="outline">
-        <mat-select placeholder="Choose Date when Exporting Expenses" formControlName="exportDate">
-          <mat-option value="current_date">
-            Current Date
-          </mat-option>
-          <mat-option value="verified_at">
-            Verification Date
-          </mat-option>
-          <mat-option value="spent_at">
-            Spend Date
-          </mat-option>
-          <mat-option value="approved_at">
-            Approval Date
-          </mat-option>
-          <mat-option value="last_spent_at">
-            Last Spend Date
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
     </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

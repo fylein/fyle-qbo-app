@@ -72,9 +72,9 @@ export class SyncComponent implements OnInit {
   getDescription() {
     const that = this;
 
-    const allowedFields = ['claim_number', 'settlement_id'];
+    const allowedFields = ['claim_number', 'settlement_id', 'expense_id'];
 
-    const expensesGroupedByList = [];
+    const reimbursableExpensesGroupedByList = [];
     that.expenseGroupSettings.reimbursable_expense_group_fields.forEach(element => {
       if (allowedFields.indexOf(element) >= 0) {
         if (element === 'claim_number') {
@@ -82,35 +82,63 @@ export class SyncComponent implements OnInit {
         } else if (element === 'settlement_id') {
           element = 'Payment';
         }
-        expensesGroupedByList.push(element);
+        reimbursableExpensesGroupedByList.push(element);
       }
     });
 
-    const expensesGroup = expensesGroupedByList.join(', ');
-    const expenseState: string = that.expenseGroupSettings.expense_state;
-    let exportDateConfiguration = null;
+    const cccExpensesGroupedByList = [];
+    that.expenseGroupSettings.corporate_credit_card_expense_group_fields.forEach(element => {
+      if (allowedFields.indexOf(element) >= 0) {
+        if (element === 'claim_number') {
+          element = 'Expense Report';
+        } else if (element === 'settlement_id') {
+          element = 'Payment';
+        } else if (element === 'expense_id') {
+          element = 'Expense';
+        }
+        cccExpensesGroupedByList.push(element);
+      }
+    });
 
-    if (that.expenseGroupSettings.export_date_type === 'spent_at') {
-      exportDateConfiguration = 'Spend Date';
-    } else if (that.expenseGroupSettings.export_date_type === 'approved_at') {
-      exportDateConfiguration = 'Approval Date';
-    } else if (that.expenseGroupSettings.export_date_type === 'verified_at') {
-      exportDateConfiguration = 'Verification Date';
-    } else if (that.expenseGroupSettings.export_date_type === 'last_spent_at') {
-      exportDateConfiguration = 'Last Spend Date';
+    const reimbursableExpensesGroup = reimbursableExpensesGroupedByList.join(', ');
+    const cccExpensesGroup = cccExpensesGroupedByList.join(', ');
+    const expenseState: string = that.expenseGroupSettings.expense_state;
+    let reimbursableExportDateConfiguration = null;
+    let cccExportDateConfiguration = null;
+
+    if (that.expenseGroupSettings.reimbursable_export_date_type === 'spent_at') {
+      reimbursableExportDateConfiguration = 'Spend Date';
+    } else if (that.expenseGroupSettings.reimbursable_export_date_type === 'approved_at') {
+      reimbursableExportDateConfiguration = 'Approval Date';
+    } else if (that.expenseGroupSettings.reimbursable_export_date_type === 'verified_at') {
+      reimbursableExportDateConfiguration = 'Verification Date';
+    } else if (that.expenseGroupSettings.reimbursable_export_date_type === 'last_spent_at') {
+      reimbursableExportDateConfiguration = 'Last Spend Date';
+    }
+
+    if (that.expenseGroupSettings.ccc_export_date_type === 'spent_at') {
+      cccExportDateConfiguration = 'Spend Date';
+    } else if (that.expenseGroupSettings.ccc_export_date_type === 'approved_at') {
+      cccExportDateConfiguration = 'Approval Date';
+    } else if (that.expenseGroupSettings.ccc_export_date_type === 'verified_at') {
+      cccExportDateConfiguration = 'Verification Date';
+    } else if (that.expenseGroupSettings.ccc_export_date_type === 'last_spent_at') {
+      cccExportDateConfiguration = 'Last Spend Date';
     }
 
     return {
-      expensesGroupedBy: expensesGroup,
+      reimbursableExpensesGroupedBy: reimbursableExpensesGroup,
+      cccExpensesGroupedBy: cccExpensesGroup,
       expenseState: expenseState.replace(/_/g, ' '),
-      exportDateType: exportDateConfiguration
+      reimbursableExportDateType: reimbursableExportDateConfiguration,
+      cccExportDateType: cccExportDateConfiguration
     };
   }
 
   open() {
     const that = this;
     const dialogRef = that.dialog.open(ExpenseGroupSettingsDialogComponent, {
-      width: '450px',
+      width: '550px',
       data: {
         workspaceId: that.workspaceId
       }

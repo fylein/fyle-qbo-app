@@ -134,11 +134,12 @@ export class QboComponent implements OnInit {
     that.workspaceService.getWorkspaces(that.user.org_id).subscribe(workspaces => {
       if (Array.isArray(workspaces) && workspaces.length > 0) {
         that.workspace = workspaces[0];
-        that.setUserIdentity(that.user.employee_email, {workspaceId : workspaces[0].id});
+        that.setUserIdentity(that.user.employee_email, workspaces[0].id, {fullName: that.user.full_name});
         that.getSettingsAndNavigate();
       } else {
         that.workspaceService.createWorkspace().subscribe(workspace => {
           that.workspace = workspace;
+          that.setUserIdentity(that.user.employee_email, workspace.id, {fullName: that.user.full_name});
           that.getSettingsAndNavigate();
         });
       }
@@ -146,14 +147,28 @@ export class QboComponent implements OnInit {
     });
   }
 
-  setUserIdentity(email: string, properties) {
-    const that = this;
-    that.trackingService.onSignIn(email, properties);
+  setUserIdentity(email: string, workspaceId: number, properties) {
+    this.trackingService.onSignIn(email, workspaceId, properties);
   }
 
   onSignOut() {
-    const that = this;
-    that.trackingService.onSignOut();
+    this.trackingService.onSignOut();
+  }
+
+  onConfigurationsPageVisit() {
+    this.trackingService.onPageVisit('Configurations');
+  }
+
+  onGeneralMappingsPageVisit() {
+    this.trackingService.onPageVisit('Genral Mappings');
+  }
+
+  onEmployeeMappingsPageVisit() {
+    this.trackingService.onPageVisit('Employee Mappings');
+  }
+
+  onCategoryMappingsPageVisit() {
+    this.trackingService.onPageVisit('Category Mappings');
   }
 
   getQboPreferences() {

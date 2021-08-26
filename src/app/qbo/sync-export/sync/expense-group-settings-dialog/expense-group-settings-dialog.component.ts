@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ExpenseGroupsService } from 'src/app/core/services/expense-groups.service';
-import { SettingsService } from 'src/app/core/services/settings.service'
-import { StorageService } from 'src/app/core/services/storage.service'
+import { SettingsService } from 'src/app/core/services/settings.service';
+import { StorageService } from 'src/app/core/services/storage.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ExpenseGroupSetting } from 'src/app/core/models/expense-group-setting.model';
-import { GeneralSetting } from 'src/app/core/models/general-setting.model'
+import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 @Component({
   selector: 'app-expense-group-settings-dialog',
   templateUrl: './expense-group-settings-dialog.component.html',
@@ -72,18 +72,17 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
     });
   }
 
-  showCCCGroups(){
+  showCCCGroups() {
     const that = this;
 
     that.settingsService.getGeneralSettings(that.workspaceId).subscribe(response => {
-      that.workspaceGeneralSettings = response
+      that.workspaceGeneralSettings = response;
     });
 
-    if (that.workspaceGeneralSettings.corporate_credit_card_expenses_object === null) {
-      return false;
-    }
-    else {
+    if (that.workspaceGeneralSettings.corporate_credit_card_expenses_object) {
       return true;
+    } else {
+      return false;
     }
   }
 

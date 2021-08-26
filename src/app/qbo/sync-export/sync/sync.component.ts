@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ExpenseGroupsService } from 'src/app/core/services/expense-groups.service';
 import { ActivatedRoute } from '@angular/router';
 import { TasksService } from 'src/app/core/services/tasks.service';
-import { SettingsService } from 'src/app/core/services/settings.service'
+import { SettingsService } from 'src/app/core/services/settings.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder } from '@angular/forms';
 import { ExpenseGroupSettingsDialogComponent } from './expense-group-settings-dialog/expense-group-settings-dialog.component';
@@ -139,14 +139,14 @@ export class SyncComponent implements OnInit {
 
   open() {
     const that = this;
-    that.dialogWidth = '450px'
+    that.dialogWidth = '450px';
 
     that.settingsService.getGeneralSettings(that.workspaceId).subscribe(response => {
       if (response.corporate_credit_card_expenses_object) {
-        that.dialogWidth = '750px'
+        that.dialogWidth = '750px';
       }
     });
-    
+
     const dialogRef = that.dialog.open(ExpenseGroupSettingsDialogComponent, {
       width: that.dialogWidth,
       data: {

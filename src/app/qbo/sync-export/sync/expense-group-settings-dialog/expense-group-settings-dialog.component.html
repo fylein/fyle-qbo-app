@@ -15,19 +15,19 @@
   </div>
     <div fxLayout="column" fxLayoutAlign="start stretch">
       <div class="dialog--label">
-        Group Expenses reported by an Employee by:
+        Group Expenses by:
       </div>
         <div>
-          <div class="dialog--group-label-left">
+          <div class="dialog--group-label-left" *ngIf="showCCCGroups()">
             Reimbursable Expenses
           </div>
-          <div class="dialog--group-label-right">
+          <div class="dialog--group-label-right" *ngIf="showCCCGroups()">
             Credit Card Expenses
           </div>
         </div>
 
       <div>
-        <mat-form-field floatLabel="always" class="dialog--group-field-left" appearance="outline" required>
+        <mat-form-field floatLabel="always" appearance="outline" required [ngClass]="showCCCGroups()?'dialog--group-field-left':'dialog--group-field'">
           <mat-select placeholder="Choose Expense fields to group Expenses"
             formControlName="reimbursibleExpenseGroupConfiguration">
             <mat-option value="claim_number">
@@ -39,9 +39,9 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field floatLabel="always" class="dialog--group-field-right" appearance="outline" required>
+        <mat-form-field floatLabel="always" class="dialog--group-field-right" appearance="outline" *ngIf="showCCCGroups()" required>
           <mat-select placeholder="Choose Expense fields to group Expenses"
-            formControlName="cccExpenseGroupConfiguration">
+            formControlName="cccExpenseGroupConfiguration" *ngIf="showCCCGroups()">
             <mat-option value="claim_number">
               Expense Report
             </mat-option>
@@ -53,19 +53,19 @@
       </div>
 
       <div class="dialog--label">
-        Date when Exporting Expenses to QuickBooks Online.
+        Date when Exporting Expenses to QuickBooks Online:
       </div>
         <div>
-          <div class="dialog--group-label-left">
+          <div class="dialog--group-label-left" *ngIf="showCCCGroups()">
             Reimbursable Expenses
           </div>
-          <div class="dialog--group-label-right">
+          <div class="dialog--group-label-right" *ngIf="showCCCGroups()">
             Credit Card Expenses
           </div>
         </div>
 
       <div>
-        <mat-form-field floatLabel="always" class="dialog--group-field-left" appearance="outline">
+        <mat-form-field floatLabel="always" class="dialog--group-field-left" appearance="outline" [ngClass]="showCCCGroups()?'dialog--group-field-left':'dialog--group-field'">
           <mat-select placeholder="Choose Date when Exporting Expenses" formControlName="reimbursableExportDate">
             <mat-option value="current_date">
               Current Date
@@ -85,8 +85,8 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field floatLabel="always" class="dialog--group-field-right" appearance="outline">
-          <mat-select placeholder="Choose Date when Exporting Expenses" formControlName="cccExportDate">
+        <mat-form-field floatLabel="always" class="dialog--group-field-right" appearance="outline" *ngIf="showCCCGroups()">
+          <mat-select placeholder="Choose Date when Exporting Expenses" formControlName="cccExportDate" *ngIf="showCCCGroups()">
             <mat-option value="current_date">
               Current Date
             </mat-option>
@@ -109,7 +109,7 @@
       <div class="dialog--label">
         Import Expenses in State:
       </div>
-      <mat-form-field floatLabel="always" class="dialog--field" appearance="outline" required>
+      <mat-form-field floatLabel="always" appearance="outline" required [ngClass]="showCCCGroups()?'dialog--group-field-left':'dialog--group-field'">
         <mat-select placeholder="Choose State of Expenses to be fetched" formControlName="expenseState">
           <mat-option value="PAYMENT_PROCESSING">
             Payment Processing

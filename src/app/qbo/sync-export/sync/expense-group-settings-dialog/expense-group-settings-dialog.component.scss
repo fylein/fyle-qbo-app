@@ -26,6 +26,11 @@
     float: right;
   }
 
+  &--group-field {
+    margin: 5px 0;
+    width: 100%;
+  }
+
   &--group-label-left {
     margin: 16px 0 4px;
     font-weight: 400;
@@ -44,6 +49,7 @@
 
   &--label {
     font-weight: 500;
+    margin: 0 0 4px;
   }
 
   &--error {

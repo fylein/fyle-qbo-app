@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ExpenseGroupsService } from 'src/app/core/services/expense-groups.service';
+import { SettingsService } from 'src/app/core/services/settings.service'
+import { StorageService } from 'src/app/core/services/storage.service'
 import { MatDialogRef } from '@angular/material/dialog';
 import { ExpenseGroupSetting } from 'src/app/core/models/expense-group-setting.model';
-
+import { GeneralSetting } from 'src/app/core/models/general-setting.model'
 @Component({
   selector: 'app-expense-group-settings-dialog',
   templateUrl: './expense-group-settings-dialog.component.html',
@@ -12,9 +14,11 @@ import { ExpenseGroupSetting } from 'src/app/core/models/expense-group-setting.m
 export class ExpenseGroupSettingsDialogComponent implements OnInit {
   importExpensesForm: FormGroup;
   expenseGroupSettings: ExpenseGroupSetting;
+  workspaceGeneralSettings: GeneralSetting;
+  workspaceId: number;
   isLoading: boolean;
 
-  constructor(private formBuilder: FormBuilder, private expenseGroupsService: ExpenseGroupsService, private dialogRef: MatDialogRef<ExpenseGroupSettingsDialogComponent>) { }
+  constructor(private formBuilder: FormBuilder, private expenseGroupsService: ExpenseGroupsService, private settingsService: SettingsService, private storageService: StorageService, private dialogRef: MatDialogRef<ExpenseGroupSettingsDialogComponent>) { }
 
   save() {
     const that = this;
@@ -68,8 +72,25 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
     });
   }
 
+  showCCCGroups(){
+    const that = this;
+
+    that.settingsService.getGeneralSettings(that.workspaceId).subscribe(response => {
+      that.workspaceGeneralSettings = response
+    });
+
+    if (that.workspaceGeneralSettings.corporate_credit_card_expenses_object === null) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
   ngOnInit() {
     const that = this;
+
+    that.workspaceId = that.storageService.get('workspaceId');
 
     that.isLoading = true;
 

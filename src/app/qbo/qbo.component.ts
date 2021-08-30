@@ -167,7 +167,6 @@ export class QboComponent implements OnInit {
   }
 
   onGeneralMappingsPageVisit() {
-    throw new Error('QBO App error');
     this.trackingService.onPageVisit('Genral Mappings');
   }
 

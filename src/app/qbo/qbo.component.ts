@@ -6,12 +6,15 @@ import { WorkspaceService } from '../core/services/workspace.service';
 import { SettingsService } from '../core/services/settings.service';
 import { BillsService } from '../core/services/bills.service';
 import { StorageService } from '../core/services/storage.service';
+import { TrackingService } from '../core/services/tracking.service';
 import { WindowReferenceService } from '../core/services/window.service';
 import { UserProfile } from '../core/models/user-profile.model';
 import { Workspace } from '../core/models/workspace.model';
 import { GeneralSetting } from '../core/models/general-setting.model';
 import { MappingSetting } from '../core/models/mapping-setting.model';
 import { MappingSettingResponse } from '../core/models/mapping-setting-response.model';
+import { MappingsService } from '../core/services/mappings.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-qbo',
@@ -28,6 +31,7 @@ export class QboComponent implements OnInit {
   generalSettings: GeneralSetting;
   mappingSettings: MappingSetting[];
   showSwitchOrg: boolean;
+  showRefreshIcon: boolean;
   qboCompanyName: string;
   navDisabled = true;
   windowReference: Window;
@@ -37,9 +41,12 @@ export class QboComponent implements OnInit {
     private settingsService: SettingsService,
     private router: Router,
     private authService: AuthService,
+    private snackBar: MatSnackBar,
+    private mappingsService: MappingsService,
     private billService: BillsService,
     private storageService: StorageService,
-    private windowReferenceService: WindowReferenceService) {
+    private windowReferenceService: WindowReferenceService,
+    private trackingService: TrackingService) {
     this.windowReference = this.windowReferenceService.nativeWindow;
   }
 
@@ -72,6 +79,7 @@ export class QboComponent implements OnInit {
 
   switchWorkspace() {
     this.authService.switchWorkspace();
+    this.trackingService.onSwitchWorkspace();
   }
 
   getSettingsAndNavigate() {
@@ -126,15 +134,41 @@ export class QboComponent implements OnInit {
     that.workspaceService.getWorkspaces(that.user.org_id).subscribe(workspaces => {
       if (Array.isArray(workspaces) && workspaces.length > 0) {
         that.workspace = workspaces[0];
+        that.setUserIdentity(that.user.employee_email, workspaces[0].id, {fullName: that.user.full_name});
         that.getSettingsAndNavigate();
       } else {
         that.workspaceService.createWorkspace().subscribe(workspace => {
           that.workspace = workspace;
+          that.setUserIdentity(that.user.employee_email, workspace.id, {fullName: that.user.full_name});
           that.getSettingsAndNavigate();
         });
       }
       that.getQboPreferences();
     });
+  }
+
+  setUserIdentity(email: string, workspaceId: number, properties) {
+    this.trackingService.onSignIn(email, workspaceId, properties);
+  }
+
+  onSignOut() {
+    this.trackingService.onSignOut();
+  }
+
+  onConfigurationsPageVisit() {
+    this.trackingService.onPageVisit('Configurations');
+  }
+
+  onGeneralMappingsPageVisit() {
+    this.trackingService.onPageVisit('Genral Mappings');
+  }
+
+  onEmployeeMappingsPageVisit() {
+    this.trackingService.onPageVisit('Employee Mappings');
+  }
+
+  onCategoryMappingsPageVisit() {
+    this.trackingService.onPageVisit('Category Mappings');
   }
 
   getQboPreferences() {
@@ -144,9 +178,20 @@ export class QboComponent implements OnInit {
     });
   }
 
+  hideRefreshIconVisibility() {
+    this.showRefreshIcon = false;
+  }
+
+  syncDimension() {
+    const that = this;
+    that.mappingsService.refreshDimension();
+    that.snackBar.open('Refreshing Fyle and Quickbooks Data');
+  }
+
   ngOnInit() {
     const that = this;
     const onboarded = that.storageService.get('onboarded');
+    that.showRefreshIcon = !onboarded;
     that.navDisabled = onboarded !== true;
     that.orgsCount = that.authService.getOrgCount();
     that.setupWorkspace();

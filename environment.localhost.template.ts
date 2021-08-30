@@ -10,6 +10,4 @@ export const environment = {
   qbo_scope: 'QBO SCOPE',
   qbo_authorize_uri: 'QBO CONNETION URI',
   qbo_app_url: 'QBO app url',
-  hotjar_whitelist_url : 'HOTJAR WHITELIST URL',
-  hotjar_id : 'HOTJAR ID',
 }

@@ -61,11 +61,11 @@ export class GenericMappingsDialogComponent implements OnInit {
         source_value: that.form.controls.sourceField.value.value,
         destination_value: that.form.controls.destinationField.value.value,
         destination_id: that.form.controls.destinationField.value.destination_id
-      }).subscribe(response => {
+      }).subscribe(() => {
         that.snackBar.open('Mapping saved successfully');
         that.isLoading = false;
         that.dialogRef.close();
-      }, err => {
+      }, () => {
         that.snackBar.open('Something went wrong');
         that.isLoading = false;
       });
@@ -120,6 +120,8 @@ export class GenericMappingsDialogComponent implements OnInit {
     const that = this;
     let qboPromise;
 
+    console.log(that.setting.destination_field)
+
     if (that.setting.destination_field === 'CUSTOMER') {
       qboPromise = that.mappingsService.getQBOCustomers();
     } else if (that.setting.destination_field === 'CLASS') {
@@ -128,10 +130,11 @@ export class GenericMappingsDialogComponent implements OnInit {
       qboPromise = that.mappingsService.getQBODepartments();
     } else if (that.setting.destination_field === 'ACCOUNT') {
       qboPromise = that.mappingsService.getExpenseAccounts();
-    } else if (that.setting.destination_field === 'TAX') {
+    } else if (that.setting.destination_field === 'TAX_CODE') {
       qboPromise = that.mappingsService.getQBOTaxcodes();
     }
 
+    console.log(qboPromise)
     that.isLoading = true;
     forkJoin([
       that.mappingsService.getFyleExpenseCustomFields(that.setting.source_field),

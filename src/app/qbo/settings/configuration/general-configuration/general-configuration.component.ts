@@ -157,7 +157,7 @@ export class GeneralConfigurationComponent implements OnInit {
         employees: [employeeFieldMapping ? employeeFieldMapping : '', Validators.required],
         importCategories: [that.generalSettings.import_categories],
         importProjects: [importProjects],
-        importTaxcodes: [that.generalSettings.import_taxcodes],
+        importTaxcodes: [that.generalSettings.import_taxdetails],
         paymentsSync: [paymentsSyncOption],
         autoMapEmployees: [that.generalSettings.auto_map_employees],
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
@@ -293,8 +293,8 @@ export class GeneralConfigurationComponent implements OnInit {
 
     if (importTaxcodes) {
       mappingsSettingsPayload.push({
-        source_field: 'TAX',
-        destination_field: 'TAX'
+        source_field: 'TAX_GROUP',
+        destination_field: 'TAX_CODE'
       });
     }
 
@@ -324,7 +324,7 @@ export class GeneralConfigurationComponent implements OnInit {
       corporate_credit_card_expenses_object: cccExpensesObject,
       import_categories: importCategories,
       import_projects: importProjects,
-      import_taxcodes: importTaxcodes,
+      import_taxdetails: importTaxcodes,
       sync_fyle_to_qbo_payments: fyleToQuickbooks,
       sync_qbo_to_fyle_payments: quickbooksToFyle,
       auto_map_employees: autoMapEmployees,

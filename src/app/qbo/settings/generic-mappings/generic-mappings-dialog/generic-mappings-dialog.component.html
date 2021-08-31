@@ -37,7 +37,7 @@
 
       <div class="mat-body-strong">
         <strong class="mappings-dialog--label">
-          Map to Corresponding Quickbooks {{ setting.destination_field | titlecase}}
+          Map to Corresponding Quickbooks {{ getTitle(setting.destination_field) | titlecase}}
         </strong>
       </div>
       <mat-form-field class="mappings-dialog--field" appearance="outline">

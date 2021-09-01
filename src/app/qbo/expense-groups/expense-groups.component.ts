@@ -3,8 +3,6 @@ import { ActivatedRoute, Router, NavigationExtras, ActivationEnd } from '@angula
 import { ExpenseGroupsService } from '../../core/services/expense-groups.service';
 import { ExpenseGroup } from 'src/app/core/models/expense-group.model';
 import { MatTableDataSource } from '@angular/material/table';
-import { SettingsService } from 'src/app/core/services/settings.service';
-import { TasksService } from 'src/app/core/services/tasks.service';
 import { environment } from 'src/environments/environment';
 import { WindowReferenceService } from 'src/app/core/services/window.service';
 import { StorageService } from 'src/app/core/services/storage.service';
@@ -21,7 +19,6 @@ export class ExpenseGroupsComponent implements OnInit, OnDestroy {
   isLoading = true;
   count: number;
   state: string;
-  settings;
   pageNumber = 0;
   pageSize: number;
   columnsToDisplay = ['employee', 'expensetype'];
@@ -30,10 +27,8 @@ export class ExpenseGroupsComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private taskService: TasksService,
     private expenseGroupService: ExpenseGroupsService,
     private router: Router,
-    private settingsService: SettingsService,
     private storageService: StorageService,
     private windowReferenceService: WindowReferenceService) {
       this.windowReference = this.windowReferenceService.nativeWindow;
@@ -105,16 +100,13 @@ export class ExpenseGroupsComponent implements OnInit, OnDestroy {
     let cachedPageSize = that.storageService.get('expense-groups.pageSize') || 10;
     that.pageSize = +that.route.snapshot.queryParams.page_size || cachedPageSize;
     that.state = that.route.snapshot.queryParams.state || 'FAILED';
-    that.settingsService.getCombinedSettings(that.workspaceId).subscribe((settings) => {
-      if (that.state === 'COMPLETE') {
-        that.columnsToDisplay = ['export-date', 'employee', 'export', 'expensetype', 'openQbo'];
-      } else {
-        that.columnsToDisplay = ['employee', 'expensetype'];
-      }
+    if (that.state === 'COMPLETE') {
+      that.columnsToDisplay = ['export-date', 'employee', 'export', 'expensetype', 'openQbo'];
+    } else {
+      that.columnsToDisplay = ['employee', 'expensetype'];
+    }
 
-      that.settings = settings;
-      that.getPaginatedExpenseGroups();
-    });
+    that.getPaginatedExpenseGroups();
 
     that.routerEventSubscription = that.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {

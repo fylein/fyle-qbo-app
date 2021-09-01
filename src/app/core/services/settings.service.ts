@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject, merge, forkJoin, from } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 import { Cacheable, CacheBuster, globalCacheBusterNotifier } from 'ngx-cacheable';
 import { FyleCredentials } from '../models/fyle-credentials.model';
@@ -11,8 +11,8 @@ import { MappingSetting } from '../models/mapping-setting.model';
 
 const fyleCredentialsCache = new Subject<void>();
 const qboCredentialsCache = new Subject<void>();
-const generalSettingsCache = new Subject<void>();
-const mappingsSettingsCache = new Subject<void>();
+const generalSettingsCache$ = new Subject<void>();
+const mappingsSettingsCache$ = new Subject<void>();
 
 @Injectable({
   providedIn: 'root',
@@ -74,64 +74,30 @@ export class SettingsService {
   }
 
   @Cacheable({
-    cacheBusterObserver: mappingsSettingsCache
+    cacheBusterObserver: mappingsSettingsCache$
   })
   getMappingSettings(workspaceId: number): Observable<MappingSettingResponse> {
     return this.apiService.get(`/workspaces/${workspaceId}/mappings/settings/`, {});
   }
 
   @CacheBuster({
-    cacheBusterNotifier: generalSettingsCache
+    cacheBusterNotifier: generalSettingsCache$
   })
   postGeneralSettings(workspaceId: number, generalSettingsPayload: GeneralSetting): Observable<GeneralSetting> {
     return this.apiService.post(`/workspaces/${workspaceId}/settings/general/`, generalSettingsPayload);
   }
 
   @CacheBuster({
-    cacheBusterNotifier: mappingsSettingsCache
+    cacheBusterNotifier: mappingsSettingsCache$
   })
   postMappingSettings(workspaceId: number, mappingSettings: MappingSetting[]): Observable<MappingSetting[]> {
     return this.apiService.post(`/workspaces/${workspaceId}/mappings/settings/`, mappingSettings);
   }
 
   @Cacheable({
-    cacheBusterObserver: generalSettingsCache
+    cacheBusterObserver: generalSettingsCache$
   })
   getGeneralSettings(workspaceId: number): Observable<GeneralSetting> {
     return this.apiService.get(`/workspaces/${workspaceId}/settings/general/`, {});
-  }
-
-  @Cacheable({
-    cacheBusterObserver: merge(generalSettingsCache, generalSettingsCache)
-  })
-  getCombinedSettings(workspaceId: number): Observable<GeneralSetting> {
-    // TODO: remove promises and do with rxjs observables
-    return from(forkJoin(
-      [
-        this.getGeneralSettings(workspaceId),
-        this.getMappingSettings(workspaceId)
-      ]
-    ).toPromise().then(responses => {
-      const generalSettings = responses[0];
-      const mappingSettings = responses[1].results;
-
-      const projectFieldMapping = mappingSettings.filter(
-        settings => settings.source_field === 'PROJECT'
-      )[0];
-
-      const costCenterFieldMapping = mappingSettings.filter(
-        settings => settings.source_field === 'COST_CENTER'
-      )[0];
-
-      if (projectFieldMapping) {
-        generalSettings.project_field_mapping = projectFieldMapping.destination_field;
-      }
-
-      if (costCenterFieldMapping) {
-        generalSettings.cost_center_field_mapping = costCenterFieldMapping.destination_field;
-      }
-
-      return generalSettings;
-    }));
   }
 }

@@ -125,7 +125,7 @@ export class ExportComponent implements OnInit {
     that.isExporting = true;
     that.failedExpenseGroupCount = 0;
     that.successfulExpenseGroupCount = 0;
-    that.settingsService.getCombinedSettings(that.workspaceId).subscribe((settings) => {
+    that.settingsService.getGeneralSettings(that.workspaceId).subscribe((settings) => {
       that.generalSettings = settings;
       const promises = [];
       let allFilteredIds = [];

@@ -13,6 +13,7 @@ const fyleCredentialsCache = new Subject<void>();
 const qboCredentialsCache = new Subject<void>();
 const generalSettingsCache$ = new Subject<void>();
 const mappingsSettingsCache$ = new Subject<void>();
+const scheduleSettingsCache$ = new Subject<void>();
 
 @Injectable({
   providedIn: 'root',
@@ -62,15 +63,21 @@ export class SettingsService {
     });
   }
 
+  @Cacheable({
+    cacheBusterObserver: scheduleSettingsCache$
+  })
+  getSettings(workspaceId: number): Observable<ScheduleSettings> {
+    return this.apiService.get(`/workspaces/${workspaceId}/schedule/`, {});
+  }
+
+  @CacheBuster({
+    cacheBusterNotifier: scheduleSettingsCache$
+  })
   postSettings(workspaceId: number, hours: number, scheduleEnabled: boolean): Observable<ScheduleSettings> {
     return this.apiService.post(`/workspaces/${workspaceId}/schedule/`, {
       hours,
       schedule_enabled: scheduleEnabled
     });
-  }
-
-  getSettings(workspaceId: number): Observable<ScheduleSettings> {
-    return this.apiService.get(`/workspaces/${workspaceId}/schedule/`, {});
   }
 
   @Cacheable({

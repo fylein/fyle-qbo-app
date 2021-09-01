@@ -21,6 +21,7 @@ export class WorkspaceService {
     return this.apiService.post('/workspaces/', {});
   }
 
+  @Cacheable()
   getWorkspaces(orgId): Observable<Workspace[]> {
     return this.apiService.get(`/workspaces/`, {
       org_id: orgId

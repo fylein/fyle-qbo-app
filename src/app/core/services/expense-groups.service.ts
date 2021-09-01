@@ -78,11 +78,13 @@ export class ExpenseGroupsService {
     });
   }
 
+  @Cacheable()
   getExpensesByExpenseGroupId(expenseGroupId: number): Observable<Expense[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_groups/${expenseGroupId}/expenses/`, {});
   }
 
+  @Cacheable()
   getExpensesGroupById(expenseGroupId: number): Observable<ExpenseGroup> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_groups/${expenseGroupId}/`, {});

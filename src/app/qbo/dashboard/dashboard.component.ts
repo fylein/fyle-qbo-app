@@ -69,25 +69,29 @@ export class DashboardComponent implements OnInit {
     this.windowReference.location.href = `${FYLE_URL}/app/developers/#/oauth/authorize?client_id=${FYLE_CLIENT_ID}&redirect_uri=${APP_URL}/workspaces/fyle/callback&response_type=code&state=${this.workspaceId}`;
   }
 
-  connectQBO() {
+  connectQBO(onboarding: boolean = false) {
     this.windowReference.location.href = QBO_AUTHORIZE_URI + '?client_id=' + QBO_CLIENT_ID + '&scope=' + QBO_SCOPE + '&response_type=code&redirect_uri=' + APP_URL + '/workspaces/qbo/callback&state=' + this.workspaceId;
-    this.trackingService.connectQBO();
+    this.onConnectQBOPageVisit(onboarding);
   }
 
-  onMapFyleFieldsToQBOFields() {
-    this.trackingService.mapFyleFieldsToQBOFields();
+  onConnectQBOPageVisit(onboarding: boolean = false) {
+    this.trackingService.onPageVisit('Connect Quickbooks Online', onboarding);
   }
 
-  onMapBankAccounts() {
-    this.trackingService.mapBankAccounts();
+  onConfigurationsPageVisit(onboarding: boolean = false) {
+    this.trackingService.onPageVisit('Configurations', onboarding);
   }
 
-  onMapEmployees() {
-    this.trackingService.mapEmployees();
+  onGeneralMappingsPageVisit(onboarding: boolean = false) {
+    this.trackingService.onPageVisit('Genral Mappings', onboarding);
   }
 
-  onMapCategories() {
-    this.trackingService.mapCategories();
+  onEmployeeMappingsPageVisit(onboarding: boolean = false) {
+    this.trackingService.onPageVisit('Employee Mappings', onboarding);
+  }
+
+  onCategoryMappingsPageVisit(onboarding: boolean = false) {
+    this.trackingService.onPageVisit('Category Mappings', onboarding);
   }
 
   // TODO: remove promises and do with rxjs observables

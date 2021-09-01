@@ -180,7 +180,7 @@ export class QboComponent implements OnInit {
     const that = this;
     that.billService.getOrgDetails().subscribe((res) => {
       that.qboCompanyName = res.CompanyName;
-    });    
+    });
   }
 
   hideRefreshIconVisibility() {

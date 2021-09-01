@@ -15,7 +15,10 @@
 					</div>
 					<div fxLayout="column" fxLayoutAlign="space-around start" >
 						<div class="sync-card--text">
-              Click on Advanced Import Settings to check your grouping settings
+              Expenses Groups are Exported at {{ getDescription().expenseState | titlecase }} state.
+            </div>
+            <div class="sync-card--info">
+              You can view or update Expense Group Settings from the Advanced import settings.
             </div>
 					</div>
           <div class="sync-card--info" *ngIf="workspace.last_synced_at">

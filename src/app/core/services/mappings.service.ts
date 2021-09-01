@@ -386,14 +386,6 @@ export class MappingsService {
     );
   }
 
-  @CacheBuster({
-    cacheBusterNotifier: generalMappingsCache
-  })
-  postGeneralMappings(generalMappings: GeneralMapping): Observable<GeneralMapping> {
-    const workspaceId = this.workspaceService.getWorkspaceId();
-    return this.apiService.post(`/workspaces/${workspaceId}/mappings/general/`, generalMappings);
-  }
-
   @Cacheable({
     cacheBusterObserver: generalMappingsCache
   })
@@ -402,6 +394,14 @@ export class MappingsService {
     return this.apiService.get(
       `/workspaces/${workspaceId}/mappings/general/`, {}
     );
+  }
+
+  @CacheBuster({
+    cacheBusterNotifier: generalMappingsCache
+  })
+  postGeneralMappings(generalMappings: GeneralMapping): Observable<GeneralMapping> {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+    return this.apiService.post(`/workspaces/${workspaceId}/mappings/general/`, generalMappings);
   }
 
   getMappings(sourceType: string, uri: string = null, limit: number = 500, offset: number = 0, tableDimension: number = 2): Observable<MappingsResponse> {

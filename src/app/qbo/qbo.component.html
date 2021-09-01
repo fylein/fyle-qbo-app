@@ -26,19 +26,19 @@
         Settings
       </a>
       <a class="mat-h3 qbo-sidenav--nav-sub-item" mat-list-item routerLink="{{workspace.id}}/settings/configurations/general"
-        routerLinkActive="active">
+        routerLinkActive="active" (click)="onConfigurationsPageVisit()">
         Configurations
       </a>
       <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item routerLink="{{workspace.id}}/settings/general_mappings/"
-        routerLinkActive="active">
+        routerLinkActive="active" (click)="onGeneralMappingsPageVisit()">
         General Mappings
       </a>
       <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item
-        routerLink="{{workspace.id}}/settings/employee_mappings/" routerLinkActive="active">
+        routerLink="{{workspace.id}}/settings/employee_mappings/" routerLinkActive="active" (click)="onEmployeeMappingsPageVisit()">
         Employee Mappings
       </a>
       <a class="mat-h3 qbo-sidenav--nav-sub-item" [ngClass]="{'qbo-sidenav--nav-sub-item__disabled': navDisabled}" mat-list-item
-        routerLink="{{workspace.id}}/settings/category/mappings/" routerLinkActive="active">
+        routerLink="{{workspace.id}}/settings/category/mappings/" routerLinkActive="active" (click)="onCategoryMappingsPageVisit()">
         Category Mappings
       </a>
       <div *ngFor="let setting of mappingSettings">

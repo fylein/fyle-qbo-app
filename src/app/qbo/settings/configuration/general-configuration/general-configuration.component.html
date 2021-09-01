@@ -116,7 +116,16 @@
       </div>
 
       <mat-slide-toggle color="primary" class="schedule" *ngIf="showAutoCreate" formControlName="autoCreateDestinationEntity">
-        <div class="schedule--toggle-text">Auto Create Vendor on Quickbooks Online</div>
+        <div class="schedule--toggle-text">
+          Auto Create Vendor on Quickbooks Online
+          <mat-icon
+            [inline]="true"
+            class="info-icon"
+            matTooltip="While exporting reimbursable expenses, Fyle will automatically create a Vendor in Quickbooks if a match does not exist already"
+            matTooltipPosition="after">
+              info
+          </mat-icon>
+        </div>
       </mat-slide-toggle>
 
       <mat-slide-toggle color="primary" class="schedule" formControlName="importCategories">

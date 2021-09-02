@@ -38,7 +38,7 @@ export class GeneralMappingsComponent implements OnInit {
     private storageService: StorageService) {
   }
 
-  redirectHanlder() {
+  redirectHandler() {
     const that = this;
 
     that.route.queryParams.subscribe(params => {
@@ -97,7 +97,7 @@ export class GeneralMappingsComponent implements OnInit {
 
     this.mappingsService.postGeneralMappings(generalMappings).subscribe(() => {
       that.snackBar.open('General Mappings saved successfully');
-      that.redirectHanlder();
+      that.redirectHandler();
     }, () => {
       that.isLoading = false;
       that.snackBar.open('Please fill up the form with valid values');

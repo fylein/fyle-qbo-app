@@ -11,5 +11,6 @@ export type UpdatedConfiguration = {
   cccExpense?: {
     oldValue: string,
     newValue: string
-  }
+  },
+  autoCreateVendor: boolean
 };

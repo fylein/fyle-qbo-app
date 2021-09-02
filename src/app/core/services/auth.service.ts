@@ -14,6 +14,7 @@ import { StorageService } from './storage.service';
 import { WindowReferenceService } from './window.service';
 import { UserProfile } from '../models/user-profile.model';
 import { Organization } from '../models/organization.model';
+import { Cacheable } from 'ngx-cacheable';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -91,14 +92,17 @@ export class AuthService {
     return this.storageService.get('orgsCount');
   }
 
+  @Cacheable()
   getUserProfile(): Observable<UserProfile> {
     return this.apiService.get('/user/profile/', {});
   }
 
+  @Cacheable()
   getClusterDomain(): Observable<string> {
     return this.apiService.get(`/user/domain/`, {});
   }
 
+  @Cacheable()
   getFyleOrgs(): Observable<Organization[]> {
     return this.apiService.get(`/user/orgs/`, {});
   }

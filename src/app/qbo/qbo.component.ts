@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, noop } from 'rxjs';
 import { AuthService } from '../core/services/auth.service';
 import { WorkspaceService } from '../core/services/workspace.service';
 import { SettingsService } from '../core/services/settings.service';
@@ -82,6 +82,10 @@ export class QboComponent implements OnInit {
     this.trackingService.onSwitchWorkspace();
   }
 
+  getQboPreferences() {
+    this.billService.getPreferences(this.workspace.id).subscribe(noop);
+  }
+
   getSettingsAndNavigate() {
     const that = this;
     const pathName = that.windowReference.location.pathname;
@@ -89,6 +93,7 @@ export class QboComponent implements OnInit {
     if (pathName === '/workspaces') {
       that.router.navigateByUrl(`/workspaces/${that.workspace.id}/dashboard`);
     }
+    that.getQboPreferences();
     that.getGeneralSettings();
     that.setupAccessiblePathWatchers();
   }
@@ -143,7 +148,7 @@ export class QboComponent implements OnInit {
           that.getSettingsAndNavigate();
         });
       }
-      that.getQboPreferences();
+      that.getQboOrgName();
     });
   }
 
@@ -171,7 +176,7 @@ export class QboComponent implements OnInit {
     this.trackingService.onPageVisit('Category Mappings');
   }
 
-  getQboPreferences() {
+  getQboOrgName() {
     const that = this;
     that.billService.getOrgDetails().subscribe((res) => {
       that.qboCompanyName = res.CompanyName;

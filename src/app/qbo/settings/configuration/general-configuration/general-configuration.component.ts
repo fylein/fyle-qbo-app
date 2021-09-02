@@ -207,17 +207,19 @@ export class GeneralConfigurationComponent implements OnInit {
       data: updatedConfigurations
     });
 
-    dialogRef.afterClosed().subscribe(accepted => {
-      if (accepted) {
+    dialogRef.afterClosed().subscribe(data => {
+      if (data.accpetedChanges) {
         that.isLoading = true;
-        that.postConfigurationsAndMappingSettings(generalSettingsPayload, mappingSettingsPayload, true);
+        that.postConfigurationsAndMappingSettings(generalSettingsPayload, mappingSettingsPayload, true, data.redirectToEmployeeMappings);
       }
     });
   }
 
   constructUpdatedConfigurationsPayload(generalSettingsPayload: GeneralSetting): UpdatedConfiguration {
     const that = this;
-    const updatedConfiguration: UpdatedConfiguration = {};
+    const updatedConfiguration: UpdatedConfiguration = {
+      autoCreateVendor: generalSettingsPayload.auto_create_destination_entity
+    };
 
     if (that.generalSettings.employee_field_mapping !== generalSettingsPayload.employee_field_mapping) {
       updatedConfiguration.employee = {
@@ -243,7 +245,7 @@ export class GeneralConfigurationComponent implements OnInit {
     return updatedConfiguration;
   }
 
-  postConfigurationsAndMappingSettings(generalSettingsPayload: GeneralSetting, mappingSettingsPayload: MappingSetting[], redirectToGeneralMappings: boolean = false) {
+  postConfigurationsAndMappingSettings(generalSettingsPayload: GeneralSetting, mappingSettingsPayload: MappingSetting[], redirectToGeneralMappings: boolean = false, redirectToEmployeeMappings: boolean = false) {
     const that = this;
 
     that.isLoading = true;
@@ -256,7 +258,16 @@ export class GeneralConfigurationComponent implements OnInit {
       that.snackBar.open('Configuration saved successfully');
       that.qbo.getGeneralSettings();
       if (redirectToGeneralMappings) {
-        that.router.navigateByUrl(`workspaces/${that.workspaceId}/settings/general_mappings`);
+        if (redirectToEmployeeMappings) {
+          // add redirect_to_employee_mappings query param
+          that.router.navigate([`workspaces/${that.workspaceId}/settings/general_mappings`], {
+            queryParams: {
+              redirect_to_employee_mappings: redirectToEmployeeMappings
+            }
+          });
+        } else {
+          that.router.navigateByUrl(`workspaces/${that.workspaceId}/settings/general_mappings`);
+        }
       } else {
         that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
       }

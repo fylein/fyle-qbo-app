@@ -14,7 +14,8 @@ module.exports = {
         QBO_SCOPE: JSON.stringify(process.env.QBO_SCOPE),
         QBO_AUTHORIZE_URI: JSON.stringify(process.env.QBO_AUTHORIZE_URI),
         QBO_APP_URL: JSON.stringify(process.env.QBO_APP_URL),
-        SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN)
+        SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
+        RELEASE: JSON.stringify(process.env.RELEASE)
       }
     })
   ]

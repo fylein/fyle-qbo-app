@@ -12,5 +12,5 @@ interface Env {
   QBO_AUTHORIZE_URI: string;
   QBO_APP_URL: string;
   SENTRY_DSN: string;
-  RELEASE: string
+  RELEASE: string;
 }

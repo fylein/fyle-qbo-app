@@ -10,4 +10,6 @@ export const environment = {
   qbo_scope: 'QBO SCOPE',
   qbo_authorize_uri: 'QBO CONNETION URI',
   qbo_app_url: 'QBO app url',
+  sentry_dsn: 'SENTRY_DSN',
+  release: 'RELEASE'
 }

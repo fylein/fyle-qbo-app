@@ -10,4 +10,6 @@ export const environment = {
   qbo_authorize_uri: '{{QBO_AUTHORIZE_URI}}',
   qbo_app_url: '{{QBO_APP_URL}}',
   hotjar_id : '{{HOTJAR_ID}}',
+  sentry_dsn: '{{SENTRY_DSN}}',
+  release: '{{RELEASE}}'
 };

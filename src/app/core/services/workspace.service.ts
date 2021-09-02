@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { StorageService } from './storage.service';
 import { Workspace } from '../models/workspace.model';
+import { Cacheable } from 'ngx-cacheable';
+
+const workspaceCache$ = new Subject<void>();
+export { workspaceCache$ };
 
 @Injectable({
   providedIn: 'root'
@@ -17,12 +21,16 @@ export class WorkspaceService {
     return this.apiService.post('/workspaces/', {});
   }
 
+  @Cacheable()
   getWorkspaces(orgId): Observable<Workspace[]> {
     return this.apiService.get(`/workspaces/`, {
       org_id: orgId
     });
   }
 
+  @Cacheable({
+    cacheBusterObserver: workspaceCache$
+  })
   getWorkspaceById(): Observable<Workspace> {
     const workspaceId = this.getWorkspaceId();
     return this.apiService.get(`/workspaces/${workspaceId}/`, {});

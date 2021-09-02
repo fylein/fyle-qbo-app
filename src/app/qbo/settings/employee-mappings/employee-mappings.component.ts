@@ -127,7 +127,7 @@ export class EmployeeMappingsComponent implements OnInit {
     const that = this;
     that.isLoading = true;
     that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
-    that.settingsService.getCombinedSettings(that.workspaceId).subscribe(settings => {
+    that.settingsService.getGeneralSettings(that.workspaceId).subscribe(settings => {
       that.mappingsCheck();
       that.generalSettings = settings;
       that.isLoading = false;

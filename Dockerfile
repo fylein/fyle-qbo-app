@@ -6,8 +6,12 @@ RUN apt-get update && apt-get install nginx vim -y --no-install-recommends git
 # set working directory
 WORKDIR /app
 
+# commit_hash
+ARG release
+
 # add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
+ENV RELEASE=$release
 
 # install and cache app dependencies
 COPY package.json /app/package.json

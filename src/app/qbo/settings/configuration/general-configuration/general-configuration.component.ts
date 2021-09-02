@@ -156,6 +156,7 @@ export class GeneralConfigurationComponent implements OnInit {
         cccExpense: [that.generalSettings ? that.generalSettings.corporate_credit_card_expenses_object : ''],
         employees: [employeeFieldMapping ? employeeFieldMapping : '', Validators.required],
         importCategories: [that.generalSettings.import_categories],
+        forcedExport: [that.generalSettings.forced_export],
         importProjects: [importProjects],
         paymentsSync: [paymentsSyncOption],
         autoMapEmployees: [that.generalSettings.auto_map_employees],
@@ -190,6 +191,7 @@ export class GeneralConfigurationComponent implements OnInit {
         cccExpense: [null],
         importCategories: [false],
         importProjects: [false],
+        forcedExport: [false],
         paymentsSync: [null],
         autoMapEmployees: [null],
         autoCreateDestinationEntity: [false],
@@ -276,6 +278,7 @@ export class GeneralConfigurationComponent implements OnInit {
     const employeeMappingsObject = that.generalSettingsForm.value.employees;
     const importCategories = that.generalSettingsForm.value.importCategories;
     const importProjects = that.generalSettingsForm.value.importProjects ? that.generalSettingsForm.value.importProjects : false;
+    const forcedExport = that.generalSettingsForm.value.forcedExport ? that.generalSettingsForm.value.forcedExport : false;
     const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
     const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
     const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
@@ -314,6 +317,7 @@ export class GeneralConfigurationComponent implements OnInit {
       corporate_credit_card_expenses_object: cccExpensesObject,
       import_categories: importCategories,
       import_projects: importProjects,
+      forced_export: forcedExport,
       sync_fyle_to_qbo_payments: fyleToQuickbooks,
       sync_qbo_to_fyle_payments: quickbooksToFyle,
       auto_map_employees: autoMapEmployees,

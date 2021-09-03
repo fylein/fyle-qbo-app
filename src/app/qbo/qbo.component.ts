@@ -167,6 +167,7 @@ export class QboComponent implements OnInit {
   }
 
   onGeneralMappingsPageVisit() {
+    throw new Error('test for single quotes');
     this.trackingService.onPageVisit('Genral Mappings');
   }
 

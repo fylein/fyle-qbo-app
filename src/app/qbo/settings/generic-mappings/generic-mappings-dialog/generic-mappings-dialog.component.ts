@@ -120,8 +120,6 @@ export class GenericMappingsDialogComponent implements OnInit {
     const that = this;
     let qboPromise;
 
-    console.log(that.setting.destination_field)
-
     if (that.setting.destination_field === 'CUSTOMER') {
       qboPromise = that.mappingsService.getQBOCustomers();
     } else if (that.setting.destination_field === 'CLASS') {
@@ -134,7 +132,6 @@ export class GenericMappingsDialogComponent implements OnInit {
       qboPromise = that.mappingsService.getQBOTaxcodes();
     }
 
-    console.log(qboPromise)
     that.isLoading = true;
     forkJoin([
       that.mappingsService.getFyleExpenseCustomFields(that.setting.source_field),

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, noop } from 'rxjs';
 import { AuthService } from '../core/services/auth.service';
 import { WorkspaceService } from '../core/services/workspace.service';
 import { SettingsService } from '../core/services/settings.service';
@@ -15,6 +15,7 @@ import { MappingSetting } from '../core/models/mapping-setting.model';
 import { MappingSettingResponse } from '../core/models/mapping-setting-response.model';
 import { MappingsService } from '../core/services/mappings.service';
 import { MatSnackBar } from '@angular/material';
+import * as Sentry from '@sentry/angular';
 
 @Component({
   selector: 'app-qbo',
@@ -80,6 +81,11 @@ export class QboComponent implements OnInit {
   switchWorkspace() {
     this.authService.switchWorkspace();
     this.trackingService.onSwitchWorkspace();
+    Sentry.configureScope(scope => scope.setUser(null));
+  }
+
+  getQboPreferences() {
+    this.billService.getPreferences(this.workspace.id).subscribe(noop);
   }
 
   getSettingsAndNavigate() {
@@ -89,6 +95,7 @@ export class QboComponent implements OnInit {
     if (pathName === '/workspaces') {
       that.router.navigateByUrl(`/workspaces/${that.workspace.id}/dashboard`);
     }
+    that.getQboPreferences();
     that.getGeneralSettings();
     that.setupAccessiblePathWatchers();
   }
@@ -143,15 +150,20 @@ export class QboComponent implements OnInit {
           that.getSettingsAndNavigate();
         });
       }
-      that.getQboPreferences();
+      that.getQboOrgName();
     });
   }
 
   setUserIdentity(email: string, workspaceId: number, properties) {
+    Sentry.setUser({
+      email,
+      workspaceId,
+    });
     this.trackingService.onSignIn(email, workspaceId, properties);
   }
 
   onSignOut() {
+    Sentry.configureScope(scope => scope.setUser(null));
     this.trackingService.onSignOut();
   }
 
@@ -171,7 +183,7 @@ export class QboComponent implements OnInit {
     this.trackingService.onPageVisit('Category Mappings');
   }
 
-  getQboPreferences() {
+  getQboOrgName() {
     const that = this;
     that.billService.getOrgDetails().subscribe((res) => {
       that.qboCompanyName = res.CompanyName;

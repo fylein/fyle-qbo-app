@@ -157,7 +157,7 @@ export class GeneralConfigurationComponent implements OnInit {
         employees: [employeeFieldMapping ? employeeFieldMapping : '', Validators.required],
         importCategories: [that.generalSettings.import_categories],
         importProjects: [importProjects],
-        importTaxcodes: [that.generalSettings.import_taxcodes],
+        importTaxCodes: [that.generalSettings.import_tax_codes],
         paymentsSync: [paymentsSyncOption],
         autoMapEmployees: [that.generalSettings.auto_map_employees],
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
@@ -191,7 +191,7 @@ export class GeneralConfigurationComponent implements OnInit {
         cccExpense: [null],
         importCategories: [false],
         importProjects: [false],
-        importTaxcodes: [false],
+        importTaxCodes: [false],
         paymentsSync: [null],
         autoMapEmployees: [null],
         autoCreateDestinationEntity: [false],
@@ -289,7 +289,7 @@ export class GeneralConfigurationComponent implements OnInit {
     const employeeMappingsObject = that.generalSettingsForm.value.employees;
     const importCategories = that.generalSettingsForm.value.importCategories;
     const importProjects = that.generalSettingsForm.value.importProjects ? that.generalSettingsForm.value.importProjects : false;
-    const importTaxcodes = that.generalSettingsForm.value.importTaxcodes;
+    const importTaxCodes = that.generalSettingsForm.value.importTaxCodes;
     const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
     const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
     const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
@@ -302,7 +302,7 @@ export class GeneralConfigurationComponent implements OnInit {
       quickbooksToFyle = that.generalSettingsForm.value.paymentsSync === 'sync_qbo_to_fyle_payments' ? true : false;
     }
 
-    if (importTaxcodes) {
+    if (importTaxCodes) {
       mappingsSettingsPayload.push({
         source_field: 'TAX_GROUP',
         destination_field: 'TAX_CODE'
@@ -335,7 +335,7 @@ export class GeneralConfigurationComponent implements OnInit {
       corporate_credit_card_expenses_object: cccExpensesObject,
       import_categories: importCategories,
       import_projects: importProjects,
-      import_taxcodes: importTaxcodes,
+      import_tax_codes: importTaxCodes,
       sync_fyle_to_qbo_payments: fyleToQuickbooks,
       sync_qbo_to_fyle_payments: quickbooksToFyle,
       auto_map_employees: autoMapEmployees,

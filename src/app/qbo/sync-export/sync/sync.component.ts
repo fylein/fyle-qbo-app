@@ -97,6 +97,8 @@ export class SyncComponent implements OnInit {
           element = 'Payment';
         } else if (element === 'expense_id') {
           element = 'Expense';
+        } else if (element === 'expense_id') {
+          element = 'Expense';
         }
         cccExpensesGroupedByList.push(element);
       }

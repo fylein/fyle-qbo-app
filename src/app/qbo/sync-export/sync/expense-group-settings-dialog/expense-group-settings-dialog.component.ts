@@ -49,12 +49,16 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
         reimbursibleConfiguration = 'claim_number';
       } else if (reimbursableFields.includes('settlement_id')) {
         reimbursibleConfiguration = 'settlement_id';
+      } else if (reimbursableFields.includes('expense_id')) {
+        reimbursibleConfiguration = 'expense_id';
       }
 
       const cccFields = that.expenseGroupSettings.corporate_credit_card_expense_group_fields;
       let cccConfiguration = null;
 
-      if (cccFields.includes('claim_number')) {
+      if (cccFields.includes('expense_id')) {
+        cccConfiguration = 'expense_id';
+      } else if (cccFields.includes('claim_number')) {
         cccConfiguration = 'claim_number';
       } else if (cccFields.includes('settlement_id')) {
         cccConfiguration = 'settlement_id';

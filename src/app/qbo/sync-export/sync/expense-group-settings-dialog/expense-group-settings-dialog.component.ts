@@ -79,14 +79,20 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
   showCCCGroups() {
     const that = this;
 
-    that.settingsService.getGeneralSettings(that.workspaceId).subscribe(response => {
-      that.workspaceGeneralSettings = response;
-    });
-
     if (that.workspaceGeneralSettings.corporate_credit_card_expenses_object) {
       return true;
     } else {
       return false;
+    }
+  }
+
+  hideGroupingOption() {
+    const that = this;
+
+    if (that.workspaceGeneralSettings.corporate_credit_card_expenses_object === 'CREDIT CARD PURCHASE') {
+      return false;
+    } else {
+      return true;
     }
   }
 
@@ -96,6 +102,10 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
     that.workspaceId = that.storageService.get('workspaceId');
 
     that.isLoading = true;
+
+    that.settingsService.getGeneralSettings(that.workspaceId).subscribe(response => {
+      that.workspaceGeneralSettings = response;
+    });
 
     that.getExpenseGroupSettings();
   }

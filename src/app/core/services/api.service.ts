@@ -31,8 +31,7 @@ export class ApiService {
         console.error(
           `Backend returned code ${error.status}, ` + `body was: ` + JSON.stringify(error.error)
         );
-      }
-      else if (error.status >= 400 && httpMethod === 'POST') {
+      } else if (error.status >= 400 && httpMethod === 'POST') {
         console.error(
           `Backend returned code ${error.status}, ` + `body was: ` + JSON.stringify(error.error)
         );

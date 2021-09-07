@@ -89,7 +89,7 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
   hideGroupingOption() {
     const that = this;
 
-    if (that.workspaceGeneralSettings.corporate_credit_card_expenses_object === 'CREDIT CARD PURCHASE') {
+    if (that.workspaceGeneralSettings.corporate_credit_card_expenses_object === 'CREDIT CARD PURCHASE' && that.workspaceGeneralSettings.map_merchant_to_vendor) {
       return false;
     } else {
       return true;

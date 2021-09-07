@@ -10,6 +10,7 @@ export type GeneralSetting = {
   auto_map_employees: string;
   auto_create_destination_entity: boolean;
   employee_field_mapping: string;
+  map_merchant_to_vendor: boolean;
   je_single_credit_line: boolean;
   created_at?: Date;
   updated_at?: Date;

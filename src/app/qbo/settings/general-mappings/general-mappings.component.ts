@@ -162,8 +162,6 @@ export class GeneralMappingsComponent implements OnInit {
       that.generalMappings = generalMappings;
       that.isLoading = false;
 
-      console.log(that.generalMappings)
-
       that.form = that.formBuilder.group({
         accountPayableAccounts: [that.generalMappings ? that.generalMappings.accounts_payable_id : ''],
         bankAccounts: [that.generalMappings ? that.generalMappings.bank_account_id : ''],

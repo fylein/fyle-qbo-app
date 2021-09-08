@@ -136,14 +136,14 @@ export class GeneralConfigurationComponent implements OnInit {
         setting => (setting.source_field === 'PROJECT' && setting.destination_field === 'CUSTOMER')
       );
 
-      if (responses[2].Country == 'US') {
+      if (responses[2].Country === 'US') {
         that.isImportTaxDisabled = true;
       }
 
       let importProjects = false;
       if (projectFieldMapping.length) {
         importProjects = projectFieldMapping[0].import_to_fyle;
-      }      
+      }
 
       const employeeFieldMapping = that.generalSettings.employee_field_mapping;
 
@@ -211,9 +211,8 @@ export class GeneralConfigurationComponent implements OnInit {
       });
 
       that.billService.getOrgDetails().subscribe((res) => {
-        console.log(res)
-        if (res.Country == 'US') {
-          that.generalSettingsForm.controls.importTaxCodes.disable()
+        if (res.Country === 'US') {
+          that.generalSettingsForm.controls.importTaxCodes.disable();
         }
       });
 
@@ -268,7 +267,6 @@ export class GeneralConfigurationComponent implements OnInit {
 
   postConfigurationsAndMappingSettings(generalSettingsPayload: GeneralSetting, mappingSettingsPayload: MappingSetting[], redirectToGeneralMappings: boolean = false, redirectToEmployeeMappings: boolean = false) {
     const that = this;
-    console.log(generalSettingsPayload)
     that.isLoading = true;
     forkJoin(
       [

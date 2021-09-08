@@ -113,11 +113,6 @@ export class SyncComponent implements OnInit {
     };
   }
 
-
-  exportDateConfiguration() {
-
-  }
-
   open() {
     const that = this;
     that.dialogWidth = '450px';

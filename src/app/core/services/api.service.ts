@@ -29,11 +29,11 @@ export class ApiService {
     } else {
       if (error.status >= 500 && httpMethod === 'GET') {
         console.error(
-          `Backend returned code ${error.status}, ` + `body was: ` + JSON.stringify(error.error)
+          `Backend returned code ${error.status}, ` + `body was: ${JSON.stringify(error.error)}`
         );
       } else if (error.status >= 400 && httpMethod === 'POST') {
         console.error(
-          `Backend returned code ${error.status}, ` + `body was: ` + JSON.stringify(error.error)
+          `Backend returned code ${error.status}, ` + `body was: ${JSON.stringify(error.error)}`
         );
       }
     }

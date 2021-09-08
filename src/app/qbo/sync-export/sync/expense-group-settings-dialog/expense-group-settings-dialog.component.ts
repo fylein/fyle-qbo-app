@@ -27,7 +27,7 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
     that.isLoading = true;
 
     const reimbursableExpensesGroupedBy = [that.importExpensesForm.value.reimbursableExpenseGroupConfiguration];
-    const cccExpensesGroupedBy = [ that.importExpensesForm.getRawValue().cccExpenseGroupConfiguration ];
+    const cccExpensesGroupedBy = [that.importExpensesForm.getRawValue().cccExpenseGroupConfiguration];
     const expenseState = that.importExpensesForm.value.expenseState;
     const reimbursableExportDateType = that.importExpensesForm.value.reimbursableExportDate;
     const cccExportDateType = that.importExpensesForm.value.cccExportDate;
@@ -54,7 +54,7 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
     } else if (fieldType.includes('settlement_id')) {
       fieldConfiguration = 'settlement_id';
     }
-    return fieldConfiguration
+    return fieldConfiguration;
   }
 
   getExpenseGroupSettings() {
@@ -85,7 +85,7 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
 
   showCCCGroups() {
     const that = this;
-    return this.workspaceGeneralSettings.corporate_credit_card_expenses_object;
+    return that.workspaceGeneralSettings.corporate_credit_card_expenses_object;
   }
 
   ngOnInit() {

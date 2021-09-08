@@ -104,7 +104,20 @@
         </mat-select>
       </mat-form-field>
       <mandatory-error-message listName="payment account" *ngIf="form.controls.billPaymentAccounts.touched && !form.controls.billPaymentAccounts.valid"></mandatory-error-message>
-    </div>
+
+      <div class="mat-body-strong" *ngIf="generalSettings.import_taxcodes">
+        Default Tax Code
+      </div>
+        <mat-form-field floatLabel="always" appearance="outline" required
+          *ngIf="generalSettings.import_taxcodes">
+          <mat-select class="general-mappings--input" placeholder="Select Tax Group"
+            formControlName="qboTaxCodes">
+            <mat-option *ngFor="let taxCode of taxCodes; let i = index" [value]="taxCodes[i].destination_id">
+              {{taxCodes[i].value}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
     <button [disabled]="!form.valid" class="configurations--save-btn" mat-flat-button color="primary" (click)="submit()" type="submit">
       Save

@@ -24,6 +24,7 @@ export class GeneralMappingsComponent implements OnInit {
   billPaymentAccounts: MappingDestination[];
   qboExpenseAccounts: MappingDestination[];
   qboVendors: MappingDestination[];
+  taxCodes: MappingDestination[];
   generalMappings: GeneralMapping;
   generalSettings: GeneralSetting;
   isLoading = true;
@@ -80,6 +81,9 @@ export class GeneralMappingsComponent implements OnInit {
     const defaultVendorId = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.form.value.qboVendors : '';
     const defaultVendor = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.qboVendors.filter(filteredVendor => filteredVendor.destination_id === defaultVendorId)[0] : '';
 
+    const defaultTaxCodeId = that.form.value.qboTaxCodes;
+    const defaultTaxCode = that.taxCodes.filter(filteredTaxCode => filteredTaxCode.destination_id === defaultTaxCodeId)[0];
+
     const generalMappings: GeneralMapping = {
       accounts_payable_name: accountPayableAccount ? accountPayableAccount.value : null,
       accounts_payable_id: accountPayableAccount ? accountPayableAccount.destination_id : null,
@@ -93,6 +97,8 @@ export class GeneralMappingsComponent implements OnInit {
       bill_payment_account_id: billPaymentAccount ? billPaymentAccount.destination_id : null,
       default_ccc_vendor_name: defaultVendor ? defaultVendor.value : null,
       default_ccc_vendor_id: defaultVendor ? defaultVendor.destination_id : null,
+      default_tax_code_name: defaultTaxCode ? defaultTaxCode.value : null,
+      default_tax_code_id: defaultTaxCode ? defaultTaxCode.destination_id : null
     };
 
     this.mappingsService.postGeneralMappings(generalMappings).subscribe(() => {
@@ -156,6 +162,8 @@ export class GeneralMappingsComponent implements OnInit {
       that.generalMappings = generalMappings;
       that.isLoading = false;
 
+      console.log(that.generalMappings)
+
       that.form = that.formBuilder.group({
         accountPayableAccounts: [that.generalMappings ? that.generalMappings.accounts_payable_id : ''],
         bankAccounts: [that.generalMappings ? that.generalMappings.bank_account_id : ''],
@@ -163,6 +171,7 @@ export class GeneralMappingsComponent implements OnInit {
         cccAccounts: [that.generalMappings ? that.generalMappings.default_ccc_account_id : ''],
         billPaymentAccounts: [that.generalMappings ? that.generalMappings.bill_payment_account_id : ''],
         qboVendors: [that.generalMappings ? that.generalMappings.default_ccc_vendor_id : ''],
+        qboTaxCodes: [that.generalMappings ? that.generalMappings.default_tax_code_id : '']
       });
 
       that.setMandatoryField();
@@ -176,6 +185,7 @@ export class GeneralMappingsComponent implements OnInit {
         cccAccounts: [null],
         billPaymentAccounts: [null],
         qboVendors: [null],
+        qboTaxCodes: [null],
       });
 
       that.setMandatoryField();
@@ -193,6 +203,7 @@ export class GeneralMappingsComponent implements OnInit {
         that.mappingsService.getAccountsPayables(),
         that.mappingsService.getQBOVendors(),
         that.mappingsService.getBillPaymentAccounts(),
+        that.mappingsService.getQBOTaxCodes(),
       ]
     ).subscribe(responses => {
       that.isLoading = false;
@@ -201,6 +212,7 @@ export class GeneralMappingsComponent implements OnInit {
       that.accountPayableAccounts = responses[2];
       that.qboVendors = responses[3];
       that.billPaymentAccounts = responses[4];
+      that.taxCodes = responses[5];
       that.qboExpenseAccounts = [ ...responses[0], ...responses[1]];
       that.getGeneralMappings();
     });

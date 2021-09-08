@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { SettingsService } from 'src/app/core/services/settings.service';
+import { BillsService } from 'src/app/core/services/bills.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
@@ -27,8 +28,9 @@ export class GeneralConfigurationComponent implements OnInit {
   showPaymentsField: boolean;
   showAutoCreate: boolean;
   showJeSingleCreditLine: boolean;
+  isImportTaxDisabled: boolean;
 
-  constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
+  constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billService: BillsService, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
   getExpenseOptions(employeeMappedTo) {
     return {
@@ -123,7 +125,8 @@ export class GeneralConfigurationComponent implements OnInit {
     forkJoin(
       [
         that.settingsService.getGeneralSettings(that.workspaceId),
-        that.settingsService.getMappingSettings(that.workspaceId)
+        that.settingsService.getMappingSettings(that.workspaceId),
+        that.billService.getOrgDetails()
       ]
     ).subscribe(responses => {
       that.generalSettings = responses[0];
@@ -133,10 +136,14 @@ export class GeneralConfigurationComponent implements OnInit {
         setting => (setting.source_field === 'PROJECT' && setting.destination_field === 'CUSTOMER')
       );
 
+      if (responses[2].Country == 'US') {
+        that.isImportTaxDisabled = true;
+      }
+
       let importProjects = false;
       if (projectFieldMapping.length) {
         importProjects = projectFieldMapping[0].import_to_fyle;
-      }
+      }      
 
       const employeeFieldMapping = that.generalSettings.employee_field_mapping;
 
@@ -157,7 +164,7 @@ export class GeneralConfigurationComponent implements OnInit {
         employees: [employeeFieldMapping ? employeeFieldMapping : '', Validators.required],
         importCategories: [that.generalSettings.import_categories],
         importProjects: [importProjects],
-        importTaxCodes: [that.generalSettings.import_tax_codes],
+        importTaxCodes: [that.generalSettings.import_tax_codes ? that.generalSettings.import_tax_codes : null],
         paymentsSync: [paymentsSyncOption],
         autoMapEmployees: [that.generalSettings.auto_map_employees],
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
@@ -177,6 +184,10 @@ export class GeneralConfigurationComponent implements OnInit {
         that.generalSettingsForm.controls.importProjects.disable();
       }
 
+      if (that.isImportTaxDisabled) {
+        that.generalSettingsForm.controls.importTaxCodes.disable();
+      }
+
       that.showAutoCreateOption(that.generalSettings.auto_map_employees, employeeFieldMapping);
 
       that.setupFieldWatchers();
@@ -184,6 +195,7 @@ export class GeneralConfigurationComponent implements OnInit {
       that.isLoading = false;
     }, () => {
       that.mappingSettings = [];
+
       that.isLoading = false;
       that.generalSettingsForm = that.formBuilder.group({
         employees: ['', Validators.required],
@@ -191,11 +203,18 @@ export class GeneralConfigurationComponent implements OnInit {
         cccExpense: [null],
         importCategories: [false],
         importProjects: [false],
-        importTaxCodes: [false],
+        importTaxCodes: [null],
         paymentsSync: [null],
         autoMapEmployees: [null],
         autoCreateDestinationEntity: [false],
         jeSingleCreditLine: [false]
+      });
+
+      that.billService.getOrgDetails().subscribe((res) => {
+        console.log(res)
+        if (res.Country == 'US') {
+          that.generalSettingsForm.controls.importTaxCodes.disable()
+        }
       });
 
       that.setupFieldWatchers();
@@ -249,7 +268,7 @@ export class GeneralConfigurationComponent implements OnInit {
 
   postConfigurationsAndMappingSettings(generalSettingsPayload: GeneralSetting, mappingSettingsPayload: MappingSetting[], redirectToGeneralMappings: boolean = false, redirectToEmployeeMappings: boolean = false) {
     const that = this;
-
+    console.log(generalSettingsPayload)
     that.isLoading = true;
     forkJoin(
       [
@@ -289,7 +308,7 @@ export class GeneralConfigurationComponent implements OnInit {
     const employeeMappingsObject = that.generalSettingsForm.value.employees;
     const importCategories = that.generalSettingsForm.value.importCategories;
     const importProjects = that.generalSettingsForm.value.importProjects ? that.generalSettingsForm.value.importProjects : false;
-    const importTaxCodes = that.generalSettingsForm.value.importTaxCodes;
+    const importTaxCodes = that.generalSettingsForm.value.importTaxCodes ? that.generalSettingsForm.value.importTaxCodes : null;
     const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
     const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
     const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;

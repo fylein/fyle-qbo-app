@@ -97,8 +97,6 @@ export class SyncComponent implements OnInit {
           element = 'Payment';
         } else if (element === 'expense_id') {
           element = 'Expense';
-        } else if (element === 'expense_id') {
-          element = 'Expense';
         }
         cccExpensesGroupedByList.push(element);
       }
@@ -107,36 +105,17 @@ export class SyncComponent implements OnInit {
     const reimbursableExpensesGroup = reimbursableExpensesGroupedByList.join(', ');
     const cccExpensesGroup = cccExpensesGroupedByList.join(', ');
     const expenseState: string = that.expenseGroupSettings.expense_state;
-    let reimbursableExportDateConfiguration = null;
-    let cccExportDateConfiguration = null;
-
-    if (that.expenseGroupSettings.reimbursable_export_date_type === 'spent_at') {
-      reimbursableExportDateConfiguration = 'Spend Date';
-    } else if (that.expenseGroupSettings.reimbursable_export_date_type === 'approved_at') {
-      reimbursableExportDateConfiguration = 'Approval Date';
-    } else if (that.expenseGroupSettings.reimbursable_export_date_type === 'verified_at') {
-      reimbursableExportDateConfiguration = 'Verification Date';
-    } else if (that.expenseGroupSettings.reimbursable_export_date_type === 'last_spent_at') {
-      reimbursableExportDateConfiguration = 'Last Spend Date';
-    }
-
-    if (that.expenseGroupSettings.ccc_export_date_type === 'spent_at') {
-      cccExportDateConfiguration = 'Spend Date';
-    } else if (that.expenseGroupSettings.ccc_export_date_type === 'approved_at') {
-      cccExportDateConfiguration = 'Approval Date';
-    } else if (that.expenseGroupSettings.ccc_export_date_type === 'verified_at') {
-      cccExportDateConfiguration = 'Verification Date';
-    } else if (that.expenseGroupSettings.ccc_export_date_type === 'last_spent_at') {
-      cccExportDateConfiguration = 'Last Spend Date';
-    }
 
     return {
       reimbursableExpensesGroupedBy: reimbursableExpensesGroup,
       cccExpensesGroupedBy: cccExpensesGroup,
       expenseState: expenseState.replace(/_/g, ' '),
-      reimbursableExportDateType: reimbursableExportDateConfiguration,
-      cccExportDateType: cccExportDateConfiguration
     };
+  }
+
+
+  exportDateConfiguration() {
+
   }
 
   open() {

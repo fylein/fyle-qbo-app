@@ -40,9 +40,6 @@ export class ExpenseGroupsService {
     return from(this.getAllExpenseGroupsInternal(limit, offset, state, allExpenseGroupsResponse));
   }
 
-  @Cacheable({
-    cacheBusterObserver: expenseGroupSettingsCache$
-  })
   getExpenseGroupSettings(): Observable<ExpenseGroupSetting> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_group_settings/`, {});

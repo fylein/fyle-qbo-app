@@ -25,13 +25,13 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
 
     that.isLoading = true;
 
-    const reimbursibleExpensesGroupedBy = [that.importExpensesForm.value.reimbursibleExpenseGroupConfiguration];
+    const reimbursableExpensesGroupedBy = [that.importExpensesForm.value.reimbursableExpenseGroupConfiguration];
     const cccExpensesGroupedBy = [that.importExpensesForm.value.cccExpenseGroupConfiguration];
     const expenseState = that.importExpensesForm.value.expenseState;
     const reimbursableExportDateType = that.importExpensesForm.value.reimbursableExportDate;
     const cccExportDateType = that.importExpensesForm.value.cccExportDate;
 
-    this.expenseGroupsService.createExpenseGroupsSettings(reimbursibleExpensesGroupedBy, cccExpensesGroupedBy, expenseState, reimbursableExportDateType, cccExportDateType).subscribe(response => {
+    this.expenseGroupsService.createExpenseGroupsSettings(reimbursableExpensesGroupedBy, cccExpensesGroupedBy, expenseState, reimbursableExportDateType, cccExportDateType).subscribe(response => {
       that.dialogRef.close();
     });
   }
@@ -43,14 +43,14 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
       that.expenseGroupSettings = response;
 
       const reimbursableFields = that.expenseGroupSettings.reimbursable_expense_group_fields;
-      let reimbursibleConfiguration = null;
+      let reimbursableConfiguration = null;
 
-      if (reimbursableFields.includes('claim_number')) {
-        reimbursibleConfiguration = 'claim_number';
+      if (reimbursableFields.includes('expense_id')) {
+        reimbursableConfiguration = 'expense_id';
+      } else if (reimbursableFields.includes('claim_number')) {
+        reimbursableConfiguration = 'claim_number';
       } else if (reimbursableFields.includes('settlement_id')) {
-        reimbursibleConfiguration = 'settlement_id';
-      } else if (reimbursableFields.includes('expense_id')) {
-        reimbursibleConfiguration = 'expense_id';
+        reimbursableConfiguration = 'settlement_id';
       }
 
       const cccFields = that.expenseGroupSettings.corporate_credit_card_expense_group_fields;
@@ -65,12 +65,16 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
       }
 
       that.importExpensesForm = that.formBuilder.group({
-        reimbursibleExpenseGroupConfiguration: [ reimbursibleConfiguration ],
+        reimbursableExpenseGroupConfiguration: [ reimbursableConfiguration ],
         cccExpenseGroupConfiguration: [ cccConfiguration ],
         expenseState: [ that.expenseGroupSettings.expense_state, [ Validators.required ]],
         reimbursableExportDate: [ that.expenseGroupSettings.reimbursable_export_date_type],
         cccExportDate: [ that.expenseGroupSettings.ccc_export_date_type]
       });
+
+      if (that.workspaceGeneralSettings.corporate_credit_card_expenses_object === 'CREDIT CARD PURCHASE') {
+        that.importExpensesForm.controls.cccExpenseGroupConfiguration.disable();
+      }
 
       that.isLoading = false;
     });
@@ -83,16 +87,6 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
       return true;
     } else {
       return false;
-    }
-  }
-
-  hideGroupingOption() {
-    const that = this;
-
-    if (that.workspaceGeneralSettings.corporate_credit_card_expenses_object === 'CREDIT CARD PURCHASE' && that.workspaceGeneralSettings.map_merchant_to_vendor) {
-      return false;
-    } else {
-      return true;
     }
   }
 

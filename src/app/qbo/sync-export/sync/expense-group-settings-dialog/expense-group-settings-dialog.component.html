@@ -29,7 +29,7 @@
       <div>
         <mat-form-field floatLabel="always" appearance="outline" required [ngClass]="showCCCGroups()?'dialog--group-field-left':'dialog--group-field'">
           <mat-select placeholder="Choose Expense fields to group Expenses"
-            formControlName="reimbursibleExpenseGroupConfiguration">
+            formControlName="reimbursableExpenseGroupConfiguration">
             <mat-option value="claim_number">
               Expense Report
             </mat-option>
@@ -45,10 +45,10 @@
         <mat-form-field floatLabel="always" class="dialog--group-field-right" appearance="outline" *ngIf="showCCCGroups()" required>
           <mat-select placeholder="Choose Expense fields to group Expenses"
             formControlName="cccExpenseGroupConfiguration" *ngIf="showCCCGroups()">
-            <mat-option value="claim_number" *ngIf="hideGroupingOption()">
+            <mat-option value="claim_number">
               Expense Report
             </mat-option>
-            <mat-option value="settlement_id" *ngIf="hideGroupingOption()">
+            <mat-option value="settlement_id">
               Payment
             </mat-option>
             <mat-option value="expense_id">

@@ -18,6 +18,7 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
   workspaceId: number;
   isLoading: boolean;
   exportDateOptions: { label: string, value: string }[];
+  expenseGroupingFieldOptions: { label: string, value: string }[];
 
   constructor(private formBuilder: FormBuilder, private expenseGroupsService: ExpenseGroupsService, private settingsService: SettingsService, private storageService: StorageService, private dialogRef: MatDialogRef<ExpenseGroupSettingsDialogComponent>) { }
 
@@ -115,6 +116,21 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
       {
         label: 'Last Spend Date',
         value: 'last_spent_at'
+      }
+    ];
+
+    that.expenseGroupingFieldOptions = [
+      {
+        label: 'Expense Report',
+        value: 'claim_number'
+      },
+      {
+        label: 'Payment',
+        value: 'settlement_id'
+      },
+      {
+        label: 'Expense',
+        value: 'expense_id'
       }
     ];
 

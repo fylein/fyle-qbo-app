@@ -17,6 +17,7 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
   workspaceGeneralSettings: GeneralSetting;
   workspaceId: number;
   isLoading: boolean;
+  exportDateOptions: { label: string, value: string }[];
 
   constructor(private formBuilder: FormBuilder, private expenseGroupsService: ExpenseGroupsService, private settingsService: SettingsService, private storageService: StorageService, private dialogRef: MatDialogRef<ExpenseGroupSettingsDialogComponent>) { }
 
@@ -26,14 +27,34 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
     that.isLoading = true;
 
     const reimbursableExpensesGroupedBy = [that.importExpensesForm.value.reimbursableExpenseGroupConfiguration];
-    const cccExpensesGroupedBy = [that.importExpensesForm.value.cccExpenseGroupConfiguration];
+    const cccExpensesGroupedBy = [ that.importExpensesForm.getRawValue().cccExpenseGroupConfiguration ];
     const expenseState = that.importExpensesForm.value.expenseState;
     const reimbursableExportDateType = that.importExpensesForm.value.reimbursableExportDate;
     const cccExportDateType = that.importExpensesForm.value.cccExportDate;
 
-    this.expenseGroupsService.createExpenseGroupsSettings(reimbursableExpensesGroupedBy, cccExpensesGroupedBy, expenseState, reimbursableExportDateType, cccExportDateType).subscribe(response => {
+    const expenseGroupSettingsPayload: ExpenseGroupSetting = {
+      reimbursable_expense_group_fields: reimbursableExpensesGroupedBy,
+      corporate_credit_card_expense_group_fields: cccExpensesGroupedBy,
+      expense_state: expenseState,
+      reimbursable_export_date_type: reimbursableExportDateType,
+      ccc_export_date_type: cccExportDateType
+    };
+
+    this.expenseGroupsService.createExpenseGroupsSettings(expenseGroupSettingsPayload).subscribe(response => {
       that.dialogRef.close();
     });
+  }
+
+  getFieldConfiguration(fieldType) {
+    let fieldConfiguration = null;
+    if (fieldType.includes('expense_id')) {
+      fieldConfiguration = 'expense_id';
+    } else if (fieldType.includes('claim_number')) {
+      fieldConfiguration = 'claim_number';
+    } else if (fieldType.includes('settlement_id')) {
+      fieldConfiguration = 'settlement_id';
+    }
+    return fieldConfiguration
   }
 
   getExpenseGroupSettings() {
@@ -43,30 +64,12 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
       that.expenseGroupSettings = response;
 
       const reimbursableFields = that.expenseGroupSettings.reimbursable_expense_group_fields;
-      let reimbursableConfiguration = null;
-
-      if (reimbursableFields.includes('expense_id')) {
-        reimbursableConfiguration = 'expense_id';
-      } else if (reimbursableFields.includes('claim_number')) {
-        reimbursableConfiguration = 'claim_number';
-      } else if (reimbursableFields.includes('settlement_id')) {
-        reimbursableConfiguration = 'settlement_id';
-      }
 
       const cccFields = that.expenseGroupSettings.corporate_credit_card_expense_group_fields;
-      let cccConfiguration = null;
-
-      if (cccFields.includes('expense_id')) {
-        cccConfiguration = 'expense_id';
-      } else if (cccFields.includes('claim_number')) {
-        cccConfiguration = 'claim_number';
-      } else if (cccFields.includes('settlement_id')) {
-        cccConfiguration = 'settlement_id';
-      }
 
       that.importExpensesForm = that.formBuilder.group({
-        reimbursableExpenseGroupConfiguration: [ reimbursableConfiguration ],
-        cccExpenseGroupConfiguration: [ cccConfiguration ],
+        reimbursableExpenseGroupConfiguration: [ that.getFieldConfiguration(reimbursableFields) ],
+        cccExpenseGroupConfiguration: [ that.getFieldConfiguration(cccFields) ],
         expenseState: [ that.expenseGroupSettings.expense_state, [ Validators.required ]],
         reimbursableExportDate: [ that.expenseGroupSettings.reimbursable_export_date_type],
         cccExportDate: [ that.expenseGroupSettings.ccc_export_date_type]
@@ -82,12 +85,7 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
 
   showCCCGroups() {
     const that = this;
-
-    if (that.workspaceGeneralSettings.corporate_credit_card_expenses_object) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.workspaceGeneralSettings.corporate_credit_card_expenses_object;
   }
 
   ngOnInit() {
@@ -96,6 +94,29 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
     that.workspaceId = that.storageService.get('workspaceId');
 
     that.isLoading = true;
+
+    that.exportDateOptions = [
+      {
+        label: 'Current Date',
+        value: 'current_date'
+      },
+      {
+        label: 'Verification Date',
+        value: 'verified_at'
+      },
+      {
+        label: 'Spend Date',
+        value: 'spent_at'
+      },
+      {
+        label: 'Approval Date',
+        value: 'approved_at'
+      },
+      {
+        label: 'Last Spend Date',
+        value: 'last_spent_at'
+      }
+    ];
 
     that.settingsService.getGeneralSettings(that.workspaceId).subscribe(response => {
       that.workspaceGeneralSettings = response;

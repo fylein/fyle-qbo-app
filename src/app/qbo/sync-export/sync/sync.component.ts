@@ -27,7 +27,6 @@ export class SyncComponent implements OnInit {
   isEmployeesSyncing: boolean;
   errorOccurred = false;
   expenseGroupSettings: ExpenseGroupSetting;
-  dialogWidth: string;
 
   constructor(private expenseGroupService: ExpenseGroupsService, private route: ActivatedRoute, private taskService: TasksService, private settingsService: SettingsService, private workspaceService: WorkspaceService, private snackBar: MatSnackBar, private formBuilder: FormBuilder, public dialog: MatDialog) { }
 
@@ -74,57 +73,25 @@ export class SyncComponent implements OnInit {
   getDescription() {
     const that = this;
 
-    const allowedFields = ['claim_number', 'settlement_id', 'expense_id'];
-
-    const reimbursableExpensesGroupedByList = [];
-    that.expenseGroupSettings.reimbursable_expense_group_fields.forEach(element => {
-      if (allowedFields.indexOf(element) >= 0) {
-        if (element === 'claim_number') {
-          element = 'Expense Report';
-        } else if (element === 'settlement_id') {
-          element = 'Payment';
-        }
-        reimbursableExpensesGroupedByList.push(element);
-      }
-    });
-
-    const cccExpensesGroupedByList = [];
-    that.expenseGroupSettings.corporate_credit_card_expense_group_fields.forEach(element => {
-      if (allowedFields.indexOf(element) >= 0) {
-        if (element === 'claim_number') {
-          element = 'Expense Report';
-        } else if (element === 'settlement_id') {
-          element = 'Payment';
-        } else if (element === 'expense_id') {
-          element = 'Expense';
-        }
-        cccExpensesGroupedByList.push(element);
-      }
-    });
-
-    const reimbursableExpensesGroup = reimbursableExpensesGroupedByList.join(', ');
-    const cccExpensesGroup = cccExpensesGroupedByList.join(', ');
     const expenseState: string = that.expenseGroupSettings.expense_state;
 
     return {
-      reimbursableExpensesGroupedBy: reimbursableExpensesGroup,
-      cccExpensesGroupedBy: cccExpensesGroup,
       expenseState: expenseState.replace(/_/g, ' '),
     };
   }
 
   open() {
     const that = this;
-    that.dialogWidth = '450px';
+    let dialogWidth = '450px';
 
     that.settingsService.getGeneralSettings(that.workspaceId).subscribe(response => {
       if (response.corporate_credit_card_expenses_object) {
-        that.dialogWidth = '750px';
+        dialogWidth = '750px';
       }
     });
 
     const dialogRef = that.dialog.open(ExpenseGroupSettingsDialogComponent, {
-      width: that.dialogWidth,
+      width: dialogWidth,
       data: {
         workspaceId: that.workspaceId
       }

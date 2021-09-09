@@ -82,7 +82,7 @@ export class GeneralMappingsComponent implements OnInit {
     const defaultVendorId = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.form.value.qboVendors : '';
     const defaultVendor = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.qboVendors.filter(filteredVendor => filteredVendor.destination_id === defaultVendorId)[0] : '';
 
-    const isLoading = true;
+    that.isLoading = true;
     const generalMappings: GeneralMapping = {
       accounts_payable_name: accountPayableAccount ? accountPayableAccount.value : null,
       accounts_payable_id: accountPayableAccount ? accountPayableAccount.destination_id : null,

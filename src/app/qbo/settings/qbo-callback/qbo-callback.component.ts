@@ -22,8 +22,8 @@ export class QBOCallbackComponent implements OnInit {
     const realmId: string = that.route.snapshot.queryParams.realmId;
     that.settingsService.connectQBO(workspaceId, code, realmId).subscribe(() => {
       that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`);
-    },(error)=>{
-      that.snackBar.open(`Please choose the correct Quickbooks online account`,null, {
+    }, (error) => {
+      that.snackBar.open(`Please choose the correct Quickbooks online account`, null, {
         duration: 5000
       });
       that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`);

@@ -55,6 +55,8 @@ export class GeneralMappingsComponent implements OnInit {
         const onboarded = that.storageService.get('onboarded');
         if (!onboarded) {
           that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
+        } else {
+          that.isLoading = false;
         }
       }
     });

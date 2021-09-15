@@ -38,6 +38,29 @@ export class GeneralMappingsComponent implements OnInit {
     private storageService: StorageService) {
   }
 
+  redirectHandler() {
+    const that = this;
+
+    that.route.queryParams.subscribe(params => {
+      if (params.redirect_to_employee_mappings) {
+        setTimeout(() => {
+          const destination = that.generalSettings.employee_field_mapping.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
+          that.snackBar.open(`To ensure successful export, map Fyle Employees to ${destination}s in QBO`, '', {
+            duration: 7000
+          });
+          return that.router.navigateByUrl(`workspaces/${that.workspaceId}/settings/employee_mappings`);
+        }, 1000);
+      } else {
+        const onboarded = that.storageService.get('onboarded');
+        if (!onboarded) {
+          that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
+        } else {
+          that.isLoading = false;
+        }
+      }
+    });
+  }
+
   submit() {
     const that = this;
 
@@ -59,6 +82,7 @@ export class GeneralMappingsComponent implements OnInit {
     const defaultVendorId = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.form.value.qboVendors : '';
     const defaultVendor = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.qboVendors.filter(filteredVendor => filteredVendor.destination_id === defaultVendorId)[0] : '';
 
+    that.isLoading = true;
     const generalMappings: GeneralMapping = {
       accounts_payable_name: accountPayableAccount ? accountPayableAccount.value : null,
       accounts_payable_id: accountPayableAccount ? accountPayableAccount.destination_id : null,
@@ -75,13 +99,8 @@ export class GeneralMappingsComponent implements OnInit {
     };
 
     this.mappingsService.postGeneralMappings(generalMappings).subscribe(() => {
-      const onboarded = that.storageService.get('onboarded');
-      if (onboarded) {
-        that.getGeneralMappings();
-      } else {
-        that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
-      }
       that.snackBar.open('General Mappings saved successfully');
+      that.redirectHandler();
     }, () => {
       that.isLoading = false;
       that.snackBar.open('Please fill up the form with valid values');
@@ -156,7 +175,7 @@ export class GeneralMappingsComponent implements OnInit {
       that.form = that.formBuilder.group({
         accountPayableAccounts: [null],
         bankAccounts: [null],
-        qboExpenseAccounts : [null],
+        qboExpenseAccounts: [null],
         cccAccounts: [null],
         billPaymentAccounts: [null],
         qboVendors: [null]
@@ -185,7 +204,7 @@ export class GeneralMappingsComponent implements OnInit {
       that.accountPayableAccounts = responses[2];
       that.qboVendors = responses[3];
       that.billPaymentAccounts = responses[4];
-      that.qboExpenseAccounts = [ ...responses[0], ...responses[1]];
+      that.qboExpenseAccounts = [...responses[0], ...responses[1]];
       that.getGeneralMappings();
     });
   }
@@ -194,7 +213,7 @@ export class GeneralMappingsComponent implements OnInit {
     const that = this;
     that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
     that.isLoading = true;
-    that.settingsService.getCombinedSettings(that.workspaceId).subscribe(settings => {
+    that.settingsService.getGeneralSettings(that.workspaceId).subscribe(settings => {
       that.generalSettings = settings;
       that.isLoading = false;
       that.reset();

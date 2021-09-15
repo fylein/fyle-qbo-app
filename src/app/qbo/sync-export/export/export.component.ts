@@ -112,6 +112,7 @@ export class ExportComponent implements OnInit {
           that.failedExpenseGroupCount = taskResponse.count;
           that.successfulExpenseGroupCount = filteredIds.length - that.failedExpenseGroupCount;
           that.isExporting = false;
+          that.exportedCount = 0;
           that.loadExportableExpenseGroups();
           that.snackBar.open('Export Complete');
         });
@@ -122,7 +123,9 @@ export class ExportComponent implements OnInit {
   createQBOItems() {
     const that = this;
     that.isExporting = true;
-    that.settingsService.getCombinedSettings(that.workspaceId).subscribe((settings) => {
+    that.failedExpenseGroupCount = 0;
+    that.successfulExpenseGroupCount = 0;
+    that.settingsService.getGeneralSettings(that.workspaceId).subscribe((settings) => {
       that.generalSettings = settings;
       const promises = [];
       let allFilteredIds = [];

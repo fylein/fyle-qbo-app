@@ -9,7 +9,7 @@ import { ExpenseField } from '../models/expense-field.model';
 import { MappingDestination } from '../models/mapping-destination.model';
 import { MappingSource } from '../models/mapping-source.model';
 import { Mapping } from '../models/mappings.model';
-import { Cacheable, CacheBuster } from 'ngx-cacheable';
+import { Cacheable, CacheBuster, globalCacheBusterNotifier } from 'ngx-cacheable';
 import { EmployeeMapping } from '../models/employee-mapping.model';
 import { EmployeeMappingsResponse } from '../models/employee-mappings-response.model';
 
@@ -71,6 +71,7 @@ export class MappingsService {
 
   refreshDimension() {
     const workspaceId = this.workspaceService.getWorkspaceId();
+    globalCacheBusterNotifier.next();
 
     this.apiService.post(`/workspaces/${workspaceId}/qbo/refresh_dimensions/`, {}).subscribe();
     this.apiService.post(`/workspaces/${workspaceId}/fyle/refresh_dimensions/`, {}).subscribe();
@@ -283,49 +284,56 @@ export class MappingsService {
     return this.qboDepartments;
   }
 
+  @Cacheable()
   getFyleExpenseFields(): Observable<ExpenseField[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_fields/`, {});
   }
 
+  @Cacheable()
   getFyleEmployees(): Observable<MappingSource[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/fyle/employees/`, {});
   }
 
+  @Cacheable()
   getFyleCategories(): Observable<MappingSource[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/fyle/categories/`, {});
   }
 
+  @Cacheable()
   getQBOVendors(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/vendors/`, {});
   }
 
+  @Cacheable()
   getQBOFields(): Observable<ExpenseField[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/quickbooks_fields/`, {});
   }
 
-
+  @Cacheable()
   getQBOEmployees(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/employees/`, {});
   }
 
+  @Cacheable()
   getQBOCustomers(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/customers/`, {});
   }
 
+  @Cacheable()
   getFyleExpenseCustomFields(attributeType: string): Observable<MappingSource[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
@@ -334,18 +342,21 @@ export class MappingsService {
     });
   }
 
+  @Cacheable()
   getQBOClasses(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/classes/`, {});
   }
 
+  @Cacheable()
   getQBODepartments(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/departments/`, {});
   }
 
+  @Cacheable()
   getExpenseAccounts(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
@@ -354,6 +365,7 @@ export class MappingsService {
     );
   }
 
+  @Cacheable()
   getBankAccounts(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
@@ -362,6 +374,7 @@ export class MappingsService {
     );
   }
 
+  @Cacheable()
   getAccountsPayables(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
@@ -370,6 +383,7 @@ export class MappingsService {
     );
   }
 
+  @Cacheable()
   getBillPaymentAccounts(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
@@ -378,20 +392,13 @@ export class MappingsService {
     );
   }
 
+  @Cacheable()
   getCreditCardAccounts(): Observable<MappingDestination[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(
       `/workspaces/${workspaceId}/qbo/credit_card_accounts/`, {}
     );
-  }
-
-  @CacheBuster({
-    cacheBusterNotifier: generalMappingsCache
-  })
-  postGeneralMappings(generalMappings: GeneralMapping): Observable<GeneralMapping> {
-    const workspaceId = this.workspaceService.getWorkspaceId();
-    return this.apiService.post(`/workspaces/${workspaceId}/mappings/general/`, generalMappings);
   }
 
   @Cacheable({
@@ -402,6 +409,14 @@ export class MappingsService {
     return this.apiService.get(
       `/workspaces/${workspaceId}/mappings/general/`, {}
     );
+  }
+
+  @CacheBuster({
+    cacheBusterNotifier: generalMappingsCache
+  })
+  postGeneralMappings(generalMappings: GeneralMapping): Observable<GeneralMapping> {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+    return this.apiService.post(`/workspaces/${workspaceId}/mappings/general/`, generalMappings);
   }
 
   getMappings(sourceType: string, uri: string = null, limit: number = 500, offset: number = 0, tableDimension: number = 2): Observable<MappingsResponse> {

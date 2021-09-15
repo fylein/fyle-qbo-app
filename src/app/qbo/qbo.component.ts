@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, noop } from 'rxjs';
 import { AuthService } from '../core/services/auth.service';
 import { WorkspaceService } from '../core/services/workspace.service';
 import { SettingsService } from '../core/services/settings.service';
@@ -15,6 +15,7 @@ import { MappingSetting } from '../core/models/mapping-setting.model';
 import { MappingSettingResponse } from '../core/models/mapping-setting-response.model';
 import { MappingsService } from '../core/services/mappings.service';
 import { MatSnackBar } from '@angular/material';
+import * as Sentry from '@sentry/angular';
 
 @Component({
   selector: 'app-qbo',
@@ -80,6 +81,11 @@ export class QboComponent implements OnInit {
   switchWorkspace() {
     this.authService.switchWorkspace();
     this.trackingService.onSwitchWorkspace();
+    Sentry.configureScope(scope => scope.setUser(null));
+  }
+
+  getQboPreferences() {
+    this.billService.getPreferences(this.workspace.id).subscribe(noop);
   }
 
   getSettingsAndNavigate() {
@@ -89,6 +95,7 @@ export class QboComponent implements OnInit {
     if (pathName === '/workspaces') {
       that.router.navigateByUrl(`/workspaces/${that.workspace.id}/dashboard`);
     }
+    that.getQboPreferences();
     that.getGeneralSettings();
     that.setupAccessiblePathWatchers();
   }
@@ -128,30 +135,40 @@ export class QboComponent implements OnInit {
     });
   }
 
+  getOrCreateWorkspace(): Promise<Workspace> {
+    const that = this;
+    return that.workspaceService.getWorkspaces(that.user.org_id).toPromise().then(workspaces => {
+      if (Array.isArray(workspaces) && workspaces.length > 0) {
+        return workspaces[0];
+      } else {
+        return that.workspaceService.createWorkspace().toPromise().then(workspace => {
+          return workspace;
+        });
+      }
+    });
+  }
+
   setupWorkspace() {
     const that = this;
     that.user = that.authService.getUser();
-    that.workspaceService.getWorkspaces(that.user.org_id).subscribe(workspaces => {
-      if (Array.isArray(workspaces) && workspaces.length > 0) {
-        that.workspace = workspaces[0];
-        that.setUserIdentity(that.user.employee_email, workspaces[0].id, {fullName: that.user.full_name});
-        that.getSettingsAndNavigate();
-      } else {
-        that.workspaceService.createWorkspace().subscribe(workspace => {
-          that.workspace = workspace;
-          that.setUserIdentity(that.user.employee_email, workspace.id, {fullName: that.user.full_name});
-          that.getSettingsAndNavigate();
-        });
-      }
-      that.getQboPreferences();
+    that.getOrCreateWorkspace().then((workspace: Workspace) => {
+      that.workspace = workspace;
+      that.setUserIdentity(that.user.employee_email, workspace.id, {fullName: that.user.full_name});
+      that.getSettingsAndNavigate();
+      that.getQboOrgName();
     });
   }
 
   setUserIdentity(email: string, workspaceId: number, properties) {
+    Sentry.setUser({
+      email,
+      workspaceId,
+    });
     this.trackingService.onSignIn(email, workspaceId, properties);
   }
 
   onSignOut() {
+    Sentry.configureScope(scope => scope.setUser(null));
     this.trackingService.onSignOut();
   }
 
@@ -171,7 +188,7 @@ export class QboComponent implements OnInit {
     this.trackingService.onPageVisit('Category Mappings');
   }
 
-  getQboPreferences() {
+  getQboOrgName() {
     const that = this;
     that.billService.getOrgDetails().subscribe((res) => {
       that.qboCompanyName = res.CompanyName;

@@ -126,7 +126,7 @@ export class GeneralConfigurationComponent implements OnInit {
       [
         that.settingsService.getGeneralSettings(that.workspaceId),
         that.settingsService.getMappingSettings(that.workspaceId),
-        that.billService.getOrgDetails()
+        that.settingsService.getQBOCredentials(that.workspaceId)
       ]
     ).subscribe(responses => {
       that.generalSettings = responses[0];
@@ -135,10 +135,6 @@ export class GeneralConfigurationComponent implements OnInit {
       const projectFieldMapping = that.mappingSettings.filter(
         setting => (setting.source_field === 'PROJECT' && setting.destination_field === 'CUSTOMER')
       );
-
-      if (responses[2].Country === 'US') {
-        that.isImportTaxDisabled = true;
-      }
 
       let importProjects = false;
       if (projectFieldMapping.length) {
@@ -184,7 +180,7 @@ export class GeneralConfigurationComponent implements OnInit {
         that.generalSettingsForm.controls.importProjects.disable();
       }
 
-      if (that.isImportTaxDisabled) {
+      if (responses[2].country === 'US') {
         that.generalSettingsForm.controls.importTaxCodes.disable();
       }
 
@@ -210,8 +206,8 @@ export class GeneralConfigurationComponent implements OnInit {
         jeSingleCreditLine: [false]
       });
 
-      that.billService.getOrgDetails().subscribe((res) => {
-        if (res.Country === 'US') {
+      that.settingsService.getQBOCredentials(that.workspaceId).subscribe((res) => {
+        if (res.country === 'US') {
           that.generalSettingsForm.controls.importTaxCodes.disable();
         }
       });

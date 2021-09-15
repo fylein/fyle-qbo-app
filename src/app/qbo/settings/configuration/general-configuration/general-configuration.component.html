@@ -136,12 +136,12 @@
         </div>
       </mat-slide-toggle>
 
-      <mat-slide-toggle color="primary" class="schedule" formControlName="forcedExport">
+      <mat-slide-toggle color="primary" class="schedule" formControlName="changeAccountingPeriod">
         <div class="schedule--toggle-text">Export to next open period
           <mat-icon
             [inline]="true"
             class="info-icon"
-            matTooltip="Expenses on Sage Intacct will be coded to the Department assigned to the employee on Sage Intacct"
+            matTooltip="If the accounting period is closed, the report will be exported at the earliest next open accounting period."
             matTooltipPosition="after">
               info
           </mat-icon>

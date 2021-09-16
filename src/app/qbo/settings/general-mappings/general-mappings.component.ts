@@ -193,30 +193,61 @@ export class GeneralMappingsComponent implements OnInit {
     });
   }
 
+
+ getAttributesFilteredByConfig() {
+  const that = this;
+  const attributes = [];
+
+  if ((that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') && that.generalSettings.reimbursable_expenses_object !== 'EXPENSE') {
+    attributes.push('ACCOUNTS_PAYABLE');
+  }
+
+  if (that.generalSettings.employee_field_mapping === 'EMPLOYEE' && this.generalSettings.reimbursable_expenses_object !== 'EXPENSE') {
+    attributes.push('BANK_ACCOUNT');
+  }
+
+  if (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL') {
+    attributes.push('CREDIT_CARD_ACCOUNT');
+  }
+
+  if (that.generalSettings.reimbursable_expenses_object === 'EXPENSE') {
+    attributes.push('BANK_ACCOUNT', 'CREDIT_CARD_ACCOUNT');
+  }
+
+  if (that.generalSettings.corporate_credit_card_expenses_object === 'BILL') {
+    attributes.push('VENDOR');
+  }
+
+  if (this.generalSettings.sync_fyle_to_qbo_payments) {
+    attributes.push('BANK_ACCOUNT');
+  }
+
+  if (this.generalSettings.import_tax_codes) {
+    attributes.push('TAX_CODE');
+  }
+
+  return attributes;
+}
+
+
   reset() {
     const that = this;
     that.isLoading = true;
-    forkJoin(
-      [
-        that.mappingsService.getBankAccounts(),
-        that.mappingsService.getCreditCardAccounts(),
-        that.mappingsService.getAccountsPayables(),
-        that.mappingsService.getQBOVendors(),
-        that.mappingsService.getBillPaymentAccounts(),
-        that.mappingsService.getQBOTaxCodes(),
-      ]
-    ).subscribe(responses => {
+
+    const attributes = this.getAttributesFilteredByConfig();
+    that.mappingsService.getGroupedQBODestinationAttributes(attributes).subscribe(responses => {
       that.isLoading = false;
-      that.bankAccounts = responses[0];
-      that.cccAccounts = responses[1];
-      that.accountPayableAccounts = responses[2];
-      that.qboVendors = responses[3];
-      that.billPaymentAccounts = responses[4];
-      that.taxCodes = responses[5];
-      that.qboExpenseAccounts = [ ...responses[0], ...responses[1]];
+      that.bankAccounts = responses.BANK_ACCOUNT;
+      that.cccAccounts = responses.CREDIT_CARD_ACCOUNT;
+      that.accountPayableAccounts = responses.ACCOUNTS_PAYABLE;
+      that.qboVendors = responses.VENDOR;
+      that.billPaymentAccounts = responses.BANK_ACCOUNT;
+      that.taxCodes = responses.TAX_CODE;
+      that.qboExpenseAccounts = [ ...responses.BANK_ACCOUNT, ...responses.CREDIT_CARD_ACCOUNT];
       that.getGeneralMappings();
     });
   }
+
 
   ngOnInit() {
     const that = this;

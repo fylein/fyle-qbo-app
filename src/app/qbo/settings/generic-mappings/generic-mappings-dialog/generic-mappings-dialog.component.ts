@@ -118,24 +118,11 @@ export class GenericMappingsDialogComponent implements OnInit {
 
   reset() {
     const that = this;
-    let qboPromise;
-
-    if (that.setting.destination_field === 'CUSTOMER') {
-      qboPromise = that.mappingsService.getQBOCustomers();
-    } else if (that.setting.destination_field === 'CLASS') {
-      qboPromise = that.mappingsService.getQBOClasses();
-    } else if (that.setting.destination_field === 'DEPARTMENT') {
-      qboPromise = that.mappingsService.getQBODepartments();
-    } else if (that.setting.destination_field === 'ACCOUNT') {
-      qboPromise = that.mappingsService.getExpenseAccounts();
-    } else if (that.setting.destination_field === 'TAX_CODE') {
-      qboPromise = that.mappingsService.getQBOTaxCodes();
-    }
 
     that.isLoading = true;
     forkJoin([
       that.mappingsService.getFyleExpenseCustomFields(that.setting.source_field),
-      qboPromise
+      that.mappingsService.getQBODestinationAttributes(that.setting.destination_field)
     ]).subscribe(response => {
       that.isLoading = false;
 

@@ -185,28 +185,27 @@ export class GeneralConfigurationComponent implements OnInit {
       }
 
       that.showAutoCreateOption(that.generalSettings.auto_map_employees, employeeFieldMapping);
-
       that.setupFieldWatchers();
 
       that.isLoading = false;
     }, () => {
       that.mappingSettings = [];
-
       that.isLoading = false;
-      that.generalSettingsForm = that.formBuilder.group({
-        employees: ['', Validators.required],
-        reimburExpense: ['', Validators.required],
-        cccExpense: [null],
-        importCategories: [false],
-        importProjects: [false],
-        importTaxCodes: [null],
-        paymentsSync: [null],
-        autoMapEmployees: [null],
-        autoCreateDestinationEntity: [false],
-        jeSingleCreditLine: [false]
-      });
 
       that.settingsService.getQBOCredentials(that.workspaceId).subscribe((res) => {
+        that.generalSettingsForm = that.formBuilder.group({
+          employees: ['', Validators.required],
+          reimburExpense: ['', Validators.required],
+          cccExpense: [null],
+          importCategories: [false],
+          importProjects: [false],
+          importTaxCodes: [null],
+          paymentsSync: [null],
+          autoMapEmployees: [null],
+          autoCreateDestinationEntity: [false],
+          jeSingleCreditLine: [false]
+        });
+
         if (res.country === 'US') {
           that.generalSettingsForm.controls.importTaxCodes.disable();
         }

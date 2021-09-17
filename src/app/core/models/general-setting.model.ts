@@ -6,6 +6,7 @@ export type GeneralSetting = {
   import_projects?: boolean;
   import_categories: boolean;
   import_tax_codes?: boolean;
+  change_accounting_period?: boolean;
   sync_fyle_to_qbo_payments: boolean;
   sync_qbo_to_fyle_payments: boolean;
   auto_map_employees: string;

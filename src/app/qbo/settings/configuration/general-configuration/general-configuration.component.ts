@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { SettingsService } from 'src/app/core/services/settings.service';
-import { BillsService } from 'src/app/core/services/bills.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
@@ -28,9 +27,8 @@ export class GeneralConfigurationComponent implements OnInit {
   showPaymentsField: boolean;
   showAutoCreate: boolean;
   showJeSingleCreditLine: boolean;
-  isImportTaxDisabled: boolean;
 
-  constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billService: BillsService, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
+  constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
   getExpenseOptions(employeeMappedTo) {
     return {
@@ -181,7 +179,13 @@ export class GeneralConfigurationComponent implements OnInit {
         that.generalSettingsForm.controls.importProjects.disable();
       }
 
-      if (responses[2].country === 'US') {
+      if (!responses[2].country) {
+        that.settingsService.postQBOCredentials(that.workspaceId).subscribe(res => {
+          if (res.country === 'US') {
+            that.generalSettingsForm.controls.importTaxCodes.disable();
+          }
+        });
+      } else if (responses[2].country === 'US' ) {
         that.generalSettingsForm.controls.importTaxCodes.disable();
       }
 
@@ -191,23 +195,29 @@ export class GeneralConfigurationComponent implements OnInit {
       that.isLoading = false;
     }, () => {
       that.mappingSettings = [];
+      that.generalSettingsForm = that.formBuilder.group({
+        employees: ['', Validators.required],
+        reimburExpense: ['', Validators.required],
+        cccExpense: [null],
+        importCategories: [false],
+        importProjects: [false],
+        changeAccountingPeriod: [false],
+        importTaxCodes: [null],
+        paymentsSync: [null],
+        autoMapEmployees: [null],
+        autoCreateDestinationEntity: [false],
+        jeSingleCreditLine: [false]
+      });
       that.isLoading = false;
 
       that.settingsService.getQBOCredentials(that.workspaceId).subscribe((res) => {
-        that.generalSettingsForm = that.formBuilder.group({
-          employees: ['', Validators.required],
-          reimburExpense: ['', Validators.required],
-          cccExpense: [null],
-          importCategories: [false],
-          importProjects: [false],
-          importTaxCodes: [null],
-          paymentsSync: [null],
-          autoMapEmployees: [null],
-          autoCreateDestinationEntity: [false],
-          jeSingleCreditLine: [false]
-        });
-
-        if (res.country === 'US') {
+        if (!res.country) {
+          that.settingsService.postQBOCredentials(that.workspaceId).subscribe(response => {
+            if (response.country === 'US') {
+              that.generalSettingsForm.controls.importTaxCodes.disable();
+            }
+          });
+        } else if (res.country === 'US') {
           that.generalSettingsForm.controls.importTaxCodes.disable();
         }
       });
@@ -399,7 +409,8 @@ export class GeneralConfigurationComponent implements OnInit {
     const that = this;
     that.workspaceId = that.route.snapshot.parent.parent.params.workspace_id;
     that.isLoading = true;
-
-    that.getAllSettings();
+    that.settingsService.getQBOCredentials(that.workspaceId).subscribe((res) => {
+      that.getAllSettings();
+    });
   }
 }

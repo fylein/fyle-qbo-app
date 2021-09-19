@@ -107,6 +107,7 @@
 
       <div class="mat-body-strong" *ngIf="generalSettings.import_tax_codes">
         Default Tax Code
+        <mandatory-field *ngIf="isFieldMandatory('qboTaxCodes')"></mandatory-field>
       </div>
         <mat-form-field floatLabel="always" appearance="outline" required
           *ngIf="generalSettings.import_tax_codes">
@@ -117,6 +118,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
+        <mandatory-error-message listName="default tax code" *ngIf="form.controls.qboTaxCodes.touched && !form.controls.qboTaxCodes.valid"></mandatory-error-message>
       </div>
 
     <button [disabled]="!form.valid" class="configurations--save-btn" mat-flat-button color="primary" (click)="submit()" type="submit">

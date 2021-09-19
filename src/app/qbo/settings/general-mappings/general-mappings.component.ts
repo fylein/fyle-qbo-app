@@ -140,6 +140,10 @@ export class GeneralMappingsComponent implements OnInit {
       that.form.controls.billPaymentAccounts.setValidators(Validators.required);
     }
 
+    if (that.generalSettings.import_tax_codes) {
+      that.form.controls.qboTaxCodes.setValidators(Validators.required);
+    }
+
     if (that.generalMappings) {
       that.form.markAllAsTouched();
     }

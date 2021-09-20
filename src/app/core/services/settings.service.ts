@@ -31,6 +31,13 @@ export class SettingsService {
   @Cacheable({
     cacheBusterObserver: qboCredentialsCache
   })
+  postQBOCredentials(workspaceId: number): Observable<QBOCredentials> {
+    return this.apiService.post('/workspaces/' + workspaceId + '/qbo_credentials/', {});
+  }
+
+  @Cacheable({
+    cacheBusterObserver: qboCredentialsCache
+  })
   getQBOCredentials(workspaceId: number): Observable<QBOCredentials> {
     return this.apiService.get('/workspaces/' + workspaceId + '/credentials/qbo/', {});
   }

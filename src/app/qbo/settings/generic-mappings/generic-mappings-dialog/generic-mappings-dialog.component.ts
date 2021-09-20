@@ -61,11 +61,11 @@ export class GenericMappingsDialogComponent implements OnInit {
         source_value: that.form.controls.sourceField.value.value,
         destination_value: that.form.controls.destinationField.value.value,
         destination_id: that.form.controls.destinationField.value.destination_id
-      }).subscribe(response => {
+      }).subscribe(() => {
         that.snackBar.open('Mapping saved successfully');
         that.isLoading = false;
         that.dialogRef.close();
-      }, err => {
+      }, () => {
         that.snackBar.open('Something went wrong');
         that.isLoading = false;
       });
@@ -118,22 +118,11 @@ export class GenericMappingsDialogComponent implements OnInit {
 
   reset() {
     const that = this;
-    let qboPromise;
-
-    if (that.setting.destination_field === 'CUSTOMER') {
-      qboPromise = that.mappingsService.getQBOCustomers();
-    } else if (that.setting.destination_field === 'CLASS') {
-      qboPromise = that.mappingsService.getQBOClasses();
-    } else if (that.setting.destination_field === 'DEPARTMENT') {
-      qboPromise = that.mappingsService.getQBODepartments();
-    } else if (that.setting.destination_field === 'ACCOUNT') {
-      qboPromise = that.mappingsService.getExpenseAccounts();
-    }
 
     that.isLoading = true;
     forkJoin([
       that.mappingsService.getFyleExpenseCustomFields(that.setting.source_field),
-      qboPromise
+      that.mappingsService.getQBODestinationAttributes(that.setting.destination_field)
     ]).subscribe(response => {
       that.isLoading = false;
 

@@ -123,7 +123,8 @@ export class GeneralConfigurationComponent implements OnInit {
     forkJoin(
       [
         that.settingsService.getGeneralSettings(that.workspaceId),
-        that.settingsService.getMappingSettings(that.workspaceId)
+        that.settingsService.getMappingSettings(that.workspaceId),
+        that.settingsService.getQBOCredentials(that.workspaceId)
       ]
     ).subscribe(responses => {
       that.generalSettings = responses[0];
@@ -158,6 +159,7 @@ export class GeneralConfigurationComponent implements OnInit {
         importCategories: [that.generalSettings.import_categories],
         changeAccountingPeriod: [that.generalSettings.change_accounting_period],
         importProjects: [importProjects],
+        importTaxCodes: [that.generalSettings.import_tax_codes ? that.generalSettings.import_tax_codes : null],
         paymentsSync: [paymentsSyncOption],
         autoMapEmployees: [that.generalSettings.auto_map_employees],
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
@@ -177,14 +179,22 @@ export class GeneralConfigurationComponent implements OnInit {
         that.generalSettingsForm.controls.importProjects.disable();
       }
 
-      that.showAutoCreateOption(that.generalSettings.auto_map_employees, employeeFieldMapping);
+      if (!responses[2].country) {
+        that.settingsService.postQBOCredentials(that.workspaceId).subscribe(res => {
+          if (res.country === 'US') {
+            that.generalSettingsForm.controls.importTaxCodes.disable();
+          }
+        });
+      } else if (responses[2].country === 'US' ) {
+        that.generalSettingsForm.controls.importTaxCodes.disable();
+      }
 
+      that.showAutoCreateOption(that.generalSettings.auto_map_employees, employeeFieldMapping);
       that.setupFieldWatchers();
 
       that.isLoading = false;
     }, () => {
       that.mappingSettings = [];
-      that.isLoading = false;
       that.generalSettingsForm = that.formBuilder.group({
         employees: ['', Validators.required],
         reimburExpense: ['', Validators.required],
@@ -192,10 +202,24 @@ export class GeneralConfigurationComponent implements OnInit {
         importCategories: [false],
         importProjects: [false],
         changeAccountingPeriod: [false],
+        importTaxCodes: [null],
         paymentsSync: [null],
         autoMapEmployees: [null],
         autoCreateDestinationEntity: [false],
         jeSingleCreditLine: [false]
+      });
+      that.isLoading = false;
+
+      that.settingsService.getQBOCredentials(that.workspaceId).subscribe((res) => {
+        if (!res.country) {
+          that.settingsService.postQBOCredentials(that.workspaceId).subscribe(response => {
+            if (response.country === 'US') {
+              that.generalSettingsForm.controls.importTaxCodes.disable();
+            }
+          });
+        } else if (res.country === 'US') {
+          that.generalSettingsForm.controls.importTaxCodes.disable();
+        }
       });
 
       that.setupFieldWatchers();
@@ -249,7 +273,6 @@ export class GeneralConfigurationComponent implements OnInit {
 
   postConfigurationsAndMappingSettings(generalSettingsPayload: GeneralSetting, mappingSettingsPayload: MappingSetting[], redirectToGeneralMappings: boolean = false, redirectToEmployeeMappings: boolean = false) {
     const that = this;
-
     that.isLoading = true;
     forkJoin(
       [
@@ -289,6 +312,7 @@ export class GeneralConfigurationComponent implements OnInit {
     const employeeMappingsObject = that.generalSettingsForm.value.employees;
     const importCategories = that.generalSettingsForm.value.importCategories;
     const importProjects = that.generalSettingsForm.value.importProjects ? that.generalSettingsForm.value.importProjects : false;
+    const importTaxCodes = that.generalSettingsForm.value.importTaxCodes ? that.generalSettingsForm.value.importTaxCodes : null;
     const changeAccountingPeriod = that.generalSettingsForm.value.changeAccountingPeriod ? that.generalSettingsForm.value.changeAccountingPeriod : false;
     const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
     const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
@@ -300,6 +324,13 @@ export class GeneralConfigurationComponent implements OnInit {
     if (that.generalSettingsForm.controls.paymentsSync.value) {
       fyleToQuickbooks = that.generalSettingsForm.value.paymentsSync === 'sync_fyle_to_qbo_payments' ? true : false;
       quickbooksToFyle = that.generalSettingsForm.value.paymentsSync === 'sync_qbo_to_fyle_payments' ? true : false;
+    }
+
+    if (importTaxCodes) {
+      mappingsSettingsPayload.push({
+        source_field: 'TAX_GROUP',
+        destination_field: 'TAX_CODE'
+      });
     }
 
     if (importProjects) {
@@ -328,6 +359,7 @@ export class GeneralConfigurationComponent implements OnInit {
       corporate_credit_card_expenses_object: cccExpensesObject,
       import_categories: importCategories,
       import_projects: importProjects,
+      import_tax_codes: importTaxCodes,
       change_accounting_period: changeAccountingPeriod,
       sync_fyle_to_qbo_payments: fyleToQuickbooks,
       sync_qbo_to_fyle_payments: quickbooksToFyle,
@@ -377,7 +409,8 @@ export class GeneralConfigurationComponent implements OnInit {
     const that = this;
     that.workspaceId = that.route.snapshot.parent.parent.params.workspace_id;
     that.isLoading = true;
-
-    that.getAllSettings();
+    that.settingsService.getQBOCredentials(that.workspaceId).subscribe((res) => {
+      that.getAllSettings();
+    });
   }
 }

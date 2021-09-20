@@ -5,6 +5,7 @@ export type GeneralSetting = {
   corporate_credit_card_expenses_object: string;
   import_projects?: boolean;
   import_categories: boolean;
+  import_tax_codes?: boolean;
   change_accounting_period?: boolean;
   sync_fyle_to_qbo_payments: boolean;
   sync_qbo_to_fyle_payments: boolean;

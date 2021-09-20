@@ -10,6 +10,7 @@ import { QboComponent } from 'src/app/qbo/qbo.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralConfigurationDialogComponent } from './general-configuration-dialog/general-configuration-dialog.component';
 import { UpdatedConfiguration } from 'src/app/core/models/updated-configuration';
+import { BillsService } from 'src/app/core/services/bills.service';
 
 @Component({
   selector: 'app-general-configuration',
@@ -28,7 +29,7 @@ export class GeneralConfigurationComponent implements OnInit {
   showAutoCreate: boolean;
   showJeSingleCreditLine: boolean;
 
-  constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
+  constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billsService: BillsService, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
   getExpenseOptions(employeeMappedTo) {
     return {
@@ -75,6 +76,19 @@ export class GeneralConfigurationComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  disableImportTaxes(response) {
+    const that = this;
+    if (!response.country) {
+      that.billsService.postPreferences(that.workspaceId).subscribe(res => {
+        if (res.country === 'US') {
+          that.generalSettingsForm.controls.importTaxCodes.disable();
+        }
+      });
+    } else if (response.country === 'US' ) {
+      that.generalSettingsForm.controls.importTaxCodes.disable();
+    }
   }
 
   setupFieldWatchers() {
@@ -179,15 +193,7 @@ export class GeneralConfigurationComponent implements OnInit {
         that.generalSettingsForm.controls.importProjects.disable();
       }
 
-      if (!responses[2].country) {
-        that.settingsService.postQBOCredentials(that.workspaceId).subscribe(res => {
-          if (res.country === 'US') {
-            that.generalSettingsForm.controls.importTaxCodes.disable();
-          }
-        });
-      } else if (responses[2].country === 'US' ) {
-        that.generalSettingsForm.controls.importTaxCodes.disable();
-      }
+      that.disableImportTaxes(responses[2]);
 
       that.showAutoCreateOption(that.generalSettings.auto_map_employees, employeeFieldMapping);
       that.setupFieldWatchers();
@@ -211,15 +217,7 @@ export class GeneralConfigurationComponent implements OnInit {
       that.isLoading = false;
 
       that.settingsService.getQBOCredentials(that.workspaceId).subscribe((res) => {
-        if (!res.country) {
-          that.settingsService.postQBOCredentials(that.workspaceId).subscribe(response => {
-            if (response.country === 'US') {
-              that.generalSettingsForm.controls.importTaxCodes.disable();
-            }
-          });
-        } else if (res.country === 'US') {
-          that.generalSettingsForm.controls.importTaxCodes.disable();
-        }
+        that.disableImportTaxes(res);
       });
 
       that.setupFieldWatchers();
@@ -409,8 +407,6 @@ export class GeneralConfigurationComponent implements OnInit {
     const that = this;
     that.workspaceId = that.route.snapshot.parent.parent.params.workspace_id;
     that.isLoading = true;
-    that.settingsService.getQBOCredentials(that.workspaceId).subscribe((res) => {
-      that.getAllSettings();
-    });
+    that.getAllSettings();
   }
 }

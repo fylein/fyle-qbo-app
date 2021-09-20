@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Observable, from } from 'rxjs';
+import { Observable, from, Subject } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 import { ExpenseGroupResponse } from 'src/app/core/models/expense-group-response.model';
 import { ExpenseGroup } from 'src/app/core/models/expense-group.model';
 import { Expense } from '../models/expense.model';
-import { WorkspaceService } from './workspace.service';
+import { WorkspaceService, workspaceCache$ } from './workspace.service';
 import { ExpenseGroupSetting } from '../models/expense-group-setting.model';
+import { Cacheable, CacheBuster } from 'ngx-cacheable';
+import { Count } from '../models/count.model';
+
+const expenseGroupSettingsCache$ = new Subject<void>();
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +31,11 @@ export class ExpenseGroupsService {
     );
   }
 
+  getExpenseGroupCountByState(state: string): Observable<Count> {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+    return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_groups/count/`, {state});
+  }
+
   getAllExpenseGroups(state: string): Observable<ExpenseGroupResponse> {
     const limit = 500;
     const offset = 0;
@@ -37,11 +46,17 @@ export class ExpenseGroupsService {
     return from(this.getAllExpenseGroupsInternal(limit, offset, state, allExpenseGroupsResponse));
   }
 
+  @Cacheable({
+    cacheBusterObserver: expenseGroupSettingsCache$
+  })
   getExpenseGroupSettings(): Observable<ExpenseGroupSetting> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_group_settings/`, {});
   }
 
+  @CacheBuster({
+    cacheBusterNotifier: expenseGroupSettingsCache$
+  })
   createExpenseGroupsSettings(expensesGroupedBy: string[], expenseState: string[], exportDateType: string): Observable<ExpenseGroupSetting> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.post(`/workspaces/${workspaceId}/fyle/expense_group_settings/`, {
@@ -69,16 +84,21 @@ export class ExpenseGroupsService {
     });
   }
 
+  @Cacheable()
   getExpensesByExpenseGroupId(expenseGroupId: number): Observable<Expense[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_groups/${expenseGroupId}/expenses/`, {});
   }
 
+  @Cacheable()
   getExpensesGroupById(expenseGroupId: number): Observable<ExpenseGroup> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_groups/${expenseGroupId}/`, {});
   }
 
+  @CacheBuster({
+    cacheBusterNotifier: workspaceCache$
+  })
   syncExpenseGroups() {
     const workspaceId = this.workspaceService.getWorkspaceId();
     return this.apiService.post(`/workspaces/${workspaceId}/fyle/expense_groups/trigger/`, {});

@@ -4,6 +4,7 @@ import { ApiService } from 'src/app/core/services/api.service';
 import { Task } from '../models/task.model';
 import { TaskResponse } from '../models/task-reponse.model';
 import { WorkspaceService } from './workspace.service';
+import { Cacheable } from 'ngx-cacheable';
 
 @Injectable({
   providedIn: 'root',
@@ -66,6 +67,7 @@ export class TasksService {
     });
   }
 
+  @Cacheable()
   getTaskByExpenseGroupId(expenseGroupId: number): Observable<Task> {
     const workspaceId = this.workspaceService.getWorkspaceId();
 

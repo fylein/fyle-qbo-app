@@ -99,7 +99,7 @@
         <mat-form-field floatLabel="always" appearance="outline" fxFlex="100">
           <mat-select placeholder="Choose how to auto map employees between Fyle and Quickbooks Online"
             formControlName="autoMapEmployees">
-            <mat-option>
+            <mat-option [value]="null">
               None
             </mat-option>
             <mat-option [value]="'NAME'">
@@ -116,7 +116,16 @@
       </div>
 
       <mat-slide-toggle color="primary" class="schedule" *ngIf="showAutoCreate" formControlName="autoCreateDestinationEntity">
-        <div class="schedule--toggle-text">Auto Create Vendor on Quickbooks Online</div>
+        <div class="schedule--toggle-text">
+          Auto Create Vendor on Quickbooks Online
+          <mat-icon
+            [inline]="true"
+            class="info-icon"
+            matTooltip="While exporting reimbursable expenses, Fyle will automatically create a Vendor in Quickbooks if a match does not exist already"
+            matTooltipPosition="after">
+              info
+          </mat-icon>
+        </div>
       </mat-slide-toggle>
 
       <mat-slide-toggle color="primary" class="schedule" formControlName="importCategories">
@@ -136,6 +145,18 @@
         </div>
       </mat-slide-toggle>
 
+      <mat-slide-toggle color="primary" class="schedule" formControlName="changeAccountingPeriod">
+        <div class="schedule--toggle-text">Export to next open period
+          <mat-icon
+            [inline]="true"
+            class="info-icon"
+            matTooltip="If the accounting period is closed, the report will be exported at the earliest next open accounting period."
+            matTooltipPosition="after">
+              info
+          </mat-icon>
+        </div>
+      </mat-slide-toggle>
+      
       <button [disabled]="!generalSettingsForm.valid" class="configurations--save-btn" mat-flat-button
         color="primary" (click)="save()" type="submit">
         Save

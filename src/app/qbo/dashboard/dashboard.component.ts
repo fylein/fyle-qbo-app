@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from 'src/app/core/services/settings.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, onErrorResumeNext } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { MappingsService } from 'src/app/core/services/mappings.service';
 import { environment } from 'src/environments/environment';
 import { ExpenseGroupsService } from 'src/app/core/services/expense-groups.service';
@@ -9,6 +9,9 @@ import { StorageService } from 'src/app/core/services/storage.service';
 import { WindowReferenceService } from 'src/app/core/services/window.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
+import { TrackingService } from 'src/app/core/services/tracking.service';
+import { QboComponent } from '../qbo.component';
+import { Count } from 'src/app/core/models/count.model';
 
 const FYLE_URL = environment.fyle_url;
 const FYLE_CLIENT_ID = environment.fyle_client_id;
@@ -54,11 +57,12 @@ export class DashboardComponent implements OnInit {
     private expenseGroupService: ExpenseGroupsService,
     private settingsService: SettingsService,
     private route: ActivatedRoute,
-    private router: Router,
+    private qbo: QboComponent,
     private snackBar: MatSnackBar,
     private mappingsService: MappingsService,
     private storageService: StorageService,
-    private windowReferenceService: WindowReferenceService) {
+    private windowReferenceService: WindowReferenceService,
+    private trackingService: TrackingService) {
       this.windowReference = this.windowReferenceService.nativeWindow;
     }
 
@@ -66,9 +70,31 @@ export class DashboardComponent implements OnInit {
     this.windowReference.location.href = `${FYLE_URL}/app/developers/#/oauth/authorize?client_id=${FYLE_CLIENT_ID}&redirect_uri=${APP_URL}/workspaces/fyle/callback&response_type=code&state=${this.workspaceId}`;
   }
 
-  connectQBO() {
+  connectQBO(onboarding: boolean = false) {
     this.windowReference.location.href = QBO_AUTHORIZE_URI + '?client_id=' + QBO_CLIENT_ID + '&scope=' + QBO_SCOPE + '&response_type=code&redirect_uri=' + APP_URL + '/workspaces/qbo/callback&state=' + this.workspaceId;
+    this.onConnectQBOPageVisit(onboarding);
   }
+
+  onConnectQBOPageVisit(onboarding: boolean = false) {
+    this.trackingService.onPageVisit('Connect Quickbooks Online', onboarding);
+  }
+
+  onConfigurationsPageVisit(onboarding: boolean = false) {
+    this.trackingService.onPageVisit('Configurations', onboarding);
+  }
+
+  onGeneralMappingsPageVisit(onboarding: boolean = false) {
+    this.trackingService.onPageVisit('Genral Mappings', onboarding);
+  }
+
+  onEmployeeMappingsPageVisit(onboarding: boolean = false) {
+    this.trackingService.onPageVisit('Employee Mappings', onboarding);
+  }
+
+  onCategoryMappingsPageVisit(onboarding: boolean = false) {
+    this.trackingService.onPageVisit('Category Mappings', onboarding);
+  }
+
   // TODO: remove promises and do with rxjs observables
   checkFyleLoginStatus() {
     const that = this;
@@ -146,8 +172,8 @@ export class DashboardComponent implements OnInit {
   loadSuccessfullExpenseGroupsCount() {
     const that = this;
     // TODO: remove promises and do with rxjs observables
-    return that.expenseGroupService.getAllExpenseGroups('COMPLETE').toPromise().then((res) => {
-      that.successfulExpenseGroupsCount = res.results.length;
+    return that.expenseGroupService.getExpenseGroupCountByState('COMPLETE').toPromise().then((res: Count) => {
+      that.successfulExpenseGroupsCount = res.count;
       return res;
     });
   }
@@ -155,8 +181,8 @@ export class DashboardComponent implements OnInit {
   loadFailedlExpenseGroupsCount() {
     const that = this;
     // TODO: remove promises and do with rxjs observables
-    return that.expenseGroupService.getAllExpenseGroups('FAILED').toPromise().then((res) => {
-      that.failedExpenseGroupsCount = res.results.length;
+    return that.expenseGroupService.getExpenseGroupCountByState('FAILED').toPromise().then((res: Count) => {
+      that.failedExpenseGroupsCount = res.count;
       return res;
     });
   }
@@ -177,9 +203,7 @@ export class DashboardComponent implements OnInit {
   syncDimension() {
     const that = this;
 
-    that.mappingsService.refreshFyleDimensions().subscribe(() => {});
-    that.mappingsService.refreshQuickbooksDimensions().subscribe(() => {});
-
+    that.mappingsService.refreshDimension();
     that.snackBar.open('Refreshing Fyle and Quickbooks Data');
   }
 
@@ -232,6 +256,7 @@ export class DashboardComponent implements OnInit {
         }).then(() => {
           that.currentState = onboardingStates.isOnboarded;
           that.storageService.set('onboarded', true);
+          that.qbo.hideRefreshIconVisibility();
           return that.loadDashboardData();
         }).catch(() => {
           // do nothing as this just means some steps are left

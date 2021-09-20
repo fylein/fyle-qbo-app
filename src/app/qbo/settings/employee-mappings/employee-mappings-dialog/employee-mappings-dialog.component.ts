@@ -208,7 +208,7 @@ export class EmployeeMappingsDialogComponent implements OnInit {
     }
 
     that.isLoading = true;
-    that.settingsService.getCombinedSettings(that.workSpaceId).subscribe(settings => {
+    that.settingsService.getGeneralSettings(that.workSpaceId).subscribe(settings => {
       that.generalSettings = settings;
       that.isLoading = false;
       that.reset();

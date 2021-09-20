@@ -8,5 +8,8 @@ export const environment = {
   qbo_client_id: '{{QBO_CLIENT_ID}}',
   qbo_scope: '{{QBO_SCOPE}}',
   qbo_authorize_uri: '{{QBO_AUTHORIZE_URI}}',
-  qbo_app_url: '{{QBO_APP_URL}}'
+  qbo_app_url: '{{QBO_APP_URL}}',
+  hotjar_id : '{{HOTJAR_ID}}',
+  sentry_dsn: '{{SENTRY_DSN}}',
+  release: '{{RELEASE}}'
 };

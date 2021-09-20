@@ -101,7 +101,7 @@ export class ExportComponent implements OnInit {
 
   checkResultsOfExport(filteredIds: number[]) {
     const that = this;
-    const taskType = ['CREATING_BILL', 'CREATING_EXPENSE', 'CREATING_CHECK', 'CREATING_CREDIT_CARD_PURCHASE', 'CREATING_JOURNAL_ENTRY'];
+    const taskType = ['CREATING_BILL', 'CREATING_EXPENSE', 'CREATING_CHECK', 'CREATING_CREDIT_CARD_PURCHASE', 'CREATING_JOURNAL_ENTRY', 'CREATING_CREDIT_CARD_CREDIT'];
     interval(3000).pipe(
       switchMap(() => from(that.taskService.getAllTasks([], filteredIds, taskType))),
       takeWhile((response) => response.results.filter(task => (task.status === 'IN_PROGRESS' || task.status === 'ENQUEUED') && filteredIds.includes(task.expense_group)).length > 0, true)
@@ -112,6 +112,7 @@ export class ExportComponent implements OnInit {
           that.failedExpenseGroupCount = taskResponse.count;
           that.successfulExpenseGroupCount = filteredIds.length - that.failedExpenseGroupCount;
           that.isExporting = false;
+          that.exportedCount = 0;
           that.loadExportableExpenseGroups();
           that.snackBar.open('Export Complete');
         });
@@ -122,7 +123,9 @@ export class ExportComponent implements OnInit {
   createQBOItems() {
     const that = this;
     that.isExporting = true;
-    that.settingsService.getCombinedSettings(that.workspaceId).subscribe((settings) => {
+    that.failedExpenseGroupCount = 0;
+    that.successfulExpenseGroupCount = 0;
+    that.settingsService.getGeneralSettings(that.workspaceId).subscribe((settings) => {
       that.generalSettings = settings;
       const promises = [];
       let allFilteredIds = [];

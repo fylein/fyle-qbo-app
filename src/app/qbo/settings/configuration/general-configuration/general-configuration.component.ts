@@ -80,13 +80,6 @@ export class GeneralConfigurationComponent implements OnInit {
     return false;
   }
 
-  disableImportTaxes() {
-    const that = this;
-    if (that.qboCompanyCountry === 'US') {
-      that.generalSettingsForm.controls.importTaxCodes.disable();
-    }
-  }
-
   setupFieldWatchers() {
     const that = this;
 
@@ -125,6 +118,10 @@ export class GeneralConfigurationComponent implements OnInit {
         that.generalSettingsForm.controls.autoCreateDestinationEntity.setValue(false);
       }
     });
+
+    if (that.qboCompanyCountry === 'US') {
+      that.generalSettingsForm.controls.importTaxCodes.disable();
+    }
   }
 
   getAllSettings() {
@@ -188,8 +185,6 @@ export class GeneralConfigurationComponent implements OnInit {
         that.generalSettingsForm.controls.importProjects.disable();
       }
 
-      that.disableImportTaxes();
-
       that.showAutoCreateOption(that.generalSettings.auto_map_employees, employeeFieldMapping);
       that.setupFieldWatchers();
 
@@ -209,10 +204,9 @@ export class GeneralConfigurationComponent implements OnInit {
         autoCreateDestinationEntity: [false],
         jeSingleCreditLine: [false]
       });
-      that.isLoading = false;
 
-      that.disableImportTaxes();
       that.setupFieldWatchers();
+      that.isLoading = false;
     });
   }
 

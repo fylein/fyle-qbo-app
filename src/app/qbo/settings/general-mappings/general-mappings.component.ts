@@ -230,7 +230,7 @@ export class GeneralMappingsComponent implements OnInit {
     attributes.push('TAX_CODE');
   }
 
-  return attributes;
+  return [...new Set(attributes)];
 }
 
 

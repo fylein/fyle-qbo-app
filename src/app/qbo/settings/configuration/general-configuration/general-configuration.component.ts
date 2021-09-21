@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { GeneralConfigurationDialogComponent } from './general-configuration-dialog/general-configuration-dialog.component';
 import { UpdatedConfiguration } from 'src/app/core/models/updated-configuration';
 import { BillsService } from 'src/app/core/services/bills.service';
+import { QBOCredentials } from 'src/app/core/models/qbo-credentials.model';
 
 @Component({
   selector: 'app-general-configuration',
@@ -23,6 +24,7 @@ export class GeneralConfigurationComponent implements OnInit {
   generalSettingsForm: FormGroup;
   expenseOptions: { label: string, value: string }[];
   workspaceId: number;
+  qboCompanyCountry: string;
   generalSettings: GeneralSetting;
   mappingSettings: MappingSetting[];
   showPaymentsField: boolean;
@@ -78,15 +80,10 @@ export class GeneralConfigurationComponent implements OnInit {
     return false;
   }
 
-  disableImportTaxes(response) {
+  disableImportTaxes() {
+    console.log(this.qboCompanyCountry)
     const that = this;
-    if (!response.country) {
-      that.billsService.postPreferences(that.workspaceId).subscribe(res => {
-        if (res.country === 'US') {
-          that.generalSettingsForm.controls.importTaxCodes.disable();
-        }
-      });
-    } else if (response.country === 'US' ) {
+    if (that.qboCompanyCountry === 'US') {
       that.generalSettingsForm.controls.importTaxCodes.disable();
     }
   }
@@ -138,7 +135,6 @@ export class GeneralConfigurationComponent implements OnInit {
       [
         that.settingsService.getGeneralSettings(that.workspaceId),
         that.settingsService.getMappingSettings(that.workspaceId),
-        that.settingsService.getQBOCredentials(that.workspaceId)
       ]
     ).subscribe(responses => {
       that.generalSettings = responses[0];
@@ -193,7 +189,7 @@ export class GeneralConfigurationComponent implements OnInit {
         that.generalSettingsForm.controls.importProjects.disable();
       }
 
-      that.disableImportTaxes(responses[2]);
+      that.disableImportTaxes();
 
       that.showAutoCreateOption(that.generalSettings.auto_map_employees, employeeFieldMapping);
       that.setupFieldWatchers();
@@ -216,10 +212,7 @@ export class GeneralConfigurationComponent implements OnInit {
       });
       that.isLoading = false;
 
-      that.settingsService.getQBOCredentials(that.workspaceId).subscribe((res) => {
-        that.disableImportTaxes(res);
-      });
-
+      that.disableImportTaxes();
       that.setupFieldWatchers();
     });
   }
@@ -403,10 +396,29 @@ export class GeneralConfigurationComponent implements OnInit {
     }
   }
 
+  getQboCompanyName(): Promise<string> {
+    const that = this;
+    return that.settingsService.getQBOCredentials(that.workspaceId).toPromise().then((qboCredentials: QBOCredentials) => {
+      if (qboCredentials.country) {
+        return qboCredentials.country;
+      } else {
+        return that.billsService.postPreferences(that.workspaceId).toPromise().then((preference: QBOCredentials) => {
+          return preference.country;
+        }).catch(() =>  {
+          return '';
+        })
+      }
+    });
+  }
+
+
   ngOnInit() {
     const that = this;
     that.workspaceId = that.route.snapshot.parent.parent.params.workspace_id;
     that.isLoading = true;
-    that.getAllSettings();
+    that.getQboCompanyName().then((qboCountry: string) => {
+      that.qboCompanyCountry = qboCountry;
+      that.getAllSettings();
+    });
   }
 }

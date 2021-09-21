@@ -81,7 +81,6 @@ export class GeneralConfigurationComponent implements OnInit {
   }
 
   disableImportTaxes() {
-    console.log(this.qboCompanyCountry)
     const that = this;
     if (that.qboCompanyCountry === 'US') {
       that.generalSettingsForm.controls.importTaxCodes.disable();
@@ -406,7 +405,7 @@ export class GeneralConfigurationComponent implements OnInit {
           return preference.country;
         }).catch(() =>  {
           return '';
-        })
+        });
       }
     });
   }

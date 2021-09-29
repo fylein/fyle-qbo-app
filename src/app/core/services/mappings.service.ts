@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { empty, Observable, Subject } from 'rxjs';
+import { empty, Observable, Subject, from } from 'rxjs';
 import { concatMap, expand, map, publishReplay, reduce, refCount } from 'rxjs/operators';
 import { ApiService } from 'src/app/core/services/api.service';
 import { GeneralMapping } from '../models/general-mapping.model';
@@ -12,6 +12,7 @@ import { Mapping } from '../models/mappings.model';
 import { Cacheable, CacheBuster, globalCacheBusterNotifier } from 'ngx-cacheable';
 import { EmployeeMapping } from '../models/employee-mapping.model';
 import { EmployeeMappingsResponse } from '../models/employee-mappings-response.model';
+import { GroupedDestinationAttributes } from '../models/grouped-destination-attribute-model';
 
 const generalMappingsCache = new Subject<void>();
 
@@ -30,6 +31,7 @@ export class MappingsService {
   qboEmployees: Observable<MappingDestination[]>;
   qboCustomers: Observable<MappingDestination[]>;
   qboDepartments: Observable<MappingDestination[]>;
+  qboTaxCodes: Observable<MappingDestination[]>;
   qboClasses: Observable<MappingDestination[]>;
   accountPayables: Observable<MappingDestination[]>;
   bankAccounts: Observable<MappingDestination[]>;
@@ -284,6 +286,33 @@ export class MappingsService {
     return this.qboDepartments;
   }
 
+  getQBODestinationAttributes(attributeTypes: string | string[]): Observable<MappingDestination[]> {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+
+    return this.apiService.get(`/workspaces/${workspaceId}/qbo/destination_attributes/`, {
+      attribute_types: attributeTypes
+    });
+  }
+
+  getGroupedQBODestinationAttributes(attributeTypes: string[]): Observable<GroupedDestinationAttributes> {
+    return from(this.getQBODestinationAttributes(attributeTypes).toPromise().then((response: MappingDestination[]) => {
+      return response.reduce((groupedAttributes: GroupedDestinationAttributes, attribute: MappingDestination) => {
+        const group: MappingDestination[] = groupedAttributes[attribute.attribute_type] || [];
+        group.push(attribute);
+        groupedAttributes[attribute.attribute_type] = group;
+
+        return groupedAttributes;
+      }, {
+        BANK_ACCOUNT: [],
+        CREDIT_CARD_ACCOUNT: [],
+        ACCOUNTS_PAYABLE: [],
+        VENDOR: [],
+        ACCOUNT: [],
+        TAX_CODE: []
+      });
+    }));
+  }
+
   @Cacheable()
   getFyleExpenseFields(): Observable<ExpenseField[]> {
     const workspaceId = this.workspaceService.getWorkspaceId();
@@ -324,6 +353,13 @@ export class MappingsService {
     const workspaceId = this.workspaceService.getWorkspaceId();
 
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/employees/`, {});
+  }
+
+  @Cacheable()
+  getQBOTaxCodes(): Observable<MappingDestination[]> {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+
+    return this.apiService.get(`/workspaces/${workspaceId}/qbo/tax_codes/`, {});
   }
 
   @Cacheable()

@@ -24,6 +24,7 @@ export class GeneralMappingsComponent implements OnInit {
   billPaymentAccounts: MappingDestination[];
   qboExpenseAccounts: MappingDestination[];
   qboVendors: MappingDestination[];
+  taxCodes: MappingDestination[];
   generalMappings: GeneralMapping;
   generalSettings: GeneralSetting;
   isLoading = true;
@@ -82,7 +83,9 @@ export class GeneralMappingsComponent implements OnInit {
     const defaultVendorId = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.form.value.qboVendors : '';
     const defaultVendor = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.qboVendors.filter(filteredVendor => filteredVendor.destination_id === defaultVendorId)[0] : '';
 
-    that.isLoading = true;
+    const defaultTaxCodeId = that.form.value.qboTaxCodes;
+    const defaultTaxCode = that.taxCodes.filter(filteredTaxCode => filteredTaxCode.destination_id === defaultTaxCodeId)[0];
+
     const generalMappings: GeneralMapping = {
       accounts_payable_name: accountPayableAccount ? accountPayableAccount.value : null,
       accounts_payable_id: accountPayableAccount ? accountPayableAccount.destination_id : null,
@@ -95,7 +98,9 @@ export class GeneralMappingsComponent implements OnInit {
       bill_payment_account_name: billPaymentAccount ? billPaymentAccount.value : null,
       bill_payment_account_id: billPaymentAccount ? billPaymentAccount.destination_id : null,
       default_ccc_vendor_name: defaultVendor ? defaultVendor.value : null,
-      default_ccc_vendor_id: defaultVendor ? defaultVendor.destination_id : null
+      default_ccc_vendor_id: defaultVendor ? defaultVendor.destination_id : null,
+      default_tax_code_name: defaultTaxCode ? defaultTaxCode.value : null,
+      default_tax_code_id: defaultTaxCode ? defaultTaxCode.destination_id : null
     };
 
     this.mappingsService.postGeneralMappings(generalMappings).subscribe(() => {
@@ -135,6 +140,10 @@ export class GeneralMappingsComponent implements OnInit {
       that.form.controls.billPaymentAccounts.setValidators(Validators.required);
     }
 
+    if (that.generalSettings.import_tax_codes) {
+      that.form.controls.qboTaxCodes.setValidators(Validators.required);
+    }
+
     if (that.generalMappings) {
       that.form.markAllAsTouched();
     }
@@ -165,7 +174,8 @@ export class GeneralMappingsComponent implements OnInit {
         qboExpenseAccounts: [that.generalMappings ? that.generalMappings.qbo_expense_account_id : ''],
         cccAccounts: [that.generalMappings ? that.generalMappings.default_ccc_account_id : ''],
         billPaymentAccounts: [that.generalMappings ? that.generalMappings.bill_payment_account_id : ''],
-        qboVendors: [that.generalMappings ? that.generalMappings.default_ccc_vendor_id : '']
+        qboVendors: [that.generalMappings ? that.generalMappings.default_ccc_vendor_id : ''],
+        qboTaxCodes: [that.generalMappings ? that.generalMappings.default_tax_code_id : '']
       });
 
       that.setMandatoryField();
@@ -178,7 +188,8 @@ export class GeneralMappingsComponent implements OnInit {
         qboExpenseAccounts: [null],
         cccAccounts: [null],
         billPaymentAccounts: [null],
-        qboVendors: [null]
+        qboVendors: [null],
+        qboTaxCodes: [null],
       });
 
       that.setMandatoryField();
@@ -186,28 +197,61 @@ export class GeneralMappingsComponent implements OnInit {
     });
   }
 
+
+ getAttributesFilteredByConfig() {
+  const that = this;
+  const attributes = [];
+
+  if ((that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') && that.generalSettings.reimbursable_expenses_object !== 'EXPENSE') {
+    attributes.push('ACCOUNTS_PAYABLE');
+  }
+
+  if (that.generalSettings.employee_field_mapping === 'EMPLOYEE' && this.generalSettings.reimbursable_expenses_object !== 'EXPENSE') {
+    attributes.push('BANK_ACCOUNT');
+  }
+
+  if (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL') {
+    attributes.push('CREDIT_CARD_ACCOUNT');
+  }
+
+  if (that.generalSettings.reimbursable_expenses_object === 'EXPENSE') {
+    attributes.push('BANK_ACCOUNT', 'CREDIT_CARD_ACCOUNT');
+  }
+
+  if (that.generalSettings.corporate_credit_card_expenses_object === 'BILL') {
+    attributes.push('VENDOR');
+  }
+
+  if (this.generalSettings.sync_fyle_to_qbo_payments) {
+    attributes.push('BANK_ACCOUNT');
+  }
+
+  if (this.generalSettings.import_tax_codes) {
+    attributes.push('TAX_CODE');
+  }
+
+  return [...new Set(attributes)];
+}
+
+
   reset() {
     const that = this;
     that.isLoading = true;
-    forkJoin(
-      [
-        that.mappingsService.getBankAccounts(),
-        that.mappingsService.getCreditCardAccounts(),
-        that.mappingsService.getAccountsPayables(),
-        that.mappingsService.getQBOVendors(),
-        that.mappingsService.getBillPaymentAccounts()
-      ]
-    ).subscribe(responses => {
+
+    const attributes = this.getAttributesFilteredByConfig();
+    that.mappingsService.getGroupedQBODestinationAttributes(attributes).subscribe(responses => {
       that.isLoading = false;
-      that.bankAccounts = responses[0];
-      that.cccAccounts = responses[1];
-      that.accountPayableAccounts = responses[2];
-      that.qboVendors = responses[3];
-      that.billPaymentAccounts = responses[4];
-      that.qboExpenseAccounts = [...responses[0], ...responses[1]];
+      that.bankAccounts = responses.BANK_ACCOUNT;
+      that.cccAccounts = responses.CREDIT_CARD_ACCOUNT;
+      that.accountPayableAccounts = responses.ACCOUNTS_PAYABLE;
+      that.qboVendors = responses.VENDOR;
+      that.billPaymentAccounts = responses.BANK_ACCOUNT;
+      that.taxCodes = responses.TAX_CODE;
+      that.qboExpenseAccounts = [ ...responses.BANK_ACCOUNT, ...responses.CREDIT_CARD_ACCOUNT];
       that.getGeneralMappings();
     });
   }
+
 
   ngOnInit() {
     const that = this;

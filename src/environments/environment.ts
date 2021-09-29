@@ -3,6 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 // TODO: the variable placeholders should have _
 export const environment = {
+  fyle_url: 'FYLE URL',
   fyle_client_id: 'FYLE CLIENT ID',
   callback_uri: 'CALLBACK URL',
   api_url: 'QBO API URL',

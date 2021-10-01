@@ -146,7 +146,15 @@
       </mat-slide-toggle>
 
       <mat-slide-toggle color="primary" class="schedule" *ngIf="qboCompanyCountry !== 'US'" formControlName="importTaxCodes">
-        <div class="schedule--toggle-text">Import Quickbooks Online Tax Codes to Fyle</div>
+        <div class="schedule--toggle-text">Import Quickbooks Online Tax Codes to Fyle
+          <mat-icon
+            [inline]="true"
+            class="info-icon"
+            matTooltip="Import Tax Codes and Groups from QBO as Tax Groups in Fyle"
+            matTooltipPosition="after">
+              info
+          </mat-icon>
+        </div>
       </mat-slide-toggle>
 
       <mat-slide-toggle color="primary" class="schedule" formControlName="changeAccountingPeriod">

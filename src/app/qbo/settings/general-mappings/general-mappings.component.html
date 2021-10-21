@@ -108,6 +108,13 @@
       <div class="mat-body-strong" *ngIf="generalSettings.import_tax_codes">
         Default Tax Code
         <mandatory-field *ngIf="isFieldMandatory('qboTaxCodes')"></mandatory-field>
+        <mat-icon
+          [inline]="true"
+          class="info-icon"
+          matTooltip="The default Tax Code would be applied to exported expenses in case the original expense in Fyle does not carry any Tax Group."
+          matTooltipPosition="after">
+            info
+        </mat-icon>
       </div>
         <mat-form-field floatLabel="always" appearance="outline" required
           *ngIf="generalSettings.import_tax_codes">

@@ -116,7 +116,7 @@ export class GeneralMappingsComponent implements OnInit {
   setMandatoryField() {
     const that = this;
 
-    if ((that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') && that.generalSettings.reimbursable_expenses_object !== 'EXPENSE') {
+    if ((that.generalSettings.reimbursable_expenses_object === 'BILL' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') || (that.generalSettings.reimbursable_expenses_object === 'JOURNAL ENTRY' && that.generalSettings.employee_field_mapping === 'VENDOR')) {
       that.form.controls.accountPayableAccounts.setValidators(Validators.required);
     }
 
@@ -202,7 +202,7 @@ export class GeneralMappingsComponent implements OnInit {
   const that = this;
   const attributes = [];
 
-  if ((that.generalSettings.employee_field_mapping === 'VENDOR' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') && that.generalSettings.reimbursable_expenses_object !== 'EXPENSE') {
+  if ((that.generalSettings.reimbursable_expenses_object === 'BILL' || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') || (that.generalSettings.reimbursable_expenses_object === 'JOURNAL ENTRY' && that.generalSettings.employee_field_mapping === 'VENDOR')) {
     attributes.push('ACCOUNTS_PAYABLE');
   }
 

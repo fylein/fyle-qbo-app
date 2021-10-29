@@ -16,12 +16,12 @@
   </div>
   <form class="general-mappings--form" [formGroup]="form">
     <div fxLayout="column" fxLayoutAlign="start stretch">
-      <div class="mat-body-strong" *ngIf="(generalSettings.employee_field_mapping === 'VENDOR' || generalSettings.corporate_credit_card_expenses_object === 'BILL') && generalSettings.reimbursable_expenses_object !== 'EXPENSE'">
+      <div class="mat-body-strong" *ngIf="((generalSettings.reimbursable_expenses_object === 'BILL' || generalSettings.corporate_credit_card_expenses_object === 'BILL') || (generalSettings.reimbursable_expenses_object === 'JOURNAL ENTRY' && generalSettings.employee_field_mapping === 'VENDOR'))">
         Accounts Payable
         <mandatory-field *ngIf="isFieldMandatory('accountPayableAccounts')"></mandatory-field>
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required
-      *ngIf="(generalSettings.employee_field_mapping === 'VENDOR' || generalSettings.corporate_credit_card_expenses_object === 'BILL') && generalSettings.reimbursable_expenses_object !== 'EXPENSE'">
+      *ngIf="((generalSettings.reimbursable_expenses_object === 'BILL' || generalSettings.corporate_credit_card_expenses_object === 'BILL') || (generalSettings.reimbursable_expenses_object === 'JOURNAL ENTRY' && generalSettings.employee_field_mapping === 'VENDOR'))">
         <mat-select class="general-mappings--input" placeholder="Select accounts payable for expenses imported from Fyle"
           formControlName="accountPayableAccounts">
           <mat-option *ngFor="let accountPayableAccount of accountPayableAccounts; let i = index"

@@ -26,6 +26,7 @@ export class GenericMappingsComponent implements OnInit {
   count: number;
   pageNumber = 0;
   rowElement: Mapping;
+  docLink: string;
   columnsToDisplay = ['sourceField', 'destinationField'];
 
   constructor(private mappingsService: MappingsService, private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private storageService: StorageService, private settingsService: SettingsService) { }
@@ -92,6 +93,11 @@ export class GenericMappingsComponent implements OnInit {
       that.isLoading = true;
       that.workspaceId = +that.route.parent.snapshot.params.workspace_id;
       that.sourceField = that.route.snapshot.params.source_field;
+      if (that.sourceField === 'tax_group') {
+        that.docLink = 'https://www.fylehq.com/help/en/articles/5671079-importing-tax-codes-and-groups-from-quickbooks-online-to-fyle';
+      } else {
+        that.docLink = 'https://www.fylehq.com/help/en/articles/4284108-configuring-mappings-for-the-fyle-quickbooks-online-integration';
+      }
       that.settingsService.getMappingSettings(that.workspaceId).subscribe(response => {
         that.setting = response.results.filter(setting => setting.source_field === that.sourceField.toUpperCase())[0];
         const data = {

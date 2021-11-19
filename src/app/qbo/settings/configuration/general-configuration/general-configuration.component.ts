@@ -30,8 +30,20 @@ export class GeneralConfigurationComponent implements OnInit {
   showPaymentsField: boolean;
   showAutoCreate: boolean;
   showJeSingleCreditLine: boolean;
+  isChartOfAccountsEnabled: boolean;
+  allAccountTypes: []
 
   constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billsService: BillsService, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
+
+  getAccountType(region) {
+    return {
+      US: [
+        'Bank', 'Fixed Assets', 'Other Current Asset', 'Accounts Receivable', 'Other Current Asset', 'Accounts Payable', 
+        'Credit Card', 'Other Current Liability', 'Long Term Liability', 'Equity', 'Income', 'Other Income', 'Cost of Goods Sold',
+        'Other Expense', 'Expense'
+      ]
+    }[region]
+  }
 
   getExpenseOptions(employeeMappedTo) {
     return {
@@ -107,6 +119,10 @@ export class GeneralConfigurationComponent implements OnInit {
       that.showAutoCreateOption(employeeMappingPreference, that.generalSettingsForm.value.employees);
     });
 
+    that.generalSettingsForm.controls.importCategories.valueChanges.subscribe((importChartOfAccountsPreference) => {
+      that.showChartOfAccounts(importChartOfAccountsPreference)
+    })
+  
     that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
       that.showAutoCreateOption(that.generalSettingsForm.value.autoMapEmployees, employeeMappedTo);
       that.expenseOptions = that.getExpenseOptions(employeeMappedTo);
@@ -135,6 +151,8 @@ export class GeneralConfigurationComponent implements OnInit {
     ).subscribe(responses => {
       that.generalSettings = responses[0];
       that.mappingSettings = responses[1].results;
+
+      console.log(that.generalSettings)
 
       const projectFieldMapping = that.mappingSettings.filter(
         setting => (setting.source_field === 'PROJECT' && setting.destination_field === 'CUSTOMER')
@@ -169,7 +187,8 @@ export class GeneralConfigurationComponent implements OnInit {
         paymentsSync: [paymentsSyncOption],
         autoMapEmployees: [that.generalSettings.auto_map_employees],
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
-        jeSingleCreditLine: [that.generalSettings.je_single_credit_line]
+        jeSingleCreditLine: [that.generalSettings.je_single_credit_line],
+        chartOfAccounts:  [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Bank', 'Fixed Assets']]
       });
 
       const fyleProjectMapping = that.mappingSettings.filter(
@@ -186,6 +205,7 @@ export class GeneralConfigurationComponent implements OnInit {
       }
 
       that.showAutoCreateOption(that.generalSettings.auto_map_employees, employeeFieldMapping);
+      that.showChartOfAccounts(that.generalSettings.import_categories)
       that.setupFieldWatchers();
 
       that.isLoading = false;
@@ -199,6 +219,7 @@ export class GeneralConfigurationComponent implements OnInit {
         importProjects: [false],
         changeAccountingPeriod: [false],
         importTaxCodes: [null],
+        chartOfAccounts: [['Expense']],
         paymentsSync: [null],
         autoMapEmployees: [null],
         autoCreateDestinationEntity: [false],
@@ -301,6 +322,7 @@ export class GeneralConfigurationComponent implements OnInit {
     const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
     const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
     const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
+    const chartOfAccounts = that.generalSettingsForm.value.chartOfAccounts ? that.generalSettingsForm.value.chartOfAccounts : ["Expense"];
 
     let fyleToQuickbooks = false;
     let quickbooksToFyle = false;
@@ -349,7 +371,8 @@ export class GeneralConfigurationComponent implements OnInit {
       sync_qbo_to_fyle_payments: quickbooksToFyle,
       auto_map_employees: autoMapEmployees,
       auto_create_destination_entity: autoCreateDestinationEntity,
-      je_single_credit_line: jeSingleCreditLine
+      je_single_credit_line: jeSingleCreditLine,
+      charts_of_accounts: chartOfAccounts
     };
 
     // Open dialog conditionally
@@ -367,6 +390,17 @@ export class GeneralConfigurationComponent implements OnInit {
       that.showPaymentsField = true;
     } else {
       that.showPaymentsField = false;
+    }
+  }
+
+  showChartOfAccounts(importCategories: boolean) {
+    const that = this;
+    console.log(importCategories)
+    console.log('here')
+    if (importCategories) {
+      that.isChartOfAccountsEnabled = true;
+    } else {
+      that.isChartOfAccountsEnabled = false;
     }
   }
 
@@ -411,6 +445,7 @@ export class GeneralConfigurationComponent implements OnInit {
     that.isLoading = true;
     that.getQboCompanyName().then((qboCountry: string) => {
       that.qboCompanyCountry = qboCountry;
+      that.allAccountTypes = that.getAccountType('US')
       that.getAllSettings();
     });
   }

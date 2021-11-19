@@ -31,18 +31,18 @@ export class GeneralConfigurationComponent implements OnInit {
   showAutoCreate: boolean;
   showJeSingleCreditLine: boolean;
   isChartOfAccountsEnabled: boolean;
-  allAccountTypes: []
+  allAccountTypes: [];
 
   constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billsService: BillsService, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
   getAccountType(region) {
     return {
       US: [
-        'Bank', 'Fixed Assets', 'Other Current Asset', 'Accounts Receivable', 'Other Current Asset', 'Accounts Payable', 
-        'Credit Card', 'Other Current Liability', 'Long Term Liability', 'Equity', 'Income', 'Other Income', 'Cost of Goods Sold',
-        'Other Expense', 'Expense'
+        'Bank', 'Fixed Assets', 'Other Current Asset', 'Accounts Receivable', 'Other Current Asset', 'Accounts Payable',
+        'Credit Card', 'Other Current Liability', 'Long Term Liability', 'Equity', 'Income', 'Other Income',
+        'Cost of Goods Sold', 'Other Expense', 'Expense'
       ]
-    }[region]
+    }[region];
   }
 
   getExpenseOptions(employeeMappedTo) {
@@ -120,9 +120,9 @@ export class GeneralConfigurationComponent implements OnInit {
     });
 
     that.generalSettingsForm.controls.importCategories.valueChanges.subscribe((importChartOfAccountsPreference) => {
-      that.showChartOfAccounts(importChartOfAccountsPreference)
-    })
-  
+      that.showChartOfAccounts(importChartOfAccountsPreference);
+    });
+
     that.generalSettingsForm.controls.employees.valueChanges.subscribe((employeeMappedTo) => {
       that.showAutoCreateOption(that.generalSettingsForm.value.autoMapEmployees, employeeMappedTo);
       that.expenseOptions = that.getExpenseOptions(employeeMappedTo);
@@ -151,8 +151,6 @@ export class GeneralConfigurationComponent implements OnInit {
     ).subscribe(responses => {
       that.generalSettings = responses[0];
       that.mappingSettings = responses[1].results;
-
-      console.log(that.generalSettings)
 
       const projectFieldMapping = that.mappingSettings.filter(
         setting => (setting.source_field === 'PROJECT' && setting.destination_field === 'CUSTOMER')
@@ -205,7 +203,7 @@ export class GeneralConfigurationComponent implements OnInit {
       }
 
       that.showAutoCreateOption(that.generalSettings.auto_map_employees, employeeFieldMapping);
-      that.showChartOfAccounts(that.generalSettings.import_categories)
+      that.showChartOfAccounts(that.generalSettings.import_categories);
       that.setupFieldWatchers();
 
       that.isLoading = false;
@@ -322,7 +320,7 @@ export class GeneralConfigurationComponent implements OnInit {
     const autoMapEmployees = that.generalSettingsForm.value.autoMapEmployees ? that.generalSettingsForm.value.autoMapEmployees : null;
     const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
     const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
-    const chartOfAccounts = that.generalSettingsForm.value.chartOfAccounts ? that.generalSettingsForm.value.chartOfAccounts : ["Expense"];
+    const chartOfAccounts = that.generalSettingsForm.value.chartOfAccounts ? that.generalSettingsForm.value.chartOfAccounts : ['Expense'];
 
     let fyleToQuickbooks = false;
     let quickbooksToFyle = false;
@@ -395,8 +393,6 @@ export class GeneralConfigurationComponent implements OnInit {
 
   showChartOfAccounts(importCategories: boolean) {
     const that = this;
-    console.log(importCategories)
-    console.log('here')
     if (importCategories) {
       that.isChartOfAccountsEnabled = true;
     } else {
@@ -445,7 +441,7 @@ export class GeneralConfigurationComponent implements OnInit {
     that.isLoading = true;
     that.getQboCompanyName().then((qboCountry: string) => {
       that.qboCompanyCountry = qboCountry;
-      that.allAccountTypes = that.getAccountType('US')
+      that.allAccountTypes = that.getAccountType('US');
       that.getAllSettings();
     });
   }

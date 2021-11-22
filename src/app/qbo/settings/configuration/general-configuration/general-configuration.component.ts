@@ -38,9 +38,19 @@ export class GeneralConfigurationComponent implements OnInit {
   getAccountType(region) {
     return {
       US: [
-        'Bank', 'Fixed Assets', 'Other Current Asset', 'Accounts Receivable', 'Other Current Asset', 'Accounts Payable',
-        'Credit Card', 'Other Current Liability', 'Long Term Liability', 'Equity', 'Income', 'Other Income',
-        'Cost of Goods Sold', 'Other Expense', 'Expense'
+        'Expense', 'Other Expense', 'Bank', 'Fixed Assets', 'Other Current Asset', 'Accounts Receivable',
+        'Other Current Asset', 'Accounts Payable', 'Credit Card', 'Other Current Liability', 'Long Term Liability',
+        'Equity', 'Income', 'Other Income', 'Cost of Goods Sold'
+      ],
+      GB: [
+        'Expense', 'Other Expense', 'Debtors', 'Current Assest', 'Tangible Assest', 'Non-current Assest',
+        'Creditors', 'Credit Card', 'Current Liability', 'Non-current Liability', 'Equity', 'Income',
+        'Other Income', 'Cost of Sales'
+      ],
+      AU: [
+        'Expense', 'Other Expense', 'Accounts Receivable', 'Current Assest', 'Cash and Cash Equivalents', 'Fixed Assets',
+        'Credit Card', 'Current Liability', 'Non-current Liability', 'Owner"s Equity', 'Income', 'Other Income', 'Cost of Sales',
+        'Non-current Assets', 'Accounts Payable'
       ]
     }[region];
   }

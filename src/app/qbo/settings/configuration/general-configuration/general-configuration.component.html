@@ -115,20 +115,6 @@
         </mat-form-field>
       </div>
 
-      <div class="configurations--label" *ngIf="isChartOfAccountsEnabled">
-        Select Charts of Accounts to Import
-      </div>
-      <div fxLayout="row" fxLayoutAlign="start center" *ngIf="isChartOfAccountsEnabled">
-        <mat-form-field floatLabel="always" appearance="outline" fxFlex="100">
-          <mat-select placeholder="Choose Accounts You want to Import to Fyle"
-            formControlName="chartOfAccounts" multiple>
-            <mat-option *ngFor="let option of allAccountTypes" [value]="option">
-              {{option}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
       <mat-slide-toggle color="primary" class="schedule" *ngIf="showAutoCreate" formControlName="autoCreateDestinationEntity">
         <div class="schedule--toggle-text">
           Auto Create Vendor on Quickbooks Online
@@ -145,6 +131,20 @@
       <mat-slide-toggle color="primary" class="schedule" formControlName="importCategories">
         <div class="schedule--toggle-text">Import Quickbooks Charts of Accounts into Fyle</div>
       </mat-slide-toggle>
+
+      <div class="configurations--label" *ngIf="isChartOfAccountsEnabled">
+        Select Charts of Accounts to Import
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center" *ngIf="isChartOfAccountsEnabled">
+        <mat-form-field floatLabel="always" appearance="outline" fxFlex="100">
+          <mat-select placeholder="Choose Accounts You want to Import to Fyle"
+            formControlName="chartOfAccounts" multiple>
+            <mat-option *ngFor="let option of allAccountTypes" [disabled]="option === 'Expense'" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
       <mat-slide-toggle color="primary" class="schedule" *ngIf="showImportProjects()" formControlName="importProjects">
         <div class="schedule--toggle-text">

@@ -196,7 +196,7 @@ export class GeneralConfigurationComponent implements OnInit {
         autoMapEmployees: [that.generalSettings.auto_map_employees],
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
         jeSingleCreditLine: [that.generalSettings.je_single_credit_line],
-        chartOfAccounts:  [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Bank', 'Fixed Assets']]
+        chartOfAccounts:  [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense']]
       });
 
       const fyleProjectMapping = that.mappingSettings.filter(
@@ -451,7 +451,7 @@ export class GeneralConfigurationComponent implements OnInit {
     that.isLoading = true;
     that.getQboCompanyName().then((qboCountry: string) => {
       that.qboCompanyCountry = qboCountry;
-      that.allAccountTypes = that.getAccountType('US');
+      that.allAccountTypes = that.getAccountType(qboCountry);
       that.getAllSettings();
     });
   }

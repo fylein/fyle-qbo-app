@@ -31,40 +31,31 @@ export class GeneralConfigurationComponent implements OnInit {
   showAutoCreate: boolean;
   showJeSingleCreditLine: boolean;
   isChartOfAccountsEnabled: boolean;
-  allAccountTypes: [];
+  allAccountTypes: string[];
 
   constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billsService: BillsService, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
-  getAccountType(region) {
-    const country = ['US', 'GB', 'AU', 'IN'];
-    if (country.includes(region)) {
-      return {
-        US: [
-          'Expense', 'Other Expense', 'Bank', 'Fixed Assets', 'Other Current Asset', 'Accounts Receivable',
-          'Other Current Asset', 'Accounts Payable', 'Credit Card', 'Other Current Liability', 'Long Term Liability',
-          'Equity', 'Income', 'Other Income', 'Cost of Goods Sold'
-        ],
-        GB: [
-          'Expense', 'Other Expense', 'Debtors', 'Current Assest', 'Tangible Assest', 'Non-current Assest',
-          'Creditors', 'Credit Card', 'Current Liability', 'Non-current Liability', 'Equity', 'Income',
-          'Other Income', 'Cost of Sales'
-        ],
-        AU: [
-          'Expense', 'Other Expense', 'Accounts Receivable', 'Current Assest', 'Cash and Cash Equivalents', 'Fixed Assets',
-          'Credit Card', 'Current Liability', 'Non-current Liability', 'Owner"s Equity', 'Income', 'Other Income', 'Cost of Sales',
-          'Non-current Assets', 'Accounts Payable'
-        ],
-        IN: [
-          'Expense', 'Other Expense', 'Bank', 'Current Asset', 'Fixed Assets', 'Non-current Assest', 'Credit Card',
-          'Current Liability', 'Equity', 'Income', 'Other Income', 'Cost of Goods Sold'
-        ]
-      }[region];
-    } else {
-      return [
-        'Expense', 'Other Expense', 'Current Asset', 'Fixed Assets', 'Liability', 'Other Current Liability',
-        'Long Term Liability', 'Cost of Goods Sold'
-      ]
+  getAccountType(region: string) {
+    var accounts = ['Expense', 'Other Expense', 'Bank', 'Fixed Assets', 'Cost of Goods Sold', 'Current Liability', 'Non-current Assets',
+                      'Other Current Asset','Other Current Liability', 'Long Term Liability', 'Credit Card', 'Current Asset'];
+
+    if (region == 'US') {
+      accounts = [...accounts, 'Other Income', 'Income', 'Equity'];
     }
+
+    if (region == 'GB') {
+      accounts = [...accounts, 'Tangible Assest', 'Non-current Liability', 'Equity', 'Cost of Sales'];
+    }
+
+    if (region == 'AU') {
+      accounts = [...accounts, 'Cash and Cash Equivalents', 'Non-current Liability', 'Cost of Sales'];
+    }
+
+    if (region == 'IN') {
+      accounts = [...accounts];
+    }
+
+    return accounts;
   }
 
   getExpenseOptions(employeeMappedTo) {

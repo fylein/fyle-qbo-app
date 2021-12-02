@@ -36,23 +36,19 @@ export class GeneralConfigurationComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billsService: BillsService, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
   getAccountType(region: string) {
-    let accounts = ['Expense', 'Other Expense', 'Bank', 'Fixed Assets', 'Cost of Goods Sold', 'Current Liability', 'Non-current Assets',
+    const accounts = ['Expense', 'Other Expense', 'Bank', 'Fixed Assets', 'Cost of Goods Sold', 'Current Liability', 'Non-current Assets',
                     'Other Current Asset', 'Other Current Liability', 'Long Term Liability', 'Credit Card', 'Current Asset'];
 
     if (region === 'US') {
-      accounts = [...accounts, 'Other Income', 'Income', 'Equity'];
+      accounts.push('Other Income', 'Income', 'Equity')
     }
 
     if (region === 'GB') {
-      accounts = [...accounts, 'Tangible Assest', 'Non-current Liability', 'Equity', 'Cost of Sales'];
+      accounts.push('Tangible Assest', 'Non-current Liability', 'Equity', 'Cost of Sales')
     }
 
     if (region === 'AU') {
-      accounts = [...accounts, 'Cash and Cash Equivalents', 'Non-current Liability', 'Cost of Sales'];
-    }
-
-    if (region === 'IN') {
-      accounts = [...accounts];
+      accounts.push('Cash and Cash Equivalents', 'Non-current Liability', 'Cost of Sales')
     }
 
     return accounts;

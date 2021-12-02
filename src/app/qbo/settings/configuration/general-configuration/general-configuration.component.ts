@@ -40,15 +40,15 @@ export class GeneralConfigurationComponent implements OnInit {
                     'Other Current Asset', 'Other Current Liability', 'Long Term Liability', 'Credit Card', 'Current Asset'];
 
     if (region === 'US') {
-      accounts.push('Other Income', 'Income', 'Equity')
+      accounts.push('Other Income', 'Income', 'Equity');
     }
 
     if (region === 'GB') {
-      accounts.push('Tangible Assest', 'Non-current Liability', 'Equity', 'Cost of Sales')
+      accounts.push('Tangible Assest', 'Non-current Liability', 'Equity', 'Cost of Sales');
     }
 
     if (region === 'AU') {
-      accounts.push('Cash and Cash Equivalents', 'Non-current Liability', 'Cost of Sales')
+      accounts.push('Cash and Cash Equivalents', 'Non-current Liability', 'Cost of Sales');
     }
 
     return accounts;

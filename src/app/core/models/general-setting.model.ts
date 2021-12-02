@@ -13,6 +13,7 @@ export type GeneralSetting = {
   auto_create_destination_entity: boolean;
   employee_field_mapping: string;
   je_single_credit_line: boolean;
+  charts_of_accounts: string[];
   created_at?: Date;
   updated_at?: Date;
   workspace?: number;

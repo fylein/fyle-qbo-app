@@ -35,25 +35,6 @@ export class GeneralConfigurationComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billsService: BillsService, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
-  getAccountType(region: string) {
-    const accounts = ['Expense', 'Other Expense', 'Bank', 'Fixed Assets', 'Cost of Goods Sold', 'Current Liability', 'Non-current Assets',
-                    'Other Current Asset', 'Other Current Liability', 'Long Term Liability', 'Credit Card', 'Current Asset'];
-
-    if (region === 'US') {
-      accounts.push('Other Income', 'Income', 'Equity');
-    }
-
-    if (region === 'GB') {
-      accounts.push('Tangible Assest', 'Non-current Liability', 'Equity', 'Cost of Sales');
-    }
-
-    if (region === 'AU') {
-      accounts.push('Cash and Cash Equivalents', 'Non-current Liability', 'Cost of Sales');
-    }
-
-    return accounts;
-  }
-
   getExpenseOptions(employeeMappedTo) {
     return {
       EMPLOYEE: [
@@ -443,14 +424,15 @@ export class GeneralConfigurationComponent implements OnInit {
     });
   }
 
-
   ngOnInit() {
     const that = this;
+
     that.workspaceId = that.route.snapshot.parent.parent.params.workspace_id;
     that.isLoading = true;
     that.getQboCompanyName().then((qboCountry: string) => {
       that.qboCompanyCountry = qboCountry;
-      that.allAccountTypes = that.getAccountType(qboCountry);
+      that.allAccountTypes = ['Expense', 'Other Expense', 'Fixed Assets', 'Cost of Goods Sold', 'Current Liability', 'Equity',
+      'Other Current Asset', 'Other Current Liability', 'Long Term Liability', 'Current Asset'];
       that.getAllSettings();
     });
   }

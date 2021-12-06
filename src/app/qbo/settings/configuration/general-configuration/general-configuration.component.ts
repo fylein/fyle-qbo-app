@@ -426,14 +426,13 @@ export class GeneralConfigurationComponent implements OnInit {
 
   ngOnInit() {
     const that = this;
-    const accounts = ['Expense', 'Other Expense', 'Fixed Assets', 'Cost of Goods Sold', 'Current Liability',
-                      'Other Current Asset', 'Other Current Liability', 'Long Term Liability', 'Current Asset'];
 
     that.workspaceId = that.route.snapshot.parent.parent.params.workspace_id;
     that.isLoading = true;
     that.getQboCompanyName().then((qboCountry: string) => {
       that.qboCompanyCountry = qboCountry;
-      that.allAccountTypes = accounts;
+      that.allAccountTypes = ['Expense', 'Other Expense', 'Fixed Assets', 'Cost of Goods Sold', 'Current Liability', 'Equity',
+      'Other Current Asset', 'Other Current Liability', 'Long Term Liability', 'Current Asset'];
       that.getAllSettings();
     });
   }

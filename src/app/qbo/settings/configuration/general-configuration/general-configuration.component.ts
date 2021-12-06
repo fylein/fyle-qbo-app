@@ -427,8 +427,7 @@ export class GeneralConfigurationComponent implements OnInit {
   ngOnInit() {
     const that = this;
     const accounts = ['Expense', 'Other Expense', 'Fixed Assets', 'Cost of Goods Sold', 'Current Liability',
-                      'Other Current Asset', 'Other Current Liability', 'Long Term Liability', 'Current Asset'
-                    ];
+                      'Other Current Asset', 'Other Current Liability', 'Long Term Liability', 'Current Asset'];
 
     that.workspaceId = that.route.snapshot.parent.parent.params.workspace_id;
     that.isLoading = true;

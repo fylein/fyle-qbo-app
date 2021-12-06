@@ -49,4 +49,8 @@ export class TrackingService {
   onSwitchWorkspace() {
     this.eventTrack('Switching Workspace');
   }
+
+  onUsingChartOfAccounts(listOfAccounts) {
+    this.eventTrack('Using Chart Of Accounts', listOfAccounts)
+  }
 }

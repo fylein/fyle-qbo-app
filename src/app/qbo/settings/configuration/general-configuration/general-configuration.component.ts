@@ -12,6 +12,7 @@ import { GeneralConfigurationDialogComponent } from './general-configuration-dia
 import { UpdatedConfiguration } from 'src/app/core/models/updated-configuration';
 import { BillsService } from 'src/app/core/services/bills.service';
 import { QBOCredentials } from 'src/app/core/models/qbo-credentials.model';
+import { TrackingService } from 'src/app/core/services/tracking.service';
 
 @Component({
   selector: 'app-general-configuration',
@@ -33,7 +34,7 @@ export class GeneralConfigurationComponent implements OnInit {
   isChartOfAccountsEnabled: boolean;
   allAccountTypes: string[];
 
-  constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billsService: BillsService, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
+  constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billsService: BillsService, private settingsService: SettingsService, private trackingService: TrackingService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
   getExpenseOptions(employeeMappedTo) {
     return {
@@ -267,6 +268,11 @@ export class GeneralConfigurationComponent implements OnInit {
   postConfigurationsAndMappingSettings(generalSettingsPayload: GeneralSetting, mappingSettingsPayload: MappingSetting[], redirectToGeneralMappings: boolean = false, redirectToEmployeeMappings: boolean = false) {
     const that = this;
     that.isLoading = true;
+
+    const trackingProperties = {
+      chartOfAccounts: generalSettingsPayload.charts_of_accounts,
+    };
+
     forkJoin(
       [
         that.settingsService.postMappingSettings(that.workspaceId, mappingSettingsPayload),
@@ -274,6 +280,11 @@ export class GeneralConfigurationComponent implements OnInit {
       ]
     ).subscribe(() => {
       that.snackBar.open('Configuration saved successfully');
+
+      if (generalSettingsPayload.charts_of_accounts.length > 1) {
+        that.trackingService.onUsingChartOfAccounts(trackingProperties);
+      }
+
       that.qbo.getGeneralSettings();
       if (redirectToGeneralMappings) {
         if (redirectToEmployeeMappings) {

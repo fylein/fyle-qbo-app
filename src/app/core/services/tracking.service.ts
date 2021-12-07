@@ -51,6 +51,6 @@ export class TrackingService {
   }
 
   onUsingChartOfAccounts(listOfAccounts) {
-    this.eventTrack('Using Chart Of Accounts', listOfAccounts)
+    this.eventTrack('Using Chart Of Accounts', listOfAccounts);
   }
 }

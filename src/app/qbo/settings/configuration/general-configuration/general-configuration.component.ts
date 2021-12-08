@@ -12,6 +12,7 @@ import { GeneralConfigurationDialogComponent } from './general-configuration-dia
 import { UpdatedConfiguration } from 'src/app/core/models/updated-configuration';
 import { BillsService } from 'src/app/core/services/bills.service';
 import { QBOCredentials } from 'src/app/core/models/qbo-credentials.model';
+import { TrackingService } from 'src/app/core/services/tracking.service';
 
 @Component({
   selector: 'app-general-configuration',
@@ -33,7 +34,7 @@ export class GeneralConfigurationComponent implements OnInit {
   isChartOfAccountsEnabled: boolean;
   allAccountTypes: string[];
 
-  constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billsService: BillsService, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
+  constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billsService: BillsService, private settingsService: SettingsService, private trackingService: TrackingService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
   getExpenseOptions(employeeMappedTo) {
     return {
@@ -176,7 +177,7 @@ export class GeneralConfigurationComponent implements OnInit {
         autoMapEmployees: [that.generalSettings.auto_map_employees],
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
         jeSingleCreditLine: [that.generalSettings.je_single_credit_line],
-        chartOfAccounts:  [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense']]
+        chartOfAccounts: [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense']]
       });
 
       const fyleProjectMapping = that.mappingSettings.filter(
@@ -267,6 +268,7 @@ export class GeneralConfigurationComponent implements OnInit {
   postConfigurationsAndMappingSettings(generalSettingsPayload: GeneralSetting, mappingSettingsPayload: MappingSetting[], redirectToGeneralMappings: boolean = false, redirectToEmployeeMappings: boolean = false) {
     const that = this;
     that.isLoading = true;
+
     forkJoin(
       [
         that.settingsService.postMappingSettings(that.workspaceId, mappingSettingsPayload),
@@ -274,6 +276,17 @@ export class GeneralConfigurationComponent implements OnInit {
       ]
     ).subscribe(() => {
       that.snackBar.open('Configuration saved successfully');
+
+      if (generalSettingsPayload.charts_of_accounts.length > 1) {
+        const trackingProperties = {
+          workspace_id: that.workspaceId,
+          oldChartOfAccounts: that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense'],
+          newChartOfAccounts: generalSettingsPayload.charts_of_accounts,
+        };
+
+        that.trackingService.onImportingChartOfAccounts(trackingProperties);
+      }
+
       that.qbo.getGeneralSettings();
       if (redirectToGeneralMappings) {
         if (redirectToEmployeeMappings) {
@@ -417,7 +430,7 @@ export class GeneralConfigurationComponent implements OnInit {
       } else {
         return that.billsService.postPreferences(that.workspaceId).toPromise().then((preference: QBOCredentials) => {
           return preference.country;
-        }).catch(() =>  {
+        }).catch(() => {
           return '';
         });
       }
@@ -432,7 +445,7 @@ export class GeneralConfigurationComponent implements OnInit {
     that.getQboCompanyName().then((qboCountry: string) => {
       that.qboCompanyCountry = qboCountry;
       that.allAccountTypes = ['Expense', 'Other Expense', 'Fixed Assets', 'Cost of Goods Sold', 'Current Liability', 'Equity',
-      'Other Current Asset', 'Other Current Liability', 'Long Term Liability', 'Current Asset'];
+        'Other Current Asset', 'Other Current Liability', 'Long Term Liability', 'Current Asset'];
       that.getAllSettings();
     });
   }

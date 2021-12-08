@@ -177,7 +177,7 @@ export class GeneralConfigurationComponent implements OnInit {
         autoMapEmployees: [that.generalSettings.auto_map_employees],
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
         jeSingleCreditLine: [that.generalSettings.je_single_credit_line],
-        chartOfAccounts:  [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense']]
+        chartOfAccounts: [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense']]
       });
 
       const fyleProjectMapping = that.mappingSettings.filter(
@@ -269,10 +269,6 @@ export class GeneralConfigurationComponent implements OnInit {
     const that = this;
     that.isLoading = true;
 
-    const trackingProperties = {
-      chartOfAccounts: generalSettingsPayload.charts_of_accounts,
-    };
-
     forkJoin(
       [
         that.settingsService.postMappingSettings(that.workspaceId, mappingSettingsPayload),
@@ -282,7 +278,13 @@ export class GeneralConfigurationComponent implements OnInit {
       that.snackBar.open('Configuration saved successfully');
 
       if (generalSettingsPayload.charts_of_accounts.length > 1) {
-        that.trackingService.onUsingChartOfAccounts(trackingProperties);
+        const trackingProperties = {
+          workspace_id: that.workspaceId,
+          oldChartOfAccounts: that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense'],
+          newChartOfAccounts: generalSettingsPayload.charts_of_accounts,
+        };
+
+        that.trackingService.onImportingChartOfAccounts(trackingProperties);
       }
 
       that.qbo.getGeneralSettings();
@@ -428,7 +430,7 @@ export class GeneralConfigurationComponent implements OnInit {
       } else {
         return that.billsService.postPreferences(that.workspaceId).toPromise().then((preference: QBOCredentials) => {
           return preference.country;
-        }).catch(() =>  {
+        }).catch(() => {
           return '';
         });
       }
@@ -443,7 +445,7 @@ export class GeneralConfigurationComponent implements OnInit {
     that.getQboCompanyName().then((qboCountry: string) => {
       that.qboCompanyCountry = qboCountry;
       that.allAccountTypes = ['Expense', 'Other Expense', 'Fixed Assets', 'Cost of Goods Sold', 'Current Liability', 'Equity',
-      'Other Current Asset', 'Other Current Liability', 'Long Term Liability', 'Current Asset'];
+        'Other Current Asset', 'Other Current Liability', 'Long Term Liability', 'Current Asset'];
       that.getAllSettings();
     });
   }

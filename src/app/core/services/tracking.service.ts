@@ -50,7 +50,7 @@ export class TrackingService {
     this.eventTrack('Switching Workspace');
   }
 
-  onUsingChartOfAccounts(listOfAccounts) {
-    this.eventTrack('Using Chart Of Accounts', listOfAccounts);
+  onImportingChartOfAccounts(typesOfAccounts) {
+    this.eventTrack('Importing Chart Of Accounts', typesOfAccounts);
   }
 }

@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 import { TrackingService } from 'src/app/core/services/tracking.service';
 import { QboComponent } from '../qbo.component';
+import { Count } from 'src/app/core/models/count.model';
 
 const FYLE_URL = environment.fyle_url;
 const FYLE_CLIENT_ID = environment.fyle_client_id;
@@ -171,8 +172,8 @@ export class DashboardComponent implements OnInit {
   loadSuccessfullExpenseGroupsCount() {
     const that = this;
     // TODO: remove promises and do with rxjs observables
-    return that.expenseGroupService.getAllExpenseGroups('COMPLETE').toPromise().then((res) => {
-      that.successfulExpenseGroupsCount = res.results.length;
+    return that.expenseGroupService.getExpenseGroupCountByState('COMPLETE').toPromise().then((res: Count) => {
+      that.successfulExpenseGroupsCount = res.count;
       return res;
     });
   }
@@ -180,8 +181,8 @@ export class DashboardComponent implements OnInit {
   loadFailedlExpenseGroupsCount() {
     const that = this;
     // TODO: remove promises and do with rxjs observables
-    return that.expenseGroupService.getAllExpenseGroups('FAILED').toPromise().then((res) => {
-      that.failedExpenseGroupsCount = res.results.length;
+    return that.expenseGroupService.getExpenseGroupCountByState('FAILED').toPromise().then((res: Count) => {
+      that.failedExpenseGroupsCount = res.count;
       return res;
     });
   }

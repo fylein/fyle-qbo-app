@@ -7,6 +7,7 @@ import { Expense } from '../models/expense.model';
 import { WorkspaceService, workspaceCache$ } from './workspace.service';
 import { ExpenseGroupSetting } from '../models/expense-group-setting.model';
 import { Cacheable, CacheBuster } from 'ngx-cacheable';
+import { Count } from '../models/count.model';
 
 const expenseGroupSettingsCache$ = new Subject<void>();
 
@@ -28,6 +29,11 @@ export class ExpenseGroupsService {
         state
       }
     );
+  }
+
+  getExpenseGroupCountByState(state: string): Observable<Count> {
+    const workspaceId = this.workspaceService.getWorkspaceId();
+    return this.apiService.get(`/workspaces/${workspaceId}/fyle/expense_groups/count/`, {state});
   }
 
   getAllExpenseGroups(state: string): Observable<ExpenseGroupResponse> {

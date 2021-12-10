@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { WorkspaceService } from './workspace.service';
 import { QBOPreference } from '../models/qbo-preference.model';
 import { QBOComapnyInfo } from '../models/qbo-company-info.model';
+import { QBOCredentials } from '../models/qbo-credentials.model';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +27,11 @@ export class BillsService {
   @Cacheable()
   getPreferences(workspaceId: number): Observable<QBOPreference> {
     return this.apiService.get(`/workspaces/${workspaceId}/qbo/preferences/`, {});
+  }
+
+  @Cacheable()
+  postPreferences(workspaceId: number): Observable<QBOCredentials> {
+    return this.apiService.post(`/workspaces/${workspaceId}/qbo/preferences/`, {});
   }
 
   UpdateExpenseGroupingIfDepartmentAdded() {

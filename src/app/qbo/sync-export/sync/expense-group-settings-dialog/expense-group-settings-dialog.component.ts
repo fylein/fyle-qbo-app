@@ -31,7 +31,7 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
     const cccExpensesGroupedBy = [that.importExpensesForm.getRawValue().cccExpenseGroupConfiguration];
     const expenseState = that.importExpensesForm.value.expenseState;
     const reimbursableExportDateType = that.importExpensesForm.value.reimbursableExportDate;
-    const cccExportDateType = that.importExpensesForm.value.cccExportDate;
+    const cccExportDateType = that.importExpensesForm.getRawValue().cccExportDate;
 
     const expenseGroupSettingsPayload: ExpenseGroupSetting = {
       reimbursable_expense_group_fields: reimbursableExpensesGroupedBy,
@@ -78,6 +78,7 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
 
       if (that.workspaceGeneralSettings.corporate_credit_card_expenses_object === 'CREDIT CARD PURCHASE') {
         that.importExpensesForm.controls.cccExpenseGroupConfiguration.disable();
+        that.importExpensesForm.controls.cccExportDate.disable();
       }
 
       that.isLoading = false;
@@ -136,9 +137,8 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
 
     that.settingsService.getGeneralSettings(that.workspaceId).subscribe(response => {
       that.workspaceGeneralSettings = response;
+      that.getExpenseGroupSettings();
     });
-
-    that.getExpenseGroupSettings();
   }
 
 }

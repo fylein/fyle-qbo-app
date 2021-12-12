@@ -177,7 +177,8 @@ export class GeneralConfigurationComponent implements OnInit {
         autoMapEmployees: [that.generalSettings.auto_map_employees],
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
         jeSingleCreditLine: [that.generalSettings.je_single_credit_line],
-        chartOfAccounts: [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense']]
+        chartOfAccounts: [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense']],
+        customizedMemo: [that.generalSettings.customized_memo ? that.generalSettings.customized_memo : [null]]
       });
 
       const fyleProjectMapping = that.mappingSettings.filter(
@@ -209,6 +210,7 @@ export class GeneralConfigurationComponent implements OnInit {
         changeAccountingPeriod: [false],
         importTaxCodes: [null],
         chartOfAccounts: [['Expense']],
+        customizedMemo: [null],
         paymentsSync: [null],
         autoMapEmployees: [null],
         autoCreateDestinationEntity: [false],
@@ -324,6 +326,7 @@ export class GeneralConfigurationComponent implements OnInit {
     const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
     const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
     const chartOfAccounts = that.generalSettingsForm.value.chartOfAccounts ? that.generalSettingsForm.value.chartOfAccounts : ['Expense'];
+    const customizedMemo = that.generalSettingsForm.value.customizedMemo ? that.generalSettingsForm.value.customizedMemo : [null];
 
     let fyleToQuickbooks = false;
     let quickbooksToFyle = false;
@@ -373,7 +376,8 @@ export class GeneralConfigurationComponent implements OnInit {
       auto_map_employees: autoMapEmployees,
       auto_create_destination_entity: autoCreateDestinationEntity,
       je_single_credit_line: jeSingleCreditLine,
-      charts_of_accounts: chartOfAccounts
+      charts_of_accounts: chartOfAccounts,
+      customized_memo: customizedMemo
     };
 
     // Open dialog conditionally

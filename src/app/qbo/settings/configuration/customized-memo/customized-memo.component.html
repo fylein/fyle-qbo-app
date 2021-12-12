@@ -1,0 +1,46 @@
+<div class="internal-loader" fxLayoutAlign="center start" *ngIf="isLoading" fxFlexFill>
+  <app-loader></app-loader>
+</div>
+
+<div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start stretch">
+  <div class="page-info">
+    <div class="page-info--description">
+        Customize how would you like to see the memo/description for the exported QBO records
+        <a href="https://www.fylehq.com/help/en/articles/4284108-configuring-mappings-for-the-fyle-quickbooks-online-integration"
+        target="_blank" rel="noopener noreferrer" class="read-more-link">
+        Read more
+        <mat-icon class="read-more-link--icon read-more">open_in_new</mat-icon>
+        </a>
+    </div>
+  </div>
+  <div class="page-info">
+    <div class="memo--label">
+        Select and set the order of the variables/items
+    </div>
+    <form class="configurations--form" [formGroup]="customizedMemoForm">
+      <div fxLayout="column" fxLayoutAlign="start stretch">
+        <mat-form-field floatLabel="always" appearance="outline" required>
+          <mat-select placeholder="Choose Quickbooks equivalent of Employees" formControlName="customizedMemo" multiple>
+            <!-- <mat-option *ngFor="let timePeriod of timePeriods"
+                [(value)]="timePeriod">
+                {{ timePeriod | titlecase }}
+            </mat-option> -->
+            <div class="page-info" cdkDropList (cdkDropListDropped)="drop($event)">
+              <mat-option *ngFor="let defaultMemo of defaultMemoFields"
+                [(value)]="defaultMemo" cdkDrag>
+                {{ getTitle(defaultMemo) | titlecase }}
+            </mat-option>
+            </div>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>        
+    <button class="configurations--save-btn" mat-flat-button color="primary" (click)="save()" type="submit">
+      Save
+    </button>
+  </div>
+</div>
+
+<!-- <div class="page-info" cdkDropList cdkDropListOrientation="horizontal" class="example-list" (cdkDropListDropped)="drop($event)">
+  <div class="example-box" *ngFor="let timePeriod of timePeriods" cdkDrag>{{timePeriod}}</div>
+</div> -->

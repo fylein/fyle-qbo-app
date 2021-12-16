@@ -33,6 +33,7 @@ export class GeneralConfigurationComponent implements OnInit {
   showJeSingleCreditLine: boolean;
   isChartOfAccountsEnabled: boolean;
   allAccountTypes: string[];
+  defaultMemoFields: string[];
 
   constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billsService: BillsService, private settingsService: SettingsService, private trackingService: TrackingService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
@@ -326,7 +327,15 @@ export class GeneralConfigurationComponent implements OnInit {
     const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
     const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
     const chartOfAccounts = that.generalSettingsForm.value.chartOfAccounts ? that.generalSettingsForm.value.chartOfAccounts : ['Expense'];
-    const customizedMemo = that.generalSettingsForm.value.customizedMemo ? that.generalSettingsForm.value.customizedMemo : [null];
+    let customizedMemo = that.generalSettingsForm.value.customizedMemo
+
+    console.log(customizedMemo)
+    if (customizedMemo[0]) {
+      customizedMemo = that.generalSettingsForm.value.customizedMemo 
+    } else {
+      customizedMemo = that.defaultMemoFields
+    }
+    
 
     let fyleToQuickbooks = false;
     let quickbooksToFyle = false;
@@ -450,6 +459,7 @@ export class GeneralConfigurationComponent implements OnInit {
       that.qboCompanyCountry = qboCountry;
       that.allAccountTypes = ['Expense', 'Other Expense', 'Fixed Assets', 'Cost of Goods Sold', 'Current Liability', 'Equity',
         'Other Current Asset', 'Other Current Liability', 'Long Term Liability', 'Current Asset'];
+      that.defaultMemoFields = ['employee_email', 'vendor', 'purpose', 'category', 'spent_on', 'report_number', 'expense_link'];
       that.getAllSettings();
     });
   }

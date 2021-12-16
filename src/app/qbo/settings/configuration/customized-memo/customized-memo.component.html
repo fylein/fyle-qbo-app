@@ -17,14 +17,11 @@
     <div class="memo--label">
         Select and set the order of the variables/items
     </div>
+  </div>
     <form class="configurations--form" [formGroup]="customizedMemoForm">
-      <div fxLayout="column" fxLayoutAlign="start stretch">
-        <mat-form-field floatLabel="always" appearance="outline" required>
+      <div fxLayout="column" fxLayoutAlign="start stretch" fxFlex="100">
+        <mat-form-field floatLabel="always" appearance="outline" class="form-margin" required>
           <mat-select placeholder="Choose Quickbooks equivalent of Employees" formControlName="customizedMemo" multiple>
-            <!-- <mat-option *ngFor="let timePeriod of timePeriods"
-                [(value)]="timePeriod">
-                {{ timePeriod | titlecase }}
-            </mat-option> -->
             <div class="page-info" cdkDropList (cdkDropListDropped)="drop($event)">
               <mat-option *ngFor="let defaultMemo of defaultMemoFields"
                 [(value)]="defaultMemo" cdkDrag>
@@ -34,11 +31,19 @@
           </mat-select>
         </mat-form-field>
       </div>
-    </form>        
+    </form>
+    <div *ngIf="!isLoading" class="info-box" fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="50" class="info-box-text">
+        Preview of memo in QBO Side <br>
+        KFC - Food
+      </div>
+      <div fxFlex="25"></div>
+    </div>
+    <div class="page-info">
     <button class="configurations--save-btn" mat-flat-button color="primary" (click)="save()" type="submit">
       Save
     </button>
-  </div>
+    </div>
 </div>
 
 <!-- <div class="page-info" cdkDropList cdkDropListOrientation="horizontal" class="example-list" (cdkDropListDropped)="drop($event)">

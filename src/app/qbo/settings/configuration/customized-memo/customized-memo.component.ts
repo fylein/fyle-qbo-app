@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 @Component({
   selector: 'app-customized-memo',
   templateUrl: './customized-memo.component.html',
@@ -19,6 +19,7 @@ export class CustomizedMemoComponent implements OnInit {
   workspaceId: number;
   generalSettings: GeneralSetting;
   defaultMemoFields: string[];
+  form: FormGroup;
 
   constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
@@ -53,6 +54,10 @@ export class CustomizedMemoComponent implements OnInit {
     const that = this;
     const customizedMemo = that.customizedMemoForm.value.customizedMemo ? that.customizedMemoForm.value.customizedMemo : [null];
 
+    // that.form.controls.customizedMemo.valueChanges.pipe(debounceTime(300)).subscribe((newValue) => {
+    //   console.log('save - ', newValue);
+    // });
+
     const generalSettingsPayload: GeneralSetting = {
       customized_memo: customizedMemo
     };
@@ -65,14 +70,11 @@ export class CustomizedMemoComponent implements OnInit {
     });
   }
 
-  onChange(deviceValue) {
-    console.log(deviceValue);
-  }
 
   ngOnInit() {
     const that = this;
     that.workspaceId = that.route.snapshot.parent.parent.params.workspace_id;
-    that.defaultMemoFields = ['employee_email', 'vendor', 'purpose', 'category', 'spent_on', 'report_number', 'expense_link'];
+    that.defaultMemoFields = ['employee_email', 'merchant', 'purpose', 'category', 'spent_on', 'report_number', 'expense_link'];
     that.getcustomizedMemoSettings();
   }
 

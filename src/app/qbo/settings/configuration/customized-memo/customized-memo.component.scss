@@ -76,12 +76,17 @@ $text-error: #ff6e40;
   margin: 16px 24px;
 }
 
+.form-margin {
+  margin-top: -2em;
+}
+
 .info-box-text {
-  font-size: 13.25px;
-  border: 1px solid rgba(0, 98, 255, 4%);
-  padding: 2px;
-  background: rgba(0, 98, 255, 2%);
+  font-size: 15px;
+  border: 2px solid rgba(0, 98, 255, 0.04);
+  padding: 20px;
+  background: rgba(0, 98, 255, 0.02);
   background-clip: padding-box;
+  margin-top: -2em;
 }
 
 .fields-header {

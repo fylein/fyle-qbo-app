@@ -280,7 +280,7 @@ export class GeneralConfigurationComponent implements OnInit {
       if (generalSettingsPayload.charts_of_accounts.length > 1) {
         const trackingProperties = {
           workspace_id: that.workspaceId,
-          oldChartOfAccounts: that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense'],
+          oldChartOfAccounts: that.generalSettings && that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense'],
           newChartOfAccounts: generalSettingsPayload.charts_of_accounts,
         };
 

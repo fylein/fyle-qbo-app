@@ -56,7 +56,7 @@ import { ExpenseGroupSettingsDialogComponent } from './sync-export/sync/expense-
 import { MatTooltipModule } from '@angular/material';
 import { GroupQuickbooksErrorComponent } from './expense-groups/view-expense-group/group-quickbooks-error/group-quickbooks-error.component';
 import { GeneralConfigurationDialogComponent } from './settings/configuration/general-configuration/general-configuration-dialog/general-configuration-dialog.component';
-import { CustomizedMemoComponent } from './settings/configuration/customized-memo/customized-memo.component';
+import { MemoStructureComponent } from './settings/configuration/memo-structure/memo-structure.component';
 import { CdkDrag, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @NgModule({
@@ -86,7 +86,7 @@ import { CdkDrag, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop
     ExpenseGroupSettingsDialogComponent,
     PaginatorComponent,
     GroupQuickbooksErrorComponent,
-    CustomizedMemoComponent
+    MemoStructureComponent
   ],
   entryComponents: [
     EmployeeMappingsDialogComponent,

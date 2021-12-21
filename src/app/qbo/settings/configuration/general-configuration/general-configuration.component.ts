@@ -179,7 +179,7 @@ export class GeneralConfigurationComponent implements OnInit {
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
         jeSingleCreditLine: [that.generalSettings.je_single_credit_line],
         chartOfAccounts: [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense']],
-        customizedMemo: [that.generalSettings.customized_memo ? that.generalSettings.customized_memo : [null]]
+        memoStructure: [that.generalSettings.memo_structure ? that.generalSettings.memo_structure : [null]]
       });
 
       const fyleProjectMapping = that.mappingSettings.filter(
@@ -327,13 +327,12 @@ export class GeneralConfigurationComponent implements OnInit {
     const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
     const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
     const chartOfAccounts = that.generalSettingsForm.value.chartOfAccounts ? that.generalSettingsForm.value.chartOfAccounts : ['Expense'];
-    let customizedMemo = that.generalSettingsForm.value.customizedMemo
+    let memoStructure = that.generalSettingsForm.value.memoStructure ? that.generalSettingsForm.value.memoStructure : that.defaultMemoFields;
 
-    console.log(customizedMemo)
-    if (customizedMemo[0]) {
-      customizedMemo = that.generalSettingsForm.value.customizedMemo 
+    if (memoStructure[0]) {
+      memoStructure = that.generalSettingsForm.value.memoStructure 
     } else {
-      customizedMemo = that.defaultMemoFields
+      memoStructure = that.defaultMemoFields
     }
     
 
@@ -386,7 +385,7 @@ export class GeneralConfigurationComponent implements OnInit {
       auto_create_destination_entity: autoCreateDestinationEntity,
       je_single_credit_line: jeSingleCreditLine,
       charts_of_accounts: chartOfAccounts,
-      customized_memo: customizedMemo
+      memo_structure: memoStructure
     };
 
     // Open dialog conditionally

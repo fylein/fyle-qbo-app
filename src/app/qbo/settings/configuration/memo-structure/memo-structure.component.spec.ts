@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CustomizedMemoComponent } from './customized-memo.component';
+import { MemoStructureComponent } from './memo-structure.component';
 
 describe('CustomizedMemoComponent', () => {
-  let component: CustomizedMemoComponent;
-  let fixture: ComponentFixture<CustomizedMemoComponent>;
+  let component: MemoStructureComponent;
+  let fixture: ComponentFixture<MemoStructureComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CustomizedMemoComponent ]
+      declarations: [ MemoStructureComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CustomizedMemoComponent);
+    fixture = TestBed.createComponent(MemoStructureComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

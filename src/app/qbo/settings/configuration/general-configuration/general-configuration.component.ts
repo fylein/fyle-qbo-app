@@ -330,11 +330,11 @@ export class GeneralConfigurationComponent implements OnInit {
     let memoStructure = that.generalSettingsForm.value.memoStructure ? that.generalSettingsForm.value.memoStructure : that.defaultMemoFields;
 
     if (memoStructure[0]) {
-      memoStructure = that.generalSettingsForm.value.memoStructure 
+      memoStructure = that.generalSettingsForm.value.memoStructure;
     } else {
-      memoStructure = that.defaultMemoFields
+      memoStructure = that.defaultMemoFields;
     }
-    
+
 
     let fyleToQuickbooks = false;
     let quickbooksToFyle = false;

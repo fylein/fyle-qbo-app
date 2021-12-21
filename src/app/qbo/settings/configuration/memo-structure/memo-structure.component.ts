@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CdkDragDrop, moveItemInArray, transferArrayItem,} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,11 +31,11 @@ export class MemoStructureComponent implements OnInit {
     return name.replace(/_/g, ' ');
   }
 
-  showPreview(memo_struture) {
-    memo_struture = memo_struture + ""
-    memo_struture = memo_struture.replace(/,/g, ' - ');
-    memo_struture = memo_struture.replace(/_/g, ' ');
-    return memo_struture;
+  showPreview(memoStructure) {
+    memoStructure = memoStructure + '';
+    memoStructure = memoStructure.replace(/,/g, ' - ');
+    memoStructure = memoStructure.replace(/_/g, ' ');
+    return memoStructure;
   }
 
   getMemoStructureSettings() {
@@ -83,7 +83,7 @@ export class MemoStructureComponent implements OnInit {
     const that = this;
     that.isLoading = true;
     that.workspaceId = that.route.snapshot.parent.parent.params.workspace_id;
-    that.defaultMemoFields = ['employee_email', 'merchant', 'purpose', 'category', 'spent_on', 'report_number', 'expense_link'];    
+    that.defaultMemoFields = ['employee_email', 'merchant', 'purpose', 'category', 'spent_on', 'report_number', 'expense_link'];
     that.getMemoStructureSettings();
   }
 

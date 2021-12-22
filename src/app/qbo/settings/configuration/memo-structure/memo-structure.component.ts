@@ -70,7 +70,7 @@ export class MemoStructureComponent implements OnInit {
     const that = this;
     that.isLoading = true;
 
-    const selectedMemoFields = that.defaultMemoFields.filter(i => that.form.value.memoStructure.indexOf(i) !== -1)
+    const selectedMemoFields = that.defaultMemoFields.filter(i => that.form.value.memoStructure.indexOf(i) !== -1);
     const memoStructure = selectedMemoFields ? selectedMemoFields : that.defaultMemoFields;
 
     const generalSettingsPayload: GeneralSetting = {

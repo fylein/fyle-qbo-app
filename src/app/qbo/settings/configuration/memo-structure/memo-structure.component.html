@@ -5,24 +5,19 @@
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start stretch">
   <div class="page-info">
     <div class="page-info--description">
-        Customize how would you like to see the memo/description for the exported QBO records
-        <a href="https://www.fylehq.com/help/en/articles/4284108-configuring-mappings-for-the-fyle-quickbooks-online-integration"
-        target="_blank" rel="noopener noreferrer" class="read-more-link">
-        Read more
-        <mat-icon class="read-more-link--icon read-more">open_in_new</mat-icon>
-        </a>
+      Customize the data set you would like to pass to the description field of QBO while exporting expenses from Fyle.
     </div>
   </div>
   <div class="page-info">
     <div class="memo--label">
-        Select and set the order of the variables/items
+      Select and reorder the fields
     </div>
   </div>
     <form class="configurations--form" [formGroup]="form">
       <div fxLayout="column" fxLayoutAlign="start stretch" fxFlex="100">
         <mat-form-field floatLabel="always" appearance="outline" class="form-margin" required>
           <mat-select formControlName="memoStructure" multiple>
-            <div class="page-info" cdkDropList (cdkDropListDropped)="drop($event)">
+            <div cdkDropList (cdkDropListDropped)="drop($event)">
                 <mat-option *ngFor="let option of defaultMemoFields" [value]="option" cdkDrag>
                   {{ getTitle(option) | titlecase }}
                 </mat-option>
@@ -34,13 +29,13 @@
 
     <div class="page-info">
       <div class="preview-label">
-        Preview of memo in QBO Side
+        Here is a sample preview of the description in QBO with the above-selected data set. 
       </div>
     </div>
     <div *ngIf="!isLoading" class="info-box" fxLayout="row" fxLayoutAlign="start center">
       <div fxFlex="50" class="info-box-text">
         <ng-container>
-          {{ showPreview(generalSettings.memo_structure) | titlecase }}
+          {{ showPreview(generalSettings.memo_structure) }}
         </ng-container>
       </div>
       <div fxFlex="25"></div>

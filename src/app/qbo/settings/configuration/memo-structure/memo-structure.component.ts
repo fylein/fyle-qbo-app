@@ -32,7 +32,15 @@ export class MemoStructureComponent implements OnInit {
   }
 
   showPreview(memoStructure) {
+    const time = Date.now();
+    const today = new Date(time);
     memoStructure = memoStructure + '';
+    memoStructure = memoStructure.replace('employee_email', ' john.doe@acme.com ');
+    memoStructure = memoStructure.replace('category', ' Meals and Entertainment ');
+    memoStructure = memoStructure.replace('purpose', ' Client Meeting ');
+    memoStructure = memoStructure.replace('merchant', ' Pizza Hut ');
+    memoStructure = memoStructure.replace('report_number', ' C/2021/12/R/1 ');
+    memoStructure = memoStructure.replace('spent_on', today.toLocaleDateString());
     memoStructure = memoStructure.replace(/,/g, ' - ');
     memoStructure = memoStructure.replace(/_/g, ' ');
     return memoStructure;

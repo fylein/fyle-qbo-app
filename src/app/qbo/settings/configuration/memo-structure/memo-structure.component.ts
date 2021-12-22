@@ -30,19 +30,30 @@ export class MemoStructureComponent implements OnInit {
     return name.replace(/_/g, ' ');
   }
 
-  showPreview(memoStructure) {
+  showPreview(previewText) {
     const time = Date.now();
     const today = new Date(time);
-    memoStructure = memoStructure + '';
-    memoStructure = memoStructure.replace('employee_email', ' john.doe@acme.com ');
-    memoStructure = memoStructure.replace('category', ' Meals and Entertainment ');
-    memoStructure = memoStructure.replace('purpose', ' Client Meeting ');
-    memoStructure = memoStructure.replace('merchant', ' Pizza Hut ');
-    memoStructure = memoStructure.replace('report_number', ' C/2021/12/R/1 ');
-    memoStructure = memoStructure.replace('spent_on', today.toLocaleDateString());
-    memoStructure = memoStructure.replace(/,/g, ' - ');
-    memoStructure = memoStructure.replace(/_/g, ' ');
-    return memoStructure;
+
+    const dummyValues = {
+        employee_email: 'john.doe@acme.com',
+        category: 'Meals and Entertainment',
+        purpose: 'Client Meeting',
+        merchant: 'Pizza Hut',
+        report_number: 'C/2021/12/R/1',
+        spent_on: today.toLocaleDateString(),
+    };
+
+    let text = '';
+    previewText.forEach((field, index) => {
+        if (field in dummyValues) {
+            text = text + dummyValues[field];
+            if (index+1 !== previewText.length) {
+                text = text + ' - '
+            }
+        }
+    });
+
+    return text;
   }
 
   getMemoStructureSettings() {
@@ -51,11 +62,11 @@ export class MemoStructureComponent implements OnInit {
     that.settingsService.getGeneralSettings(this.workspaceId).subscribe(generalSettings => {
       that.generalSettings = generalSettings;
       that.showPreview(generalSettings.memo_structure);
-      that.isLoading = false;
 
       that.form = that.formBuilder.group({
         memoStructure: [that.generalSettings.memo_structure ? that.generalSettings.memo_structure : this.defaultMemoFields]
       });
+      that.isLoading = false;
 
     }, () => {
       that.isLoading = false;
@@ -70,16 +81,12 @@ export class MemoStructureComponent implements OnInit {
     const that = this;
     that.isLoading = true;
 
-    const selectedMemoFields = that.defaultMemoFields.filter(i => that.form.value.memoStructure.indexOf(i) !== -1);
+    const selectedMemoFields = that.defaultMemoFields.filter(memoOption => that.form.value.memoStructure.indexOf(memoOption) !== -1);
     const memoStructure = selectedMemoFields ? selectedMemoFields : that.defaultMemoFields;
 
-    const generalSettingsPayload: GeneralSetting = {
-      memo_structure: memoStructure
-    };
-
-    that.settingsService.patchGeneralSettings(this.workspaceId, generalSettingsPayload).subscribe((response) => {
+    that.settingsService.patchGeneralSettings(this.workspaceId, memoStructure).subscribe((response) => {
       that.snackBar.open('Custom Memo saved successfully');
-      that.getMemoStructureSettings();
+      that.generalSettings = response;
       that.isLoading = false;
     }, () => {
       that.snackBar.open('Something went wrong');

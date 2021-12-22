@@ -12,7 +12,7 @@
     <a mat-tab-link (click)="changeState('EXPENSE_FIELDS')" *ngIf="showExpenseFields()" [active]="state==='EXPENSE_FIELDS'">
       Expense Fields
     </a>
-    <a mat-tab-link (click)="changeState('MEMO_STRUCTURE')" *ngIf="showExpenseFields()" [active]="state==='MEMO_STRUCTURE'">
+    <a mat-tab-link (click)="changeState('MEMO_STRUCTURE')" *ngIf="generalSettings" [active]="state==='MEMO_STRUCTURE'">
       Modify Description
     </a>
   </nav>

@@ -97,8 +97,10 @@ export class SettingsService {
   @CacheBuster({
     cacheBusterNotifier: generalSettingsCache$
   })
-  patchGeneralSettings(workspaceId: number, generalSettingsPayload: GeneralSetting): Observable<GeneralSetting> {
-    return this.apiService.patch(`/workspaces/${workspaceId}/settings/general/`, generalSettingsPayload);
+  patchGeneralSettings(workspaceId: number, memoStructure: string[]): Observable<GeneralSetting> {
+    return this.apiService.patch(`/workspaces/${workspaceId}/settings/general/`, {
+      memo_structure: memoStructure
+    });
   }
 
   @Cacheable({

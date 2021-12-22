@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { elementClass } from '@rxweb/reactive-form-validators';
 @Component({
   selector: 'app-memo-structure',
   templateUrl: './memo-structure.component.html',
@@ -70,7 +69,9 @@ export class MemoStructureComponent implements OnInit {
   save() {
     const that = this;
     that.isLoading = true;
-    const memoStructure = that.form.value.memoStructure ? that.form.value.memoStructure : that.defaultMemoFields;
+
+    const selectedMemoFields = that.defaultMemoFields.filter(i => that.form.value.memoStructure.indexOf(i) !== -1)
+    const memoStructure = selectedMemoFields ? selectedMemoFields : that.defaultMemoFields;
 
     const generalSettingsPayload: GeneralSetting = {
       memo_structure: memoStructure
@@ -94,5 +95,4 @@ export class MemoStructureComponent implements OnInit {
     that.defaultMemoFields = ['employee_email', 'merchant', 'purpose', 'category', 'spent_on', 'report_number', 'expense_link'];
     that.getMemoStructureSettings();
   }
-
 }

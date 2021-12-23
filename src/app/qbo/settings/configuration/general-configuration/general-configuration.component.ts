@@ -179,7 +179,6 @@ export class GeneralConfigurationComponent implements OnInit {
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
         jeSingleCreditLine: [that.generalSettings.je_single_credit_line],
         chartOfAccounts: [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense']],
-        memoStructure: [that.generalSettings.memo_structure ? that.generalSettings.memo_structure : [null]]
       });
 
       const fyleProjectMapping = that.mappingSettings.filter(
@@ -327,13 +326,6 @@ export class GeneralConfigurationComponent implements OnInit {
     const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
     const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
     const chartOfAccounts = that.generalSettingsForm.value.chartOfAccounts ? that.generalSettingsForm.value.chartOfAccounts : ['Expense'];
-    let memoStructure = that.generalSettingsForm.value.memoStructure ? that.generalSettingsForm.value.memoStructure : that.defaultMemoFields;
-
-    if (memoStructure[0]) {
-      memoStructure = that.generalSettingsForm.value.memoStructure;
-    } else {
-      memoStructure = that.defaultMemoFields;
-    }
 
 
     let fyleToQuickbooks = false;
@@ -384,8 +376,7 @@ export class GeneralConfigurationComponent implements OnInit {
       auto_map_employees: autoMapEmployees,
       auto_create_destination_entity: autoCreateDestinationEntity,
       je_single_credit_line: jeSingleCreditLine,
-      charts_of_accounts: chartOfAccounts,
-      memo_structure: memoStructure
+      charts_of_accounts: chartOfAccounts
     };
 
     // Open dialog conditionally

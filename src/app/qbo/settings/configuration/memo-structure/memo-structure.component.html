@@ -11,11 +11,12 @@
   <div class="page-info">
     <div class="memo--label">
       Select and reorder the fields
+      <mandatory-field></mandatory-field>
     </div>
   </div>
     <form class="configurations--form" [formGroup]="form">
       <div fxLayout="column" fxLayoutAlign="start stretch" fxFlex="100">
-        <mat-form-field floatLabel="always" appearance="outline" class="form-margin" required>
+        <mat-form-field floatLabel="always" appearance="outline" class="form-margin">
           <mat-select formControlName="memoStructure" multiple>
             <div cdkDropList (cdkDropListDropped)="drop($event)">
                 <mat-option *ngFor="let option of defaultMemoFields" [value]="option" cdkDrag>
@@ -24,6 +25,7 @@
             </div>
           </mat-select>
         </mat-form-field>
+        <mandatory-error-message listName="option" *ngIf="form.controls.memoStructure.touched && !form.controls.memoStructure.valid"></mandatory-error-message>
       </div>
     </form>
 
@@ -41,7 +43,7 @@
       <div fxFlex="25"></div>
     </div>
     <div class="page-info">
-    <button class="configurations--save-btn" mat-flat-button color="primary" (click)="save()">
+    <button class="configurations--save-btn" [disabled]="!form.valid" mat-flat-button color="primary" (click)="save()">
       Save
     </button>
     </div>

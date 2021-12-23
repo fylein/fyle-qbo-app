@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
@@ -66,6 +66,7 @@ export class MemoStructureComponent implements OnInit {
       that.form = that.formBuilder.group({
         memoStructure: [that.generalSettings.memo_structure ? that.generalSettings.memo_structure : this.defaultMemoFields]
       });
+      that.form.controls.memoStructure.setValidators(Validators.required);
       that.isLoading = false;
 
     }, () => {

@@ -14,7 +14,7 @@ export type GeneralSetting = {
   employee_field_mapping: string;
   je_single_credit_line: boolean;
   charts_of_accounts: string[];
-  memo_structure: string[];
+  memo_structure?: string[];
   created_at?: Date;
   updated_at?: Date;
   workspace?: number;

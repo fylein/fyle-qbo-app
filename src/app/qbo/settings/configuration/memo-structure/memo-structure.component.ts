@@ -23,7 +23,11 @@ export class MemoStructureComponent implements OnInit {
 
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.defaultMemoFields, event.previousIndex, event.currentIndex);
+    const that = this;
+    moveItemInArray(that.defaultMemoFields, event.previousIndex, event.currentIndex);
+    const selectedMemoFields = that.defaultMemoFields.filter(memoOption => that.form.value.memoStructure.indexOf(memoOption) !== -1);
+    const memoStructure = selectedMemoFields ? selectedMemoFields : that.defaultMemoFields;
+    that.generalSettings.memo_structure = memoStructure;
   }
 
   getTitle(name: string) {
@@ -59,14 +63,19 @@ export class MemoStructureComponent implements OnInit {
   getMemoStructureSettings() {
     const that = this;
     that.isLoading = true;
-    that.settingsService.getGeneralSettings(this.workspaceId).subscribe(generalSettings => {
+    that.settingsService.getGeneralSettings(that.workspaceId).subscribe(generalSettings => {
       that.generalSettings = generalSettings;
-      that.showPreview(generalSettings.memo_structure);
 
       that.form = that.formBuilder.group({
         memoStructure: [ that.generalSettings.memo_structure ]
       });
       that.form.controls.memoStructure.setValidators(Validators.required);
+
+      that.form.controls.memoStructure.valueChanges.subscribe((memoChanges) => {
+        that.generalSettings.memo_structure = memoChanges;
+        that.showPreview(memoChanges);
+      });
+
       that.isLoading = false;
 
     });
@@ -80,7 +89,7 @@ export class MemoStructureComponent implements OnInit {
     const selectedMemoFields = that.defaultMemoFields.filter(memoOption => that.form.value.memoStructure.indexOf(memoOption) !== -1);
     const memoStructure = selectedMemoFields ? selectedMemoFields : that.defaultMemoFields;
 
-    that.settingsService.patchGeneralSettings(this.workspaceId, memoStructure).subscribe((response) => {
+    that.settingsService.patchGeneralSettings(that.workspaceId, memoStructure).subscribe((response) => {
       that.snackBar.open('Custom Memo saved successfully');
       that.generalSettings = response;
       that.isLoading = false;

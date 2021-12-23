@@ -209,7 +209,6 @@ export class GeneralConfigurationComponent implements OnInit {
         changeAccountingPeriod: [false],
         importTaxCodes: [null],
         chartOfAccounts: [['Expense']],
-        customizedMemo: [null],
         paymentsSync: [null],
         autoMapEmployees: [null],
         autoCreateDestinationEntity: [false],

@@ -64,16 +64,11 @@ export class MemoStructureComponent implements OnInit {
       that.showPreview(generalSettings.memo_structure);
 
       that.form = that.formBuilder.group({
-        memoStructure: [that.generalSettings.memo_structure ? that.generalSettings.memo_structure : this.defaultMemoFields]
+        memoStructure: [ that.generalSettings.memo_structure ]
       });
       that.form.controls.memoStructure.setValidators(Validators.required);
       that.isLoading = false;
 
-    }, () => {
-      that.isLoading = false;
-      that.form = that.formBuilder.group({
-        memoStructure: this.defaultMemoFields,
-      });
     });
   }
 

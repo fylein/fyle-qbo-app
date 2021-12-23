@@ -47,8 +47,8 @@ export class MemoStructureComponent implements OnInit {
     previewText.forEach((field, index) => {
         if (field in dummyValues) {
             text = text + dummyValues[field];
-            if (index+1 !== previewText.length) {
-                text = text + ' - '
+            if (index + 1 !== previewText.length) {
+                text = text + ' - ';
             }
         }
     });

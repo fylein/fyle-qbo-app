@@ -325,6 +325,7 @@ export class GeneralConfigurationComponent implements OnInit {
     const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
     const chartOfAccounts = that.generalSettingsForm.value.chartOfAccounts ? that.generalSettingsForm.value.chartOfAccounts : ['Expense'];
 
+
     let fyleToQuickbooks = false;
     let quickbooksToFyle = false;
 

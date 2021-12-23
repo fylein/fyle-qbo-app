@@ -22,6 +22,7 @@ import { GeneralConfigurationComponent } from './settings/configuration/general-
 import { ExpenseFieldConfigurationComponent } from './settings/configuration/expense-field-configuration/expense-field-configuration.component';
 import { GenericMappingsComponent } from './settings/generic-mappings/generic-mappings.component';
 import { GroupQuickbooksErrorComponent } from './expense-groups/view-expense-group/group-quickbooks-error/group-quickbooks-error.component';
+import { MemoStructureComponent } from './settings/configuration/memo-structure/memo-structure.component';
 
 const routes: Routes = [{
   path: '',
@@ -90,6 +91,10 @@ const routes: Routes = [{
             {
               path: 'expense_fields',
               component: ExpenseFieldConfigurationComponent
+            },
+            {
+              path: 'memo_structure',
+              component: MemoStructureComponent
             }
           ]
         },

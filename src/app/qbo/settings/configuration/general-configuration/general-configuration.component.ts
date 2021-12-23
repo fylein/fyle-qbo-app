@@ -33,7 +33,6 @@ export class GeneralConfigurationComponent implements OnInit {
   showJeSingleCreditLine: boolean;
   isChartOfAccountsEnabled: boolean;
   allAccountTypes: string[];
-  defaultMemoFields: string[];
 
   constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billsService: BillsService, private settingsService: SettingsService, private trackingService: TrackingService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
@@ -449,7 +448,6 @@ export class GeneralConfigurationComponent implements OnInit {
       that.qboCompanyCountry = qboCountry;
       that.allAccountTypes = ['Expense', 'Other Expense', 'Fixed Assets', 'Cost of Goods Sold', 'Current Liability', 'Equity',
         'Other Current Asset', 'Other Current Liability', 'Long Term Liability', 'Current Asset'];
-      that.defaultMemoFields = ['employee_email', 'vendor', 'purpose', 'category', 'spent_on', 'report_number', 'expense_link'];
       that.getAllSettings();
     });
   }

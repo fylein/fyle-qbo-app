@@ -34,7 +34,7 @@ export class MemoStructureComponent implements OnInit {
     return name.replace(/_/g, ' ');
   }
 
-  showPreview(previewText) {
+  showPreview(selectedMemoFields: string[]) {
     const time = Date.now();
     const today = new Date(time);
 
@@ -45,13 +45,14 @@ export class MemoStructureComponent implements OnInit {
         merchant: 'Pizza Hut',
         report_number: 'C/2021/12/R/1',
         spent_on: today.toLocaleDateString(),
+        expense_link: 'https://app.fylehq.com/app/main/#/enterprise/view_expense/'
     };
 
     let text = '';
-    previewText.forEach((field, index) => {
+    selectedMemoFields.forEach((field, index) => {
         if (field in dummyValues) {
             text = text + dummyValues[field];
-            if (index + 1 !== previewText.length) {
+            if (index + 1 !== selectedMemoFields.length) {
                 text = text + ' - ';
             }
         }

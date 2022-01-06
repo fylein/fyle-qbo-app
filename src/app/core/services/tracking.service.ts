@@ -53,4 +53,8 @@ export class TrackingService {
   onImportingChartOfAccounts(typesOfAccounts) {
     this.eventTrack('Importing Chart Of Accounts', typesOfAccounts);
   }
+
+  onModifyDescription(selectedFields) {
+    this.eventTrack('Modifying Description', selectedFields);
+  }
 }

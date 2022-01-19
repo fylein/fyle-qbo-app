@@ -13,6 +13,7 @@ import { MappingDestination } from 'src/app/core/models/mapping-destination.mode
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 import { MappingModal } from 'src/app/core/models/mapping-modal.model';
 import { EmployeeMapping } from 'src/app/core/models/employee-mapping.model';
+import { Mapping } from 'src/app/core/models/mappings.model';
 
 export class MappingErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -80,10 +81,10 @@ export class EmployeeMappingsDialogComponent implements OnInit {
       };
 
       that.isLoading = true;
-      that.mappingsService.postEmployeeMappings(employeeMapping).subscribe(() => {
+      that.mappingsService.postEmployeeMappings(employeeMapping).subscribe((employeeMapping: EmployeeMapping) => {
         that.snackBar.open('Employee Mapping saved successfully');
         that.isLoading = false;
-        that.dialogRef.close();
+        that.dialogRef.close(employeeMapping);
       }, () => {
         that.snackBar.open('Something went wrong');
         that.isLoading = false;

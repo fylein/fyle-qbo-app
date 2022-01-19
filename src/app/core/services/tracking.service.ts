@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from './auth.service';
+import { EmployeeMapping } from '../models/employee-mapping.model';
+import { GeneralMapping } from '../models/general-mapping.model';
+import { GeneralSetting } from '../models/general-setting.model';
+import { Mapping } from '../models/mappings.model';
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +11,7 @@ import { AuthService } from './auth.service';
 export class TrackingService {
   identityEmail = null;
 
-  constructor(
-    private authService: AuthService
-  ) { }
+  constructor() { }
 
   get tracking() {
     return (window as any).analytics;
@@ -36,6 +37,20 @@ export class TrackingService {
     this.eventTrack('Sign In', properties);
   }
 
+  onSignUp(email: string, workspaceId: number, properties: {orgName: string, orgId: string}) {
+    if (this.tracking) {
+      this.tracking.identify(email, {
+        workspaceId,
+      });
+      this.identityEmail = email;
+    }
+    this.eventTrack('Sign Up', properties);
+  }
+
+  onQBOConnect() {
+    this.eventTrack('QBO Account connected');
+  }
+
   onPageVisit(page: string, onboarding: boolean= false) {
     let event = `Visited ${page} Page`;
     event = onboarding ? `Onboarding: ${event}` : event;
@@ -52,6 +67,22 @@ export class TrackingService {
 
   onImportingChartOfAccounts(typesOfAccounts) {
     this.eventTrack('Importing Chart Of Accounts', typesOfAccounts);
+  }
+
+  onSaveConfigurations(configurations: GeneralSetting) {
+    this.eventTrack('Configurations update/create', configurations);
+  }
+
+  onSaveGeneralMappings(generalMappings: GeneralMapping) {
+    this.eventTrack('General Mappings update/create', generalMappings);
+  }
+
+  onSaveEmployeeMappings(employeeMapping: EmployeeMapping) {
+    this.eventTrack('Employee Mappings create', employeeMapping);
+  }
+
+  onSaveCategoryMappings(mapping: Mapping) {
+    this.eventTrack('Employee Mappings create', mapping);
   }
 
   onModifyDescription(selectedFields) {

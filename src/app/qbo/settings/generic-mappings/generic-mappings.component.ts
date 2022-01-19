@@ -60,7 +60,7 @@ export class GenericMappingsComponent implements OnInit {
       const onboarded = that.storageService.get('onboarded');
 
       if (onboarded === false) {
-        if (mapping) {
+        if (mapping && that.sourceField === 'category') {
           // tracking for 1st category mapping
           this.trackingService.onSaveCategoryMappings(mapping);
         }

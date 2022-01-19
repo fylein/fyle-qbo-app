@@ -11,6 +11,7 @@ import { MappingSource } from 'src/app/core/models/mapping-source.model';
 import { MappingDestination } from 'src/app/core/models/mapping-destination.model';
 import { MappingSetting } from 'src/app/core/models/mapping-setting.model';
 import { MappingModal } from 'src/app/core/models/mapping-modal.model';
+import { Mapping } from 'src/app/core/models/mappings.model';
 
 export class MappingErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -61,10 +62,10 @@ export class GenericMappingsDialogComponent implements OnInit {
         source_value: that.form.controls.sourceField.value.value,
         destination_value: that.form.controls.destinationField.value.value,
         destination_id: that.form.controls.destinationField.value.destination_id
-      }).subscribe(() => {
+      }).subscribe((mapping: Mapping) => {
         that.snackBar.open('Mapping saved successfully');
         that.isLoading = false;
-        that.dialogRef.close();
+        that.dialogRef.close(mapping);
       }, () => {
         that.snackBar.open('Something went wrong');
         that.isLoading = false;

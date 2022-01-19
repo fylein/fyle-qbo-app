@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MappingsService } from '../../../core/services/mappings.service';
-import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StorageService } from 'src/app/core/services/storage.service';
 import { GeneralMapping } from 'src/app/core/models/general-mapping.model';
 import { MappingDestination } from 'src/app/core/models/mapping-destination.model';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
+import { TrackingService } from 'src/app/core/services/tracking.service';
 
 @Component({
   selector: 'app-general-mappings',
@@ -36,7 +36,8 @@ export class GeneralMappingsComponent implements OnInit {
     private router: Router,
     private settingsService: SettingsService,
     private snackBar: MatSnackBar,
-    private storageService: StorageService) {
+    private storageService: StorageService,
+    private trackingService: TrackingService) {
   }
 
   redirectHandler() {
@@ -104,6 +105,7 @@ export class GeneralMappingsComponent implements OnInit {
     };
 
     this.mappingsService.postGeneralMappings(generalMappings).subscribe(() => {
+      that.trackingService.onSaveGeneralMappings(generalMappings);
       that.snackBar.open('General Mappings saved successfully');
       that.redirectHandler();
     }, () => {

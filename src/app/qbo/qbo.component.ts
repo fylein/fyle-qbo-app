@@ -139,9 +139,13 @@ export class QboComponent implements OnInit {
     const that = this;
     return that.workspaceService.getWorkspaces(that.user.org_id).toPromise().then(workspaces => {
       if (Array.isArray(workspaces) && workspaces.length > 0) {
+        that.setUserIdentity(that.user.employee_email, workspaces[0].id, {fullName: that.user.full_name});
+        this.trackingService.onSignIn(that.user.employee_email, workspaces[0].id, {fullName: that.user.full_name});
         return workspaces[0];
       } else {
         return that.workspaceService.createWorkspace().toPromise().then(workspace => {
+          that.setUserIdentity(that.user.employee_email, workspace.id, {fullName: that.user.full_name});
+          that.trackingService.onSignUp(that.user.employee_email, workspace.id, {orgName: that.workspace.name, orgId: that.workspace.fyle_org_id});
           return workspace;
         });
       }
@@ -153,7 +157,6 @@ export class QboComponent implements OnInit {
     that.user = that.authService.getUser();
     that.getOrCreateWorkspace().then((workspace: Workspace) => {
       that.workspace = workspace;
-      that.setUserIdentity(that.user.employee_email, workspace.id, {fullName: that.user.full_name});
       that.getSettingsAndNavigate();
       that.getQboOrgName();
     });
@@ -164,7 +167,6 @@ export class QboComponent implements OnInit {
       email,
       workspaceId,
     });
-    this.trackingService.onSignIn(email, workspaceId, properties);
   }
 
   onSignOut() {

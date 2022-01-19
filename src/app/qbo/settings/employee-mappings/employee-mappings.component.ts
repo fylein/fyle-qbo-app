@@ -11,6 +11,7 @@ import { Mapping } from 'src/app/core/models/mappings.model';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 import { EmployeeMappingsResponse } from 'src/app/core/models/employee-mappings-response.model';
 import { EmployeeMapping } from 'src/app/core/models/employee-mapping.model';
+import { TrackingService } from 'src/app/core/services/tracking.service';
 
 @Component({
   selector: 'app-employee-mappings',
@@ -37,7 +38,8 @@ export class EmployeeMappingsComponent implements OnInit {
               private router: Router,
               private snackBar: MatSnackBar,
               private settingsService: SettingsService,
-              private storageService: StorageService) { }
+              private storageService: StorageService,
+              private trackingService: TrackingService) { }
 
   open(selectedItem: EmployeeMapping = null) {
     const that = this;
@@ -49,7 +51,18 @@ export class EmployeeMappingsComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(() => {
+    dialogRef.afterClosed().subscribe((employeeMapping: EmployeeMapping | null) => {
+      const onboarded = that.storageService.get('onboarded');
+
+      if (onboarded === false) {
+        if (employeeMapping) {
+          // tracking for 1st employee mapping
+          this.trackingService.onSaveEmployeeMappings(employeeMapping);
+        }
+        that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
+        return;
+      }
+
       that.isLoading = true;
       const data = {
         pageSize: that.storageService.get('mappings.pageSize') || 50,

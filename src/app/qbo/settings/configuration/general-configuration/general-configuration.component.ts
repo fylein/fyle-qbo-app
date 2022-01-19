@@ -274,8 +274,9 @@ export class GeneralConfigurationComponent implements OnInit {
         that.settingsService.postMappingSettings(that.workspaceId, mappingSettingsPayload),
         that.settingsService.postGeneralSettings(that.workspaceId, generalSettingsPayload)
       ]
-    ).subscribe(() => {
+    ).subscribe((responses) => {
       that.snackBar.open('Configuration saved successfully');
+      that.trackingService.onSaveConfigurations(responses[1]);
 
       if (generalSettingsPayload.charts_of_accounts.length > 1) {
         const trackingProperties = {

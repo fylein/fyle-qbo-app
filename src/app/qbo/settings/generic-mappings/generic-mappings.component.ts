@@ -10,6 +10,7 @@ import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 import { MappingSetting } from 'src/app/core/models/mapping-setting.model';
 import { MappingRow } from 'src/app/core/models/mapping-row.model';
 import { MatTableDataSource } from '@angular/material';
+import { TrackingService } from 'src/app/core/services/tracking.service';
 
 @Component({
   selector: 'app-generic-mappings',
@@ -29,7 +30,15 @@ export class GenericMappingsComponent implements OnInit {
   docLink: string;
   columnsToDisplay = ['sourceField', 'destinationField'];
 
-  constructor(private mappingsService: MappingsService, private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private storageService: StorageService, private settingsService: SettingsService) { }
+  constructor(
+    private mappingsService: MappingsService,
+    private router: Router,
+    private route: ActivatedRoute,
+    public dialog: MatDialog,
+    private storageService: StorageService,
+    private settingsService: SettingsService,
+    private trackingService: TrackingService
+  ) { }
 
   open(selectedItem: MappingRow = null) {
     const that = this;
@@ -42,7 +51,7 @@ export class GenericMappingsComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((mapping: Mapping | null) => {
       const data = {
         pageSize: that.storageService.get('mappings.pageSize') || 50,
         pageNumber: 0
@@ -51,6 +60,10 @@ export class GenericMappingsComponent implements OnInit {
       const onboarded = that.storageService.get('onboarded');
 
       if (onboarded === false) {
+        if (mapping && that.sourceField === 'category') {
+          // tracking for 1st category mapping
+          this.trackingService.onSaveCategoryMappings(mapping);
+        }
         that.router.navigateByUrl(`workspaces/${that.workspaceId}/dashboard`);
       }
     });

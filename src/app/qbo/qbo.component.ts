@@ -145,7 +145,7 @@ export class QboComponent implements OnInit {
       } else {
         return that.workspaceService.createWorkspace().toPromise().then(workspace => {
           that.setUserIdentity(that.user.employee_email, workspace.id, {fullName: that.user.full_name});
-          that.trackingService.onSignUp(that.user.employee_email, workspace.id, {orgName: that.workspace.name, orgId: that.workspace.fyle_org_id});
+          that.trackingService.onSignUp(that.user.employee_email, workspace.id, {orgName: workspace.name, orgId: workspace.fyle_org_id});
           return workspace;
         });
       }

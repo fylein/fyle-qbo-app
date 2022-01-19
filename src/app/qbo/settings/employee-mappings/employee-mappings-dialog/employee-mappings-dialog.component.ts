@@ -81,10 +81,10 @@ export class EmployeeMappingsDialogComponent implements OnInit {
       };
 
       that.isLoading = true;
-      that.mappingsService.postEmployeeMappings(employeeMapping).subscribe((employeeMapping: EmployeeMapping) => {
+      that.mappingsService.postEmployeeMappings(employeeMapping).subscribe((employeeMappingResponse: EmployeeMapping) => {
         that.snackBar.open('Employee Mapping saved successfully');
         that.isLoading = false;
-        that.dialogRef.close(employeeMapping);
+        that.dialogRef.close(employeeMappingResponse);
       }, () => {
         that.snackBar.open('Something went wrong');
         that.isLoading = false;

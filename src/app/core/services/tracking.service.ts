@@ -82,7 +82,7 @@ export class TrackingService {
   }
 
   onSaveCategoryMappings(mapping: Mapping) {
-    this.eventTrack('Employee Mappings create', mapping);
+    this.eventTrack('Category Mappings create', mapping);
   }
 
   onModifyDescription(selectedFields) {

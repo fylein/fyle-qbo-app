@@ -49,7 +49,6 @@ export class GenericMappingsDialogComponent implements OnInit {
   }
 
   getTitle(name: string) {
-    console.log('name', name)
     return name.replace(/_/g, ' ');
   }
 

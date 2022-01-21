@@ -446,7 +446,7 @@ export class GeneralConfigurationComponent implements OnInit {
     that.isLoading = true;
     that.getQboCompanyName().then((qboCountry: string) => {
       that.qboCompanyCountry = qboCountry;
-      that.allAccountTypes = ['Expense', 'Other Expense', 'Fixed Assets', 'Cost of Goods Sold', 'Current Liability', 'Equity',
+      that.allAccountTypes = ['Expense', 'Other Expense', 'Fixed Asset', 'Cost of Goods Sold', 'Current Liability', 'Equity',
         'Other Current Asset', 'Other Current Liability', 'Long Term Liability', 'Current Asset'];
       that.getAllSettings();
     });

@@ -41,7 +41,7 @@
         </strong>
       </div>
       <mat-form-field class="mappings-dialog--field" appearance="outline">
-        <input type="text" formControlName="destinationField" placeholder="Select Quickbooks {{ setting.destination_field | titlecase}}" matInput [matAutocomplete]="qboEl"
+        <input type="text" formControlName="destinationField" placeholder="Select Quickbooks {{ getTitle(setting.destination_field) | titlecase}}" matInput [matAutocomplete]="qboEl"
           [errorStateMatcher]="matcher">
         <mat-autocomplete #qboEl="matAutocomplete" [displayWith]="mappingDisplay">
           <mat-option *ngFor="let option of qboOptions" [value]="option">

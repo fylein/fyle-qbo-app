@@ -93,9 +93,7 @@ export class EmployeeMappingsComponent implements OnInit {
   createEmployeeMappingsRows() {
     const that = this;
     that.employeeMappings = that.employeeMappings.filter((employeeMapping: EmployeeMapping) => {
-      if (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL') {
-        return employeeMapping.destination_employee || employeeMapping.destination_vendor || employeeMapping.destination_card_account;
-      } else if (that.generalSettings.employee_field_mapping === 'EMPLOYEE') {
+      if (that.generalSettings.employee_field_mapping === 'EMPLOYEE') {
         return employeeMapping.destination_employee;
       } else {
         return employeeMapping.destination_vendor;
@@ -122,8 +120,7 @@ export class EmployeeMappingsComponent implements OnInit {
   searchByText(data: EmployeeMapping, filterText: string) {
     return data.source_employee.value.toLowerCase().includes(filterText) ||
     (data.destination_employee ? data.destination_employee.value.toLowerCase().includes(filterText) : false) ||
-    (data.destination_vendor ? data.destination_vendor.value.toLowerCase().includes(filterText) : false) ||
-    (data.destination_card_account ? data.destination_card_account.value.toLowerCase().includes(filterText) : false);
+    (data.destination_vendor ? data.destination_vendor.value.toLowerCase().includes(filterText) : false);
   }
 
   mappingsCheck() {
@@ -144,9 +141,6 @@ export class EmployeeMappingsComponent implements OnInit {
       that.mappingsCheck();
       that.generalSettings = settings;
       that.isLoading = false;
-      if (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL') {
-        that.columnsToDisplay.push('ccc');
-      }
       const data = {
         pageSize: that.storageService.get('mappings.pageSize') || 50,
         pageNumber: 0

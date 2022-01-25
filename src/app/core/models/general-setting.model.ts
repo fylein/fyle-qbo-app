@@ -15,6 +15,7 @@ export type GeneralSetting = {
   je_single_credit_line: boolean;
   charts_of_accounts: string[];
   memo_structure?: string[];
+  map_fyle_cards_qbo_account: boolean;
   created_at?: Date;
   updated_at?: Date;
   workspace?: number;

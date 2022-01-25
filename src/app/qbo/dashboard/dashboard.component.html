@@ -25,7 +25,7 @@
         <div class="onboarding-stepper--step" fxLayout="row" fxLayoutAlign="space-between center">
           <div fxLayout="row" fxLayoutAlign="start center">
             <mat-icon class="onboarding-stepper--check"
-              [ngClass]="{'onboarding-stepper--check__complete': currentState === allOnboardingStates.fyleConnected || currentState === allOnboardingStates.qboConnected || currentState === allOnboardingStates.configurationsDone || currentState === allOnboardingStates.generalMappingsDone || currentState === allOnboardingStates.employeeMappingsDone}">
+              [ngClass]="{'onboarding-stepper--check__complete': currentState === allOnboardingStates.fyleConnected || currentState === allOnboardingStates.qboConnected || currentState === allOnboardingStates.configurationsDone || currentState === allOnboardingStates.generalMappingsDone || currentState === allOnboardingStates.cardsMappingDone || currentState === allOnboardingStates.employeeMappingsDone}">
               check_circle</mat-icon>
             <div class="onboarding-stepper--desc">Connect to Fyle Account</div>
           </div>
@@ -38,7 +38,7 @@
         <div class="onboarding-stepper--step" fxLayout="row" fxLayoutAlign="space-between center">
           <div fxLayout="row" fxLayoutAlign="start center">
             <mat-icon class="onboarding-stepper--check"
-              [ngClass]="{'onboarding-stepper--check__complete': currentState === allOnboardingStates.qboConnected || currentState === allOnboardingStates.configurationsDone || currentState === allOnboardingStates.generalMappingsDone || currentState === allOnboardingStates.employeeMappingsDone}">
+              [ngClass]="{'onboarding-stepper--check__complete': currentState === allOnboardingStates.qboConnected || currentState === allOnboardingStates.configurationsDone || currentState === allOnboardingStates.generalMappingsDone || currentState === allOnboardingStates.employeeMappingsDone || currentState === allOnboardingStates.cardsMappingDone}">
               check_circle</mat-icon>
             <div class="onboarding-stepper--desc">Connect to Quickbooks Online Account</div>
           </div>
@@ -58,7 +58,7 @@
         <div class="onboarding-stepper--step" fxLayout="row" fxLayoutAlign="space-between center">
           <div fxLayout="row" fxLayoutAlign="start center">
             <mat-icon class="onboarding-stepper--check"
-              [ngClass]="{'onboarding-stepper--check__complete': currentState === allOnboardingStates.configurationsDone || currentState === allOnboardingStates.generalMappingsDone || currentState === allOnboardingStates.employeeMappingsDone}">
+              [ngClass]="{'onboarding-stepper--check__complete': currentState === allOnboardingStates.configurationsDone || currentState === allOnboardingStates.generalMappingsDone || currentState === allOnboardingStates.employeeMappingsDone || currentState === allOnboardingStates.cardsMappingDone}">
               check_circle</mat-icon>
             <div class="onboarding-stepper--desc">Map Fyle fields to Quickbooks Online fields</div>
           </div>
@@ -79,7 +79,7 @@
         <div class="onboarding-stepper--step" fxLayout="row" fxLayoutAlign="space-between center">
           <div fxLayout="row" fxLayoutAlign="start center">
             <mat-icon class="onboarding-stepper--check"
-              [ngClass]="{'onboarding-stepper--check__complete': currentState === allOnboardingStates.generalMappingsDone || currentState === allOnboardingStates.employeeMappingsDone}">
+              [ngClass]="{'onboarding-stepper--check__complete': currentState === allOnboardingStates.generalMappingsDone || currentState === allOnboardingStates.cardsMappingDone || currentState === allOnboardingStates.employeeMappingsDone}">
               check_circle</mat-icon>
             <div class="onboarding-stepper--desc">Map Bank Accounts</div>
           </div>
@@ -91,6 +91,24 @@
           </div>
         </div>
         <div class="onboarding-stepper--step" fxLayout="row" fxLayoutAlign="space-between center">
+          <div fxLayout="row" fxLayoutAlign="start center" *ngIf="showCardsMapping">
+            <mat-icon class="onboarding-stepper--check"
+              [ngClass]="{'onboarding-stepper--check__complete': currentState === allOnboardingStates.cardsMappingDone || currentState === allOnboardingStates.employeeMappingsDone}">
+              check_circle</mat-icon>
+            <div class="onboarding-stepper--desc">Map Corporate Cards</div>
+          </div>
+          <div (click)="onCardsMappingsPageVisit(true)" class="onboarding-stepper--navigation cursor-pointer"
+            *ngIf="currentState === allOnboardingStates.generalMappingsDone && showCardsMapping"
+            [ngClass]="{'onboarding-stepper--navigation__active': currentState === allOnboardingStates.generalMappingsDone}">
+            <span class="cards-mapping" routerLink="../settings/corporate_card/mappings/">
+              Go to Cards Mappings
+            </span>
+            <span (click)="skipCardsMapping()">
+              Skip
+            </span>
+          </div>
+        </div>
+        <div class="onboarding-stepper--step" fxLayout="row" fxLayoutAlign="space-between center">
           <div fxLayout="row" fxLayoutAlign="start center">
             <mat-icon class="onboarding-stepper--check"
               [ngClass]="{'onboarding-stepper--check__complete': currentState === allOnboardingStates.employeeMappingsDone}">
@@ -98,8 +116,8 @@
             <div class="onboarding-stepper--desc">Map Employees</div>
           </div>
           <div routerLink="../settings/employee_mappings/" class="onboarding-stepper--navigation cursor-pointer"
-            *ngIf="currentState === allOnboardingStates.generalMappingsDone"
-            [ngClass]="{'onboarding-stepper--navigation__active': currentState === allOnboardingStates.generalMappingsDone}"
+            *ngIf="(currentState === allOnboardingStates.generalMappingsDone && currentState === allOnboardingStates.cardsMappingDone) || (showCardsMapping && currentState === allOnboardingStates.cardsMappingDone) || (!showCardsMapping && currentState === allOnboardingStates.generalMappingsDone)"
+            [ngClass]="{'onboarding-stepper--navigation__active': (currentState === allOnboardingStates.generalMappingsDone) || (showCardsMapping && currentState === allOnboardingStates.cardsMappingDone) || (!showCardsMapping && currentState === allOnboardingStates.generalMappingsDone)}"  
             (click)="onEmployeeMappingsPageVisit(true)">
             Go to Employee Mappings
           </div>

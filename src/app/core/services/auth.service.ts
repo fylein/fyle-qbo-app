@@ -98,11 +98,6 @@ export class AuthService {
   }
 
   @Cacheable()
-  getClusterDomain(): Observable<string> {
-    return this.apiService.get(`/user/domain/`, {});
-  }
-
-  @Cacheable()
   getFyleOrgs(): Observable<Organization[]> {
     return this.apiService.get(`/user/orgs/`, {});
   }

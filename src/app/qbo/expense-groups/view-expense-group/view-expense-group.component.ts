@@ -3,8 +3,6 @@ import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { ExpenseGroupsService } from '../../../core/services/expense-groups.service';
 import { forkJoin, Observable } from 'rxjs';
 import { TasksService } from '../../../core/services/tasks.service';
-import { ChecksService } from '../../../core/services/checks.service';
-import { JournalEntriesService } from '../../../core/services/journal-entries.service';
 import { environment } from 'src/environments/environment';
 import { ExpenseGroup } from 'src/app/core/models/expense-group.model';
 import { StorageService } from 'src/app/core/services/storage.service';
@@ -70,8 +68,7 @@ export class ViewExpenseGroupComponent implements OnInit {
   }
 
   openExpenseInFyle(expenseId: string) {
-    const clusterDomain = this.storageService.get('clusterDomain');
-    this.windowReference.open(`${clusterDomain}/app/main/#/enterprise/view_expense/${expenseId}`, '_blank');
+    this.windowReference.open(`${environment.fyle_app_url}/app/main/#/enterprise/view_expense/${expenseId}`, '_blank');
   }
 
   ngOnInit() {

@@ -23,7 +23,12 @@ import * as Sentry from '@sentry/angular';
   styleUrls: ['./qbo.component.scss']
 })
 export class QboComponent implements OnInit {
-  user: UserProfile;
+  user: {
+    employee_email: string,
+    full_name: string,
+    org_id: string,
+    org_name: string
+  };
   orgsCount: number;
   workspace: Workspace;
   isLoading = true;

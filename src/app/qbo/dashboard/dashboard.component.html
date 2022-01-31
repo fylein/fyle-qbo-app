@@ -116,8 +116,8 @@
             <div class="onboarding-stepper--desc">Map Employees</div>
           </div>
           <div routerLink="../settings/employee_mappings/" class="onboarding-stepper--navigation cursor-pointer"
-            *ngIf="(currentState === allOnboardingStates.generalMappingsDone) || (showCardsMapping && currentState === allOnboardingStates.cardsMappingDone) || (!showCardsMapping && currentState === allOnboardingStates.generalMappingsDone)"
-            [ngClass]="{'onboarding-stepper--navigation__active': (currentState === allOnboardingStates.generalMappingsDone) || (showCardsMapping && currentState === allOnboardingStates.cardsMappingDone) || (!showCardsMapping && currentState === allOnboardingStates.generalMappingsDone)}"  
+          *ngIf="(showCardsMapping && currentState === allOnboardingStates.cardsMappingDone) || (!showCardsMapping && currentState === allOnboardingStates.generalMappingsDone)"
+          [ngClass]="{'onboarding-stepper--navigation__active': (showCardsMapping && currentState === allOnboardingStates.cardsMappingDone) || (!showCardsMapping && currentState === allOnboardingStates.generalMappingsDone)}"  
             (click)="onEmployeeMappingsPageVisit(true)">
             Go to Employee Mappings
           </div>

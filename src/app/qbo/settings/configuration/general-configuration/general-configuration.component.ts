@@ -33,6 +33,7 @@ export class GeneralConfigurationComponent implements OnInit {
   showJeSingleCreditLine: boolean;
   isChartOfAccountsEnabled: boolean;
   allAccountTypes: string[];
+  enableCardsMapping: boolean;
 
   constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billsService: BillsService, private settingsService: SettingsService, private trackingService: TrackingService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
@@ -177,7 +178,8 @@ export class GeneralConfigurationComponent implements OnInit {
         autoMapEmployees: [that.generalSettings.auto_map_employees],
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
         jeSingleCreditLine: [that.generalSettings.je_single_credit_line],
-        chartOfAccounts: [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense']]
+        chartOfAccounts: [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense']],
+        enableCardsMapping: [that.generalSettings.map_fyle_cards_qbo_account]
       });
 
       const fyleProjectMapping = that.mappingSettings.filter(
@@ -212,7 +214,8 @@ export class GeneralConfigurationComponent implements OnInit {
         paymentsSync: [null],
         autoMapEmployees: [null],
         autoCreateDestinationEntity: [false],
-        jeSingleCreditLine: [false]
+        jeSingleCreditLine: [false],
+        enableCardsMapping: [false]
       });
 
       that.setupFieldWatchers();
@@ -318,7 +321,7 @@ export class GeneralConfigurationComponent implements OnInit {
 
     let cardsMapping = false;
 
-    if (this.generalSettingsForm.value.cccExpense && this.generalSettingsForm.value.cccExpense !== 'BILL') {
+    if ((this.generalSettingsForm.value.cccExpense && this.generalSettingsForm.value.cccExpense !== 'BILL') && this.generalSettingsForm.value.enableCardsMapping) {
       cardsMapping = true;
       mappingsSettingsPayload.push(
         {
@@ -427,6 +430,15 @@ export class GeneralConfigurationComponent implements OnInit {
       that.showJeSingleCreditLine = true;
     } else {
       that.showJeSingleCreditLine = false;
+    }
+  }
+
+  showCardsMapping() {
+    const that = this;
+    if (that.workspaceId == 1 || that.workspaceId == 171) {
+      return true;
+    } else {
+      return false;
     }
   }
 

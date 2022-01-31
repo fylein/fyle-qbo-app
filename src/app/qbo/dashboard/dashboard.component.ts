@@ -158,10 +158,8 @@ export class DashboardComponent implements OnInit {
         return that.mappingsService.getMappings('CORPORATE_CARD', null, 1).toPromise().then((res) => {
           if (res.results.length > 0) {
             that.currentState = onboardingStates.cardsMappingDone;
-          } else if (!that.generalSettings.corporate_credit_card_expenses_object) {
+          } else if (!that.generalSettings.corporate_credit_card_expenses_object || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') {
             that.currentState = onboardingStates.cardsMappingDone;
-          } else if (!that.generalSettings.map_fyle_cards_qbo_account) {
-            throw new Error('card mappings have no entries');
           }
           return res;
         });

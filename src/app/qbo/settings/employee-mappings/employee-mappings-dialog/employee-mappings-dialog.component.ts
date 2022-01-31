@@ -56,12 +56,18 @@ export class EmployeeMappingsDialogComponent implements OnInit {
     return mappingObject ? mappingObject.value : '';
   }
 
+  showCreditCardAccountDialogue() {
+    if (!this.generalSettings.map_fyle_cards_qbo_account && (this.workSpaceId === 284 || this.workSpaceId === 171)) {
+      return true;
+    }
+  }
+
   submit() {
     const that = this;
     const fyleEmployee = that.form.controls.fyleEmployee.value;
     const qboVendor = that.form.getRawValue().qboVendor;
     const qboEmployee = that.form.getRawValue().qboEmployee;
-    const creditCardAccount = that.form.getRawValue().creditCardAccount;
+    const creditCardAccount = that.form.getRawValue().creditCardAccount ? that.form.getRawValue().creditCardAccount : null;
 
     if (that.form.valid && (qboVendor || qboEmployee || creditCardAccount)) {
       const employeeMapping: EmployeeMapping = {

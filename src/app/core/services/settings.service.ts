@@ -103,6 +103,15 @@ export class SettingsService {
     });
   }
 
+  @CacheBuster({
+    cacheBusterNotifier: generalSettingsCache$
+  })
+  skipCardsMapping(workspaceId: number, ): Observable<GeneralSetting> {
+    return this.apiService.patch(`/workspaces/${workspaceId}/settings/general/`, {
+      map_fyle_cards_qbo_account: true
+    });
+  }
+
   @Cacheable({
     cacheBusterObserver: mappingsSettingsCache$
   })

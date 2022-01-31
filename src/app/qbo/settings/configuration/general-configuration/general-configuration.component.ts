@@ -33,6 +33,7 @@ export class GeneralConfigurationComponent implements OnInit {
   showJeSingleCreditLine: boolean;
   isChartOfAccountsEnabled: boolean;
   allAccountTypes: string[];
+  enableCardsMapping: boolean;
 
   constructor(private formBuilder: FormBuilder, private qbo: QboComponent, private billsService: BillsService, private settingsService: SettingsService, private trackingService: TrackingService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, public dialog: MatDialog) { }
 
@@ -177,7 +178,8 @@ export class GeneralConfigurationComponent implements OnInit {
         autoMapEmployees: [that.generalSettings.auto_map_employees],
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
         jeSingleCreditLine: [that.generalSettings.je_single_credit_line],
-        chartOfAccounts: [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense']]
+        chartOfAccounts: [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense']],
+        enableCardsMapping: [that.generalSettings.map_fyle_cards_qbo_account]
       });
 
       const fyleProjectMapping = that.mappingSettings.filter(
@@ -212,7 +214,8 @@ export class GeneralConfigurationComponent implements OnInit {
         paymentsSync: [null],
         autoMapEmployees: [null],
         autoCreateDestinationEntity: [false],
-        jeSingleCreditLine: [false]
+        jeSingleCreditLine: [false],
+        enableCardsMapping: [false]
       });
 
       that.setupFieldWatchers();
@@ -309,10 +312,24 @@ export class GeneralConfigurationComponent implements OnInit {
   save() {
     const that = this;
 
-    const mappingsSettingsPayload: MappingSetting[] = [{
+    const mappingsSettingsPayload: MappingSetting[] = [
+    {
       source_field: 'CATEGORY',
       destination_field: 'ACCOUNT'
-    }];
+    }
+  ];
+
+    let cardsMapping = false;
+
+    if ((this.generalSettingsForm.value.cccExpense && this.generalSettingsForm.value.cccExpense !== 'BILL') && this.generalSettingsForm.value.enableCardsMapping) {
+      cardsMapping = true;
+      mappingsSettingsPayload.push(
+        {
+          source_field: 'CORPORATE_CARD',
+          destination_field: 'CREDIT_CARD_ACCOUNT'
+        }
+      );
+    }
 
     const reimbursableExpensesObject = that.generalSettingsForm.value.reimburExpense;
     const cccExpensesObject = that.generalSettingsForm.value.cccExpense ? that.generalSettingsForm.value.cccExpense : null;
@@ -325,6 +342,7 @@ export class GeneralConfigurationComponent implements OnInit {
     const autoCreateDestinationEntity = that.generalSettingsForm.value.autoCreateDestinationEntity;
     const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
     const chartOfAccounts = that.generalSettingsForm.value.chartOfAccounts ? that.generalSettingsForm.value.chartOfAccounts : ['Expense'];
+    const mapFyleCardQboAccount = cardsMapping;
 
 
     let fyleToQuickbooks = false;
@@ -375,7 +393,8 @@ export class GeneralConfigurationComponent implements OnInit {
       auto_map_employees: autoMapEmployees,
       auto_create_destination_entity: autoCreateDestinationEntity,
       je_single_credit_line: jeSingleCreditLine,
-      charts_of_accounts: chartOfAccounts
+      charts_of_accounts: chartOfAccounts,
+      map_fyle_cards_qbo_account: mapFyleCardQboAccount
     };
 
     // Open dialog conditionally
@@ -411,6 +430,15 @@ export class GeneralConfigurationComponent implements OnInit {
       that.showJeSingleCreditLine = true;
     } else {
       that.showJeSingleCreditLine = false;
+    }
+  }
+
+  showCardsMapping() {
+    const that = this;
+    if (that.workspaceId === 284 || that.workspaceId === 171) {
+      return true;
+    } else {
+      return false;
     }
   }
 

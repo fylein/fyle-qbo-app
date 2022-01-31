@@ -26,6 +26,7 @@ enum onboardingStates {
   qboConnected,
   configurationsDone,
   generalMappingsDone,
+  cardsMappingDone,
   employeeMappingsDone,
   categoryMappingsDone,
   isOnboarded
@@ -39,6 +40,8 @@ export class DashboardComponent implements OnInit {
   workspaceId: number;
   isLoading = false;
   generalSettings: GeneralSetting;
+  showCardsMapping = true;
+  skipCardsMappings = false;
 
   currentState = onboardingStates.initialized;
 
@@ -84,7 +87,11 @@ export class DashboardComponent implements OnInit {
   }
 
   onGeneralMappingsPageVisit(onboarding: boolean = false) {
-    this.trackingService.onPageVisit('Genral Mappings', onboarding);
+    this.trackingService.onPageVisit('General Mappings', onboarding);
+  }
+
+  onCardsMappingsPageVisit(onboarding: boolean = false) {
+    this.trackingService.onPageVisit('Cards Mappings', onboarding);
   }
 
   onEmployeeMappingsPageVisit(onboarding: boolean = false) {
@@ -125,6 +132,10 @@ export class DashboardComponent implements OnInit {
     ).toPromise().then((res) => {
       that.generalSettings = res[0];
       that.currentState = onboardingStates.configurationsDone;
+      if (!res[0].corporate_credit_card_expenses_object || res[0].corporate_credit_card_expenses_object === 'BILL') {
+        that.showCardsMapping = false;
+        that.skipCardsMappings = true;
+      }
       return res;
     });
   }
@@ -136,6 +147,24 @@ export class DashboardComponent implements OnInit {
       that.currentState = onboardingStates.generalMappingsDone;
       return generalMappings;
     });
+  }
+
+  getCardsMappings() {
+    const that = this;
+    if (that.generalSettings && that.showCardsMapping) {
+      if (that.skipCardsMappings) {
+        that.currentState = onboardingStates.cardsMappingDone;
+      } else {
+        return that.mappingsService.getMappings('CORPORATE_CARD', null, 1).toPromise().then((res) => {
+          if (res.results.length > 0) {
+            that.currentState = onboardingStates.cardsMappingDone;
+          } else if (!that.generalSettings.corporate_credit_card_expenses_object || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') {
+            that.currentState = onboardingStates.cardsMappingDone;
+          }
+          return res;
+        });
+      }
+    }
   }
 
   getEmployeeMappings() {
@@ -222,6 +251,19 @@ export class DashboardComponent implements OnInit {
     this.windowReference.open(`workspaces/${that.workspaceId}/settings/schedule`, '_blank');
   }
 
+  skipCardsMapping() {
+    const that = this;
+    if (that.showCardsMapping) {
+      that.isLoading = true;
+      that.settingsService.skipCardsMapping(that.workspaceId).subscribe((generalSetting: GeneralSetting) => {
+        that.generalSettings = generalSetting;
+        that.skipCardsMappings = true;
+        that.currentState = onboardingStates.cardsMappingDone;
+        that.isLoading = false;
+      });
+    }
+  }
+
   ngOnInit() {
     const that = this;
     that.workspaceId = +that.route.snapshot.params.workspace_id;
@@ -249,6 +291,8 @@ export class DashboardComponent implements OnInit {
           return that.getConfigurations();
         }).then(() => {
           return that.getGeneralMappings();
+        }).then(() => {
+          return that.getCardsMappings();
         }).then(() => {
           return that.getEmployeeMappings();
         }).then(() => {

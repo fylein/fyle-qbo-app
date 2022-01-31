@@ -321,7 +321,7 @@ export class GeneralConfigurationComponent implements OnInit {
 
     let cardsMapping = false;
 
-    if ((this.generalSettingsForm.value.cccExpense && this.generalSettingsForm.value.cccExpense !== 'BILL') && this.generalSettingsForm.value.enableCardsMapping) {
+    if ((this.generalSettingsForm.value.cccExpense && this.generalSettingsForm.value.cccExpense !== 'BILL') || this.generalSettingsForm.value.enableCardsMapping) {
       cardsMapping = true;
       mappingsSettingsPayload.push(
         {

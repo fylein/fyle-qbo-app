@@ -144,7 +144,7 @@ export class EmployeeMappingsComponent implements OnInit {
       that.mappingsCheck();
       that.generalSettings = settings;
       that.isLoading = false;
-      if (!that.generalSettings.map_fyle_cards_qbo_account && (that.workspaceId == 171 || that.workspaceId == 284)) {
+      if (!that.generalSettings.map_fyle_cards_qbo_account && (that.workspaceId === 171 || that.workspaceId === 284)) {
         that.columnsToDisplay.push('ccc');
       }
       const data = {

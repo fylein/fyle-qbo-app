@@ -57,8 +57,8 @@ export class EmployeeMappingsDialogComponent implements OnInit {
   }
 
   showCreditCardAccountDialogue() {
-    if(!this.generalSettings.map_fyle_cards_qbo_account && (this.workSpaceId == 1 || this.workSpaceId == 2)) {
-      return true
+    if (!this.generalSettings.map_fyle_cards_qbo_account && (this.workSpaceId === 284 || this.workSpaceId === 178)) {
+      return true;
     }
   }
 

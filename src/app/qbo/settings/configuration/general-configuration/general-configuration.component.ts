@@ -435,7 +435,7 @@ export class GeneralConfigurationComponent implements OnInit {
 
   showCardsMapping() {
     const that = this;
-    if (that.workspaceId == 1 || that.workspaceId == 171) {
+    if (that.workspaceId == 284 || that.workspaceId == 171) {
       return true;
     } else {
       return false;

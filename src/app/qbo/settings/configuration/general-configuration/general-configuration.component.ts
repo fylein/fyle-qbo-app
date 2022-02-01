@@ -321,11 +321,11 @@ export class GeneralConfigurationComponent implements OnInit {
 
     let cardsMapping = false;
 
-    if (this.generalSettingsForm.value.enableCardsMapping && (this.generalSettingsForm.value.cccExpense && this.generalSettingsForm.value.cccExpense !== 'BILL')) {
+    if (that.generalSettingsForm.value.enableCardsMapping && (that.generalSettingsForm.value.cccExpense && this.generalSettingsForm.value.cccExpense !== 'BILL')) {
       cardsMapping = true;
     }
 
-    if (this.generalSettingsForm.value.cccExpense && this.generalSettingsForm.value.cccExpense !== 'BILL') {
+    if ((that.generalSettingsForm.value.cccExpense && that.generalSettingsForm.value.cccExpense !== 'BILL') && that.workspaceId.toString() !== '171' && that.workspaceId.toString() !== '284') {
       cardsMapping = true;
     }
 
@@ -440,9 +440,9 @@ export class GeneralConfigurationComponent implements OnInit {
     }
   }
 
-  showCardsMapping() {
+  showQBOCardsMapping() {
     const that = this;
-    if (that.workspaceId === 284 || that.workspaceId === 171) {
+    if (that.workspaceId.toString() === '171' || that.workspaceId.toString() === '284') {
       return true;
     } else {
       return false;

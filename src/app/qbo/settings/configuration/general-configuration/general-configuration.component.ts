@@ -321,7 +321,7 @@ export class GeneralConfigurationComponent implements OnInit {
 
     let cardsMapping = false;
 
-    if (this.generalSettings.map_fyle_cards_qbo_account && (this.generalSettingsForm.value.cccExpense && this.generalSettingsForm.value.cccExpense !== 'BILL')) {
+    if (this.generalSettingsForm.value.enableCardsMapping && (this.generalSettingsForm.value.cccExpense && this.generalSettingsForm.value.cccExpense !== 'BILL')) {
       cardsMapping = true;
     }
 

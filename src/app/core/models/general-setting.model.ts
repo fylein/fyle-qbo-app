@@ -16,7 +16,7 @@ export type GeneralSetting = {
   charts_of_accounts: string[];
   memo_structure?: string[];
   map_fyle_cards_qbo_account: boolean;
-  skip_cards_mapping: boolean;
+  skip_cards_mapping?: boolean;
   created_at?: Date;
   updated_at?: Date;
   workspace?: number;

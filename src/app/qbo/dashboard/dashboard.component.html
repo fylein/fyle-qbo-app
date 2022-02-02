@@ -93,13 +93,13 @@
         <div class="onboarding-stepper--step" fxLayout="row" fxLayoutAlign="space-between center">
           <div fxLayout="row" fxLayoutAlign="start center" *ngIf="showCardsMapping">
             <mat-icon class="onboarding-stepper--check"
-              [ngClass]="{'onboarding-stepper--check__complete': currentState === allOnboardingStates.cardsMappingDone || currentState === allOnboardingStates.employeeMappingsDone}">
+              [ngClass]="{'onboarding-stepper--check__complete': (generalSettings && generalSettings.skip_cards_mapping) || currentState === allOnboardingStates.cardsMappingDone || currentState === allOnboardingStates.employeeMappingsDone}">
               check_circle</mat-icon>
             <div class="onboarding-stepper--desc">Map Corporate Cards</div>
           </div>
           <div (click)="onCardsMappingsPageVisit(true)" class="onboarding-stepper--navigation cursor-pointer"
-            *ngIf="currentState === allOnboardingStates.generalMappingsDone && showCardsMapping"
-            [ngClass]="{'onboarding-stepper--navigation__active': currentState === allOnboardingStates.generalMappingsDone}">
+            *ngIf="currentState === allOnboardingStates.generalMappingsDone && showCardsMapping && (generalSettings && !generalSettings.skip_cards_mapping)"
+            [ngClass]="{'onboarding-stepper--navigation__active': (generalSettings && !generalSettings.skip_cards_mapping) && currentState === allOnboardingStates.generalMappingsDone}">
             <span class="cards-mapping" routerLink="../settings/corporate_card/mappings/">
               Go to Cards Mappings
             </span>
@@ -116,8 +116,8 @@
             <div class="onboarding-stepper--desc">Map Employees</div>
           </div>
           <div routerLink="../settings/employee_mappings/" class="onboarding-stepper--navigation cursor-pointer"
-            *ngIf="(currentState === allOnboardingStates.generalMappingsDone && currentState === allOnboardingStates.cardsMappingDone) || (showCardsMapping && currentState === allOnboardingStates.cardsMappingDone) || (!showCardsMapping && currentState === allOnboardingStates.generalMappingsDone)"
-            [ngClass]="{'onboarding-stepper--navigation__active': (currentState === allOnboardingStates.generalMappingsDone) || (showCardsMapping && currentState === allOnboardingStates.cardsMappingDone) || (!showCardsMapping && currentState === allOnboardingStates.generalMappingsDone)}"  
+          *ngIf="(showCardsMapping && currentState === allOnboardingStates.cardsMappingDone) || (!showCardsMapping && currentState === allOnboardingStates.generalMappingsDone)"
+          [ngClass]="{'onboarding-stepper--navigation__active': (showCardsMapping && currentState === allOnboardingStates.cardsMappingDone) || (!showCardsMapping && currentState === allOnboardingStates.generalMappingsDone)}"
             (click)="onEmployeeMappingsPageVisit(true)">
             Go to Employee Mappings
           </div>

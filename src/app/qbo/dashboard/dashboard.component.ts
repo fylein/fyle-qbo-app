@@ -152,7 +152,7 @@ export class DashboardComponent implements OnInit {
   getCardsMappings() {
     const that = this;
     if (that.generalSettings && that.showCardsMapping) {
-      if (that.skipCardsMappings) {
+      if (that.generalSettings.skip_cards_mapping) {
         that.currentState = onboardingStates.cardsMappingDone;
       } else {
         return that.mappingsService.getMappings('CORPORATE_CARD', null, 1).toPromise().then((res) => {
@@ -160,6 +160,8 @@ export class DashboardComponent implements OnInit {
             that.currentState = onboardingStates.cardsMappingDone;
           } else if (!that.generalSettings.corporate_credit_card_expenses_object || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') {
             that.currentState = onboardingStates.cardsMappingDone;
+          } else if (!that.generalSettings.skip_cards_mapping) {
+            throw new Error('card mappings have no entries');
           }
           return res;
         });
@@ -257,7 +259,6 @@ export class DashboardComponent implements OnInit {
       that.isLoading = true;
       that.settingsService.skipCardsMapping(that.workspaceId).subscribe((generalSetting: GeneralSetting) => {
         that.generalSettings = generalSetting;
-        that.skipCardsMappings = true;
         that.currentState = onboardingStates.cardsMappingDone;
         that.isLoading = false;
       });

@@ -263,7 +263,7 @@ export class GeneralMappingsComponent implements OnInit {
       that.billPaymentAccounts = responses.BANK_ACCOUNT;
       that.taxCodes = responses.TAX_CODE;
       that.qboExpenseAccounts = [ ...responses.BANK_ACCOUNT, ...responses.CREDIT_CARD_ACCOUNT];
-      that.debitCardExpenseAccounts = [ ...responses.BANK_ACCOUNT, ...responses.CREDIT_CARD_ACCOUNT];
+      that.debitCardExpenseAccounts = [ ...responses.BANK_ACCOUNT];
       that.getGeneralMappings();
     });
   }

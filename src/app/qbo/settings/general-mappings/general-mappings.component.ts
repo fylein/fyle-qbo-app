@@ -25,6 +25,7 @@ export class GeneralMappingsComponent implements OnInit {
   qboExpenseAccounts: MappingDestination[];
   qboVendors: MappingDestination[];
   taxCodes: MappingDestination[];
+  debitCardExpenseAccounts: MappingDestination[];
   generalMappings: GeneralMapping;
   generalSettings: GeneralSetting;
   isLoading = true;
@@ -84,6 +85,14 @@ export class GeneralMappingsComponent implements OnInit {
     const defaultVendorId = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.form.value.qboVendors : '';
     const defaultVendor = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.qboVendors.filter(filteredVendor => filteredVendor.destination_id === defaultVendorId)[0] : '';
 
+    const debitCardExpenseAccountId = that.generalSettings.corporate_credit_card_expenses_object === 'DEBIT CARD EXPENSE' ? 
+      that.form.value.debitCardExpenseAccounts : '';
+      
+    const debitCardExpenseAccount = that.generalSettings.corporate_credit_card_expenses_object === 'DEBIT CARD EXPENSE' ? 
+      that.debitCardExpenseAccounts.filter(
+        filteredDebitCardExpenseAccount => filteredDebitCardExpenseAccount.destination_id === debitCardExpenseAccountId
+      )[0] : '';
+
     const defaultTaxCodeId = that.form.value.qboTaxCodes;
     const defaultTaxCode = that.taxCodes.filter(filteredTaxCode => filteredTaxCode.destination_id === defaultTaxCodeId)[0];
 
@@ -101,7 +110,9 @@ export class GeneralMappingsComponent implements OnInit {
       default_ccc_vendor_name: defaultVendor ? defaultVendor.value : null,
       default_ccc_vendor_id: defaultVendor ? defaultVendor.destination_id : null,
       default_tax_code_name: defaultTaxCode ? defaultTaxCode.value : null,
-      default_tax_code_id: defaultTaxCode ? defaultTaxCode.destination_id : null
+      default_tax_code_id: defaultTaxCode ? defaultTaxCode.destination_id : null,
+      default_debit_card_account_name: debitCardExpenseAccount ? debitCardExpenseAccount.value : null,
+      default_debit_card_account_id: debitCardExpenseAccount ? debitCardExpenseAccount.destination_id : null,
     };
 
     this.mappingsService.postGeneralMappings(generalMappings).subscribe(() => {
@@ -146,6 +157,10 @@ export class GeneralMappingsComponent implements OnInit {
       that.form.controls.qboTaxCodes.setValidators(Validators.required);
     }
 
+    if (that.generalSettings.corporate_credit_card_expenses_object === 'DEBIT CARD EXPENSE') {
+      that.form.controls.debitCardExpenseAccounts.setValidators(Validators.required);
+    }
+
     if (that.generalMappings) {
       that.form.markAllAsTouched();
     }
@@ -177,7 +192,8 @@ export class GeneralMappingsComponent implements OnInit {
         cccAccounts: [that.generalMappings ? that.generalMappings.default_ccc_account_id : ''],
         billPaymentAccounts: [that.generalMappings ? that.generalMappings.bill_payment_account_id : ''],
         qboVendors: [that.generalMappings ? that.generalMappings.default_ccc_vendor_id : ''],
-        qboTaxCodes: [that.generalMappings ? that.generalMappings.default_tax_code_id : '']
+        qboTaxCodes: [that.generalMappings ? that.generalMappings.default_tax_code_id : ''],
+        debitCardExpenseAccounts: [that.generalMappings ? that.generalMappings.default_debit_card_account_id : ''],
       });
 
       that.setMandatoryField();
@@ -192,6 +208,7 @@ export class GeneralMappingsComponent implements OnInit {
         billPaymentAccounts: [null],
         qboVendors: [null],
         qboTaxCodes: [null],
+        debitCardExpenseAccounts: [null],
       });
 
       that.setMandatoryField();
@@ -216,7 +233,7 @@ export class GeneralMappingsComponent implements OnInit {
     attributes.push('CREDIT_CARD_ACCOUNT');
   }
 
-  if (that.generalSettings.reimbursable_expenses_object === 'EXPENSE') {
+  if (that.generalSettings.reimbursable_expenses_object === 'EXPENSE' || that.generalSettings.corporate_credit_card_expenses_object === 'DEBIT CARD EXPENSE') {
     attributes.push('BANK_ACCOUNT', 'CREDIT_CARD_ACCOUNT');
   }
 
@@ -250,6 +267,7 @@ export class GeneralMappingsComponent implements OnInit {
       that.billPaymentAccounts = responses.BANK_ACCOUNT;
       that.taxCodes = responses.TAX_CODE;
       that.qboExpenseAccounts = [ ...responses.BANK_ACCOUNT, ...responses.CREDIT_CARD_ACCOUNT];
+      that.debitCardExpenseAccounts = [ ...responses.BANK_ACCOUNT, ...responses.CREDIT_CARD_ACCOUNT];
       that.getGeneralMappings();
     });
   }

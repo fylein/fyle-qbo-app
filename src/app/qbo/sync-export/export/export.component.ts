@@ -15,6 +15,7 @@ import { CreditCardPurchasesService } from 'src/app/core/services/credit-card-pu
 import { WindowReferenceService } from 'src/app/core/services/window.service';
 import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 import { TaskResponse } from 'src/app/core/models/task-reponse.model';
+import { DebitCardExpensesService } from 'src/app/core/services/debit-card-expenses.service';
 
 @Component({
   selector: 'app-export',
@@ -48,7 +49,8 @@ export class ExportComponent implements OnInit {
     private qboExpensesService: QBOExpensesService,
     private snackBar: MatSnackBar,
     private settingsService: SettingsService,
-    private windowReferenceService: WindowReferenceService) {
+    private windowReferenceService: WindowReferenceService,
+    private debitCardService: DebitCardExpensesService) {
       this.windowReference = this.windowReferenceService.nativeWindow;
     }
 
@@ -81,6 +83,9 @@ export class ExportComponent implements OnInit {
       'CREDIT CARD PURCHASE': (filteredIds) => {
         return that.creditCardService.createCreditCardPurchases(filteredIds);
       },
+      'DEBIT CARD EXPENSE': (filteredIds)=>{
+        return that.debitCardService.createDebitCardExpenses(filteredIds);
+      },
       BILL: (filteredIds) => {
         return that.billsService.createBills(filteredIds);
       }
@@ -101,7 +106,7 @@ export class ExportComponent implements OnInit {
 
   checkResultsOfExport(filteredIds: number[]) {
     const that = this;
-    const taskType = ['CREATING_BILL', 'CREATING_EXPENSE', 'CREATING_CHECK', 'CREATING_CREDIT_CARD_PURCHASE', 'CREATING_JOURNAL_ENTRY', 'CREATING_CREDIT_CARD_CREDIT'];
+    const taskType = ['CREATING_BILL', 'CREATING_EXPENSE', 'CREATING_CHECK', 'CREATING_CREDIT_CARD_PURCHASE', 'CREATING_JOURNAL_ENTRY', 'CREATING_CREDIT_CARD_CREDIT', 'CREATING_DEBIT_CARD_EXPENSE'];
     interval(3000).pipe(
       switchMap(() => from(that.taskService.getAllTasks([], filteredIds, taskType))),
       takeWhile((response) => response.results.filter(task => (task.status === 'IN_PROGRESS' || task.status === 'ENQUEUED') && filteredIds.includes(task.expense_group)).length > 0, true)

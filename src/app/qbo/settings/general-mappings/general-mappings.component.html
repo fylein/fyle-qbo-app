@@ -144,7 +144,7 @@
         <mandatory-error-message listName="default tax code" *ngIf="form.controls.qboTaxCodes.touched && !form.controls.qboTaxCodes.valid"></mandatory-error-message>
       </div>
 
-    <button class="configurations--save-btn" mat-flat-button color="primary" (click)="submit()" type="submit">
+    <button [disabled]="!form.valid" class="configurations--save-btn" mat-flat-button color="primary" (click)="submit()" type="submit">
       Save
     </button>
   </form>

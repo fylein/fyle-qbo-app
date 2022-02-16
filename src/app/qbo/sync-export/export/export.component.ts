@@ -83,7 +83,7 @@ export class ExportComponent implements OnInit {
       'CREDIT CARD PURCHASE': (filteredIds) => {
         return that.creditCardService.createCreditCardPurchases(filteredIds);
       },
-      'DEBIT CARD EXPENSE': (filteredIds)=>{
+      'DEBIT CARD EXPENSE': (filteredIds) => {
         return that.debitCardService.createDebitCardExpenses(filteredIds);
       },
       BILL: (filteredIds) => {

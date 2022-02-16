@@ -85,13 +85,9 @@ export class GeneralMappingsComponent implements OnInit {
     const defaultVendorId = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.form.value.qboVendors : '';
     const defaultVendor = that.generalSettings.corporate_credit_card_expenses_object === 'BILL' ? that.qboVendors.filter(filteredVendor => filteredVendor.destination_id === defaultVendorId)[0] : '';
 
-    const debitCardExpenseAccountId = that.generalSettings.corporate_credit_card_expenses_object === 'DEBIT CARD EXPENSE' ? 
-      that.form.value.debitCardExpenseAccounts : '';
-      
-    const debitCardExpenseAccount = that.generalSettings.corporate_credit_card_expenses_object === 'DEBIT CARD EXPENSE' ? 
-      that.debitCardExpenseAccounts.filter(
-        filteredDebitCardExpenseAccount => filteredDebitCardExpenseAccount.destination_id === debitCardExpenseAccountId
-      )[0] : '';
+    const debitCardExpenseAccountId = that.generalSettings.corporate_credit_card_expenses_object === 'DEBIT CARD EXPENSE' ? that.form.value.debitCardExpenseAccounts : '';
+
+    const debitCardExpenseAccount = that.generalSettings.corporate_credit_card_expenses_object === 'DEBIT CARD EXPENSE' ? that.debitCardExpenseAccounts.filter(filteredDebitCardExpenseAccount => filteredDebitCardExpenseAccount.destination_id === debitCardExpenseAccountId)[0] : '';
 
     const defaultTaxCodeId = that.form.value.qboTaxCodes;
     const defaultTaxCode = that.taxCodes.filter(filteredTaxCode => filteredTaxCode.destination_id === defaultTaxCodeId)[0];
@@ -137,7 +133,7 @@ export class GeneralMappingsComponent implements OnInit {
       that.form.controls.bankAccounts.setValidators(Validators.required);
     }
 
-    if (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL') {
+    if (that.generalSettings.corporate_credit_card_expenses_object && that.generalSettings.corporate_credit_card_expenses_object !== 'BILL' && that.generalSettings.corporate_credit_card_expenses_object !== 'DEBIT CARD EXPENSE') {
       that.form.controls.cccAccounts.setValidators(Validators.required);
     }
 

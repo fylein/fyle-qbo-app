@@ -76,7 +76,7 @@ export class ExpenseGroupSettingsDialogComponent implements OnInit {
         cccExportDate: [ that.expenseGroupSettings.ccc_export_date_type]
       });
 
-      if (that.workspaceGeneralSettings.corporate_credit_card_expenses_object === 'CREDIT CARD PURCHASE') {
+      if (that.workspaceGeneralSettings.corporate_credit_card_expenses_object === 'CREDIT CARD PURCHASE' || that.workspaceGeneralSettings.corporate_credit_card_expenses_object === 'DEBIT CARD EXPENSE') {
         that.importExpensesForm.controls.cccExpenseGroupConfiguration.disable();
         that.importExpensesForm.controls.cccExportDate.disable();
       }

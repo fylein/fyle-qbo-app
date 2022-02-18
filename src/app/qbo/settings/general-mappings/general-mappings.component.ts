@@ -221,7 +221,7 @@ export class GeneralMappingsComponent implements OnInit {
     attributes.push('ACCOUNTS_PAYABLE');
   }
 
-  if (that.generalSettings.employee_field_mapping === 'EMPLOYEE' && this.generalSettings.reimbursable_expenses_object !== 'EXPENSE') {
+  if ((that.generalSettings.employee_field_mapping === 'EMPLOYEE' && this.generalSettings.reimbursable_expenses_object !== 'EXPENSE') || (that.generalSettings.corporate_credit_card_expenses_object === 'DEBIT CARD EXPENSE')) {
     attributes.push('BANK_ACCOUNT');
   }
 
@@ -229,7 +229,7 @@ export class GeneralMappingsComponent implements OnInit {
     attributes.push('CREDIT_CARD_ACCOUNT');
   }
 
-  if (that.generalSettings.reimbursable_expenses_object === 'EXPENSE' || that.generalSettings.corporate_credit_card_expenses_object === 'DEBIT CARD EXPENSE') {
+  if (that.generalSettings.reimbursable_expenses_object === 'EXPENSE') {
     attributes.push('BANK_ACCOUNT', 'CREDIT_CARD_ACCOUNT');
   }
 

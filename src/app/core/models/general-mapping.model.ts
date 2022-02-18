@@ -19,4 +19,6 @@ export type GeneralMapping = {
   created_at?: Date;
   updated_at?: Date;
   workspace?: number;
+  default_debit_card_account_name: string;
+  default_debit_card_account_id: string;
 };

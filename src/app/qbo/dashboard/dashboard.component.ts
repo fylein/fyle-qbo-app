@@ -132,7 +132,7 @@ export class DashboardComponent implements OnInit {
     ).toPromise().then((res) => {
       that.generalSettings = res[0];
       that.currentState = onboardingStates.configurationsDone;
-      if (!res[0].corporate_credit_card_expenses_object || res[0].corporate_credit_card_expenses_object === 'BILL') {
+      if (!res[0].corporate_credit_card_expenses_object || res[0].corporate_credit_card_expenses_object === 'BILL' || res[0].corporate_credit_card_expenses_object === 'DEBIT CARD EXPENSE') {
         that.showCardsMapping = false;
         that.skipCardsMappings = true;
       }

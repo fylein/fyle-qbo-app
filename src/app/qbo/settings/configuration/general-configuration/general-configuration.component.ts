@@ -321,11 +321,11 @@ export class GeneralConfigurationComponent implements OnInit {
 
     let cardsMapping = false;
 
-    if (that.generalSettingsForm.value.enableCardsMapping && (that.generalSettingsForm.value.cccExpense && this.generalSettingsForm.value.cccExpense !== 'BILL')) {
+    if (that.generalSettingsForm.value.enableCardsMapping && (that.generalSettingsForm.value.cccExpense && this.generalSettingsForm.value.cccExpense !== 'BILL' && that.generalSettingsForm.value.cccExpense !== 'DEBIT CARD EXPENSE')) {
       cardsMapping = true;
     }
 
-    if ((that.generalSettingsForm.value.cccExpense && that.generalSettingsForm.value.cccExpense !== 'BILL') && that.workspaceId.toString() !== '171' && that.workspaceId.toString() !== '284') {
+    if ((that.generalSettingsForm.value.cccExpense && that.generalSettingsForm.value.cccExpense !== 'BILL' && that.generalSettingsForm.value.cccExpense !== 'DEBIT CARD EXPENSE') && that.workspaceId.toString() !== '171' && that.workspaceId.toString() !== '284') {
       cardsMapping = true;
     }
 

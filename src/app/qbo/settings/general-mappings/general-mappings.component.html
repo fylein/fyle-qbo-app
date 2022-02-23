@@ -91,7 +91,7 @@
       <mandatory-error-message listName="vendor" *ngIf="form.controls.qboVendors.touched && !form.controls.qboVendors.valid"></mandatory-error-message>
 
       <div class="mat-body-strong" *ngIf="generalSettings.corporate_credit_card_expenses_object === 'DEBIT CARD EXPENSE'">
-        Default Debit Card Expense Account
+        Default Debit Card Account
         <mandatory-field *ngIf="isFieldMandatory('debitCardExpenseAccounts')"></mandatory-field>
       </div>
       <mat-form-field floatLabel="always" appearance="outline" required

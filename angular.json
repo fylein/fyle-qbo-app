@@ -97,6 +97,9 @@
             },
             "dev": {
               "browserTarget": "fyle-qbo-app:build:dev"
+            },
+            "localhost": {
+              "browserTarget": "fyle-qbo-app:build:localhost"
             }
           }
         },

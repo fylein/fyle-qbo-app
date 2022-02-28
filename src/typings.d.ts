@@ -13,5 +13,6 @@ interface Env {
   QBO_AUTHORIZE_URI: string;
   QBO_APP_URL: string;
   SENTRY_DSN: string;
+  HOTJAR_ID: string;
   RELEASE: string;
 }

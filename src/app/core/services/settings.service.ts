@@ -40,7 +40,7 @@ export class SettingsService {
   })
   deleteQBOCredentials(workspaceId: number) {
     globalCacheBusterNotifier.next();
-    return this.apiService.post('/workspaces/' + workspaceId + '/credentials/qbo/delete/', {});
+    return this.apiService.patch('/workspaces/' + workspaceId + '/credentials/qbo/delete/', {});
   }
 
   @CacheBuster({

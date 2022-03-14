@@ -43,7 +43,7 @@ export class WorkspacesGuard implements CanActivate {
       catchError(error => {
         const that = this;
         if (error.status === 400 && error.error.message === 'Quickbooks Online connection expired') {
-          that.settingsService.deleteQBOCredentials(workspaceId).subscribe(() => {
+          that.settingsService.patchQBOCredentials(workspaceId).subscribe(() => {
             that.authService.logout();
             that.authService.redirectToLogin();
           });

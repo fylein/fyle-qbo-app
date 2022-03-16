@@ -40,7 +40,7 @@ export class SettingsService {
   })
   patchQBOCredentials(workspaceId: number) {
     globalCacheBusterNotifier.next();
-    return this.apiService.patch('/workspaces/' + workspaceId + '/credentials/qbo/patch/', {});
+    return this.apiService.patch('/workspaces/' + workspaceId + '/credentials/qbo/', {});
   }
 
   @CacheBuster({

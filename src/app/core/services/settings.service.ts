@@ -46,11 +46,12 @@ export class SettingsService {
   @CacheBuster({
     cacheBusterNotifier: qboCredentialsCache
   })
-  connectQBO(workspaceId: number, authorizationCode: string, realmId: string): Observable<QBOCredentials> {
+  connectQBO(workspaceId: number, authorizationCode: string, realmId: string, redirectUri: string): Observable<QBOCredentials> {
     globalCacheBusterNotifier.next();
     return this.apiService.post('/workspaces/' + workspaceId + '/connect_qbo/authorization_code/', {
       code: authorizationCode,
-      realm_id: realmId
+      realm_id: realmId,
+      redirect_uri: redirectUri
     });
   }
 

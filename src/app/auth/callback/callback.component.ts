@@ -49,7 +49,7 @@ export class CallbackComponent implements OnInit {
             };
             that.storageService.set('user', user);
             that.authService.getFyleOrgs().subscribe(responses => {
-              that.storageService.set('orgsCount', responses[1]);
+              that.storageService.set('orgsCount', responses);
               that.router.navigate(['/workspaces']);
             });
           },

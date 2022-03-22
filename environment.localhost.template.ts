@@ -12,5 +12,6 @@ export const environment = {
   qbo_authorize_uri: 'QBO CONNETION URI',
   qbo_app_url: 'QBO app url',
   sentry_dsn: 'SENTRY_DSN',
-  release: 'RELEASE'
+  release: 'RELEASE',
+  qbo_redirect_uri : 'QBO REDIRECT URI'
 }

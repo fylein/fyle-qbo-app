@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TrackingService } from 'src/app/core/services/tracking.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-qbo-callback',
@@ -22,7 +23,8 @@ export class QBOCallbackComponent implements OnInit {
     const workspaceId: number = that.route.snapshot.queryParams.state;
     const code: string = that.route.snapshot.queryParams.code;
     const realmId: string = that.route.snapshot.queryParams.realmId;
-    that.settingsService.connectQBO(workspaceId, code, realmId).subscribe(() => {
+    const redirectUri: string = environment.qbo_redirect_uri
+    that.settingsService.connectQBO(workspaceId, code, realmId, redirectUri).subscribe(() => {
       that.trackingService.onQBOConnect();
       that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`);
     }, () => {

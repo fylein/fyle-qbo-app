@@ -23,7 +23,7 @@ export class QBOCallbackComponent implements OnInit {
     const workspaceId: number = that.route.snapshot.queryParams.state;
     const code: string = that.route.snapshot.queryParams.code;
     const realmId: string = that.route.snapshot.queryParams.realmId;
-    const redirectUri: string = environment.qbo_redirect_uri
+    const redirectUri: string = environment.qbo_redirect_uri;
     that.settingsService.connectQBO(workspaceId, code, realmId, redirectUri).subscribe(() => {
       that.trackingService.onQBOConnect();
       that.router.navigateByUrl(`workspaces/${workspaceId}/dashboard`);

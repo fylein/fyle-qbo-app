@@ -455,7 +455,7 @@ export class MappingsService {
     return this.apiService.post(`/workspaces/${workspaceId}/mappings/general/`, generalMappings);
   }
 
-  getMappings(sourceType: string, destinationType: string=null, uri: string = null, limit: number = 500, offset: number = 0, tableDimension: number = 2): Observable<MappingsResponse> {
+  getMappings(sourceType: string, destinationType: string = null, uri: string = null, limit: number = 500, offset: number = 0, tableDimension: number = 2): Observable<MappingsResponse> {
     const workspaceId = this.workspaceService.getWorkspaceId();
     const url = uri ? uri.split('/api')[1] : `/workspaces/${workspaceId}/mappings/?limit=${limit}&offset=${offset}&source_type=${sourceType}&destination_type=${destinationType}&table_dimension=${tableDimension}`;
     return this.apiService.get(url, {});

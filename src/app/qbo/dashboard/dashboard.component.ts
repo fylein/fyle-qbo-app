@@ -155,7 +155,7 @@ export class DashboardComponent implements OnInit {
       if (that.generalSettings.skip_cards_mapping) {
         that.currentState = onboardingStates.cardsMappingDone;
       } else {
-        return that.mappingsService.getMappings('CORPORATE_CARD', null, 1).toPromise().then((res) => {
+        return that.mappingsService.getMappings('CORPORATE_CARD', 'CREDIT_CARD_ACCOUNT', null, 1).toPromise().then((res) => {
           if (res.results.length > 0) {
             that.currentState = onboardingStates.cardsMappingDone;
           } else if (!that.generalSettings.corporate_credit_card_expenses_object || that.generalSettings.corporate_credit_card_expenses_object === 'BILL') {
@@ -190,7 +190,7 @@ export class DashboardComponent implements OnInit {
   getCategoryMappings() {
     const that = this;
     // TODO: remove promises and do with rxjs observables
-    return that.mappingsService.getMappings('CATEGORY', null, 1).toPromise().then((res) => {
+    return that.mappingsService.getMappings('CATEGORY', 'ACCOUNT', null, 1).toPromise().then((res) => {
       if (res.results.length > 0) {
         that.currentState = onboardingStates.categoryMappingsDone;
       } else {

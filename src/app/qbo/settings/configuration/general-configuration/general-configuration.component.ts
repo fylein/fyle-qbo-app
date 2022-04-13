@@ -352,7 +352,7 @@ export class GeneralConfigurationComponent implements OnInit {
     const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
     const chartOfAccounts = that.generalSettingsForm.value.chartOfAccounts ? that.generalSettingsForm.value.chartOfAccounts : ['Expense'];
     const mapFyleCardQboAccount = cardsMapping;
-    const import_vendors_as_merchants = that.generalSettingsForm.value.importVendorsAsMerchants ? that.generalSettingsForm.value.importVendorsAsMerchants : false
+    const importVendorsAsMerchants = that.generalSettingsForm.value.importVendorsAsMerchants ? that.generalSettingsForm.value.importVendorsAsMerchants : false;
 
     let fyleToQuickbooks = false;
     let quickbooksToFyle = false;
@@ -404,7 +404,7 @@ export class GeneralConfigurationComponent implements OnInit {
       je_single_credit_line: jeSingleCreditLine,
       charts_of_accounts: chartOfAccounts,
       map_fyle_cards_qbo_account: mapFyleCardQboAccount,
-      import_vendors_as_merchants: import_vendors_as_merchants
+      import_vendors_as_merchants: importVendorsAsMerchants
     };
 
     // Open dialog conditionally

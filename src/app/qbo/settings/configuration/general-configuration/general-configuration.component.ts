@@ -179,7 +179,8 @@ export class GeneralConfigurationComponent implements OnInit {
         autoCreateDestinationEntity: [that.generalSettings.auto_create_destination_entity],
         jeSingleCreditLine: [that.generalSettings.je_single_credit_line],
         chartOfAccounts: [that.generalSettings.charts_of_accounts ? that.generalSettings.charts_of_accounts : ['Expense']],
-        enableCardsMapping: [that.generalSettings.map_fyle_cards_qbo_account]
+        enableCardsMapping: [that.generalSettings.map_fyle_cards_qbo_account],
+        importVendorsAsMerchants: [that.generalSettings.import_vendors_as_merchants]
       });
 
       const fyleProjectMapping = that.mappingSettings.filter(
@@ -215,7 +216,8 @@ export class GeneralConfigurationComponent implements OnInit {
         autoMapEmployees: [null],
         autoCreateDestinationEntity: [false],
         jeSingleCreditLine: [false],
-        enableCardsMapping: [false]
+        enableCardsMapping: [false],
+        importVendorsAsMerchants: [false],
       });
 
       that.setupFieldWatchers();
@@ -350,7 +352,7 @@ export class GeneralConfigurationComponent implements OnInit {
     const jeSingleCreditLine = that.generalSettingsForm.value.jeSingleCreditLine;
     const chartOfAccounts = that.generalSettingsForm.value.chartOfAccounts ? that.generalSettingsForm.value.chartOfAccounts : ['Expense'];
     const mapFyleCardQboAccount = cardsMapping;
-
+    const importVendorsAsMerchants = that.generalSettingsForm.value.importVendorsAsMerchants ? that.generalSettingsForm.value.importVendorsAsMerchants : false;
 
     let fyleToQuickbooks = false;
     let quickbooksToFyle = false;
@@ -401,7 +403,8 @@ export class GeneralConfigurationComponent implements OnInit {
       auto_create_destination_entity: autoCreateDestinationEntity,
       je_single_credit_line: jeSingleCreditLine,
       charts_of_accounts: chartOfAccounts,
-      map_fyle_cards_qbo_account: mapFyleCardQboAccount
+      map_fyle_cards_qbo_account: mapFyleCardQboAccount,
+      import_vendors_as_merchants: importVendorsAsMerchants
     };
 
     // Open dialog conditionally

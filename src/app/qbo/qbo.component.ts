@@ -212,6 +212,10 @@ export class QboComponent implements OnInit {
     that.snackBar.open('Refreshing Fyle and Quickbooks Data');
   }
 
+  switchToNewApp(): void {
+
+  }
+
   ngOnInit() {
     const that = this;
     const onboarded = that.storageService.get('onboarded');

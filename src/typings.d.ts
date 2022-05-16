@@ -15,4 +15,5 @@ interface Env {
   SENTRY_DSN: string;
   HOTJAR_ID: string;
   RELEASE: string;
+  NEW_QBO_APP_URL: string;
 }

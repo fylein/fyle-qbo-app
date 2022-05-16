@@ -16,6 +16,7 @@ import { MappingSettingResponse } from '../core/models/mapping-setting-response.
 import { MappingsService } from '../core/services/mappings.service';
 import { MatSnackBar } from '@angular/material';
 import * as Sentry from '@sentry/angular';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-qbo',
@@ -40,6 +41,7 @@ export class QboComponent implements OnInit {
   showRefreshIcon: boolean;
   qboCompanyName: string;
   navDisabled = true;
+  showSwitchApp = false;
   windowReference: Window;
 
   constructor(
@@ -157,11 +159,23 @@ export class QboComponent implements OnInit {
     });
   }
 
+  showAppSwitcher(): void {
+    this.showSwitchApp = true;
+  }
+
   setupWorkspace() {
     const that = this;
     that.user = that.authService.getUser();
     that.getOrCreateWorkspace().then((workspace: Workspace) => {
       that.workspace = workspace;
+
+      // Redirect new orgs to new app
+      const workspaceCreatedAt = new Date(workspace.created_at);
+      const oldAppCutOffDate = new Date('2022-05-16T00:00:00.000Z');
+      if (workspaceCreatedAt.getTime() > oldAppCutOffDate.getTime()) {
+        this.switchToNewApp();
+        return;
+      }
       that.getSettingsAndNavigate();
       that.getQboOrgName();
     });
@@ -213,7 +227,22 @@ export class QboComponent implements OnInit {
   }
 
   switchToNewApp(): void {
+    const user = this.authService.getUser();
 
+    const localStorageDump = {
+      'user': {
+        'email': user.employee_email,
+        'access_token': this.storageService.get('access_token'),
+        'refresh_token': this.storageService.get('refresh_token'),
+        'full_name': user.full_name,
+        'user_id': user.user_id,
+        'org_id': user.org_id,
+        'org_name': user.org_name
+      },
+      'orgsCount': this.orgsCount
+    };
+
+    this.windowReference.location.href = `${environment.new_qbo_app_url}?local_storage_dump=${JSON.stringify(localStorageDump)}`;
   }
 
   ngOnInit() {

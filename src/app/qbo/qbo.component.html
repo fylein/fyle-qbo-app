@@ -57,13 +57,13 @@
   <mat-sidenav-content>
     <mat-toolbar fxLayoutAlign="space-between center">
       <div class="qbo--title" fxLayout="row" fxLayoutAlign="space-around center">
-        <div class="mat-small" [ngClass]="{'switcher--separator': !qboCompanyName}">
+        <div class="mat-small">
           Fyle Org Name:
           <span class="qbo--title-fyle-org">
             {{user.org_name}}
           </span>
         </div>
-        <div class="mat-small qbo--title-separator">
+        <div class="mat-small qbo--title-separator" *ngIf="qboCompanyName || showSwitchApp">
           |
         </div>
         <div class="mat-small" *ngIf="qboCompanyName">
@@ -72,10 +72,10 @@
             {{qboCompanyName}}
           </span>
         </div>
-        <div class="mat-small qbo--title-separator" *ngIf="qboCompanyName">
+        <div class="mat-small qbo--title-separator" *ngIf="qboCompanyName && showSwitchApp">
           |
         </div>
-        <div (click)="switchToNewApp()" fxLayout="row" fxLayoutAlign="space-between center" class="switcher--back-btn">
+        <div *ngIf="showSwitchApp" (click)="switchToNewApp()" fxLayout="row" fxLayoutAlign="space-between center" class="switcher--back-btn">
           <img src="assets/images/svgs/sync.svg" class="switcher--back-btn-arrow" width="12px" height="9px" />
           <span class="switcher--btn-icon">Switch to Integration 2.0</span>
         </div>

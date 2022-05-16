@@ -271,6 +271,7 @@ export class DashboardComponent implements OnInit {
     const onboarded = that.storageService.get('onboarded');
 
     if (onboarded === true) {
+      that.qbo.showAppSwitcher();
       that.updateDimensionTables();
       that.loadDashboardData();
       that.getQboStatus().then(() => {

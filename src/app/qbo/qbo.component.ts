@@ -172,7 +172,7 @@ export class QboComponent implements OnInit {
       // Redirect new orgs to new app
       const workspaceCreatedAt = new Date(workspace.created_at);
       const oldAppCutOffDate = new Date('2022-05-16T00:00:00.000Z');
-      if (workspace.app_version == 'v2') {
+      if (workspace.app_version === 'v2') {
         this.redirectToNewApp();
         return;
       } else if (workspaceCreatedAt.getTime() > oldAppCutOffDate.getTime()) {
@@ -233,20 +233,20 @@ export class QboComponent implements OnInit {
   private redirectToNewApp(): void {
     const user = this.authService.getUser();
 
-      const localStorageDump = {
-        user: {
-          email: user.employee_email,
-          access_token: this.storageService.get('access_token'),
-          refresh_token: this.storageService.get('refresh_token'),
-          full_name: user.full_name,
-          user_id: user.user_id,
-          org_id: user.org_id,
-          org_name: user.org_name
-        },
-        orgsCount: this.orgsCount
-      };
+    const localStorageDump = {
+      user: {
+        email: user.employee_email,
+        access_token: this.storageService.get('access_token'),
+        refresh_token: this.storageService.get('refresh_token'),
+        full_name: user.full_name,
+        user_id: user.user_id,
+        org_id: user.org_id,
+        org_name: user.org_name
+      },
+      orgsCount: this.orgsCount
+    };
 
-      this.windowReference.location.href = `${environment.new_qbo_app_url}?local_storage_dump=${JSON.stringify(localStorageDump)}`;
+    this.windowReference.location.href = `${environment.new_qbo_app_url}?local_storage_dump=${JSON.stringify(localStorageDump)}`;
   }
 
   switchToNewApp(workspace: MinimalPatchWorkspace | void): void {

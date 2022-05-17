@@ -9,7 +9,7 @@ import { StorageService } from '../core/services/storage.service';
 import { TrackingService } from '../core/services/tracking.service';
 import { WindowReferenceService } from '../core/services/window.service';
 import { UserProfile } from '../core/models/user-profile.model';
-import { Workspace } from '../core/models/workspace.model';
+import { MinimalPatchWorkspace, Workspace } from '../core/models/workspace.model';
 import { GeneralSetting } from '../core/models/general-setting.model';
 import { MappingSetting } from '../core/models/mapping-setting.model';
 import { MappingSettingResponse } from '../core/models/mapping-setting-response.model';
@@ -172,10 +172,14 @@ export class QboComponent implements OnInit {
       // Redirect new orgs to new app
       const workspaceCreatedAt = new Date(workspace.created_at);
       const oldAppCutOffDate = new Date('2022-05-16T00:00:00.000Z');
-      if (workspaceCreatedAt.getTime() > oldAppCutOffDate.getTime()) {
-        this.switchToNewApp();
+      if (workspace.app_version == 'v2') {
+        this.redirectToNewApp();
+        return;
+      } else if (workspaceCreatedAt.getTime() > oldAppCutOffDate.getTime()) {
+        this.switchToNewApp({app_version: 'v2'});
         return;
       }
+
       that.getSettingsAndNavigate();
       that.getQboOrgName();
     });
@@ -226,23 +230,36 @@ export class QboComponent implements OnInit {
     that.snackBar.open('Refreshing Fyle and Quickbooks Data');
   }
 
-  switchToNewApp(): void {
+  private redirectToNewApp(): void {
     const user = this.authService.getUser();
 
-    const localStorageDump = {
-      'user': {
-        'email': user.employee_email,
-        'access_token': this.storageService.get('access_token'),
-        'refresh_token': this.storageService.get('refresh_token'),
-        'full_name': user.full_name,
-        'user_id': user.user_id,
-        'org_id': user.org_id,
-        'org_name': user.org_name
-      },
-      'orgsCount': this.orgsCount
-    };
+      const localStorageDump = {
+        'user': {
+          'email': user.employee_email,
+          'access_token': this.storageService.get('access_token'),
+          'refresh_token': this.storageService.get('refresh_token'),
+          'full_name': user.full_name,
+          'user_id': user.user_id,
+          'org_id': user.org_id,
+          'org_name': user.org_name
+        },
+        'orgsCount': this.orgsCount
+      };
 
-    this.windowReference.location.href = `${environment.new_qbo_app_url}?local_storage_dump=${JSON.stringify(localStorageDump)}`;
+      this.windowReference.location.href = `${environment.new_qbo_app_url}?local_storage_dump=${JSON.stringify(localStorageDump)}`;
+  }
+
+  switchToNewApp(workspace: MinimalPatchWorkspace | void): void {
+    if (!workspace) {
+      workspace = {
+        app_version: 'v2',
+        onboarding_state: 'COMPLETE'
+      };
+    }
+
+    this.workspaceService.patchWorkspace(workspace).subscribe(() => {
+      this.redirectToNewApp();
+    });
   }
 
   ngOnInit() {

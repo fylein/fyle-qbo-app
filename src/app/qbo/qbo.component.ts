@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, AfterContentChecked } from '@angular/core';
 import { Router } from '@angular/router';
 import { forkJoin, noop } from 'rxjs';
 import { AuthService } from '../core/services/auth.service';
@@ -23,7 +23,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './qbo.component.html',
   styleUrls: ['./qbo.component.scss']
 })
-export class QboComponent implements OnInit {
+export class QboComponent implements OnInit, AfterContentChecked {
   user: {
     employee_email: string,
     full_name: string,
@@ -45,6 +45,7 @@ export class QboComponent implements OnInit {
   windowReference: Window;
 
   constructor(
+    private changeDetector: ChangeDetectorRef,
     private workspaceService: WorkspaceService,
     private settingsService: SettingsService,
     private router: Router,
@@ -270,4 +271,8 @@ export class QboComponent implements OnInit {
     that.orgsCount = that.authService.getOrgCount();
     that.setupWorkspace();
   }
+
+  ngAfterContentChecked() : void {
+    this.changeDetector.detectChanges();
+}
 }

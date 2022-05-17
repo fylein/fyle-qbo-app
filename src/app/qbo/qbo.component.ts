@@ -272,7 +272,7 @@ export class QboComponent implements OnInit, AfterContentChecked {
     that.setupWorkspace();
   }
 
-  ngAfterContentChecked() : void {
+  ngAfterContentChecked(): void {
     this.changeDetector.detectChanges();
   }
 }

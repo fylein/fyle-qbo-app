@@ -234,16 +234,16 @@ export class QboComponent implements OnInit {
     const user = this.authService.getUser();
 
       const localStorageDump = {
-        'user': {
-          'email': user.employee_email,
-          'access_token': this.storageService.get('access_token'),
-          'refresh_token': this.storageService.get('refresh_token'),
-          'full_name': user.full_name,
-          'user_id': user.user_id,
-          'org_id': user.org_id,
-          'org_name': user.org_name
+        user: {
+          email: user.employee_email,
+          access_token: this.storageService.get('access_token'),
+          refresh_token: this.storageService.get('refresh_token'),
+          full_name: user.full_name,
+          user_id: user.user_id,
+          org_id: user.org_id,
+          org_name: user.org_name
         },
-        'orgsCount': this.orgsCount
+        orgsCount: this.orgsCount
       };
 
       this.windowReference.location.href = `${environment.new_qbo_app_url}?local_storage_dump=${JSON.stringify(localStorageDump)}`;

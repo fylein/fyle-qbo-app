@@ -302,6 +302,7 @@ export class DashboardComponent implements OnInit {
         }).then(() => {
           that.currentState = onboardingStates.isOnboarded;
           that.storageService.set('onboarded', true);
+          that.qbo.showAppSwitcher();
           that.qbo.hideRefreshIconVisibility();
           return that.loadDashboardData();
         }).catch(() => {

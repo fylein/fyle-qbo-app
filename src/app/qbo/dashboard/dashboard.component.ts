@@ -271,6 +271,7 @@ export class DashboardComponent implements OnInit {
     const onboarded = that.storageService.get('onboarded');
 
     if (onboarded === true) {
+      that.qbo.showAppSwitcher();
       that.updateDimensionTables();
       that.loadDashboardData();
       that.getQboStatus().then(() => {
@@ -301,6 +302,7 @@ export class DashboardComponent implements OnInit {
         }).then(() => {
           that.currentState = onboardingStates.isOnboarded;
           that.storageService.set('onboarded', true);
+          that.qbo.showAppSwitcher();
           that.qbo.hideRefreshIconVisibility();
           return that.loadDashboardData();
         }).catch(() => {

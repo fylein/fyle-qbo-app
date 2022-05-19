@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, AfterContentChecked } from '@angular/core';
 import { Router } from '@angular/router';
 import { forkJoin, noop } from 'rxjs';
 import { AuthService } from '../core/services/auth.service';
@@ -9,20 +9,21 @@ import { StorageService } from '../core/services/storage.service';
 import { TrackingService } from '../core/services/tracking.service';
 import { WindowReferenceService } from '../core/services/window.service';
 import { UserProfile } from '../core/models/user-profile.model';
-import { Workspace } from '../core/models/workspace.model';
+import { MinimalPatchWorkspace, Workspace } from '../core/models/workspace.model';
 import { GeneralSetting } from '../core/models/general-setting.model';
 import { MappingSetting } from '../core/models/mapping-setting.model';
 import { MappingSettingResponse } from '../core/models/mapping-setting-response.model';
 import { MappingsService } from '../core/services/mappings.service';
 import { MatSnackBar } from '@angular/material';
 import * as Sentry from '@sentry/angular';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-qbo',
   templateUrl: './qbo.component.html',
   styleUrls: ['./qbo.component.scss']
 })
-export class QboComponent implements OnInit {
+export class QboComponent implements OnInit, AfterContentChecked {
   user: {
     employee_email: string,
     full_name: string,
@@ -40,9 +41,11 @@ export class QboComponent implements OnInit {
   showRefreshIcon: boolean;
   qboCompanyName: string;
   navDisabled = true;
+  showSwitchApp = false;
   windowReference: Window;
 
   constructor(
+    private changeDetector: ChangeDetectorRef,
     private workspaceService: WorkspaceService,
     private settingsService: SettingsService,
     private router: Router,
@@ -157,11 +160,28 @@ export class QboComponent implements OnInit {
     });
   }
 
+  showAppSwitcher(): void {
+    this.showSwitchApp = true;
+  }
+
   setupWorkspace() {
     const that = this;
     that.user = that.authService.getUser();
     that.getOrCreateWorkspace().then((workspace: Workspace) => {
       that.workspace = workspace;
+
+      // Redirect new orgs to new app
+      const workspaceCreatedAt = new Date(workspace.created_at);
+      // TODO: replace oldAppCutOffDate
+      const oldAppCutOffDate = new Date('2023-05-16T00:00:00.000Z');
+      if (workspace.app_version === 'v2') {
+        this.redirectToNewApp();
+        return;
+      } else if (workspaceCreatedAt.getTime() > oldAppCutOffDate.getTime()) {
+        this.switchToNewApp({app_version: 'v2'});
+        return;
+      }
+
       that.getSettingsAndNavigate();
       that.getQboOrgName();
     });
@@ -212,6 +232,38 @@ export class QboComponent implements OnInit {
     that.snackBar.open('Refreshing Fyle and Quickbooks Data');
   }
 
+  private redirectToNewApp(): void {
+    const user = this.authService.getUser();
+
+    const localStorageDump = {
+      user: {
+        email: user.employee_email,
+        access_token: this.storageService.get('access_token'),
+        refresh_token: this.storageService.get('refresh_token'),
+        full_name: user.full_name,
+        user_id: user.user_id,
+        org_id: user.org_id,
+        org_name: user.org_name
+      },
+      orgsCount: this.orgsCount
+    };
+
+    this.windowReference.location.href = `${environment.new_qbo_app_url}?local_storage_dump=${JSON.stringify(localStorageDump)}`;
+  }
+
+  switchToNewApp(workspace: MinimalPatchWorkspace | void): void {
+    if (!workspace) {
+      workspace = {
+        app_version: 'v2',
+        onboarding_state: 'COMPLETE'
+      };
+    }
+
+    this.workspaceService.patchWorkspace(workspace).subscribe(() => {
+      this.redirectToNewApp();
+    });
+  }
+
   ngOnInit() {
     const that = this;
     const onboarded = that.storageService.get('onboarded');
@@ -219,5 +271,9 @@ export class QboComponent implements OnInit {
     that.navDisabled = onboarded !== true;
     that.orgsCount = that.authService.getOrgCount();
     that.setupWorkspace();
+  }
+
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
   }
 }

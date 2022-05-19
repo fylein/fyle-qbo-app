@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { Observable, Subject } from 'rxjs';
 import { StorageService } from './storage.service';
-import { Workspace } from '../models/workspace.model';
+import { MinimalPatchWorkspace, Workspace } from '../models/workspace.model';
 import { Cacheable } from 'ngx-cacheable';
 
 const workspaceCache$ = new Subject<void>();
@@ -19,6 +19,10 @@ export class WorkspaceService {
 
   createWorkspace(): Observable<Workspace> {
     return this.apiService.post('/workspaces/', {});
+  }
+
+  patchWorkspace(workspace: MinimalPatchWorkspace): Observable<Workspace> {
+    return this.apiService.patch(`/workspaces/${this.getWorkspaceId()}/`, workspace);
   }
 
   @Cacheable()

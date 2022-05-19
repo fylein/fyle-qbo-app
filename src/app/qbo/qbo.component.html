@@ -63,7 +63,9 @@
             {{user.org_name}}
           </span>
         </div>
-        <div class="mat-small qbo--title-separator" *ngIf="qboCompanyName || showSwitchApp">
+        <!-- TODO -->
+        <!-- <div class="mat-small qbo--title-separator" *ngIf="qboCompanyName || showSwitchApp"> -->
+        <div class="mat-small qbo--title-separator" *ngIf="qboCompanyName">
           |
         </div>
         <div class="mat-small" *ngIf="qboCompanyName">
@@ -72,13 +74,14 @@
             {{qboCompanyName}}
           </span>
         </div>
-        <div class="mat-small qbo--title-separator" *ngIf="qboCompanyName && showSwitchApp">
+        <!-- TODO: remove this comment later, when we are exposing the button after new app prod release, also replace the previous div *ngIf condition -->
+        <!-- <div class="mat-small qbo--title-separator" *ngIf="qboCompanyName && showSwitchApp">
           |
         </div>
         <div *ngIf="showSwitchApp" (click)="switchToNewApp()" fxLayout="row" fxLayoutAlign="space-between center" class="switcher--back-btn">
           <img src="assets/images/svgs/sync.svg" class="switcher--back-btn-arrow" width="12px" height="9px" />
           <span class="switcher--btn-icon">Switch to Integration 2.0</span>
-        </div>
+        </div> -->
 
         <div class="mat-small" *ngIf="showRefreshIcon">
           <mat-icon class="refresh"

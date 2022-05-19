@@ -172,7 +172,8 @@ export class QboComponent implements OnInit, AfterContentChecked {
 
       // Redirect new orgs to new app
       const workspaceCreatedAt = new Date(workspace.created_at);
-      const oldAppCutOffDate = new Date('2022-05-16T00:00:00.000Z');
+      // TODO: replace oldAppCutOffDate
+      const oldAppCutOffDate = new Date('2023-05-16T00:00:00.000Z');
       if (workspace.app_version === 'v2') {
         this.redirectToNewApp();
         return;

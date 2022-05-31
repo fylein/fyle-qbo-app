@@ -99,7 +99,6 @@ export class QboComponent implements OnInit, AfterContentChecked {
   getSettingsAndNavigate() {
     const that = this;
     const pathName = that.windowReference.location.pathname;
-    that.storageService.set('workspaceId', that.workspace.id);
     if (pathName === '/workspaces') {
       that.router.navigateByUrl(`/workspaces/${that.workspace.id}/dashboard`);
     }
@@ -169,6 +168,7 @@ export class QboComponent implements OnInit, AfterContentChecked {
     that.user = that.authService.getUser();
     that.getOrCreateWorkspace().then((workspace: Workspace) => {
       that.workspace = workspace;
+      that.storageService.set('workspaceId', that.workspace.id);
 
       // Redirect new orgs to new app
       const workspaceCreatedAt = new Date(workspace.created_at);

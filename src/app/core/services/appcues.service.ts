@@ -7,8 +7,12 @@ export class AppcuesService {
 
   constructor() { }
 
+  get appcues() {
+    return (window as any).Appcues;
+  }
+
   initialiseAppcues(): void {
-    (window as any)?.Appcues('identify', 'ashwin1111', {
+    this.appcues.identify('ashwin1111', {
       email: 'ashwin@ashwin.ashwin',
       name: 'Ashwin',
       account: {

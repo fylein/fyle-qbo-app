@@ -13,14 +13,14 @@ export class AppcuesService {
 
   initialiseAppcues(): void {
     // TODO: inititialise appcues only when workspace has completed onboarding
-    this.appcues.identify('ashwin1111', {
-      email: 'ashwin@ashwin.ashwin',
-      name: 'Ashwin',
-      account: {
-        workspace_id: 234234,
-        workspace_name: 'Ashwin Org'
-      },
-      source: 'Fyle Quickbooks Integration'
-    });
+    // this.appcues.identify('ashwin1111', {
+    //   email: 'ashwin@ashwin.ashwin',
+    //   name: 'Ashwin',
+    //   account: {
+    //     workspace_id: 234234,
+    //     workspace_name: 'Ashwin Org'
+    //   },
+    //   source: 'Fyle Quickbooks Integration'
+    // });
   }
 }

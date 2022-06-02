@@ -9,10 +9,6 @@ import { Integrations as TracingIntegrations } from '@sentry/tracing';
 const hostname = window.location.hostname;
 const env = hostname.substring(0, hostname.indexOf('.'));
 
-declare global {
-  interface Window { appcues: any; }
-}
-
 if (environment.sentry_dsn) {
   Sentry.init({
     dsn: environment.sentry_dsn,

@@ -12,6 +12,7 @@ export class AppcuesService {
   }
 
   initialiseAppcues(): void {
+    // TODO: inititialise appcues only when workspace has completed onboarding
     this.appcues.identify('ashwin1111', {
       email: 'ashwin@ashwin.ashwin',
       name: 'Ashwin',

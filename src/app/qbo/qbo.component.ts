@@ -177,10 +177,10 @@ export class QboComponent implements OnInit, AfterContentChecked {
       // TODO: replace oldAppCutOffDate
       const oldAppCutOffDate = new Date('2023-05-16T00:00:00.000Z');
       if (workspace.app_version === 'v2') {
-        this.redirectToNewApp();
+        this.workspaceService.redirectToNewApp();
         return;
       } else if (workspaceCreatedAt.getTime() > oldAppCutOffDate.getTime()) {
-        this.switchToNewApp({app_version: 'v2'});
+        this.workspaceService.switchToNewApp({app_version: 'v2'});
         return;
       }
 
@@ -234,39 +234,6 @@ export class QboComponent implements OnInit, AfterContentChecked {
     const that = this;
     that.mappingsService.refreshDimension();
     that.snackBar.open('Refreshing Fyle and Quickbooks Data');
-  }
-
-  private redirectToNewApp(): void {
-    const user = this.authService.getUser();
-
-    const localStorageDump = {
-      user: {
-        email: user.employee_email,
-        access_token: this.storageService.get('access_token'),
-        refresh_token: this.storageService.get('refresh_token'),
-        full_name: user.full_name,
-        user_id: user.user_id,
-        org_id: user.org_id,
-        org_name: user.org_name
-      },
-      orgsCount: this.orgsCount
-    };
-
-    this.windowReference.location.href = `${environment.new_qbo_app_url}?local_storage_dump=${JSON.stringify(localStorageDump)}`;
-  }
-
-  switchToNewApp(workspace: MinimalPatchWorkspace | void): void {
-    if (!workspace) {
-      workspace = {
-        app_version: 'v2',
-        onboarding_state: 'COMPLETE'
-      };
-    }
-
-    this.workspaceService.patchWorkspace(workspace).subscribe(() => {
-      this.trackingService.onSwitchToNewApp();
-      this.redirectToNewApp();
-    });
   }
 
   ngOnInit() {

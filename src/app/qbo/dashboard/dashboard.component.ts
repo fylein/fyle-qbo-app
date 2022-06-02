@@ -12,6 +12,7 @@ import { GeneralSetting } from 'src/app/core/models/general-setting.model';
 import { TrackingService } from 'src/app/core/services/tracking.service';
 import { QboComponent } from '../qbo.component';
 import { Count } from 'src/app/core/models/count.model';
+import { AppcuesService } from 'src/app/core/services/appcues.service';
 
 const FYLE_URL = environment.fyle_url;
 const FYLE_CLIENT_ID = environment.fyle_client_id;
@@ -57,6 +58,7 @@ export class DashboardComponent implements OnInit {
   windowReference: Window;
 
   constructor(
+    private appcuesService: AppcuesService,
     private expenseGroupService: ExpenseGroupsService,
     private settingsService: SettingsService,
     private route: ActivatedRoute,
@@ -272,6 +274,7 @@ export class DashboardComponent implements OnInit {
 
     if (onboarded === true) {
       that.qbo.showAppSwitcher();
+      this.appcuesService.initialiseAppcues();
       that.updateDimensionTables();
       that.loadDashboardData();
       that.getQboStatus().then(() => {
@@ -302,6 +305,7 @@ export class DashboardComponent implements OnInit {
         }).then(() => {
           that.currentState = onboardingStates.isOnboarded;
           that.storageService.set('onboarded', true);
+          this.appcuesService.initialiseAppcues();
           that.qbo.showAppSwitcher();
           that.qbo.hideRefreshIconVisibility();
           return that.loadDashboardData();

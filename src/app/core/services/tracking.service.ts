@@ -88,4 +88,8 @@ export class TrackingService {
   onModifyDescription(selectedFields) {
     this.eventTrack('Modifying Description', selectedFields);
   }
+
+  onSwitchToNewApp(): void {
+    this.eventTrack('Switching to new app');
+  }
 }

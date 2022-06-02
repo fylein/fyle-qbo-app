@@ -17,6 +17,7 @@ import { MappingsService } from '../core/services/mappings.service';
 import { MatSnackBar } from '@angular/material';
 import * as Sentry from '@sentry/angular';
 import { environment } from 'src/environments/environment';
+import { AppcuesService } from '../core/services/appcues.service';
 
 @Component({
   selector: 'app-qbo',
@@ -45,6 +46,7 @@ export class QboComponent implements OnInit, AfterContentChecked {
   windowReference: Window;
 
   constructor(
+    private appcuesService: AppcuesService,
     private changeDetector: ChangeDetectorRef,
     private workspaceService: WorkspaceService,
     private settingsService: SettingsService,
@@ -192,6 +194,8 @@ export class QboComponent implements OnInit, AfterContentChecked {
       email,
       workspaceId,
     });
+
+    this.appcuesService.initialiseAppcues();
   }
 
   onSignOut() {
@@ -260,6 +264,7 @@ export class QboComponent implements OnInit, AfterContentChecked {
     }
 
     this.workspaceService.patchWorkspace(workspace).subscribe(() => {
+      this.trackingService.onSwitchToNewApp();
       this.redirectToNewApp();
     });
   }

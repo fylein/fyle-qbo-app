@@ -163,6 +163,10 @@ export class QboComponent implements OnInit, AfterContentChecked {
     this.showSwitchApp = true;
   }
 
+  switchToNewApp(): void {
+    this.workspaceService.switchToNewApp({app_version: 'v2'});
+  }
+
   setupWorkspace() {
     const that = this;
     that.user = that.authService.getUser();

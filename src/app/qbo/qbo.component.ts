@@ -99,7 +99,6 @@ export class QboComponent implements OnInit, AfterContentChecked {
   getSettingsAndNavigate() {
     const that = this;
     const pathName = that.windowReference.location.pathname;
-    that.storageService.set('workspaceId', that.workspace.id);
     if (pathName === '/workspaces') {
       that.router.navigateByUrl(`/workspaces/${that.workspace.id}/dashboard`);
     }
@@ -169,11 +168,13 @@ export class QboComponent implements OnInit, AfterContentChecked {
     that.user = that.authService.getUser();
     that.getOrCreateWorkspace().then((workspace: Workspace) => {
       that.workspace = workspace;
+      that.storageService.set('workspaceId', that.workspace.id);
 
       // Redirect new orgs to new app
       const workspaceCreatedAt = new Date(workspace.created_at);
-      // TODO: replace oldAppCutOffDate
-      const oldAppCutOffDate = new Date('2023-05-16T00:00:00.000Z');
+
+      // Cut off date to be 6th June 2022 3.30pm IST
+      const oldAppCutOffDate = new Date('2022-06-06T09:30:00.000Z');
       if (workspace.app_version === 'v2') {
         this.workspaceService.redirectToNewApp();
         return;

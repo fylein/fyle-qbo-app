@@ -31,21 +31,6 @@ export class SharedLoginComponent implements OnInit {
     });
 
     this.router.navigate(['/workspaces']);
-    // that.storageService.set('email', response.user.email);
-    // that.storageService.set('access_token', response.access_token);
-    // that.storageService.set('refresh_token', response.refresh_token);
-    // const user = {
-    //   employee_email: response.user.email,
-    //   full_name: response.user.full_name,
-    //   org_id: response.user.org_id,
-    //   org_name: response.user.org_name,
-    //   user_id: response.user.user_id
-    // };
-    // that.storageService.set('user', user);
-    // that.authService.getFyleOrgs().subscribe(responses => {
-    //   that.storageService.set('orgsCount', responses);
-    //   that.router.navigate(['/workspaces']);
-    // });
   }
 
 }

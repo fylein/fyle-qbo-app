@@ -58,7 +58,7 @@ export class WorkspaceService {
       orgsCount: this.authService.getOrgCount()
     };
 
-    this.windowReference.location.href = `${environment.new_qbo_app_url}?local_storage_dump=${JSON.stringify(localStorageDump)}`;
+    this.windowReference.location.href = `${environment.new_qbo_app_url}?local_storage_dump=${encodeURIComponent(JSON.stringify(localStorageDump))}`;
   }
 
   createWorkspace(): Observable<Workspace> {

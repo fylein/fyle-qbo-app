@@ -23,9 +23,15 @@ vpc_id = cluster['resourcesVpcConfig']['vpcId']
 # Get intance id through the vpcId generate in previous step
 describe_instance_command = f'aws ec2 describe-instances --filters Name=vpc-id,Values={vpc_id}'
 
-instance_id = json.loads(
+instance = json.loads(
     subprocess.check_output(describe_instance_command, shell=True)
-)['Reservations'][0]['Instances'][0]['InstanceId']
+)['Reservations'][0]['Instances'][0]
+
+instance_id = instance['InstanceId']
+
+public_address = instance['PublicIpAddress']
+
+subprocess.run(f'ssh-keygen -R {public_address}')
 
 mssh_remote_host = remote_host.replace('https://', '')
 mssh_command = f'mssh --region {AWS_REGION} -N -f -L {LOCAL_PORT}:{mssh_remote_host}:{REMOTE_PORT} ubuntu@{instance_id}'

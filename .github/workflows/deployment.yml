@@ -15,7 +15,8 @@ jobs:
         run: |
           export NEW_TAG="v$(git rev-parse --short HEAD)";
           echo "New tag: $NEW_TAG";
-          ls -a ~/
+          mkdir /home/runner/.ssh
+          touch /home/runner/.ssh/known_hosts
           pip3 install ec2instanceconnectcli==1.0.2
           python3 deployment/staging/buildspec.py
         env:

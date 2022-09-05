@@ -64,7 +64,7 @@ with open('kubeconfig.yaml', 'w') as file:
   file.write(filedata)
 
 # Apply deployment manifest file
-subprocess.run('kubectl -n integrations get pods', shell=True)
+subprocess.run('kubectl apply -f deployment/staging/controller.yml', shell=True)
 
 # Kill Tunnel
 kill_command = f'ps aux | grep ssh | grep {mssh_remote_host} | grep {LOCAL_PORT} | awk \'{{print $2}} \'' \

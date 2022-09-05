@@ -31,7 +31,7 @@ instance_id = instance['InstanceId']
 
 public_address = instance['PublicIpAddress']
 
-subprocess.run(f'ssh-keygen -R {public_address}')
+subprocess.run(f'ssh-keygen -R {public_address}', shell=True)
 
 mssh_remote_host = remote_host.replace('https://', '')
 mssh_command = f'mssh --region {AWS_REGION} -N -f -L {LOCAL_PORT}:{mssh_remote_host}:{REMOTE_PORT} ubuntu@{instance_id}'

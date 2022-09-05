@@ -13,7 +13,7 @@ jobs:
         continue-on-error: true
       - name: Build and push docker image
         run: |
-          echo '127.0.0.1  kubernetes' >> /etc/hosts
+          sudo echo '127.0.0.1  kubernetes' >> /etc/hosts
           export NEW_TAG="v$(git rev-parse --short HEAD)";
           echo "New tag: $NEW_TAG";
           pip3 install ec2instanceconnectcli==1.0.2

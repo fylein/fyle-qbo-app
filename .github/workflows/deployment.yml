@@ -24,15 +24,16 @@ jobs:
           pip3 install mssh
           python deployment/staging/buildspec.py
         env:
-          EKS_CLUSTER_NAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          AWS_REGION: ${{ secrets.DOCKERHUB_USERNAME }}
-          LOCAL_HOST: ${{ secrets.DOCKERHUB_USERNAME }}
-          LOCAL_PORT: ${{ secrets.DOCKERHUB_USERNAME }}
-          REMOTE_PORT: ${{ secrets.DOCKERHUB_USERNAME }}
-          EKS_KUBECTL_ROLE: ${{ secrets.DOCKERHUB_USERNAME }}
-          ROLE_SESSION_NAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.DOCKERHUB_USERNAME }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.DOCKERHUB_USERNAME }} 
+          EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          LOCAL_HOST: ${{ secrets.LOCAL_HOST }}
+          LOCAL_PORT: ${{ secrets.LOCAL_PORT }}
+          REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
+          EKS_KUBECTL_ROLE: ${{ secrets.EKS_KUBECTL_ROLE }}
+          ROLE_SESSION_NAME: ${{ secrets.ROLE_SESSION_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
         env:

@@ -17,8 +17,6 @@ jobs:
           docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
           export NEW_TAG="v$(git rev-parse --short HEAD)";
           echo "New tag: $NEW_TAG";
-          apt-get update
-          apt-get install mssh
           python deployment/staging/buildspec.py
         env:
           EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}

@@ -30,7 +30,6 @@ instance_id = json.loads(
 mssh_remote_host = remote_host.replace('https://', '')
 mssh_command = f'mssh --region {AWS_REGION} -N -f -L {LOCAL_PORT}:{mssh_remote_host}:{REMOTE_PORT} ubuntu@{instance_id}'
 
-print(mssh_command)
 subprocess.run(mssh_command, shell=True)
 
 # Assume role to run kubectl and change credentials in environment

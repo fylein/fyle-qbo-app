@@ -1,9 +1,8 @@
 name: Continuous Deployment
 
 on:
-  push:
-    branches:
-      - master
+  pull_request:
+    types: [assigned, opened, synchronize, reopened]
 
 jobs:
   staging_deploy:
@@ -15,6 +14,9 @@ jobs:
         continue-on-error: true
       - name: Build and push docker image
         run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install 
           docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
           export NEW_TAG="v$(git rev-parse --short HEAD)";
           echo "New tag: $NEW_TAG";
@@ -22,26 +24,18 @@ jobs:
           echo "Pushing Docker Image to Docker Hub";
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/fyle_qbo-app:$NEW_TAG
           echo "NEW_TAG=v$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
-      - name: Run CodeBuild
-        uses: aws-actions/aws-codebuild-run-build@v1
-        with:
-          project-name: ${{ secrets.CODEBUILD_PROJECT_NAME }}
-          env-vars-for-codebuild: |
-            requester,
-            event-name,
-            NEW_TAG,
-            DOCKERHUB_USERNAME
+          pip3 install mssh
+          python deployment/staging/buildspec.py
         env:
-          requester: ${{ github.actor }}
-          event-name: ${{ github.event_name }}
-          NEW_TAG: ${{ env.NEW_TAG }}
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          EKS_CLUSTER_NAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          AWS_REGION: ${{ secrets.DOCKERHUB_USERNAME }}
+          LOCAL_HOST: ${{ secrets.DOCKERHUB_USERNAME }}
+          LOCAL_PORT: ${{ secrets.DOCKERHUB_USERNAME }}
+          REMOTE_PORT: ${{ secrets.DOCKERHUB_USERNAME }}
+          EKS_KUBECTL_ROLE: ${{ secrets.DOCKERHUB_USERNAME }}
+          ROLE_SESSION_NAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.DOCKERHUB_USERNAME }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DOCKERHUB_USERNAME }} 
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
         env:

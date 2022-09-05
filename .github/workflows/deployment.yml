@@ -13,11 +13,9 @@ jobs:
         continue-on-error: true
       - name: Build and push docker image
         run: |
-          docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
           export NEW_TAG="v$(git rev-parse --short HEAD)";
           echo "New tag: $NEW_TAG";
-          mkdir /home/runner/.ssh
-          touch /home/runner/.ssh/known_hosts
+          ls -a ~/
           pip3 install ec2instanceconnectcli==1.0.2
           python3 deployment/staging/buildspec.py
         env:

@@ -4,6 +4,7 @@ import json
 import logging
 
 logger = logging.getLogger('Deploy to Staging')
+logging.basicConfig(level=logging.INFO)
 
 AWS_REGION = os.environ.get('AWS_REGION')
 EKS_CLUSTER_NAME = os.environ.get('EKS_CLUSTER_NAME')

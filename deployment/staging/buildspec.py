@@ -13,6 +13,7 @@ LOCAL_PORT = os.environ.get('LOCAL_PORT')
 REMOTE_PORT = os.environ.get('REMOTE_PORT')
 EKS_KUBECTL_ROLE = os.environ.get('EKS_KUBECTL_ROLE')
 ROLE_SESSION_NAME = os.environ.get('ROLE_SESSION_NAME')
+EC2_INSTANCE_NAME = os.environ.get('EC2_INSTANCE_NAME')
 
 
 def get_vpc_id_and_endpoint() -> str:
@@ -29,11 +30,12 @@ def get_vpc_id_and_endpoint() -> str:
   return vpc_id, remote_host
 
 
-def access_instance_and_run_tunnel(vpc_id: str, remote_host: str) -> str:
+def setup_ssh_tunnel(vpc_id: str, remote_host: str) -> str:
   # Get intance id through the vpcId generate in previous step
   logger.info('Getting intance id through the vpcId generate in previous step')
 
-  describe_instance_command = f'aws ec2 describe-instances --filters Name=vpc-id,Values={vpc_id}'
+  describe_instance_command = f'aws ec2 describe-instances --filters Name=vpc-id,Values={vpc_id}\
+     Name=tag:Name,Values={EC2_INSTANCE_NAME}'
   instance = json.loads(
       subprocess.check_output(describe_instance_command, shell=True)
   )['Reservations'][0]['Instances'][0]
@@ -86,13 +88,16 @@ def replace_kubeconfig_server(mssh_remote_host: str):
     file.write(filedata)
 
 
-def apply_manifest_and_kill_tunnel():
+def apply_manifest():
   # Apply deployment manifest file
-  logger.info('Applying deployment manifest file and killing tunnel')
+  logger.info('Applying deployment manifest file')
 
   subprocess.run('kubectl apply -f deployment/staging/controller.yml', shell=True)
 
+
+def kill_tunnel():
   # Kill Tunnel
+  logger.info('Killing Tunnel')
   kill_command = f'ps aux | grep ssh | grep {mssh_remote_host} | grep {LOCAL_PORT} | awk \'{{print $2}} \'' \
                        ' | xargs kill -9 $1'
 
@@ -102,8 +107,9 @@ def apply_manifest_and_kill_tunnel():
 if __name__ == '__main__':
   logger.info('Initiating deployment')
   vpc_id, remote_host = get_vpc_id_and_endpoint()
-  mssh_remote_host = access_instance_and_run_tunnel(vpc_id, remote_host)
+  mssh_remote_host = setup_ssh_tunnel(vpc_id, remote_host)
   assume_kubectl_role()
   replace_kubeconfig_server(mssh_remote_host)
-  apply_manifest_and_kill_tunnel()
+  apply_manifest()
+  kill_tunnel()
   logger.info('Deployment Complete')
